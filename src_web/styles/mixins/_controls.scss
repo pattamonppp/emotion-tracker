@@ -1,0 +1,28 @@
+@use '../tokens/colors' as *;
+@use '../tokens/geometry' as *;
+@use '../tokens/motion' as *;
+@use '../tokens/elevation' as *;
+
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  user-select: none;
+  transition: all $transition-base;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+@mixin pill-control {
+  border-radius: $radius-pill;
+  padding: 8px 16px;
+}

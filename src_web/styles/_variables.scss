@@ -1,0 +1,19 @@
+// Stacking order (Z-index scale)
+$z-base: 1;
+$z-sticky: 20;
+$z-dropdown: 30;
+$z-drawer: 40;
+$z-modal-backdrop: 50;
+$z-modal: 60;
+$z-popover: 70;
+$z-toast: 80;
+$z-tooltip: 90;
+
+// Dimensions & Metrics
+$mobile-frame-max-width: 480px;
+$mobile-frame-height: 844px;
+$header-height: 56px;
+$status-bar-height: 44px;
+$control-height-sm: 32px;
+$control-height-md: 44px;
+$control-height-lg: 52px;

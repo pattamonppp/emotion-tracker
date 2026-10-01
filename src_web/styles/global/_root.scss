@@ -1,0 +1,32 @@
+@use '../tokens' as *;
+
+:root {
+  --color-brand-primary: #{$color-brand-primary};
+  --color-brand-light: #{$color-brand-light};
+  --color-brand-pale: #{$color-brand-pale};
+  --color-brand-text: #{$color-brand-text};
+
+  --color-accent-blue-500: #{$color-accent-blue-500};
+  --color-accent-marigo-1: #{$color-accent-marigo-1};
+
+  --color-feedback-error: #{$color-feedback-error};
+  --color-feedback-warning: #{$color-feedback-warning};
+  --color-feedback-success: #{$color-feedback-success};
+
+  --radius-circle: #{$radius-circle};
+  --radius-pill: #{$radius-pill};
+  --radius-avatar: #{$radius-avatar};
+  --radius-actionable-sm: #{$radius-actionable-sm};
+  --radius-actionable-lg: #{$radius-actionable-lg};
+  --radius-container: #{$radius-container};
+  --radius-card: #{$radius-card};
+
+  --elevation-1: #{$elevation-1};
+  --elevation-2: #{$elevation-2};
+  --elevation-3: #{$elevation-3};
+  --elevation-4: #{$elevation-4};
+  --elevation-5: #{$elevation-5};
+  --elevation-6: #{$elevation-6};
+  --elevation-7: #{$elevation-7};
+  --elevation-8: #{$elevation-8};
+}

@@ -1,0 +1,19 @@
+@use '../tokens' as *;
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  background-color: $color-slate-900;
+  color: $color-slate-100;
+  font-family: $font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

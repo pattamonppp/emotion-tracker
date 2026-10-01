@@ -1,0 +1,27 @@
+@use '../tokens/colors' as *;
+@use '../tokens/geometry' as *;
+@use '../tokens/elevation' as *;
+
+@mixin glass($blur: 16px, $bg: rgba(255, 255, 255, 0.85)) {
+  background: $bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+}
+
+@mixin card-surface {
+  background: $color-surface-card;
+  border-radius: $radius-card;
+  box-shadow: $elevation-2;
+  border: 1px solid $color-border-default;
+}
+
+@mixin elevated($level: 2) {
+  @if $level == 1 { box-shadow: $elevation-1; }
+  @else if $level == 2 { box-shadow: $elevation-2; }
+  @else if $level == 3 { box-shadow: $elevation-3; }
+  @else if $level == 4 { box-shadow: $elevation-4; }
+  @else if $level == 5 { box-shadow: $elevation-5; }
+  @else if $level == 6 { box-shadow: $elevation-6; }
+  @else if $level == 7 { box-shadow: $elevation-7; }
+  @else if $level == 8 { box-shadow: $elevation-8; }
+}
