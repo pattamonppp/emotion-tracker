@@ -10,7 +10,8 @@
     "dev:web": "vite",
     "build:web": "vite build",
     "preview:web": "vite preview",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo-google-fonts/prompt": "^0.4.1",
@@ -38,6 +39,7 @@
     "@types/classnames": "^2.3.0",
     "@types/react": "~19.2.2",
     "@vitejs/plugin-react": "^6.1.1",
+    "patch-package": "^8.0.1",
     "typescript": "~6.0.3",
     "vite": "^8.3.2"
   },

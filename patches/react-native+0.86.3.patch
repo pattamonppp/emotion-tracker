@@ -1,0 +1,30 @@
+diff --git a/node_modules/react-native/Libraries/Text/Text.js b/node_modules/react-native/Libraries/Text/Text.js
+index 8e7b29c..56ad413 100644
+--- a/node_modules/react-native/Libraries/Text/Text.js
++++ b/node_modules/react-native/Libraries/Text/Text.js
+@@ -196,6 +196,25 @@ const TextImpl: component(
+         String(processedStyle.fontWeight) as TextStyleInternal['fontWeight'];
+     }
+ 
++    // Global Prompt Typography Enforcement
++    if (!processedStyle.fontFamily) {
++      overrides = overrides || ({} as {...TextStyleInternal});
++      const w = String(processedStyle.fontWeight || '400');
++      if (w === 'bold' || w === '700') overrides.fontFamily = 'Prompt_700Bold';
++      else if (w === '800' || w === '900') overrides.fontFamily = 'Prompt_800ExtraBold';
++      else if (w === '600') overrides.fontFamily = 'Prompt_600SemiBold';
++      else if (w === '500') overrides.fontFamily = 'Prompt_500Medium';
++      else if (w === '300') overrides.fontFamily = 'Prompt_300Light';
++      else overrides.fontFamily = 'Prompt_400Regular';
++
++      if (Platform.OS === 'android') {
++        overrides.fontWeight = undefined;
++      }
++    } else if (Platform.OS === 'android' && typeof processedStyle.fontFamily === 'string' && processedStyle.fontFamily.startsWith('Prompt')) {
++      overrides = overrides || ({} as {...TextStyleInternal});
++      overrides.fontWeight = undefined;
++    }
++
+     if (processedStyle.userSelect != null) {
+       _selectable = userSelectToSelectableMap[processedStyle.userSelect];
+       overrides = overrides || ({} as {...TextStyleInternal});
