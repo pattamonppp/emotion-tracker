@@ -1,33 +1,75 @@
-// OOCA Brand Turquoise
-$color-brand-primary: #00C4B3;
-$color-brand-light: #33D0C2;
-$color-brand-pale: #E6F9F7;
-$color-brand-text: #004D40;
-$color-brand-hover: #00A89A;
+// =============================================================================
+// mindfull / OOCA Official CI Color System (Color.png)
+// =============================================================================
+
+// OOCA Turquoise (Brand primary, 70% in main primary, 30% in accent)
+$color-turquoise-1: #00C4B3; // Turquoise 1 (main)
+$color-turquoise-2: #92E8E4; // Turquoise 2
+$color-turquoise-3: #DDF8F5; // Turquoise 3
+$color-turquoise-text: #007D75; // Turquoise text
+$color-brand-contrast: #004D40; // Deep contrast text
+
+// Aliases for brand
+$color-brand-primary: $color-turquoise-1;
+$color-brand-light: $color-turquoise-2;
+$color-brand-pale: $color-turquoise-3;
+$color-brand-text: $color-turquoise-text;
+$color-brand-hover: #33D0C2;
 $color-brand-active: #008B7D;
 
-// Accent Blue
-$color-accent-blue-500: #1F77DF;
-$color-accent-blue-300: #62A0E9;
-$color-accent-blue-200: #8FBBEF;
-$color-accent-blue-100: #C7DDF7;
-$color-accent-blue-50: #E4EFFB;
+// Accent Blue (Use to emphasize actions and highlighted information)
+$color-blue-1: #1F77DF; // Blue 1 (500)
+$color-blue-2: #62A0E9; // Blue 2 (300)
+$color-blue-3: #8FBBEF; // Blue 3 (200)
+$color-blue-4: #C7DDF7; // Blue 4 (100)
+$color-blue-5: #E4EFFB; // Blue 5 (50)
 
-// Accent Orange / Marigo
-$color-accent-marigo-1: #F9A000;
-$color-accent-marigo-2: #F8E4B3;
+$color-accent-blue-500: $color-blue-1;
+$color-accent-blue-300: $color-blue-2;
+$color-accent-blue-200: $color-blue-3;
+$color-accent-blue-100: $color-blue-4;
+$color-accent-blue-50: $color-blue-5;
+
+// Accent Orange (Marigo - Use to emphasize actions and highlighted information)
+$color-marigo-1: #F9A000; // Marigo 1 (500)
+$color-marigo-2: #F8E4B3; // Marigo 2 (100)
+
+$color-accent-marigo-1: $color-marigo-1;
+$color-accent-marigo-2: $color-marigo-2;
 
 // System Feedback
-$color-feedback-error: #F26E6E;
-$color-feedback-error-light: #FAD6D5;
-$color-feedback-warning: #FA8C3D;
-$color-feedback-warning-light: #FFDDC9;
-$color-feedback-success: #7CC954;
-$color-feedback-success-light: #DCF3D1;
+// Error
+$color-flamingo-1: #EF7773; // Flamingo 1 (500)
+$color-flamingo-2: #FAD6D5; // Flamingo 2 (100)
+$color-feedback-error: $color-flamingo-1;
+$color-feedback-error-light: $color-flamingo-2;
 
-// Grays & Neutrals
+// Warning
+$color-sunshade-1: #FF8F4B; // Sunshade 1 (500)
+$color-sunshade-2: #FFDDC9; // Sunshade 2 (100)
+$color-feedback-warning: $color-sunshade-1;
+$color-feedback-warning-light: $color-sunshade-2;
+
+// Success
+$color-guava-1: #8AD866; // Guava 1 (500)
+$color-guava-2: #DCF3D1; // Guava 2 (100)
+$color-feedback-success: $color-guava-1;
+$color-feedback-success-light: $color-guava-2;
+
+// Gray (Text, containers, border, system error)
 $color-black: #000000;
-$color-slate-950: #020617;
+$color-black-gray-1: #C4C4C4; // Black Gray 1 (400)
+$color-black-gray-2: #F1F1F1; // Black Gray 2 (200)
+$color-black-gray-3: #F6F6F6; // Black Gray 3 (100)
+$color-white: #FFFFFF;
+
+// Turquoise Gray (Dark container & muted backgrounds)
+$color-turquoise-gray-1: #2B4543;
+$color-turquoise-gray-2: #3F5E5C;
+$color-turquoise-gray-3: #567C7A;
+$color-turquoise-gray-4: #759D9B;
+
+// Neutrals for UI
 $color-slate-900: #0F172A;
 $color-slate-800: #1E293B;
 $color-slate-700: #334155;
@@ -38,7 +80,6 @@ $color-slate-300: #CBD5E1;
 $color-slate-200: #E2E8F0;
 $color-slate-100: #F1F5F9;
 $color-slate-50: #F8FAFC;
-$color-white: #FFFFFF;
 
 // Surfaces & Borders
 $color-surface-bg: #F8FAFB;
@@ -47,3 +88,10 @@ $color-surface-subtle: #F1F5F9;
 $color-surface-raised: #FFFFFF;
 $color-border-default: #E2E8F0;
 $color-border-subtle: #F1F5F9;
+
+// Background Gradients (Background.png & Color.png)
+$gradient-bg-default: #F8FAFB;
+$gradient-bg-extended: linear-gradient(180deg, #DDF7F3 0%, #FFFFFF 100%);
+$gradient-turquoise-01: linear-gradient(180deg, #D5F2EE 0%, #FFFFFF 100%);
+$gradient-turquoise-02: linear-gradient(180deg, #DDF7F3 0%, #E0F5F6 100%);
+$gradient-black: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);

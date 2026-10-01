@@ -1,23 +1,42 @@
 @use 'abstracts' as *;
 
+// =============================================================================
+// mindfull / OOCA Official Button CI Matrix (Button.png)
+// =============================================================================
+
 .button {
   @include button-base;
-  height: $control-height-md;
-  padding: 0 16px;
-  border-radius: $radius-actionable-sm;
-  font-size: 0.875rem;
+  position: relative;
+  font-family: $font-sans;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
 
   svg {
     flex: none;
-    width: 16px;
-    height: 16px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Sizes
+// -----------------------------------------------------------------------------
+.xs {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 0.75rem;
+  gap: 4px;
+
+  svg {
+    width: 12px;
+    height: 12px;
   }
 }
 
 .sm {
-  height: $control-height-sm;
-  padding: 0 12px;
-  font-size: 0.75rem;
+  height: 36px;
+  padding: 0 14px;
+  font-size: 0.8125rem;
+  gap: 6px;
 
   svg {
     width: 14px;
@@ -25,11 +44,23 @@
   }
 }
 
+.md {
+  height: 44px;
+  padding: 0 20px;
+  font-size: 0.875rem;
+  gap: 8px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 .lg {
-  height: $control-height-lg;
-  padding: 0 24px;
+  height: 52px;
+  padding: 0 28px;
   font-size: 1rem;
-  border-radius: $radius-actionable-lg;
+  gap: 10px;
 
   svg {
     width: 20px;
@@ -37,61 +68,307 @@
   }
 }
 
-.primary,
+// -----------------------------------------------------------------------------
+// Shapes from CI
+// -----------------------------------------------------------------------------
+.pill {
+  border-radius: $radius-pill;
+}
+
+.rounded {
+  border-radius: $radius-actionable-sm;
+}
+
+.circle {
+  border-radius: $radius-circle;
+  padding: 0;
+  aspect-ratio: 1;
+
+  &.xs { width: 28px; }
+  &.sm { width: 36px; }
+  &.md { width: 44px; }
+  &.lg { width: 52px; }
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+// -----------------------------------------------------------------------------
+// Color Themes & Variants from Button.png
+// -----------------------------------------------------------------------------
+
+// TURQUOISE BRAND (Main)
 .turquoise {
-  background-color: $color-brand-primary;
-  color: $color-white;
-  box-shadow: $elevation-2;
+  &.primary {
+    background-color: $color-turquoise-1;
+    color: $color-white;
+    box-shadow: $elevation-1;
 
-  &:hover:not(:disabled) {
-    background-color: $color-brand-hover;
-    box-shadow: $elevation-3;
-    transform: translateY(-1px);
+    &:hover:not(:disabled) {
+      background-color: $color-brand-hover;
+      box-shadow: $elevation-2;
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      background-color: $color-brand-active;
+      transform: translateY(0);
+    }
   }
 
-  &:active:not(:disabled) {
-    background-color: $color-brand-active;
-    transform: translateY(0);
+  &.secondary {
+    background-color: $color-white;
+    color: $color-turquoise-text;
+    border: 2px solid $color-turquoise-1;
+
+    &:hover:not(:disabled) {
+      background-color: $color-turquoise-3;
+      border-color: $color-brand-hover;
+    }
+
+    &:active:not(:disabled) {
+      background-color: rgba(0, 196, 179, 0.2);
+    }
+  }
+
+  &.outline {
+    background-color: transparent;
+    color: $color-turquoise-text;
+    border: 1px solid rgba(0, 196, 179, 0.4);
+
+    &:hover:not(:disabled) {
+      background-color: $color-turquoise-3;
+      border-color: $color-turquoise-1;
+    }
+  }
+
+  &.ghost {
+    background-color: transparent;
+    color: $color-turquoise-text;
+
+    &:hover:not(:disabled) {
+      background-color: $color-turquoise-3;
+    }
+  }
+
+  &.link {
+    background: transparent;
+    color: $color-turquoise-1;
+    height: auto;
+    padding: 0;
+
+    &:hover:not(:disabled) {
+      color: $color-brand-hover;
+      text-decoration: underline;
+    }
+  }
+
+  &.iconOnly {
+    background-color: $color-turquoise-3;
+    color: $color-turquoise-text;
+    border: 1px solid rgba(0, 196, 179, 0.3);
+
+    &:hover:not(:disabled) {
+      background-color: $color-turquoise-2;
+      transform: scale(1.05);
+    }
   }
 }
 
-.secondary {
-  background-color: $color-slate-100;
-  color: $color-slate-700;
-  border: 1px solid $color-border-default;
+// BLUE ACCENT (Primary actions)
+.blue {
+  &.primary {
+    background-color: $color-blue-1;
+    color: $color-white;
+    box-shadow: 0 2px 8px rgba(31, 119, 223, 0.2);
 
-  &:hover:not(:disabled) {
-    background-color: $color-slate-200;
-    color: $color-slate-900;
+    &:hover:not(:disabled) {
+      background-color: $color-blue-2;
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      background-color: #1858A8;
+      transform: translateY(0);
+    }
+  }
+
+  &.secondary {
+    background-color: $color-white;
+    color: $color-blue-1;
+    border: 2px solid $color-blue-1;
+
+    &:hover:not(:disabled) {
+      background-color: $color-blue-5;
+    }
+  }
+
+  &.outline {
+    background-color: transparent;
+    color: $color-blue-1;
+    border: 1px solid rgba(31, 119, 223, 0.4);
+
+    &:hover:not(:disabled) {
+      background-color: $color-blue-5;
+      border-color: $color-blue-1;
+    }
+  }
+
+  &.ghost {
+    background-color: transparent;
+    color: $color-blue-1;
+
+    &:hover:not(:disabled) {
+      background-color: $color-blue-5;
+    }
+  }
+
+  &.link {
+    background: transparent;
+    color: $color-blue-1;
+    height: auto;
+    padding: 0;
+
+    &:hover:not(:disabled) {
+      text-decoration: underline;
+    }
+  }
+
+  &.iconOnly {
+    background-color: $color-blue-5;
+    color: $color-blue-1;
+    border: 1px solid rgba(31, 119, 223, 0.3);
+
+    &:hover:not(:disabled) {
+      background-color: $color-blue-4;
+      transform: scale(1.05);
+    }
   }
 }
 
-.outline {
-  background: transparent;
-  color: $color-brand-text;
-  border: 1px solid rgba(0, 196, 179, 0.4);
+// RED DESTRUCTIVE (Flamingo feedback)
+.red {
+  &.primary {
+    background-color: $color-flamingo-1;
+    color: $color-white;
+    box-shadow: 0 2px 8px rgba(239, 119, 115, 0.2);
 
-  &:hover:not(:disabled) {
-    background-color: $color-brand-pale;
-    border-color: $color-brand-primary;
+    &:hover:not(:disabled) {
+      background-color: #E05252;
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      background-color: #C83E3E;
+    }
+  }
+
+  &.secondary {
+    background-color: $color-white;
+    color: $color-flamingo-1;
+    border: 2px solid $color-flamingo-1;
+
+    &:hover:not(:disabled) {
+      background-color: $color-flamingo-2;
+    }
+  }
+
+  &.outline {
+    background-color: transparent;
+    color: $color-flamingo-1;
+    border: 1px solid rgba(239, 119, 115, 0.4);
+
+    &:hover:not(:disabled) {
+      background-color: $color-flamingo-2;
+      border-color: $color-flamingo-1;
+    }
+  }
+
+  &.ghost {
+    background-color: transparent;
+    color: $color-flamingo-1;
+
+    &:hover:not(:disabled) {
+      background-color: $color-flamingo-2;
+    }
+  }
+
+  &.link {
+    background: transparent;
+    color: $color-flamingo-1;
+    height: auto;
+    padding: 0;
+
+    &:hover:not(:disabled) {
+      text-decoration: underline;
+    }
+  }
+
+  &.iconOnly {
+    background-color: $color-flamingo-2;
+    color: $color-flamingo-1;
+    border: 1px solid rgba(239, 119, 115, 0.3);
+
+    &:hover:not(:disabled) {
+      background-color: rgba(239, 119, 115, 0.3);
+      transform: scale(1.05);
+    }
   }
 }
 
-.ghost {
-  background: transparent;
-  color: $color-slate-600;
+// NEUTRAL / GRAY
+.neutral {
+  &.primary {
+    background-color: $color-black-gray-1;
+    color: $color-slate-800;
 
-  &:hover:not(:disabled) {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: $color-slate-900;
+    &:hover:not(:disabled) {
+      background-color: #A8A8A8;
+    }
+  }
+
+  &.secondary {
+    background-color: $color-white;
+    color: $color-slate-700;
+    border: 1px solid $color-border-default;
+
+    &:hover:not(:disabled) {
+      background-color: $color-black-gray-2;
+    }
+  }
+
+  &.ghost {
+    background-color: transparent;
+    color: $color-slate-600;
+
+    &:hover:not(:disabled) {
+      background-color: $color-black-gray-2;
+    }
   }
 }
 
-.danger {
-  background-color: $color-feedback-error;
-  color: $color-white;
+// -----------------------------------------------------------------------------
+// Disabled & Loading states from Button.png
+// -----------------------------------------------------------------------------
+.button:disabled,
+.disabled {
+  opacity: 0.45;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  box-shadow: none !important;
+  transform: none !important;
+}
 
-  &:hover:not(:disabled) {
-    background-color: #d9534f;
-  }
+.loading {
+  cursor: wait;
+}
+
+.spinner {
+  animation: buttonSpin 0.9s linear infinite;
+}
+
+@keyframes buttonSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
