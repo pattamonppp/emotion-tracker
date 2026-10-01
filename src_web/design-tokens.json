@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json.schemastore.org/design-tokens.json",
+  "name": "mindfull / Ooca Design Tokens",
+  "version": "2.1.0",
+  "color": {
+    "brand": {
+      "turquoise": {
+        "primary": { "value": "#00C4B3", "type": "color", "description": "Brand Turquoise Primary" },
+        "light": { "value": "#33D0C2", "type": "color", "description": "Turquoise-2" },
+        "pale": { "value": "#E6F9F7", "type": "color", "description": "Turquoise-3" },
+        "text": { "value": "#004D40", "type": "color", "description": "Brand Turquoise Text" }
+      }
+    },
+    "accent": {
+      "blue": {
+        "500": { "value": "#1F77DF", "name": "Blue 500", "type": "color" },
+        "300": { "value": "#62A0E9", "name": "Blue 300", "type": "color" },
+        "200": { "value": "#8FBBEF", "name": "Blue 200", "type": "color" },
+        "100": { "value": "#C7DDF7", "name": "Blue 100", "type": "color" },
+        "50": { "value": "#E4EFFB", "name": "Blue 50", "type": "color" }
+      }
+    },
+    "feedback": {
+      "error": { "value": "#F26E6E", "name": "Flamingo", "type": "color", "description": "Error feedback" },
+      "warning": { "value": "#FA8C3D", "name": "Sunshade", "type": "color", "description": "Warning feedback" },
+      "success": { "value": "#7CC954", "name": "Guava", "type": "color", "description": "Success feedback" }
+    },
+    "gray": {
+      "black": { "value": "#000000", "type": "color" },
+      "darkText": { "value": "#1E293B", "type": "color" },
+      "muted": { "value": "#64748B", "type": "color" },
+      "border": { "value": "#E2E8F0", "type": "color" },
+      "surface": { "value": "#F8FAFC", "type": "color" },
+      "white": { "value": "#FFFFFF", "type": "color" }
+    }
+  },
+  "geometry": {
+    "borderRadius": {
+      "controls": { "value": "50%", "type": "borderRadius", "description": "Controls & Toggles: 50% border-radius (Circle)" },
+      "avatars": { "value": "12px", "type": "borderRadius", "description": "Avatars: 12px rounded square" },
+      "actionables-sm": { "value": "8px", "type": "borderRadius", "description": "Actionables: 8px rounded rectangle" },
+      "actionables-lg": { "value": "24px", "type": "borderRadius", "description": "Actionables: 24px rounded rectangle" },
+      "containers": { "value": "0px", "type": "borderRadius", "description": "Layout Containers (Headers, Footers): 0px sharp edges" }
+    }
+  },
+  "elevation": {
+    "level1": { "value": "0 1px 2px 0 rgba(0, 196, 179, 0.08)", "type": "boxShadow" },
+    "level2": { "value": "0 2px 4px -1px rgba(0, 196, 179, 0.08), 0 1px 2px -1px rgba(0, 196, 179, 0.08)", "type": "boxShadow" },
+    "level3": { "value": "0 4px 6px -1px rgba(0, 196, 179, 0.08), 0 2px 4px -2px rgba(0, 196, 179, 0.08)", "type": "boxShadow" },
+    "level4": { "value": "0 8px 10px -2px rgba(0, 196, 179, 0.12), 0 4px 6px -3px rgba(0, 196, 179, 0.08)", "type": "boxShadow" },
+    "level5": { "value": "0 12px 16px -4px rgba(0, 196, 179, 0.12), 0 6px 8px -3px rgba(0, 196, 179, 0.08)", "type": "boxShadow" },
+    "level6": { "value": "0 16px 24px -4px rgba(0, 196, 179, 0.12), 0 8px 10px -4px rgba(0, 196, 179, 0.08)", "type": "boxShadow" },
+    "level7": { "value": "0 20px 28px -6px rgba(0, 196, 179, 0.16), 0 10px 14px -5px rgba(0, 196, 179, 0.12)", "type": "boxShadow" },
+    "level8": { "value": "0 25px 50px -12px rgba(0, 196, 179, 0.16)", "type": "boxShadow" }
+  },
+  "mascot": {
+    "name": "Mooca",
+    "role": "Your best friend who will always be by your side",
+    "companion": "Sunny (mini sunshine buddy)"
+  }
+}

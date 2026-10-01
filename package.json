@@ -1,0 +1,31 @@
+{
+  "name": "emotion-tracker",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start --port 8084",
+    "android": "expo start --android --port 8084",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^3.1.1",
+    "expo": "~57.0.26",
+    "expo-haptics": "^57.0.3",
+    "expo-linear-gradient": "^57.0.2",
+    "expo-sensors": "^57.0.3",
+    "expo-speech": "^57.0.3",
+    "expo-status-bar": "~57.0.1",
+    "lucide-react-native": "^1.49.0",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "^5.10.1",
+    "react-native-svg": "^15.15.5"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  },
+  "private": true
+}

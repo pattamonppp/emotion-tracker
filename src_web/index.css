@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+:root {
+  /* OOCA Turquoise */
+  --color-brand-turquoise-1: #00C4B3;
+  --color-brand-turquoise-2: #B3EDE8;
+  --color-brand-turquoise-3: #DBF0EE;
+  --color-brand-turquoise-text: #009688;
+  --color-brand-text-contrast: #004D40;
+
+  /* Accent Blue */
+  --color-accent-blue-500: #1F77DF;
+  --color-accent-blue-300: #62A0E9;
+  --color-accent-blue-200: #8FBBEF;
+  --color-accent-blue-100: #C7DDF7;
+  --color-accent-blue-50: #E4EFFB;
+
+  /* Accent Orange (Marigo) */
+  --color-accent-marigo-1: #F9A000;
+  --color-accent-marigo-2: #F8E4B3;
+
+  /* System Feedback */
+  --color-feedback-flamingo-1: #EF7773;
+  --color-feedback-flamingo-2: #FAD6D5;
+  --color-feedback-sunshade-1: #FF8F4B;
+  --color-feedback-sunshade-2: #FFDDC9;
+  --color-feedback-guava-1: #8AD866;
+  --color-feedback-guava-2: #DCF3D1;
+
+  /* Grays */
+  --color-black: #000000;
+  --color-black-gray-1: #C4C4C4;
+  --color-black-gray-2: #F1F1F1;
+  --color-black-gray-3: #F6F6F6;
+  --color-white: #FFFFFF;
+
+  /* Geometry from CI */
+  --radius-controls: 50%;
+  --radius-avatars: 12px;
+  --radius-actionables-sm: 8px;
+  --radius-actionables-lg: 24px;
+  --radius-containers: 0px;
+
+  /* Exact Tinted Elevations from Elevation.png */
+  --elevation-1: 0px 2px 8px 0px rgba(0, 196, 179, 0.08);
+  --elevation-2: 0px 4px 12px 0px rgba(0, 196, 179, 0.08);
+  --elevation-3: 0px 8px 16px 0px rgba(0, 196, 179, 0.12);
+  --elevation-4: 0px 16px 24px 0px rgba(0, 196, 179, 0.16);
+  --elevation-5: 0px 8px 16px -4px rgba(0, 196, 179, 0.20);
+  --elevation-6: 0px 16px 24px 0px rgba(0, 196, 179, 0.16), 0px 4px 8px -4px rgba(0, 196, 179, 0.12);
+  --elevation-7: 0px 16px 32px 0px rgba(0, 196, 179, 0.16), 0px 4px 12px -4px rgba(0, 196, 179, 0.12);
+  --elevation-8: 0px 24px 40px 0px rgba(0, 196, 179, 0.16), 0px 8px 24px -4px rgba(0, 196, 179, 0.12);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', Sarabun, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  background-color: #F8FAFB;
+  color: #1E293B;
+}
+
+/* Custom Elevation Classes */
+.elevation-1 { box-shadow: var(--elevation-1); }
+.elevation-2 { box-shadow: var(--elevation-2); }
+.elevation-3 { box-shadow: var(--elevation-3); }
+.elevation-4 { box-shadow: var(--elevation-4); }
+.elevation-5 { box-shadow: var(--elevation-5); }
+.elevation-6 { box-shadow: var(--elevation-6); }
+.elevation-7 { box-shadow: var(--elevation-7); }
+.elevation-8 { box-shadow: var(--elevation-8); }
+
+/* Cozy Backgrounds from Background.png */
+.bg-mooca-default {
+  background-color: #F8FAFC;
+}
+
+.bg-mooca-gradient {
+  background: linear-gradient(180deg, #D7FFFC 0%, #E0FEFB 40%, #F8FAFC 100%);
+}
+
+.bg-mooca-card {
+  background-color: #FFFFFF;
+}
+
+/* Glow Effects */
+.glow-turquoise {
+  box-shadow: 0 0 25px rgba(0, 196, 179, 0.35);
+}
+
+.glow-warm {
+  box-shadow: 0 0 30px rgba(249, 160, 0, 0.35);
+}
+
+/* Pulse animation for heartbeat */
+@keyframes heart-pulse {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.15); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  70% { transform: scale(1); }
+}
+
+.animate-heart-pulse {
+  animation: heart-pulse 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+/* Floating animation */
+@keyframes mooca-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: mooca-float 3s ease-in-out infinite;
+}
