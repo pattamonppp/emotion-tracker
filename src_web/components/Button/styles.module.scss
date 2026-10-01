@@ -18,12 +18,12 @@
 }
 
 // -----------------------------------------------------------------------------
-// Sizes
+// Sizes (matching Typography/TH button sizes: 16px large, 14px small)
 // -----------------------------------------------------------------------------
 .xs {
   height: 28px;
   padding: 0 10px;
-  font-size: 0.75rem;
+  @include text-caption;
   gap: 4px;
 
   svg {
@@ -35,7 +35,7 @@
 .sm {
   height: 36px;
   padding: 0 14px;
-  font-size: 0.8125rem;
+  @include text-button-sm;
   gap: 6px;
 
   svg {
@@ -47,7 +47,7 @@
 .md {
   height: 44px;
   padding: 0 20px;
-  font-size: 0.875rem;
+  @include text-button-lg;
   gap: 8px;
 
   svg {
@@ -59,7 +59,7 @@
 .lg {
   height: 52px;
   padding: 0 28px;
-  font-size: 1rem;
+  @include text-button-lg;
   gap: 10px;
 
   svg {

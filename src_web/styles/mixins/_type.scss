@@ -1,49 +1,212 @@
 @use '../tokens/type' as *;
 
+// =============================================================================
+// mindfull / OOCA Official Type Mixins (Typography / TH - Prompt)
+// =============================================================================
+
+// Font Family Shortcuts
+@mixin font-prompt {
+  font-family: $font-prompt;
+}
+
+@mixin font-rounded {
+  font-family: $font-rounded;
+}
+
 @mixin font-display {
   font-family: $font-display;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 @mixin font-thai {
-  font-family: $font-thai;
+  font-family: $font-prompt;
+  letter-spacing: 0;
 }
 
-@mixin text-hero {
-  font-family: $font-display;
-  font-size: 2rem;
-  line-height: 1.2;
-  font-weight: 700;
-}
-
+// -----------------------------------------------------------------------------
+// Headlines (เฮดไลน์)
+// -----------------------------------------------------------------------------
+// เอช1 เฮดไลน์: 36px / SemiBold / 0 letter-spacing / 42 line-height / Weight 600
 @mixin text-h1 {
-  font-family: $font-display;
-  font-size: 1.5rem;
-  line-height: 1.3;
-  font-weight: 700;
+  font-family: $font-prompt;
+  font-size: 36px;
+  line-height: 42px;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0;
 }
 
+// เอช2 เฮดไลน์: 30px / Regular / 0 letter-spacing / 36 line-height / Weight 400
 @mixin text-h2 {
-  font-family: $font-display;
-  font-size: 1.25rem;
-  line-height: 1.35;
-  font-weight: 600;
+  font-family: $font-prompt;
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: $font-weight-regular;
+  letter-spacing: 0;
 }
 
+// เอช3 เฮดไลน์: 24px / Medium / 0 letter-spacing / 30 line-height / Weight 500
+@mixin text-h3 {
+  font-family: $font-prompt;
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// เอช4 เฮดไลน์: 20px / Medium / 0 letter-spacing / 24 line-height / Weight 500
+@mixin text-h4 {
+  font-family: $font-prompt;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// Hero display alias
+@mixin text-hero {
+  @include text-h1;
+}
+
+// -----------------------------------------------------------------------------
+// Subtitles (หัวข้อย่อย)
+// -----------------------------------------------------------------------------
+// หัวข้อย่อย 1: 16px / Medium / 0 letter-spacing / 20 line-height / Weight 500
+@mixin text-subtitle-1 {
+  font-family: $font-prompt;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// หัวข้อย่อย 2: 14px / Light / 0 letter-spacing / 20 line-height / Weight 300
+@mixin text-subtitle-2 {
+  font-family: $font-prompt;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: $font-weight-light;
+  letter-spacing: 0;
+}
+
+// -----------------------------------------------------------------------------
+// Titles (หัวเรื่อง)
+// -----------------------------------------------------------------------------
+// หัวเรื่อง 1: 20px / Medium / 0 letter-spacing / 24 line-height / Weight 500
+@mixin text-title-1 {
+  font-family: $font-prompt;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// หัวเรื่อง 2: 16px / Medium / 0 letter-spacing / 20 line-height / Weight 500
+@mixin text-title-2 {
+  font-family: $font-prompt;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// หัวเรื่อง 3: 14px / Medium / 0 letter-spacing / 20 line-height / Weight 500
+@mixin text-title-3 {
+  font-family: $font-prompt;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// -----------------------------------------------------------------------------
+// Body (บอดี้)
+// -----------------------------------------------------------------------------
+// บอดี้ 1: 16px / Light / 0 letter-spacing / 20 line-height / Weight 300
+@mixin text-body-1 {
+  font-family: $font-prompt;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: $font-weight-light;
+  letter-spacing: 0;
+}
+
+// บอดี้ 2: 14px / Medium / 0 letter-spacing / 20 line-height / Weight 500
+@mixin text-body-2 {
+  font-family: $font-prompt;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// บอดี้ 3: 14px / Regular / 0 letter-spacing / 20 line-height / Weight 400
+@mixin text-body-3 {
+  font-family: $font-prompt;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: $font-weight-regular;
+  letter-spacing: 0;
+}
+
+// บอดี้ 4: 12px / Medium / 0 letter-spacing / 16 line-height / Weight 500
+@mixin text-body-4 {
+  font-family: $font-prompt;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// บอดี้ 5: 12px / Light / 0 letter-spacing / 16 line-height / Weight 300
+@mixin text-body-5 {
+  font-family: $font-prompt;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: $font-weight-light;
+  letter-spacing: 0;
+}
+
+// Body default alias
 @mixin text-body {
-  font-family: $font-sans;
-  font-size: 0.9375rem;
-  line-height: 1.5;
+  @include text-body-3;
 }
 
+// Small text alias
 @mixin text-small {
-  font-family: $font-sans;
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  @include text-body-4;
 }
 
+// Caption text alias
 @mixin text-caption {
-  font-family: $font-sans;
-  font-size: 0.6875rem;
-  line-height: 1.3;
+  @include text-body-5;
+}
+
+// -----------------------------------------------------------------------------
+// Button Typography from CI (Gotham Rounded / Prompt)
+// -----------------------------------------------------------------------------
+// ปุ่มขนาดใหญ่ / Gotham Rounded: 16px / Medium / 0 letter-spacing / 24 line-height / Weight 500
+@mixin text-button-lg {
+  font-family: $font-rounded;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// ปุ่มขนาดเล็ก / Gotham Rounded: 14px / Medium / 0 letter-spacing / 18 line-height / Weight 500
+@mixin text-button-sm {
+  font-family: $font-rounded;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
+}
+
+// Extra-small footnote / Micro
+@mixin text-micro {
+  font-family: $font-rounded;
+  font-size: 8px;
+  line-height: 10px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0;
 }

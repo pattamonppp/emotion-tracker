@@ -1,5 +1,18 @@
-// Typography tokens
-$font-sans: 'Plus Jakarta Sans', 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-$font-thai: 'Sarabun', -apple-system, BlinkMacSystemFont, sans-serif;
-$font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+// =============================================================================
+// mindfull / OOCA Official Typography CI (Typography / TH - Prompt)
+// =============================================================================
+
+// Primary Brand Font (Prompt from Typography / TH)
+$font-prompt: 'Prompt', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-sans: 'Prompt', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-thai: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-rounded: 'Gotham Rounded', 'Prompt', 'Plus Jakarta Sans', 'Outfit', sans-serif;
+$font-display: 'Prompt', 'Outfit', 'Plus Jakarta Sans', sans-serif;
 $font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+// Font Weights from Typography / TH
+$font-weight-light: 300;     // Light (300)
+$font-weight-regular: 400;   // Regular (400)
+$font-weight-medium: 500;    // Medium (500)
+$font-weight-semibold: 600;  // SemiBold (600)
+$font-weight-bold: 700;      // Bold (700)
