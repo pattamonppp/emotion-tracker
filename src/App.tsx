@@ -91,15 +91,6 @@ export default function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
 
-  // Guard rendering so Android does not instantiate native TextViews before fonts are in cache
-  if (!fontsLoaded && !fontError) {
-    return (
-      <View style={{ flex: 1, backgroundColor: '#E6F9F7', alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
-
   // Load saved profile & history on mount
   useEffect(() => {
     storageService.getProfile(DEFAULT_PROFILE).then(setProfile);
@@ -191,6 +182,15 @@ export default function App() {
       }
     }
   };
+
+  // Guard rendering so Android does not instantiate native TextViews before fonts are in cache
+  if (!fontsLoaded && !fontError) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#E6F9F7', alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaProvider>
