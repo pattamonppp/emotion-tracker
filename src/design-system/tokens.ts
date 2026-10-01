@@ -1,3 +1,5 @@
+import { Platform, TextStyle } from 'react-native';
+
 export const colors = {
   primary: '#00C4B3',
   primaryDark: '#004D40',
@@ -60,10 +62,40 @@ export const shadows = {
 };
 
 export const typography = {
+  // Direct font family asset names (expo-font / Google Fonts Prompt)
   fontPromptLight: 'Prompt_300Light',
   fontPromptRegular: 'Prompt_400Regular',
   fontPromptMedium: 'Prompt_500Medium',
   fontPromptSemiBold: 'Prompt_600SemiBold',
   fontPromptBold: 'Prompt_700Bold',
+  fontPromptExtraBold: 'Prompt_800ExtraBold',
   fontDefault: 'Prompt_400Regular',
+
+  // Safe style objects for StyleSheet.create
+  // Note: On Android, fontWeight is stripped when using custom weighted font assets
+  // to prevent Android's ReactFontManager from falling back to Roboto.
+  light: {
+    fontFamily: 'Prompt_300Light',
+    ...(Platform.OS !== 'android' ? { fontWeight: '300' as const } : {}),
+  } as TextStyle,
+  regular: {
+    fontFamily: 'Prompt_400Regular',
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' as const } : {}),
+  } as TextStyle,
+  medium: {
+    fontFamily: 'Prompt_500Medium',
+    ...(Platform.OS !== 'android' ? { fontWeight: '500' as const } : {}),
+  } as TextStyle,
+  semiBold: {
+    fontFamily: 'Prompt_600SemiBold',
+    ...(Platform.OS !== 'android' ? { fontWeight: '600' as const } : {}),
+  } as TextStyle,
+  bold: {
+    fontFamily: 'Prompt_700Bold',
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' as const } : {}),
+  } as TextStyle,
+  extraBold: {
+    fontFamily: 'Prompt_800ExtraBold',
+    ...(Platform.OS !== 'android' ? { fontWeight: '800' as const } : {}),
+  } as TextStyle,
 };

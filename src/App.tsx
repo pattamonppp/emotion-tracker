@@ -3,7 +3,8 @@ import {
   View, 
   Text, 
   StyleSheet, 
-  TouchableOpacity 
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -44,7 +45,8 @@ import {
   Prompt_400Regular, 
   Prompt_500Medium, 
   Prompt_600SemiBold, 
-  Prompt_700Bold 
+  Prompt_700Bold,
+  Prompt_800ExtraBold
 } from '@expo-google-fonts/prompt';
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -61,12 +63,13 @@ const DEFAULT_PROFILE: UserProfile = {
 };
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     Prompt_300Light,
     Prompt_400Regular,
     Prompt_500Medium,
     Prompt_600SemiBold,
     Prompt_700Bold,
+    Prompt_800ExtraBold,
   });
 
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
@@ -87,6 +90,15 @@ export default function App() {
   const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
+
+  // Guard rendering so Android does not instantiate native TextViews before fonts are in cache
+  if (!fontsLoaded && !fontError) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#E6F9F7', alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
 
   // Load saved profile & history on mount
   useEffect(() => {

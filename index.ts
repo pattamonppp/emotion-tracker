@@ -1,3 +1,4 @@
+import './src/design-system/initTypography';
 import { registerRootComponent } from 'expo';
 import App from './src/App';
 
