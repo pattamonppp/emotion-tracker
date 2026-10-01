@@ -1,13 +1,21 @@
 // =============================================================================
-// mindfull / OOCA Official Typography CI (Typography / TH - Prompt)
+// mindfull / OOCA Official Typography CI (Typography / TH & EN)
 // =============================================================================
 
-// Primary Brand Font (Prompt from Typography / TH)
-$font-prompt: 'Prompt', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-$font-sans: 'Prompt', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-$font-thai: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
-$font-rounded: 'Gotham Rounded', 'Prompt', 'Plus Jakarta Sans', 'Outfit', sans-serif;
-$font-display: 'Prompt', 'Outfit', 'Plus Jakarta Sans', sans-serif;
+// Thai Font: Prompt (from Typography / TH)
+$font-th: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-thai: $font-th;
+$font-prompt: $font-th;
+
+// English & Numerals Font: Gotham Rounded (from Typography / TH: Gotham Rounded)
+$font-en: 'Gotham Rounded', 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-rounded: $font-en;
+
+// Universal Default Font Stack:
+// Latin & Numbers -> Gotham Rounded / Plus Jakarta Sans
+// Thai Characters -> Prompt
+$font-sans: 'Gotham Rounded', 'Plus Jakarta Sans', 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-display: 'Gotham Rounded', 'Prompt', 'Outfit', 'Plus Jakarta Sans', sans-serif;
 $font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
 // Font Weights from Typography / TH

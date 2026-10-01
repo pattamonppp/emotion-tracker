@@ -53,7 +53,7 @@ export function MobileFrame({
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-lang={profile.language} lang={profile.language}>
       {/* Desktop External Helper Bar */}
       <div className={styles.desktopHelperBar}>
         <div className={styles.helperIndicator}>

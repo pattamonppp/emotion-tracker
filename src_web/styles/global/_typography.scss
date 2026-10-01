@@ -1,6 +1,29 @@
 @use '../tokens' as *;
 @use '../mixins/type' as *;
 
+// Language-specific typography switching
+:root,
+[data-lang="th"],
+:lang(th) {
+  font-family: $font-th;
+}
+
+[data-lang="en"],
+:lang(en) {
+  font-family: $font-en;
+}
+
+// Explicit utility classes
+.font-th,
+.font-thai {
+  font-family: $font-th !important;
+}
+
+.font-en,
+.font-rounded {
+  font-family: $font-en !important;
+}
+
 h1 {
   @include text-h1;
 }
@@ -18,5 +41,5 @@ h4 {
 }
 
 p, span, div, a, button, input {
-  font-family: $font-prompt;
+  font-family: inherit;
 }

@@ -1,10 +1,20 @@
 @use '../tokens/type' as *;
 
 // =============================================================================
-// mindfull / OOCA Official Type Mixins (Typography / TH - Prompt)
+// mindfull / OOCA Official Type Mixins (Typography / TH & EN)
 // =============================================================================
 
-// Font Family Shortcuts
+// Language-Specific Font Family Mixins
+@mixin font-th {
+  font-family: $font-th;
+  letter-spacing: 0;
+}
+
+@mixin font-en {
+  font-family: $font-en;
+  letter-spacing: -0.01em;
+}
+
 @mixin font-prompt {
   font-family: $font-prompt;
 }
@@ -19,8 +29,7 @@
 }
 
 @mixin font-thai {
-  font-family: $font-prompt;
-  letter-spacing: 0;
+  @include font-th;
 }
 
 // -----------------------------------------------------------------------------
@@ -62,7 +71,6 @@
   letter-spacing: 0;
 }
 
-// Hero display alias
 @mixin text-hero {
   @include text-h1;
 }
