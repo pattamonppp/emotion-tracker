@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useRef } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Animated,
+} from 'react-native';
 import { GoalType } from '../types';
 import { REFRAMING_INSIGHTS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
-import { Button } from '../design-system/Button';
+import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { MoocaMascot } from './MoocaMascot';
-import { Heart, Dna, Footprints, Check, ArrowRight, Sparkles } from 'lucide-react-native';
-import { colors, radii, shadows } from '../design-system/tokens';
+import { Heart, Dna, ArrowRight, Sparkles } from 'lucide-react-native';
+import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 interface Phase3CognitiveReframingProps {
   goal: GoalType;
@@ -22,11 +29,26 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
   const [isActionCommitted, setIsActionCommitted] = useState(false);
   const insight = REFRAMING_INSIGHTS[goal];
 
+  const stampAnim = useRef(new Animated.Value(0)).current;
+
   const handleCommitAction = () => {
     setIsActionCommitted(true);
     audioService.triggerHaptic('success');
     audioService.playJarDrop();
+
+    stampAnim.setValue(0);
+    Animated.spring(stampAnim, {
+      toValue: 1,
+      friction: 4,
+      tension: 180,
+      useNativeDriver: true,
+    }).start();
   };
+
+  const stampScale = stampAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [2.2, 1],
+  });
 
   return (
     <ScrollView
@@ -41,65 +63,73 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           speakingBubble={
             isActionCommitted
               ? lang === 'th'
-                ? 'สัญญากันแล้วนะ! Mooca จะคอยเชียร์อยู่ข้างๆ เสมอ!'
-                : 'Pinky promise! Mooca is right beside you!'
+                ? 'ประทับตราสัญญาใจแล้ว! Mooca อยู่เคียงข้างเสมอ สู้ไปด้วยกันนะ! 💕'
+                : 'Pinky promise sealed! Mooca is right beside you!'
               : lang === 'th'
-              ? 'รู้ไหม? ความตื่นเต้นนี้ คือร่างกายกำลังช่วยสูบฉีดความพร้อมนะ'
-              : 'Physical surges are your body priming focus, not fear!'
+              ? 'เปิดอ่านจดหมายจากใจ Mooca แล้วทำสัญญาใจ 1 ก้าวด้วยกันนะ'
+              : 'Read Mooca’s heartfelt letter and make a pinky promise!'
           }
         />
 
         <View style={styles.phaseBadge}>
           <Sparkles size={12} color={colors.primary} />
           <Text style={styles.phaseBadgeText}>
-            {lang === 'th' ? 'จดหมายสะท้อนใจจาก Mooca (Phase 3)' : 'Phase 3: Cognitive Insight'}
-          </Text>
-        </View>
-
-        <Text style={styles.title}>
-          {lang === 'th' ? 'ความจริงทางชีววิทยาที่ Mooca อยากบอก' : 'Biological Insight & 1 Action'}
-        </Text>
-      </View>
-
-      {/* 1. Contextual Behavioral Reflection Card */}
-      <View style={styles.reflectionCard}>
-        <View style={styles.cardHeader}>
-          <Heart size={14} color={colors.accentPink} />
-          <Text style={styles.cardHeaderText}>
-            {lang === 'th' ? 'ข้อความคลายใจจากเพื่อน Mooca' : 'Behavioral Reflection'}
-          </Text>
-        </View>
-
-        <Text style={styles.reflectionText}>
-          {lang === 'th' ? insight.reflectionTh : insight.reflectionEn}
-        </Text>
-
-        <View style={styles.biologyBox}>
-          <Dna size={16} color="#1F77DF" style={{ marginTop: 2 }} />
-          <Text style={styles.biologyText}>
-            {lang === 'th' ? insight.biologyFactTh : insight.biologyFactEn}
+            {lang === 'th' ? 'จดหมายอบอุ่นจากใจ Mooca' : 'Heartfelt Letter from Mooca'}
           </Text>
         </View>
       </View>
 
-      {/* 2. The 1 Micro-Action Next Step Card */}
-      <View style={styles.microActionCard}>
-        <View style={styles.microActionHeader}>
-          <View style={styles.microTitleRow}>
-            <Footprints size={14} color={colors.secondary} />
-            <Text style={styles.microTitleText}>
-              {lang === 'th' ? '1 ก้าวถัดไปที่ทำได้ทันที' : 'The 1 Micro-Action'}
+      {/* Washi-Tape Letter Card */}
+      <View style={styles.letterWrapper}>
+        {/* Pastel Washi Tape - Top Left */}
+        <View style={styles.washiTapeLeft}>
+          <View style={styles.washiTapePattern} />
+        </View>
+
+        {/* Pastel Washi Tape - Top Right */}
+        <View style={styles.washiTapeRight}>
+          <View style={styles.washiTapePattern} />
+        </View>
+
+        {/* Cozy Cream Letter Paper */}
+        <View style={styles.letterPaper}>
+          <View style={styles.letterHeader}>
+            <Heart size={14} color="#F43F5E" />
+            <Text style={styles.letterGreeting}>
+              {lang === 'th' ? 'ถึงเธอ... คนเก่งที่กำลังพยายามอยู่' : 'Dearest Brave Friend,'}
             </Text>
           </View>
-          <View style={styles.immediateBadge}>
-            <Text style={styles.immediateText}>
-              {lang === 'th' ? 'ทำทันที' : 'Immediate'}
+
+          {/* Emotional Reframing Message */}
+          <Text style={styles.letterBody}>
+            {lang === 'th' ? insight.reflectionTh : insight.reflectionEn}
+          </Text>
+
+          {/* Biological Reassurance Note */}
+          <View style={styles.biologyNote}>
+            <Dna size={15} color={colors.primaryDark} style={{ marginTop: 2 }} />
+            <Text style={styles.biologyText}>
+              {lang === 'th' ? insight.biologyFactTh : insight.biologyFactEn}
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Pinky-Promise Action Box */}
+      <View style={styles.promiseCard}>
+        <View style={styles.promiseHeaderRow}>
+          <Text style={styles.promiseTitle}>
+            🤙 {lang === 'th' ? 'กล่องสัญญาใจ 1 ก้าวถัดไป' : 'Pinky-Promise Action'}
+          </Text>
+          <View style={styles.promiseBadge}>
+            <Text style={styles.promiseBadgeText}>
+              {lang === 'th' ? 'ก้าวเล็กๆ ชนะใจ' : 'Micro Step'}
             </Text>
           </View>
         </View>
 
         <TouchableOpacity
-          activeOpacity={0.8}
+          activeOpacity={0.85}
           onPress={handleCommitAction}
           style={[
             styles.commitBox,
@@ -107,44 +137,58 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           ]}
         >
           <View style={styles.commitContent}>
-            <Text style={styles.commitEmoji}>👉</Text>
+            <Text style={styles.actionEmoji}>🌱</Text>
             <Text style={[styles.commitActionText, isActionCommitted && { color: colors.primaryDark }]}>
               {lang === 'th' ? insight.microActionTh : insight.microActionEn}
             </Text>
           </View>
 
-          <View
-            style={[
-              styles.checkboxCircle,
-              isActionCommitted && styles.checkboxCircleActive,
-            ]}
-          >
-            {isActionCommitted ? (
-              <Check size={14} color="#FFFFFF" strokeWidth={3} />
-            ) : (
-              <Text style={styles.tapPrompt}>{lang === 'th' ? 'แตะ' : 'Tap'}</Text>
-            )}
-          </View>
+          {/* Mint Wax Seal Heart Stamp */}
+          {isActionCommitted ? (
+            <Animated.View
+              style={[
+                styles.mintSealStamp,
+                { transform: [{ scale: stampScale }, { rotate: '-8deg' }] },
+              ]}
+            >
+              <View style={styles.mintSealInner}>
+                <Text style={{ fontSize: 13 }}>💚</Text>
+                <Text style={styles.mintSealText}>PROMISED</Text>
+              </View>
+            </Animated.View>
+          ) : (
+            <View style={styles.stampPlaceholder}>
+              <Text style={styles.stampPrompt}>
+                {lang === 'th' ? 'แตะเพื่อ\nประทับตรา' : 'Tap to\nSeal'}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
 
         <Text style={styles.commitHint}>
-          {lang === 'th'
-            ? '♥ แตะที่กล่องเพื่อสัญญากับ Mooca แล้วเตรียมก้าวไปลุย'
-            : '♥ Tap to commit this micro-action with Mooca.'}
+          {isActionCommitted
+            ? lang === 'th'
+              ? '✨ สัญญาใจถูกประทับเรียบร้อยแล้ว มีพลังก้าวต่อไปได้เลย!'
+              : '✨ Sealed with a mint heart! You have got this!'
+            : lang === 'th'
+            ? '♥ แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca'
+            : '♥ Tap box to stamp your pinky-promise mint heart.'}
         </Text>
       </View>
 
       {/* Proceed Button */}
       <View style={styles.actionSection}>
-        <Button
+        <MarshmallowButton
           variant="primary"
           size="lg"
-          fullWidth
           onPress={onProceed}
           icon={<ArrowRight size={18} color="#FFFFFF" />}
-        >
-          {lang === 'th' ? 'วัดผลการเปลี่ยนแปลงอารมณ์ (Phase 4)' : 'Measure Emotional Shift (Phase 4)'}
-        </Button>
+          title={
+            lang === 'th'
+              ? 'วัดผลลัพธ์การฟื้นตัวของใจ (Phase 4)'
+              : 'Measure Emotional Shift (Phase 4)'
+          }
+        />
       </View>
     </ScrollView>
   );
@@ -153,13 +197,13 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 32,
+    paddingTop: 8,
+    paddingBottom: 28,
     alignItems: 'center',
   },
   header: {
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   phaseBadge: {
     flexDirection: 'row',
@@ -171,162 +215,210 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderTeal,
     gap: 6,
-    marginTop: 8,
-    marginBottom: 4,
+    marginTop: 6,
     ...shadows.card,
   },
   phaseBadgeText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 11,
-    fontWeight: '800',
     color: colors.primaryDark,
   },
-  title: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: colors.primaryDark,
-    textAlign: 'center',
-  },
-  reflectionCard: {
+  letterWrapper: {
     width: '100%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: radii.xl,
+    position: 'relative',
+    marginVertical: 6,
+    paddingTop: 10,
+  },
+  washiTapeLeft: {
+    position: 'absolute',
+    top: 0,
+    left: 20,
+    width: 68,
+    height: 20,
+    backgroundColor: 'rgba(167, 243, 208, 0.88)',
+    borderRadius: 2,
+    transform: [{ rotate: '-4deg' }],
+    zIndex: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(52, 211, 153, 0.4)',
+    borderStyle: 'dashed',
+    ...shadows.card,
+  },
+  washiTapeRight: {
+    position: 'absolute',
+    top: 2,
+    right: 20,
+    width: 68,
+    height: 20,
+    backgroundColor: 'rgba(254, 205, 211, 0.88)',
+    borderRadius: 2,
+    transform: [{ rotate: '4deg' }],
+    zIndex: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(251, 113, 133, 0.4)',
+    borderStyle: 'dashed',
+    ...shadows.card,
+  },
+  washiTapePattern: {
+    flex: 1,
+  },
+  letterPaper: {
+    backgroundColor: '#FFFDF8',
+    borderRadius: 18,
     padding: 16,
+    paddingTop: 18,
     borderWidth: 1.5,
-    borderColor: colors.borderTeal,
-    marginBottom: 12,
+    borderColor: '#FED7AA',
     ...shadows.soft,
   },
-  cardHeader: {
+  letterHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     marginBottom: 8,
   },
-  cardHeaderText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: colors.primaryDark,
-    textTransform: 'uppercase',
+  letterGreeting: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 12,
+    color: '#9A3412',
   },
-  reflectionText: {
-    fontSize: 13,
+  letterBody: {
+    fontFamily: typography.fontPromptMedium,
+    fontSize: 12,
     color: colors.textPrimary,
     lineHeight: 20,
-    fontWeight: '600',
   },
-  biologyBox: {
+  biologyNote: {
     flexDirection: 'row',
-    backgroundColor: '#E6F9F7',
+    backgroundColor: '#F0FDFA',
     padding: 10,
-    borderRadius: radii.md,
+    borderRadius: 12,
     marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#CCFBF1',
     gap: 8,
   },
   biologyText: {
+    flex: 1,
+    fontFamily: typography.fontPromptRegular,
     fontSize: 11,
     color: colors.primaryDark,
-    lineHeight: 16,
-    flex: 1,
-    fontWeight: '500',
+    lineHeight: 17,
   },
-  microActionCard: {
+  promiseCard: {
     width: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: radii.xl,
-    padding: 16,
-    borderWidth: 2,
-    borderColor: 'rgba(250, 140, 61, 0.4)',
-    marginBottom: 16,
+    borderRadius: 18,
+    padding: 14,
+    borderWidth: 1.5,
+    borderColor: colors.borderTeal,
+    marginTop: 8,
     ...shadows.soft,
   },
-  microActionHeader: {
+  promiseHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
   },
-  microTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  microTitleText: {
+  promiseTitle: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 12,
-    fontWeight: '800',
-    color: colors.secondary,
-    textTransform: 'uppercase',
+    color: colors.primaryDark,
   },
-  immediateBadge: {
-    backgroundColor: colors.primaryLight,
+  promiseBadge: {
+    backgroundColor: '#FEF3C7',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: radii.full,
-    borderWidth: 1,
-    borderColor: colors.borderTeal,
   },
-  immediateText: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: colors.primaryDark,
+  promiseBadgeText: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 9,
+    color: '#B45309',
   },
   commitBox: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FAFAFA',
+    backgroundColor: '#F8FAFC',
+    borderRadius: 14,
     padding: 12,
-    borderRadius: radii.lg,
     borderWidth: 1.5,
-    borderColor: colors.borderSubtle,
+    borderColor: '#E2E8F0',
+    gap: 10,
   },
   commitBoxActive: {
-    backgroundColor: '#E6F9F7',
+    backgroundColor: '#F0FDFA',
     borderColor: colors.primary,
   },
   commitContent: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-    marginRight: 10,
     gap: 8,
   },
-  commitEmoji: {
-    fontSize: 16,
+  actionEmoji: {
+    fontSize: 20,
   },
   commitActionText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: colors.textPrimary,
-    lineHeight: 17,
     flex: 1,
+    fontFamily: typography.fontPromptBold,
+    fontSize: 12,
+    color: colors.textPrimary,
+    lineHeight: 18,
   },
-  checkboxCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+  stampPlaceholder: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     borderWidth: 1.5,
-    borderColor: colors.borderSubtle,
-    backgroundColor: '#FFFFFF',
+    borderColor: '#CBD5E1',
+    borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkboxCircleActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  tapPrompt: {
-    fontSize: 9,
+  stampPrompt: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 8,
     color: colors.textMuted,
-    fontWeight: '700',
+    textAlign: 'center',
+  },
+  mintSealStamp: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: '#10B981',
+    padding: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#A7F3D0',
+    ...shadows.card,
+  },
+  mintSealInner: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#059669',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mintSealText: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 6,
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
   commitHint: {
+    fontFamily: typography.fontPromptMedium,
     fontSize: 10,
     color: colors.textMuted,
-    marginTop: 8,
     textAlign: 'center',
-    fontWeight: '500',
+    marginTop: 8,
   },
   actionSection: {
     width: '100%',
+    marginTop: 10,
   },
 });

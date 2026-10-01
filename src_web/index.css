@@ -115,3 +115,29 @@ body {
 .animate-float {
   animation: mooca-float 3s ease-in-out infinite;
 }
+
+/* Floating Emotion Cloud Harmonic Physics */
+@keyframes float-cloud-1 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes float-cloud-2 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float-cloud-3 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes float-cloud-4 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-9px); }
+}
+
+.animate-cloud-1 { animation: float-cloud-1 2.8s ease-in-out infinite; }
+.animate-cloud-2 { animation: float-cloud-2 3.4s ease-in-out infinite 0.2s; }
+.animate-cloud-3 { animation: float-cloud-3 3.0s ease-in-out infinite 0.5s; }
+.animate-cloud-4 { animation: float-cloud-4 3.6s ease-in-out infinite 0.15s; }

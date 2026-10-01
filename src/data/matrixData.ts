@@ -5,7 +5,8 @@ export const EMOTION_TAGS: EmotionTag[] = [
     id: 'shaking',
     labelTh: 'ตื่นเต้นจนตัวสั่น',
     labelEn: 'Trembling with Nerves',
-    color: '#FA8C3D', // Sunshade warning
+    emoji: '🥶',
+    color: '#FA8C3D', // Sunshade warm accent
     weightDescription: 'Adrenaline surge in extremities',
     recommendedOption: 'A', // The Somatic Absorption (rubbing warms cold shaking hands)
   },
@@ -13,6 +14,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     id: 'forgetting',
     labelTh: 'กลัวลืมสิ่งที่อ่านมา',
     labelEn: 'Fear of Blanking Out',
+    emoji: '💭',
     color: '#F26E6E', // Flamingo
     weightDescription: 'Prefrontal amygdala hijack',
     recommendedOption: 'A', // Somatic Absorption / Blessing Sigil
@@ -21,6 +23,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     id: 'pressure',
     labelTh: 'กดดันจนหายใจไม่ทั่วท้อง',
     labelEn: 'Crushed by Pressure',
+    emoji: '🪨',
     color: '#3B82F6', // Accent Blue
     weightDescription: 'Sympathetic tension & rapid pulse',
     recommendedOption: 'B', // The Victory Sip (Vagal Maneuver)
@@ -29,14 +32,16 @@ export const EMOTION_TAGS: EmotionTag[] = [
     id: 'freeze',
     labelTh: 'สมองช็อต ตื้อตัน คิดไม่ออก',
     labelEn: 'Cognitive Freeze',
-    color: '#93C5FD',
+    emoji: '🧊',
+    color: '#60A5FA',
     weightDescription: 'Mental deadlock & physical freeze',
     recommendedOption: 'C', // Kinetic Tension Shaker (discharge)
   },
   {
     id: 'burnout',
-    labelTh: 'ล้าสะสม พลังงานหมดเกลี้ยง',
+    labelTh: 'ล้าสะสม หมดไฟชั่วขณะ',
     labelEn: 'Chronic Drain & Burnout',
+    emoji: '🕯️',
     color: '#00C4B3', // Brand turquoise
     weightDescription: 'Neural depletion & sensory overload',
     recommendedOption: 'D', // Pre-Generated Studio Audio Matrix

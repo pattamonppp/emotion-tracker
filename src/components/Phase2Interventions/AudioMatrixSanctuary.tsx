@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  Easing,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MBTIType } from '../../types';
 import { MBTI_SANCTUARY_SCRIPTS, getMBTIArchetype } from '../../data/matrixData';
 import { audioService } from '../../services/audioService';
-import { Button } from '../../design-system/Button';
+import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
-import { Volume2, VolumeX, Sparkles, Check, Headphones } from 'lucide-react-native';
-import { colors, radii, shadows } from '../../design-system/tokens';
+import { Volume2, VolumeX, Sparkles, Check, Headphones, Moon } from 'lucide-react-native';
+import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface AudioMatrixSanctuaryProps {
   mbti: MBTIType;
@@ -23,6 +31,53 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
   const [countdown, setCountdown] = useState(25);
   const archetype = getMBTIArchetype(mbti);
   const script = MBTI_SANCTUARY_SCRIPTS[archetype];
+
+  // Star twinkling animations
+  const starTwinkleAnim = useRef(new Animated.Value(0.4)).current;
+  const moonGlowAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const twinkle = Animated.loop(
+      Animated.sequence([
+        Animated.timing(starTwinkleAnim, {
+          toValue: 1,
+          duration: 1200,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(starTwinkleAnim, {
+          toValue: 0.35,
+          duration: 1200,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    twinkle.start();
+
+    const moonPulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(moonGlowAnim, {
+          toValue: 1.08,
+          duration: 2000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(moonGlowAnim, {
+          toValue: 1,
+          duration: 2000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    moonPulse.start();
+
+    return () => {
+      twinkle.stop();
+      moonPulse.stop();
+    };
+  }, [starTwinkleAnim, moonGlowAnim]);
 
   useEffect(() => {
     audioService.startNeuralEntrainment('both');
@@ -73,6 +128,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
 
         <TouchableOpacity
           onPress={toggleSound}
+          activeOpacity={0.8}
           style={styles.soundToggle}
         >
           {isPlaying ? (
@@ -83,29 +139,62 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* Mascot in Listening Mode */}
-      <View style={styles.mascotWrapper}>
-        <MoocaMascot
-          mood="listening"
-          size="md"
-          speakingBubble={
-            isPlaying
-              ? lang === 'th'
-                ? 'หลับตาลง แล้วฟังเสียงคลื่นอัลฟา...'
-                : 'Close your eyes and let the Alpha waves steady you...'
-              : lang === 'th'
-              ? 'แตะไอคอนลำโพงเพื่อเริ่มฟังเสียง'
-              : 'Tap the speaker to play voice'
-          }
-        />
-      </View>
+      {/* Cozy Night Sky with Crescent Moon & Twinkling Stars */}
+      <LinearGradient
+        colors={['#1E293B', '#0F172A', '#1E293B']}
+        style={styles.nightSkyCard}
+      >
+        {/* Glowing Crescent Moon */}
+        <Animated.View
+          style={[
+            styles.moonWrapper,
+            { transform: [{ scale: moonGlowAnim }] },
+          ]}
+        >
+          <Moon size={32} color="#FDE047" fill="#FDE047" />
+          <View style={styles.moonHalo} />
+        </Animated.View>
+
+        {/* Twinkling Stars in Night Sky */}
+        <Animated.View style={[styles.starsLayer, { opacity: starTwinkleAnim }]}>
+          <Text style={[styles.twinkleStar, { top: 12, left: 24 }]}>✨</Text>
+          <Text style={[styles.twinkleStar, { top: 28, right: 38, fontSize: 10 }]}>⭐</Text>
+          <Text style={[styles.twinkleStar, { bottom: 45, left: 34, fontSize: 11 }]}>💫</Text>
+          <Text style={[styles.twinkleStar, { bottom: 50, right: 48 }]}>✨</Text>
+        </Animated.View>
+
+        {/* Cozy Mooca Wearing Turquoise Headphones Sleeping on Cloud */}
+        <View style={styles.sleepingMoocaArea}>
+          <MoocaMascot
+            mood="listening"
+            size="md"
+            speakingBubble={
+              isPlaying
+                ? lang === 'th'
+                  ? 'Mooca ใส่หูฟังเปิดคลื่นอัลฟาให้... หลับตาลงสบายๆ นะ'
+                  : 'Mooca has your sanctuary waves ready... rest your eyes.'
+                : lang === 'th'
+                ? 'แตะไอคอนลำโพงเพื่อเริ่มฟังเสียงสมาธิ'
+                : 'Tap the speaker to play sanctuary'
+            }
+          />
+
+          {/* Turquoise Headphones Visual Accent Badge */}
+          <View style={styles.headphonesBadge}>
+            <Headphones size={12} color="#00C4B3" />
+            <Text style={styles.headphonesBadgeText}>
+              {lang === 'th' ? 'หูฟังสีเทอร์ควอยซ์เชื่อมต่อแล้ว' : 'Turquoise Headphones Connected'}
+            </Text>
+          </View>
+        </View>
+      </LinearGradient>
 
       {/* Voice Affirmation Script Card */}
       <View style={styles.scriptCard}>
         <View style={styles.scriptHeader}>
           <Sparkles size={14} color={colors.secondary} />
           <Text style={styles.scriptCategory}>
-            {lang === 'th' ? 'ข้อความปลอบประโลมเฉพาะคุณ' : 'Personalized Sanctuary Voice'}
+            {lang === 'th' ? 'ถ้อยคำปลอบประโลมสำหรับคุณ' : 'Personalized Sanctuary Voice'}
           </Text>
         </View>
 
@@ -113,36 +202,39 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
           "{lang === 'th' ? script.th : script.en}"
         </Text>
 
-        {/* Ambient Neural Wave Visualizer Bar */}
+        {/* Ambient Neural Wave Visualizer */}
         <View style={styles.waveBar}>
-          <View style={[styles.wavePill, { height: 18 }]} />
-          <View style={[styles.wavePill, { height: 28 }]} />
+          <View style={[styles.wavePill, { height: 16 }]} />
+          <View style={[styles.wavePill, { height: 26 }]} />
           <View style={[styles.wavePill, { height: 14 }]} />
-          <View style={[styles.wavePill, { height: 32 }]} />
           <View style={[styles.wavePill, { height: 22 }]} />
+          <View style={[styles.wavePill, { height: 28 }]} />
+          <View style={[styles.wavePill, { height: 18 }]} />
+          <View style={[styles.wavePill, { height: 24 }]} />
           <View style={[styles.wavePill, { height: 12 }]} />
         </View>
-        <Text style={styles.waveSubtext}>10Hz Alpha Calm Wave Neural Entrainment</Text>
       </View>
 
       {/* Complete Button */}
       <View style={styles.actionSection}>
-        <Button
+        <MarshmallowButton
           variant="primary"
           size="lg"
-          fullWidth
           onPress={() => {
             audioService.stopAllVoice();
             onComplete();
           }}
           icon={<Check size={18} color="#FFFFFF" />}
-        >
-          {countdown > 0
-            ? `${lang === 'th' ? 'พักใจอีก' : 'Breathe for'} ${countdown}s`
-            : lang === 'th'
-            ? 'เสร็จสิ้นการบำบัดเสียง'
-            : 'Complete Acoustic Sanctuary'}
-        </Button>
+          title={
+            countdown > 0
+              ? lang === 'th'
+                ? `ฟังเสียงสมาธิต่อ (${countdown}s) หรือแตะเพื่อไปต่อ`
+                : `Listening (${countdown}s) • Tap to Proceed`
+              : lang === 'th'
+              ? 'สงบจิตใจเรียบร้อยแล้ว ก้าวต่อไป'
+              : 'Sanctuary Complete • Step Forward'
+          }
+        />
       </View>
     </View>
   );
@@ -152,14 +244,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   badgeRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
     width: '100%',
   },
   mbtiBadge: {
@@ -167,7 +259,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
     borderColor: colors.borderTeal,
@@ -175,14 +267,14 @@ const styles = StyleSheet.create({
     ...shadows.card,
   },
   mbtiBadgeText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 10,
-    fontWeight: '800',
     color: colors.primaryDark,
   },
   soundToggle: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: colors.borderTeal,
@@ -190,61 +282,106 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...shadows.card,
   },
-  mascotWrapper: {
+  nightSkyCard: {
+    width: '100%',
+    borderRadius: 22,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: 'rgba(0, 196, 179, 0.3)',
+    ...shadows.soft,
+  },
+  moonWrapper: {
+    position: 'absolute',
+    top: 14,
+    right: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  moonHalo: {
+    position: 'absolute',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(253, 224, 71, 0.15)',
+  },
+  starsLayer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  twinkleStar: {
+    position: 'absolute',
+    fontSize: 13,
+  },
+  sleepingMoocaArea: {
     alignItems: 'center',
     marginVertical: 4,
+  },
+  headphonesBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: radii.full,
+    gap: 5,
+    marginTop: 6,
+  },
+  headphonesBadgeText: {
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 9,
+    color: colors.primaryDark,
   },
   scriptCard: {
     width: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: radii.xl,
-    padding: 16,
+    borderRadius: 16,
+    padding: 12,
     borderWidth: 1.5,
     borderColor: colors.borderTeal,
-    alignItems: 'center',
     ...shadows.soft,
   },
   scriptHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 8,
+    marginBottom: 4,
   },
   scriptCategory: {
-    fontSize: 11,
-    fontWeight: '800',
+    fontFamily: typography.fontPromptBold,
+    fontSize: 10,
     color: colors.secondary,
     textTransform: 'uppercase',
   },
   scriptText: {
-    fontSize: 12.5,
+    fontFamily: typography.fontPromptMedium,
+    fontSize: 11,
+    color: colors.textPrimary,
     lineHeight: 18,
-    color: colors.primaryDark,
-    textAlign: 'center',
     fontStyle: 'italic',
-    fontWeight: '500',
   },
   waveBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    marginTop: 12,
-    height: 36,
+    marginTop: 8,
+    height: 28,
   },
   wavePill: {
-    width: 5,
+    width: 4,
     backgroundColor: colors.primary,
-    borderRadius: 3,
-  },
-  waveSubtext: {
-    fontSize: 10,
-    color: colors.textMuted,
-    fontWeight: '600',
-    marginTop: 4,
+    borderRadius: 2,
+    opacity: 0.8,
   },
   actionSection: {
     width: '100%',
-    marginTop: 6,
+    marginTop: 4,
   },
 });

@@ -12,6 +12,7 @@ export interface EmotionTag {
   id: EmotionTagId;
   labelTh: string;
   labelEn: string;
+  emoji: string;
   color: string;
   weightDescription: string;
   recommendedOption: 'A' | 'B' | 'C' | 'D';

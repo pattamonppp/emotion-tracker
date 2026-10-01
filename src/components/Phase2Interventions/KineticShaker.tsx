@@ -1,11 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  Easing,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Accelerometer } from 'expo-sensors';
 import { audioService } from '../../services/audioService';
-import { Button } from '../../design-system/Button';
+import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
 import { Zap, Activity, CheckCircle2, RotateCw } from 'lucide-react-native';
-import { colors, radii, shadows } from '../../design-system/tokens';
+import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface KineticShakerProps {
   onComplete: () => void;
@@ -20,21 +28,33 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
   const [shakesLeft, setShakesLeft] = useState(15);
   const [bouncesLeft, setBouncesLeft] = useState(10);
   const [isFinished, setIsFinished] = useState(false);
-  const lastShakeTime = useRef(0);
+  const [starBurstCount, setStarBurstCount] = useState(0);
 
-  // Shake animation value
+  const lastShakeTime = useRef(0);
   const shakeAnim = useRef(new Animated.Value(0)).current;
+  const starBurstAnim = useRef(new Animated.Value(0)).current;
 
   const triggerShakeVisual = () => {
+    // Shake wiggle
     Animated.sequence([
-      Animated.timing(shakeAnim, { toValue: 10, duration: 40, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: -10, duration: 40, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: 6, duration: 40, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: 0, duration: 40, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 8, duration: 35, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: -8, duration: 35, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 5, duration: 35, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 0, duration: 35, useNativeDriver: true }),
     ]).start();
+
+    // Burst stars from shattered grumpy cloud
+    setStarBurstCount((prev) => prev + 1);
+    starBurstAnim.setValue(0);
+    Animated.timing(starBurstAnim, {
+      toValue: 1,
+      duration: 600,
+      easing: Easing.out(Easing.quad),
+      useNativeDriver: true,
+    }).start();
   };
 
-  // Accelerometer subscription via expo-sensors
+  // Accelerometer listener
   useEffect(() => {
     let subscription: { remove: () => void } | null = null;
     try {
@@ -42,14 +62,13 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       subscription = Accelerometer.addListener(({ x, y, z }) => {
         const total = Math.sqrt(x * x + y * y + z * z);
         const now = Date.now();
-        // G-force threshold: > 1.8 indicates physical shaking
         if (total > 1.8 && now - lastShakeTime.current > 250) {
           lastShakeTime.current = now;
           handleCycle();
         }
       });
     } catch {
-      // Simulator or sensors disabled
+      // Simulator fallback
     }
 
     return () => {
@@ -87,12 +106,24 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
     audioService.playChimeShockwave();
     setTimeout(() => {
       onComplete();
-    }, 1200);
+    }, 1400);
   };
 
   const currentCount = mode === 'shake' ? shakesLeft : bouncesLeft;
   const maxCount = mode === 'shake' ? 15 : 10;
   const progressPercent = Math.round(((maxCount - currentCount) / maxCount) * 100);
+  // Mercury height drops from 95% down to 15%
+  const mercuryHeightPercent = Math.max(15, 95 - progressPercent * 0.8);
+
+  const starBurstScale = starBurstAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.6, 1.4],
+  });
+
+  const starBurstOpacity = starBurstAnim.interpolate({
+    inputRange: [0, 0.2, 1],
+    outputRange: [0, 1, 0],
+  });
 
   return (
     <View style={styles.container}>
@@ -103,11 +134,12 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             audioService.triggerHaptic('selection');
             setMode('shake');
           }}
+          activeOpacity={0.8}
           style={[styles.modeTab, mode === 'shake' && styles.modeTabActive]}
         >
           <Zap size={14} color={mode === 'shake' ? '#FFFFFF' : colors.primaryDark} />
           <Text style={[styles.modeTabText, mode === 'shake' && styles.modeTabTextActive]}>
-            {lang === 'th' ? 'เขย่าสะบัดมือ (Shake)' : 'Hand Shake'}
+            {lang === 'th' ? 'สะบัดข้อมือ (Wrist Shake)' : 'Hand Shake'}
           </Text>
         </TouchableOpacity>
 
@@ -116,16 +148,17 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             audioService.triggerHaptic('selection');
             setMode('bounce');
           }}
+          activeOpacity={0.8}
           style={[styles.modeTab, mode === 'bounce' && styles.modeTabActive]}
         >
           <Activity size={14} color={mode === 'bounce' ? '#FFFFFF' : colors.primaryDark} />
           <Text style={[styles.modeTabText, mode === 'bounce' && styles.modeTabTextActive]}>
-            {lang === 'th' ? 'ย่ำเท้าอยู่กับที่ (Bounce)' : 'Heel Bounce'}
+            {lang === 'th' ? 'กระโดดดึ๋งๆ (Heel Bounce)' : 'Heel Bounce'}
           </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Main Mascot Display with Shake Animation */}
+      {/* Mascot View with Shake Feedback */}
       <Animated.View
         style={[
           styles.mascotWrapper,
@@ -134,61 +167,143 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       >
         <MoocaMascot
           mood={isFinished ? 'celebrating' : 'shaking'}
-          size="lg"
+          size="sm"
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'ยอดเยี่ยมมาก! ความตึงเครียดสลายตัวแล้ว'
-                : 'Awesome! Tension successfully discharged!'
+                ? 'เมฆหน้าบึ้งแตกเป็นดาวหมดแล้ว! ตัวเบาสบายเลย ✨'
+                : 'All grumpy clouds shattered into shining stars!'
               : lang === 'th'
-              ? `เขย่ามือถือหรือแตะปุ่มอีก ${currentCount} ครั้ง!`
-              : `Shake device or tap ${currentCount} more times!`
+              ? `สะบัดข้อมือหรือกระโดดอีก ${currentCount} ครั้ง ให้เมฆแตกกระจาย!`
+              : `Shake device or bounce ${currentCount} more times!`
           }
         />
       </Animated.View>
 
-      {/* Circular Progress & Counter */}
-      <View style={styles.counterCard}>
-        <Text style={styles.counterTitle}>
-          {mode === 'shake'
-            ? lang === 'th'
-              ? 'สลัดอะดรีนาลีนส่วนเกินออกจากแขน'
-              : 'Discharging Excess Adrenaline'
-            : lang === 'th'
-            ? 'ทิ้งน้ำหนักลงส้นเท้าเพื่อ Grounding'
-            : 'Heel Drops to Ground Nervous System'}
-        </Text>
+      {/* Stress Thermometer & Shattering Clouds Container */}
+      <View style={styles.thermometerSection}>
+        {/* Star Burst Particles overlay */}
+        <Animated.View
+          style={[
+            styles.starBurstOverlay,
+            {
+              transform: [{ scale: starBurstScale }],
+              opacity: starBurstOpacity,
+            },
+          ]}
+          pointerEvents="none"
+        >
+          <Text style={styles.burstStar1}>⭐</Text>
+          <Text style={styles.burstStar2}>✨</Text>
+          <Text style={styles.burstStar3}>🌟</Text>
+          <Text style={styles.burstStar4}>✨</Text>
+        </Animated.View>
 
-        <View style={styles.counterBadge}>
-          <Text style={styles.counterNumber}>{currentCount}</Text>
-          <Text style={styles.counterUnit}>{lang === 'th' ? 'ครั้ง' : 'left'}</Text>
-        </View>
+        {/* The Cute Glass Thermometer Tube */}
+        <Animated.View
+          style={[
+            styles.thermometerWrapper,
+            { transform: [{ translateX: shakeAnim }] },
+          ]}
+        >
+          {/* Glass Stem */}
+          <View style={styles.thermoStem}>
+            {/* Tick Marks */}
+            <View style={styles.tickMarks}>
+              <View style={[styles.tick, { top: '15%' }]} />
+              <View style={[styles.tick, { top: '35%' }]} />
+              <View style={[styles.tick, { top: '55%' }]} />
+              <View style={[styles.tick, { top: '75%' }]} />
+            </View>
 
-        {/* Progress Bar */}
-        <View style={styles.progressBarBg}>
-          <View style={[styles.progressBarFill, { width: `${progressPercent}%` }]} />
+            {/* Mercury Liquid Fill */}
+            <LinearGradient
+              colors={
+                progressPercent > 70
+                  ? ['#2DD4BF', '#00C4B3']
+                  : progressPercent > 40
+                  ? ['#FBBF24', '#F59E0B']
+                  : ['#FB7185', '#E11D48']
+              }
+              style={[styles.mercuryFill, { height: `${mercuryHeightPercent}%` }]}
+            />
+          </View>
+
+          {/* Bulb Base with Grumpy Cloud / Stars */}
+          <View style={styles.thermoBulb}>
+            <LinearGradient
+              colors={
+                isFinished
+                  ? ['#CCFBF1', '#99F6E4']
+                  : progressPercent > 60
+                  ? ['#FEF08A', '#FDE047']
+                  : ['#FFE4E6', '#FECDD3']
+              }
+              style={styles.bulbGradient}
+            >
+              {isFinished ? (
+                <Text style={{ fontSize: 22 }}>🌟</Text>
+              ) : (
+                <View style={styles.grumpyCloud}>
+                  <Text style={styles.cloudEmoji}>☁️</Text>
+                  <Text style={styles.grumpyFace}>&gt;_&lt;</Text>
+                </View>
+              )}
+            </LinearGradient>
+          </View>
+        </Animated.View>
+
+        {/* Tension Gauge Label */}
+        <View style={styles.gaugeInfo}>
+          <Text style={styles.gaugeTitle}>
+            {lang === 'th' ? 'หลอดปรอทสะบัดความตึงเครียด' : 'Stress Discharge Mercury'}
+          </Text>
+          <Text style={styles.gaugeSub}>
+            {isFinished
+              ? lang === 'th'
+                ? 'ความตึงเครียดแตกสลายหมดแล้ว 100%'
+                : 'Tension fully discharged 100%'
+              : lang === 'th'
+              ? `เหลือเมฆหน้าบึ้งอีก ${currentCount} ก้อน`
+              : `${currentCount} grumpy clouds remaining`}
+          </Text>
+
+          {/* Progress Bar */}
+          <View style={styles.progressBarBg}>
+            <LinearGradient
+              colors={['#00C4B3', '#62A0E9']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[styles.progressBarFill, { width: `${progressPercent}%` }]}
+            />
+          </View>
         </View>
-        <Text style={styles.progressPercentText}>{progressPercent}% Discharged</Text>
       </View>
 
-      {/* Manual Action Button for simulator or physical interaction */}
+      {/* Tactile Marshmallow Tap Action */}
       <View style={styles.actionSection}>
-        <Button
-          variant="amber"
+        <MarshmallowButton
+          variant={isFinished ? 'mint' : 'secondary'}
           size="lg"
-          fullWidth
           onPress={handleCycle}
           disabled={isFinished}
-          icon={isFinished ? <CheckCircle2 size={18} color="#FFFFFF" /> : <RotateCw size={18} color="#FFFFFF" />}
-        >
-          {isFinished
-            ? lang === 'th'
-              ? 'ปลดปล่อยสำเร็จ!'
-              : 'Complete!'
-            : lang === 'th'
-            ? 'แตะตรงนี้เพื่อสลัดพลังงาน (Tap)'
-            : 'Tap Here to Shake / Discharge'}
-        </Button>
+          icon={
+            isFinished ? (
+              <CheckCircle2 size={18} color="#004D40" />
+            ) : (
+              <RotateCw size={18} color="#FFFFFF" />
+            )
+          }
+          title={
+            isFinished
+              ? lang === 'th'
+                ? 'สลัดพลังลบแตกกระจายสำเร็จ!'
+                : 'Tension Discharged!'
+              : lang === 'th'
+              ? `แตะเพื่อสะบัดทิ้งพลังลบ (${currentCount} ครั้ง)`
+              : `Tap to Shake / Discharge (${currentCount} left)`
+          }
+        />
       </View>
     </View>
   );
@@ -198,7 +313,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 14,
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -206,7 +321,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderRadius: radii.full,
-    padding: 4,
+    padding: 3,
     borderWidth: 1,
     borderColor: colors.borderTeal,
     width: '100%',
@@ -217,16 +332,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: 7,
     borderRadius: radii.full,
-    gap: 6,
+    gap: 5,
   },
   modeTabActive: {
     backgroundColor: colors.secondary,
   },
   modeTabText: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 11,
     color: colors.primaryDark,
   },
   modeTabTextActive: {
@@ -234,63 +349,127 @@ const styles = StyleSheet.create({
   },
   mascotWrapper: {
     alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 12,
+    marginVertical: 2,
   },
-  counterCard: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: radii.xl,
-    padding: 16,
+  thermometerSection: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 14,
     borderWidth: 1.5,
-    borderColor: colors.borderTeal,
+    borderColor: '#FED7AA',
+    width: '100%',
+    gap: 16,
+    position: 'relative',
     ...shadows.soft,
   },
-  counterTitle: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: 8,
+  starBurstOverlay: {
+    position: 'absolute',
+    left: 20,
+    top: 20,
+    width: 80,
+    height: 120,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
   },
-  counterBadge: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: 4,
-    marginVertical: 4,
+  burstStar1: { position: 'absolute', top: 5, left: 10, fontSize: 18 },
+  burstStar2: { position: 'absolute', top: 20, right: 10, fontSize: 16 },
+  burstStar3: { position: 'absolute', bottom: 25, left: 15, fontSize: 20 },
+  burstStar4: { position: 'absolute', bottom: 10, right: 15, fontSize: 16 },
+  thermometerWrapper: {
+    alignItems: 'center',
+    width: 54,
   },
-  counterNumber: {
-    fontSize: 44,
+  thermoStem: {
+    width: 20,
+    height: 100,
+    backgroundColor: '#F3F4F6',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderWidth: 2,
+    borderBottomWidth: 0,
+    borderColor: '#D1D5DB',
+    overflow: 'hidden',
+    justifyContent: 'flex-end',
+    position: 'relative',
+  },
+  tickMarks: {
+    position: 'absolute',
+    left: 2,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    zIndex: 2,
+  },
+  tick: {
+    position: 'absolute',
+    width: 5,
+    height: 1.5,
+    backgroundColor: '#9CA3AF',
+  },
+  mercuryFill: {
+    width: '100%',
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
+  },
+  thermoBulb: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 2.5,
+    borderColor: '#D1D5DB',
+    overflow: 'hidden',
+    marginTop: -8,
+    zIndex: 3,
+    ...shadows.card,
+  },
+  bulbGradient: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  grumpyCloud: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cloudEmoji: {
+    fontSize: 20,
+  },
+  grumpyFace: {
+    fontSize: 7,
     fontWeight: '900',
-    color: colors.secondary,
+    color: '#9F1239',
+    marginTop: -8,
   },
-  counterUnit: {
-    fontSize: 14,
-    fontWeight: '700',
+  gaugeInfo: {
+    flex: 1,
+    gap: 4,
+  },
+  gaugeTitle: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 12,
+    color: colors.primaryDark,
+  },
+  gaugeSub: {
+    fontFamily: typography.fontPromptRegular,
+    fontSize: 10,
     color: colors.textMuted,
   },
   progressBarBg: {
-    width: '100%',
-    height: 10,
-    backgroundColor: '#F1F5F9',
-    borderRadius: 5,
+    height: 8,
+    backgroundColor: '#F3F4F6',
+    borderRadius: 4,
     overflow: 'hidden',
-    marginTop: 8,
+    marginTop: 6,
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: colors.secondary,
-    borderRadius: 5,
-  },
-  progressPercentText: {
-    fontSize: 11,
-    color: colors.textMuted,
-    fontWeight: '600',
-    marginTop: 4,
+    borderRadius: 4,
   },
   actionSection: {
     width: '100%',
-    marginTop: 8,
+    marginTop: 4,
   },
 });

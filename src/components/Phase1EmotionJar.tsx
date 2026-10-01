@@ -1,19 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { EmotionTagId } from '../types';
 import { EMOTION_TAGS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
-import { Button } from '../design-system/Button';
+import { MarshmallowButton } from '../design-system/MarshmallowButton';
+import { FloatingEmotionCloud } from './FloatingEmotionCloud';
 import { GlassEmotionJar } from './GlassEmotionJar';
 import { MoocaMascot } from './MoocaMascot';
-import { MapPin, Activity, ArrowRight, Check } from 'lucide-react-native';
+import { MapPin, Activity, Sparkles, Check, ArrowRight } from 'lucide-react-native';
 import { colors, radii, shadows } from '../design-system/tokens';
 
 interface Phase1EmotionJarProps {
   currentLocation: string;
   heartRate: number;
   selectedEmotions: EmotionTagId[];
-  onSelectEmotions: (ids: EmotionTagId[]) => void;
+  onSelectEmotions: (emotions: EmotionTagId[]) => void;
   onProceed: () => void;
   onOpenPulseSensor?: () => void;
   onOpenStory?: () => void;
@@ -31,25 +38,32 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   lang,
 }) => {
   const toggleEmotion = (id: EmotionTagId) => {
+    audioService.playJarDrop();
     if (selectedEmotions.includes(id)) {
-      audioService.triggerHaptic('light');
       onSelectEmotions(selectedEmotions.filter((item) => item !== id));
     } else {
-      audioService.triggerHaptic('medium');
-      audioService.playJarDrop();
+      onSelectEmotions([...selectedEmotions, id]);
+    }
+  };
+
+  const handleDropIntoJar = (id: EmotionTagId) => {
+    if (!selectedEmotions.includes(id)) {
       onSelectEmotions([...selectedEmotions, id]);
     }
   };
 
   const handleClearAll = () => {
+    audioService.triggerHaptic('medium');
     onSelectEmotions([]);
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
+    <View style={styles.root}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
       {/* Top Status Indicators (Location & Live Pulse) */}
       <View style={styles.statusRow}>
         <View style={styles.badgePill}>
@@ -69,7 +83,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* Hero Mascot Greeting */}
+      {/* Hero Mascot Greeting with Interactive Petting Mode */}
       <View style={styles.mascotSection}>
         <MoocaMascot
           mood={selectedEmotions.length > 0 ? 'comforting' : 'happy'}
@@ -77,17 +91,17 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           speakingBubble={
             selectedEmotions.length > 0
               ? lang === 'th'
-                ? 'Mooca จะช่วยดูแลความรู้สึกนี้เองนะ!'
-                : 'Mooca will hold this safe for you!'
+                ? 'Mooca จะช่วยดูแลความรู้สึกนี้เองนะ! 💕'
+                : 'Mooca will hold this safe for you! 💕'
               : lang === 'th'
-              ? 'สวัสดี! วันนี้รู้สึกหนักใจเรื่องอะไรบ้าง?'
-              : 'Hello! What is weighing on your mind?'
+              ? 'สวัสดี! วันนี้รู้สึกหนักใจเรื่องอะไรบ้าง? (แตะลูบหัวเค้าได้นะ) ✨'
+              : 'Hello! What is weighing on your mind? (Tap to pet me!) ✨'
           }
           onHug={onOpenStory}
         />
       </View>
 
-      {/* The Glass Emotion Jar */}
+      {/* The Storybook Apothecary Glass Emotion Jar */}
       <GlassEmotionJar
         selectedEmotions={selectedEmotions}
         onRemoveEmotion={(id) => toggleEmotion(id)}
@@ -95,91 +109,89 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
         lang={lang}
       />
 
-      {/* Emotion Selection Matrix Chips */}
+      {/* Floating Emotion Clouds Section */}
       <View style={styles.selectorSection}>
-        <Text style={styles.sectionTitle}>
-          {lang === 'th' ? 'เลือกความรู้สึกที่เกิดขึ้นตอนนี้:' : 'Identify your current state:'}
-        </Text>
+        <View style={styles.sectionHeaderRow}>
+          <Sparkles size={14} color={colors.primary} />
+          <Text style={styles.sectionTitle}>
+            {lang === 'th'
+              ? 'ก้อนเมฆอารมณ์ลอยได้ (ลากหรือแตะหย่อนลงโหล):'
+              : 'Floating Emotion Clouds (Drag or Tap into Jar):'}
+          </Text>
+        </View>
 
-        <View style={styles.chipsGrid}>
-          {EMOTION_TAGS.map((tag) => {
+        <View style={styles.cloudsList}>
+          {EMOTION_TAGS.map((tag, idx) => {
             const isSelected = selectedEmotions.includes(tag.id);
             return (
-              <TouchableOpacity
+              <FloatingEmotionCloud
                 key={tag.id}
-                activeOpacity={0.8}
-                onPress={() => toggleEmotion(tag.id)}
-                style={[
-                  styles.chip,
-                  {
-                    borderColor: isSelected ? tag.color : colors.borderSubtle,
-                    backgroundColor: isSelected ? tag.color + '18' : '#FFFFFF',
-                  },
-                ]}
-              >
-                <View
-                  style={[
-                    styles.chipIndicator,
-                    {
-                      backgroundColor: tag.color,
-                      borderColor: isSelected ? tag.color : 'transparent',
-                    },
-                  ]}
-                >
-                  {isSelected && <Check size={10} color="#FFFFFF" strokeWidth={3} />}
-                </View>
-
-                <View style={styles.chipTextWrapper}>
-                  <Text
-                    style={[
-                      styles.chipLabel,
-                      { color: isSelected ? colors.primaryDark : colors.textPrimary },
-                    ]}
-                  >
-                    {lang === 'th' ? tag.labelTh : tag.labelEn}
-                  </Text>
-                  <Text style={styles.chipSub}>{tag.weightDescription}</Text>
-                </View>
-              </TouchableOpacity>
+                tag={tag}
+                index={idx}
+                isSelected={isSelected}
+                onToggle={toggleEmotion}
+                onDropIntoJar={handleDropIntoJar}
+                lang={lang}
+              />
             );
           })}
         </View>
       </View>
-
-      {/* Proceed CTA */}
-      <View style={styles.ctaContainer}>
-        <Button
-          variant="primary"
-          size="lg"
-          fullWidth
-          onPress={() => {
-            if (selectedEmotions.length === 0) {
-              // auto-select first one if none selected
-              toggleEmotion(EMOTION_TAGS[0].id);
-            }
-            onProceed();
-          }}
-          icon={<ArrowRight size={18} color="#FFFFFF" />}
-        >
-          {lang === 'th' ? 'เริ่มกระบวนการรีเซ็ตใจ (120 วินาที)' : 'Begin 120s Reset Engine'}
-        </Button>
-      </View>
     </ScrollView>
+
+    {/* Sticky Bottom Marshmallow 3D Proceed CTA */}
+    <View style={styles.stickyBottomBar}>
+      <MarshmallowButton
+        variant="primary"
+        size="lg"
+        onPress={() => {
+          if (selectedEmotions.length === 0) {
+            toggleEmotion(EMOTION_TAGS[0].id);
+          }
+          onProceed();
+        }}
+        title={lang === 'th' ? 'เริ่มกระบวนการรีเซ็ตใจกับ Mooca' : 'Begin Cozy Reset Engine'}
+        icon={<ArrowRight size={18} color="#FFFFFF" />}
+      />
+    </View>
+  </View>
   );
 };
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    width: '100%',
+  },
+  container: {
+    flex: 1,
+    width: '100%',
+  },
   scrollContent: {
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 32,
+    paddingTop: 8,
+    paddingBottom: 20,
     alignItems: 'center',
+  },
+  stickyBottomBar: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 196, 179, 0.15)',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 4,
   },
   statusRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 8,
+    paddingHorizontal: 2,
   },
   badgePill: {
     flexDirection: 'row',
@@ -188,9 +200,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radii.full,
-    borderWidth: 1,
-    borderColor: colors.borderTeal,
+    borderWidth: 1.2,
+    borderColor: 'rgba(0, 196, 179, 0.25)',
     gap: 4,
+    ...shadows.soft,
   },
   badgeText: {
     fontSize: 11,
@@ -204,9 +217,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radii.full,
-    borderWidth: 1,
+    borderWidth: 1.2,
     borderColor: 'rgba(250, 140, 61, 0.3)',
     gap: 4,
+    ...shadows.soft,
   },
   pulseText: {
     fontSize: 11,
@@ -214,54 +228,28 @@ const styles = StyleSheet.create({
     color: colors.secondary,
   },
   mascotSection: {
-    marginVertical: 4,
+    marginVertical: 2,
     alignItems: 'center',
   },
   selectorSection: {
     width: '100%',
-    marginTop: 12,
+    marginTop: 10,
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginBottom: 10,
   },
   sectionTitle: {
     fontSize: 13,
     fontWeight: '700',
     color: colors.primaryDark,
-    marginBottom: 8,
     textAlign: 'center',
   },
-  chipsGrid: {
-    gap: 7,
-  },
-  chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: radii.lg,
-    borderWidth: 1.5,
-    ...shadows.card,
-  },
-  chipIndicator: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-  },
-  chipTextWrapper: {
-    flex: 1,
-  },
-  chipLabel: {
-    fontSize: 13,
-    fontWeight: '700',
-    marginBottom: 1,
-  },
-  chipSub: {
-    fontSize: 10,
-    color: colors.textMuted,
-    fontWeight: '500',
-  },
-  ctaContainer: {
+  cloudsList: {
     width: '100%',
-    marginTop: 20,
+    gap: 4,
   },
 });

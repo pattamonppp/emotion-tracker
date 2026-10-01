@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { EmotionTagId, ShiftFeedback } from '../types';
 import { audioService } from '../services/audioService';
-import { Button } from '../design-system/Button';
+import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { MoocaMascot } from './MoocaMascot';
-import { Heart, Activity, Check, Plus, Minus, ArrowRight } from 'lucide-react-native';
-import { colors, radii, shadows } from '../design-system/tokens';
+import { Activity, Check, Plus, Minus, ArrowRight } from 'lucide-react-native';
+import { colors, radii, shadows, typography } from '../design-system/tokens';
+
+export type MoodStampType = 'empowered' | 'grounded' | 'hug';
 
 interface Phase4FeedbackProps {
   preHeartRate: number;
@@ -21,15 +29,21 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
   lang,
 }) => {
   const [postHeartRate, setPostHeartRate] = useState(Math.max(65, preHeartRate - 18));
-  const [shiftResult, setShiftResult] = useState<'empowered' | 'grounded' | 'same'>('grounded');
+  const [shiftResult, setShiftResult] = useState<MoodStampType>('empowered');
 
   const bpmDrop = preHeartRate - postHeartRate;
+
+  const handleSelectStamp = (stamp: MoodStampType) => {
+    audioService.triggerHaptic('medium');
+    audioService.playJarDrop();
+    setShiftResult(stamp);
+  };
 
   const handleFinish = () => {
     audioService.triggerHaptic('success');
     audioService.playChimeShockwave();
     onFinishReset({
-      shiftResult,
+      shiftResult: shiftResult === 'hug' ? 'same' : shiftResult,
       preHeartRate,
       postHeartRate,
       timestamp: new Date().toISOString(),
@@ -44,20 +58,24 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
       {/* Header & Mascot */}
       <View style={styles.header}>
         <MoocaMascot
-          mood={shiftResult === 'same' ? 'comforting' : 'celebrating'}
+          mood={shiftResult === 'hug' ? 'hugging' : 'celebrating'}
           size="sm"
           speakingBubble={
-            shiftResult === 'same'
+            shiftResult === 'hug'
               ? lang === 'th'
-                ? 'ไม่เป็นไรเลยนะ การได้หยุดพัก 2 นาทีนี้ ร่างกายก็ได้ชะลอแล้ว'
-                : 'That is completely okay. These 2 minutes gave your mind real rest.'
+                ? 'มากอดกันแน่นๆ นะ! Mooca อยู่ตรงนี้เสมอ ไม่ต้องกลัวเลย 🧸'
+                : 'Big warm hugs! Mooca is always by your side 🧸'
+              : shiftResult === 'empowered'
+              ? lang === 'th'
+                ? 'เย้! พลังใจมาเต็มแล้ว ลุยได้สบายเลย! ⚡'
+                : 'Awesome! Confidence restored and ready to conquer! ⚡'
               : lang === 'th'
-              ? 'เก่งมากเลย! ดูสิ หัวใจและร่างกายของเธอค่อยๆ สงบลงแล้ว'
-              : 'Look at that! Your heart and mind have found their rhythm.'
+              ? 'ลมหายใจนิ่งขึ้น จิตใจสงบแล้วนะคนเก่ง 🌿'
+              : 'Mind is steady and peaceful now 🌿'
           }
         />
         <Text style={styles.title}>
-          {lang === 'th' ? 'วัดผลการฟื้นตัวของใจ (Delta Check)' : 'Post-Session Bio Feedback'}
+          {lang === 'th' ? 'ตราประทับวัดผลลัพธ์ใจ' : 'Mind & Body Delta Check'}
         </Text>
       </View>
 
@@ -66,7 +84,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
         <View style={styles.bpmHeader}>
           <Activity size={15} color={colors.secondary} />
           <Text style={styles.bpmHeaderText}>
-            {lang === 'th' ? 'การเปลี่ยนแปลงของอัตราการเต้นของหัวใจ' : 'Heart Rate Delta'}
+            {lang === 'th' ? 'การเปลี่ยนแปลงของอัตราการเต้นหัวใจ' : 'Heart Rate Delta'}
           </Text>
         </View>
 
@@ -95,122 +113,155 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   audioService.triggerHaptic('selection');
                   setPostHeartRate((prev) => Math.max(50, prev - 1));
                 }}
+                activeOpacity={0.7}
                 style={styles.stepperBtn}
               >
-                <Minus size={12} color={colors.primaryDark} />
+                <Minus size={11} color={colors.primaryDark} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   audioService.triggerHaptic('selection');
                   setPostHeartRate((prev) => Math.min(160, prev + 1));
                 }}
+                activeOpacity={0.7}
                 style={styles.stepperBtn}
               >
-                <Plus size={12} color={colors.primaryDark} />
+                <Plus size={11} color={colors.primaryDark} />
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </View>
 
-      {/* Subjective Shift Perception Options */}
-      <View style={styles.shiftSection}>
-        <Text style={styles.shiftTitle}>
-          {lang === 'th' ? 'ตอนนี้คุณรู้สึกอย่างไรบ้าง?' : 'How do you feel right now?'}
+      {/* Soft-Touch Mood Stamp Buttons Section */}
+      <View style={styles.stampSection}>
+        <Text style={styles.stampSectionTitle}>
+          {lang === 'th'
+            ? 'เลือกตราประทับบอกความรู้สึกตอนนี้'
+            : 'Select Your Mood Stamp'}
         </Text>
 
-        <View style={styles.optionsList}>
-          {/* Option 1: Grounded */}
+        <View style={styles.stampsList}>
+          {/* Stamp 1: ⚡ พร้อมลุย/มั่นใจขึ้น */}
           <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              audioService.triggerHaptic('selection');
-              setShiftResult('grounded');
-            }}
+            activeOpacity={0.88}
+            onPress={() => handleSelectStamp('empowered')}
             style={[
-              styles.optionCard,
-              shiftResult === 'grounded' && styles.optionCardActive,
+              styles.stampBtn,
+              shiftResult === 'empowered' && styles.stampBtnActiveAmber,
             ]}
           >
-            <View style={styles.optionContent}>
-              <Text style={styles.optionEmoji}>🌊</Text>
-              <View>
-                <Text style={styles.optionLabel}>
-                  {lang === 'th' ? 'นิ่งสงบ หายใจทั่วท้องขึ้น' : 'Grounded & Calmer'}
+            <View style={styles.stampLeftRow}>
+              <View
+                style={[
+                  styles.stampSealIcon,
+                  { backgroundColor: '#FEF3C7', borderColor: '#F59E0B' },
+                ]}
+              >
+                <Text style={{ fontSize: 18 }}>⚡</Text>
+              </View>
+              <View style={styles.stampTextCol}>
+                <Text style={styles.stampMainLabel}>
+                  {lang === 'th' ? 'พร้อมลุย / มั่นใจขึ้น' : 'Ready & Confident'}
                 </Text>
-                <Text style={styles.optionSub}>
-                  {lang === 'th' ? 'ระบบประสาทพาราซิมพาเทติกทำงาน' : 'Parasympathetic vagal activation'}
+                <Text style={styles.stampSubLabel}>
+                  {lang === 'th' ? 'สมองปลอดโปร่ง มีพลังลุยงาน' : 'Clarity restored, ready to win'}
                 </Text>
               </View>
             </View>
-            {shiftResult === 'grounded' && <Check size={18} color={colors.primary} strokeWidth={3} />}
+            {shiftResult === 'empowered' ? (
+              <View style={[styles.stampPill, { backgroundColor: '#F59E0B' }]}>
+                <Check size={12} color="#FFFFFF" strokeWidth={3} />
+                <Text style={styles.stampPillText}>STAMPED</Text>
+              </View>
+            ) : null}
           </TouchableOpacity>
 
-          {/* Option 2: Empowered */}
+          {/* Stamp 2: 🌿 นิ่งขึ้น มีสติ */}
           <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              audioService.triggerHaptic('selection');
-              setShiftResult('empowered');
-            }}
+            activeOpacity={0.88}
+            onPress={() => handleSelectStamp('grounded')}
             style={[
-              styles.optionCard,
-              shiftResult === 'empowered' && styles.optionCardActive,
+              styles.stampBtn,
+              shiftResult === 'grounded' && styles.stampBtnActiveTeal,
             ]}
           >
-            <View style={styles.optionContent}>
-              <Text style={styles.optionEmoji}>✨</Text>
-              <View>
-                <Text style={styles.optionLabel}>
-                  {lang === 'th' ? 'โล่งโปร่ง มั่นใจขึ้น พร้อมลุย' : 'Empowered & Ready'}
+            <View style={styles.stampLeftRow}>
+              <View
+                style={[
+                  styles.stampSealIcon,
+                  { backgroundColor: '#CCFBF1', borderColor: '#00C4B3' },
+                ]}
+              >
+                <Text style={{ fontSize: 18 }}>🌿</Text>
+              </View>
+              <View style={styles.stampTextCol}>
+                <Text style={styles.stampMainLabel}>
+                  {lang === 'th' ? 'นิ่งขึ้น มีสติ' : 'Calm & Grounded'}
                 </Text>
-                <Text style={styles.optionSub}>
-                  {lang === 'th' ? 'ออกซิเจนกลับสู่สมองส่วนหน้า' : 'Prefrontal clarity restored'}
+                <Text style={styles.stampSubLabel}>
+                  {lang === 'th' ? 'หายใจทั่วท้อง ชีพจรชะลอลง' : 'Steady breath, centered focus'}
                 </Text>
               </View>
             </View>
-            {shiftResult === 'empowered' && <Check size={18} color={colors.primary} strokeWidth={3} />}
+            {shiftResult === 'grounded' ? (
+              <View style={[styles.stampPill, { backgroundColor: colors.primary }]}>
+                <Check size={12} color="#FFFFFF" strokeWidth={3} />
+                <Text style={styles.stampPillText}>STAMPED</Text>
+              </View>
+            ) : null}
           </TouchableOpacity>
 
-          {/* Option 3: Same */}
+          {/* Stamp 3: 🧸 ขอกอดเพิ่มหน่อย */}
           <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              audioService.triggerHaptic('selection');
-              setShiftResult('same');
-            }}
+            activeOpacity={0.88}
+            onPress={() => handleSelectStamp('hug')}
             style={[
-              styles.optionCard,
-              shiftResult === 'same' && styles.optionCardActive,
+              styles.stampBtn,
+              shiftResult === 'hug' && styles.stampBtnActivePink,
             ]}
           >
-            <View style={styles.optionContent}>
-              <Text style={styles.optionEmoji}>🍃</Text>
-              <View>
-                <Text style={styles.optionLabel}>
-                  {lang === 'th' ? 'ยังรู้สึกตึงเท่าเดิม' : 'Still Feel Tense'}
+            <View style={styles.stampLeftRow}>
+              <View
+                style={[
+                  styles.stampSealIcon,
+                  { backgroundColor: '#FFE4E6', borderColor: '#F43F5E' },
+                ]}
+              >
+                <Text style={{ fontSize: 18 }}>🧸</Text>
+              </View>
+              <View style={styles.stampTextCol}>
+                <Text style={styles.stampMainLabel}>
+                  {lang === 'th' ? 'ขอกอดเพิ่มหน่อย' : 'Need Extra Warm Hug'}
                 </Text>
-                <Text style={styles.optionSub}>
-                  {lang === 'th' ? 'สามารถทำซ้ำอีกรอบหรือพักจิบน้ำ' : 'May repeat or rest deeper'}
+                <Text style={styles.stampSubLabel}>
+                  {lang === 'th' ? 'ไม่เป็นไรเลย Mooca อยู่กอดตรงนี้เสมอ' : 'Mooca is here to cuddle you'}
                 </Text>
               </View>
             </View>
-            {shiftResult === 'same' && <Check size={18} color={colors.primary} strokeWidth={3} />}
+            {shiftResult === 'hug' ? (
+              <View style={[styles.stampPill, { backgroundColor: '#F43F5E' }]}>
+                <Check size={12} color="#FFFFFF" strokeWidth={3} />
+                <Text style={styles.stampPillText}>STAMPED</Text>
+              </View>
+            ) : null}
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* CTA Button */}
+      {/* CTA Button to Generate Polaroid */}
       <View style={styles.actionSection}>
-        <Button
+        <MarshmallowButton
           variant="primary"
           size="lg"
-          fullWidth
           onPress={handleFinish}
           icon={<ArrowRight size={18} color="#FFFFFF" />}
-        >
-          {lang === 'th' ? 'บันทึกผลและสรุปการรีเซ็ต' : 'Complete Reset & View Summary'}
-        </Button>
+          title={
+            lang === 'th'
+              ? 'รับการ์ดโพลารอยด์แห่งความกล้าหาญ'
+              : 'Claim Polaroid Keepsake'
+          }
+        />
       </View>
     </ScrollView>
   );
@@ -219,149 +270,180 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 32,
+    paddingTop: 8,
+    paddingBottom: 28,
     alignItems: 'center',
   },
   header: {
     alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: 8,
   },
   title: {
-    fontSize: 15,
-    fontWeight: '800',
+    fontFamily: typography.fontPromptBold,
+    fontSize: 14,
     color: colors.primaryDark,
-    marginTop: 8,
+    marginTop: 6,
   },
   bpmCard: {
     width: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: radii.xl,
-    padding: 16,
+    borderRadius: 18,
+    padding: 14,
     borderWidth: 1.5,
     borderColor: colors.borderTeal,
-    marginBottom: 16,
+    marginBottom: 10,
     ...shadows.soft,
   },
   bpmHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   bpmHeaderText: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: colors.secondary,
-    textTransform: 'uppercase',
+    fontFamily: typography.fontPromptBold,
+    fontSize: 11,
+    color: colors.primaryDark,
   },
   bpmComparisonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
+    justifyContent: 'space-around',
   },
   bpmCol: {
     alignItems: 'center',
   },
   bpmColLabel: {
-    fontSize: 11,
+    fontFamily: typography.fontPromptRegular,
+    fontSize: 10,
     color: colors.textMuted,
-    fontWeight: '600',
     marginBottom: 2,
   },
   bpmPreValue: {
-    fontSize: 26,
-    fontWeight: '900',
-    color: colors.textSecondary,
+    fontFamily: typography.fontPromptBold,
+    fontSize: 22,
+    color: colors.textMuted,
   },
   bpmPostValue: {
-    fontSize: 28,
-    fontWeight: '900',
+    fontFamily: typography.fontPromptBold,
+    fontSize: 24,
     color: colors.primary,
   },
   bpmUnit: {
-    fontSize: 10,
+    fontFamily: typography.fontPromptRegular,
+    fontSize: 9,
     color: colors.textMuted,
-    fontWeight: '600',
   },
   deltaBadge: {
-    backgroundColor: '#E6F9F7',
+    backgroundColor: '#F0FDFA',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.borderTeal,
   },
   deltaText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 12,
-    fontWeight: '900',
-    color: colors.primaryDark,
+    color: colors.primary,
   },
   stepperRow: {
     flexDirection: 'row',
-    gap: 6,
+    gap: 4,
     marginTop: 4,
   },
   stepperBtn: {
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: colors.primaryLight,
+    backgroundColor: '#F1F5F9',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: colors.borderTeal,
   },
-  shiftSection: {
+  stampSection: {
     width: '100%',
-    marginBottom: 16,
-  },
-  shiftTitle: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: colors.primaryDark,
     marginBottom: 10,
-    textAlign: 'center',
   },
-  optionsList: {
+  stampSectionTitle: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 12,
+    color: colors.primaryDark,
+    marginBottom: 8,
+  },
+  stampsList: {
     gap: 8,
   },
-  optionCard: {
+  stampBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     padding: 12,
-    borderRadius: radii.lg,
     borderWidth: 1.5,
-    borderColor: colors.borderSubtle,
+    borderColor: '#E2E8F0',
+    borderBottomWidth: 3.5,
+    borderBottomColor: '#CBD5E1',
     ...shadows.card,
   },
-  optionCardActive: {
-    backgroundColor: '#E6F9F7',
-    borderColor: colors.primary,
+  stampBtnActiveAmber: {
+    borderColor: '#F59E0B',
+    borderBottomColor: '#D97706',
+    backgroundColor: '#FFFBEB',
   },
-  optionContent: {
+  stampBtnActiveTeal: {
+    borderColor: colors.primary,
+    borderBottomColor: colors.primaryDark,
+    backgroundColor: '#F0FDFA',
+  },
+  stampBtnActivePink: {
+    borderColor: '#F43F5E',
+    borderBottomColor: '#E11D48',
+    backgroundColor: '#FFF1F2',
+  },
+  stampLeftRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     flex: 1,
   },
-  optionEmoji: {
-    fontSize: 22,
+  stampSealIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  optionLabel: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: colors.textPrimary,
+  stampTextCol: {
+    flex: 1,
   },
-  optionSub: {
+  stampMainLabel: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 12,
+    color: colors.primaryDark,
+  },
+  stampSubLabel: {
+    fontFamily: typography.fontPromptRegular,
     fontSize: 10,
     color: colors.textMuted,
-    fontWeight: '500',
-    marginTop: 1,
+    lineHeight: 14,
+  },
+  stampPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: radii.full,
+    gap: 3,
+  },
+  stampPillText: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 8,
+    color: '#FFFFFF',
   },
   actionSection: {
     width: '100%',
+    marginTop: 6,
   },
 });

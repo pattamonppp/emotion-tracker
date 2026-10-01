@@ -22,6 +22,7 @@ import { storageService } from './services/storageService';
 import { audioService } from './services/audioService';
 
 import { MindfullLogo } from './components/MindfullLogo';
+import { DynamicSkyEngine, SkyPeriodSwitcher, SkyTimePeriod } from './components/DynamicSkyEngine';
 import { Phase1EmotionJar } from './components/Phase1EmotionJar';
 import { SomaticAbsorption } from './components/Phase2Interventions/SomaticAbsorption';
 import { VictorySip } from './components/Phase2Interventions/VictorySip';
@@ -37,7 +38,7 @@ import { LivePulseSensorModal } from './components/LivePulseSensorModal';
 import { ResetHistoryModal } from './components/ResetHistoryModal';
 import { MoocaStoryModal } from './components/MoocaStoryModal';
 
-import { Layers, Languages, Heart } from 'lucide-react-native';
+import { Languages } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from './design-system/tokens';
 import { 
   useFonts, 
@@ -90,6 +91,7 @@ export default function App() {
   const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
+  const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>('day');
 
   // Load saved profile & history on mount
   useEffect(() => {
@@ -194,81 +196,67 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" />
-      <LinearGradient
-        colors={['#E6F9F7', '#FFFDF9', '#E0F7F5']}
-        style={styles.gradientContainer}
+      <StatusBar style={skyPeriod === 'night' ? 'light' : 'dark'} />
+      <DynamicSkyEngine
+        onTimePeriodChange={setSkyPeriod}
+        lang={profile.language}
       >
         <SafeAreaView style={styles.safeArea}>
-          {/* Top Bar (Wordmark, Story Trigger, Profile/Language Actions) */}
+          {/* Top Bar (Wordmark, Language Actions, Profile Avatar) */}
           <View style={styles.topBar}>
             {/* Zone 1: Logo */}
             <View style={styles.logoRow}>
               <MindfullLogo size="sm" />
-              <View style={styles.badge120}>
-                <Text style={styles.badge120Text}>120s</Text>
-              </View>
             </View>
 
-            {/* Zone 2: Mooca Friend Trigger */}
-            <TouchableOpacity
-              onPress={() => {
-                audioService.triggerHaptic('selection');
-                setIsStoryModalOpen(true);
-              }}
-              style={styles.moocaStoryBtn}
-            >
-              <Text style={{ fontSize: 13 }}>🐑</Text>
-              <Text style={styles.moocaStoryText}>
-                {profile.language === 'th' ? 'เพื่อน Mooca' : 'Mooca'}
-              </Text>
-            </TouchableOpacity>
-
-            {/* Zone 3: Actions */}
+            {/* Zone 2: Actions */}
             <View style={styles.actionsRow}>
-              {/* Design Tokens Drawer */}
-              <TouchableOpacity
-                onPress={() => {
-                  audioService.triggerHaptic('selection');
-                  setIsDesignSystemOpen(true);
-                }}
-                style={styles.circleBtn}
-              >
-                <Layers size={13} color={colors.primary} />
-              </TouchableOpacity>
-
               {/* Language Switch */}
               <TouchableOpacity
                 onPress={toggleLanguage}
+                activeOpacity={0.8}
                 style={styles.langBtn}
               >
-                <Languages size={12} color={colors.primary} />
+                <Languages size={13} color={colors.primary} />
                 <Text style={styles.langText}>{profile.language.toUpperCase()}</Text>
               </TouchableOpacity>
 
-              {/* Profile Avatar */}
+              {/* Profile Avatar (Rounded 12px Turquoise-Blue Gradient) */}
               <TouchableOpacity
                 onPress={() => {
                   audioService.triggerHaptic('selection');
                   setIsOnboardingOpen(true);
                 }}
-                style={styles.avatarBtn}
+                activeOpacity={0.85}
+                style={styles.avatarWrapper}
               >
-                <Text style={styles.avatarText}>
-                  {profile.name.charAt(0).toUpperCase() || 'M'}
-                </Text>
+                <LinearGradient
+                  colors={['#00C4B3', '#62A0E9']}
+                  start={{ x: 0, y: 1 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.avatarGradient}
+                >
+                  <Text style={styles.avatarText}>
+                    {profile.name.charAt(0).toUpperCase() || 'M'}
+                  </Text>
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           </View>
 
-          {/* Dynamic Island Session Pill with Countdown */}
+          {/* Dynamic Island Session Pill with Countdown & Sky Atmosphere Switcher */}
           <View style={styles.dynamicIslandContainer}>
-            <View style={styles.dynamicPill}>
-              <View style={styles.pingDot} />
-              <Text style={styles.phaseLabelText}>{getPhaseName()}</Text>
-              <View style={styles.timerChip}>
-                <Text style={styles.timerChipText}>{formatSeconds(elapsedSeconds)}</Text>
+            <View style={styles.dynamicIslandRow}>
+              <View style={styles.dynamicPill}>
+                <View style={styles.pingDot} />
+                <Text style={styles.phaseLabelText}>{getPhaseName()}</Text>
+                <View style={styles.timerChip}>
+                  <Text style={styles.timerChipText}>{formatSeconds(elapsedSeconds)}</Text>
+                </View>
               </View>
+
+              {/* Dynamic Sky Period Switcher */}
+              <SkyPeriodSwitcher />
             </View>
           </View>
 
@@ -426,7 +414,7 @@ export default function App() {
             lang={profile.language}
           />
         </SafeAreaView>
-      </LinearGradient>
+      </DynamicSkyEngine>
     </SafeAreaProvider>
   );
 }
@@ -443,7 +431,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderBottomWidth: 1,
     borderBottomColor: colors.borderTeal,
@@ -451,88 +439,59 @@ const styles = StyleSheet.create({
   logoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
-  badge120: {
-    backgroundColor: '#E6F9F7',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.borderTeal,
-  },
-  badge120Text: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 9,
-    color: colors.primaryDark,
-  },
-  moocaStoryBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#E6F9F7',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: radii.full,
-    borderWidth: 1,
-    borderColor: colors.borderTeal,
-    gap: 4,
-  },
-  moocaStoryText: {
-    fontFamily: typography.fontPromptSemiBold,
-    fontSize: 11,
-    color: colors.primaryDark,
   },
   actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
-  circleBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: colors.borderSubtle,
-    alignItems: 'center',
-    justifyContent: 'center',
+    gap: 8,
   },
   langBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 28,
-    paddingHorizontal: 8,
+    height: 32,
+    paddingHorizontal: 10,
     borderRadius: radii.full,
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: colors.borderSubtle,
+    backgroundColor: '#F0FDFB',
+    borderWidth: 1.5,
+    borderColor: '#BFEFEB',
     gap: 4,
   },
   langText: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 10,
+    fontSize: 11,
     color: colors.primaryDark,
   },
-  avatarBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: colors.primary,
+  avatarWrapper: {
+    borderRadius: 12,
+    shadowColor: '#00C4B3',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  avatarGradient: {
+    width: 32,
+    height: 32,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    ...shadows.card,
   },
   avatarText: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 12,
+    fontSize: 13,
     color: '#FFFFFF',
   },
   dynamicIslandContainer: {
     alignItems: 'center',
-    paddingVertical: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    paddingVertical: 5,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 196, 179, 0.1)',
+  },
+  dynamicIslandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   dynamicPill: {
     flexDirection: 'row',
