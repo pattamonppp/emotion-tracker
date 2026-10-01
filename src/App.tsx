@@ -37,7 +37,15 @@ import { ResetHistoryModal } from './components/ResetHistoryModal';
 import { MoocaStoryModal } from './components/MoocaStoryModal';
 
 import { Layers, Languages, Heart } from 'lucide-react-native';
-import { colors, radii, shadows } from './design-system/tokens';
+import { colors, radii, shadows, typography } from './design-system/tokens';
+import { 
+  useFonts, 
+  Prompt_300Light, 
+  Prompt_400Regular, 
+  Prompt_500Medium, 
+  Prompt_600SemiBold, 
+  Prompt_700Bold 
+} from '@expo-google-fonts/prompt';
 
 const DEFAULT_PROFILE: UserProfile = {
   name: 'Alex',
@@ -53,6 +61,14 @@ const DEFAULT_PROFILE: UserProfile = {
 };
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Prompt_300Light,
+    Prompt_400Regular,
+    Prompt_500Medium,
+    Prompt_600SemiBold,
+    Prompt_700Bold,
+  });
+
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
   const [currentPhase, setCurrentPhase] = useState<ResetPhase>('phase1_jar');
   const [activeOption, setActiveOption] = useState<InterventionOption>('A');
@@ -434,8 +450,8 @@ const styles = StyleSheet.create({
     borderColor: colors.borderTeal,
   },
   badge120Text: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 9,
-    fontWeight: '800',
     color: colors.primaryDark,
   },
   moocaStoryBtn: {
@@ -450,8 +466,8 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   moocaStoryText: {
+    fontFamily: typography.fontPromptSemiBold,
     fontSize: 11,
-    fontWeight: '700',
     color: colors.primaryDark,
   },
   actionsRow: {
@@ -481,8 +497,8 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   langText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 10,
-    fontWeight: '800',
     color: colors.primaryDark,
   },
   avatarBtn: {
@@ -495,8 +511,8 @@ const styles = StyleSheet.create({
     ...shadows.card,
   },
   avatarText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 12,
-    fontWeight: '900',
     color: '#FFFFFF',
   },
   dynamicIslandContainer: {
@@ -525,8 +541,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   phaseLabelText: {
+    fontFamily: typography.fontPromptSemiBold,
     fontSize: 11,
-    fontWeight: '800',
     color: colors.primaryDark,
   },
   timerChip: {
@@ -536,8 +552,8 @@ const styles = StyleSheet.create({
     borderRadius: radii.full,
   },
   timerChipText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 10,
-    fontWeight: '900',
     color: colors.primaryDark,
   },
   viewport: {
@@ -557,8 +573,8 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.borderTeal,
   },
   interventionHeaderTitle: {
+    fontFamily: typography.fontPromptSemiBold,
     fontSize: 11,
-    fontWeight: '800',
     color: colors.primaryDark,
   },
   optionsRow: {
@@ -580,8 +596,8 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   optionBtnText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 12,
-    fontWeight: '900',
     color: colors.primaryDark,
   },
   optionBtnTextActive: {

@@ -13,10 +13,12 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@expo-google-fonts/prompt": "^0.4.1",
     "@react-native-async-storage/async-storage": "^3.1.1",
     "@types/react-dom": "~19.2.2",
     "classnames": "^2.5.1",
     "expo": "~57.0.26",
+    "expo-font": "^57.0.4",
     "expo-haptics": "^57.0.3",
     "expo-linear-gradient": "^57.0.2",
     "expo-sensors": "^57.0.3",

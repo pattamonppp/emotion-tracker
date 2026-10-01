@@ -58,3 +58,12 @@ export const shadows = {
     elevation: 1,
   },
 };
+
+export const typography = {
+  fontPromptLight: 'Prompt_300Light',
+  fontPromptRegular: 'Prompt_400Regular',
+  fontPromptMedium: 'Prompt_500Medium',
+  fontPromptSemiBold: 'Prompt_600SemiBold',
+  fontPromptBold: 'Prompt_700Bold',
+  fontDefault: 'Prompt_400Regular',
+};
