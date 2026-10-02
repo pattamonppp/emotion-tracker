@@ -21,6 +21,7 @@ import Svg, {
 } from 'react-native-svg';
 import { audioService } from '../services/audioService';
 import { Heart, Sparkles } from 'lucide-react-native';
+import { typography } from '../design-system/tokens';
 
 export type MoocaMood =
   | 'happy'
@@ -211,21 +212,29 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
         </View>
       </Animated.View>
 
-      {/* Sweet Cozy Speech Bubble */}
-      {displayMessage ? (
-        <View style={styles.bubbleContainer}>
-          <Text style={styles.bubbleText}>{displayMessage}</Text>
-          <View style={styles.bubbleTail} />
+      {/* Mooca + Bubble — bubble grows upward, Mooca stays at same Y always */}
+      <View style={styles.mascotAnchor}>
+
+        {/* Bubble outer positioner: absolute, full-width, centers inner bubble box */}
+        <View style={[
+          styles.bubblePositioner,
+          !displayMessage && styles.bubblePositionerHidden,
+        ]}>
+          {displayMessage ? (
+            <View style={styles.bubbleContainer}>
+              <Text style={styles.bubbleText}>{displayMessage}</Text>
+              <View style={styles.bubbleTail} />
+            </View>
+          ) : null}
         </View>
-      ) : null}
 
       {/* Interactive Mooca Mascot Container */}
-      <TouchableOpacity
-        activeOpacity={0.92}
-        onPress={handlePetting}
-        disabled={!interactive}
-        style={{ width, height, alignItems: 'center', justifyContent: 'center', position: 'relative' }}
-      >
+        <TouchableOpacity
+          activeOpacity={0.92}
+          onPress={handlePetting}
+          disabled={!interactive}
+          style={{ width, height, alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+        >
         <Animated.View
           style={{
             transform: [
@@ -437,6 +446,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
           </Animated.View>
         )}
       </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -446,14 +456,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+    width: '100%',
   },
+  mascotAnchor: {
+    alignItems: 'center',
+    position: 'relative',
+    width: '100%',
+  },
+  // Outer: absolute, spans full mascotAnchor width, centers inner bubble horizontally
+  bubblePositioner: {
+    position: 'absolute',
+    bottom: '100%',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  bubblePositionerHidden: {
+    // No content → collapses to 0 height naturally (no children rendered)
+  },
+  // Inner: fit-content bubble box with min/max width constraints
   bubbleContainer: {
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 14,
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderRadius: 16,
-    marginBottom: 4,
-    maxWidth: 320,
+    minWidth: 100,
+    maxWidth: 280,
     borderWidth: 1.2,
     borderColor: '#00C4B3',
     shadowColor: '#004D40',
@@ -462,14 +491,15 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 2,
     alignItems: 'center',
+    justifyContent: 'center',
     position: 'relative',
   },
   bubbleText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 11.5,
-    fontWeight: '700',
     color: '#004D40',
     textAlign: 'center',
-    lineHeight: 17,
+    lineHeight: 18,
   },
   bubbleTail: {
     position: 'absolute',

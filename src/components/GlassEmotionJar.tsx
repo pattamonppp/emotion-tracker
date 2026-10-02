@@ -347,9 +347,9 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
     switch (skyPeriod) {
       case 'sunset':
         return {
-          core: '#FFFBEB',
-          mid: '#FDE68A',
-          outer: '#FBCFE8',
+          core: '#f597b0ff',
+          mid: '#ffea94ff',
+          outer: '#ffffffff',
         };
       case 'dawn':
         return {
@@ -511,7 +511,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   <Text
                     style={[
                       styles.emptyBadgeTitle,
-                      (skyPeriod === 'sunset' || skyPeriod === 'night') && { color: '#F8FAFC' },
+                      (skyPeriod === 'sunset' || skyPeriod === 'night') && { color: '#ffffffff' },
                       skyPeriod === 'dawn' && { color: '#78350F' },
                     ]}
                   >
@@ -520,7 +520,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   <Text
                     style={[
                       styles.emptyBadgeSubtitle,
-                      (skyPeriod === 'sunset' || skyPeriod === 'night') && { color: '#CBD5E1' },
+                      (skyPeriod === 'sunset' || skyPeriod === 'night') && { color: '#fafcffff' },
                       skyPeriod === 'dawn' && { color: '#92400E' },
                     ]}
                   >

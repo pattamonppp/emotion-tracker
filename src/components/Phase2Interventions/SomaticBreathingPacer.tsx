@@ -48,26 +48,44 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
   const auraGlowAnim = useRef(new Animated.Value(0.4)).current;
 
   const getSkyColors = () => {
+    // Center orb & pacing circle ALWAYS strictly use Ooca CI Turquoise / Teal
+    const oocaCIOrb = {
+      ringTrack: 'rgba(0, 203, 167, 0.16)',
+      ringProgress: colors.primary, // #00C4B3 / #00CBA7 Ooca Primary
+      orbBorder: colors.primary,
+      secondsColor: '#004D40', // Deep pine teal on white orb body
+      phaseLabelColor: '#00796B',
+      cycleCounterColor: '#0D9488',
+    };
+
     switch (activePeriod) {
       case 'sunset':
         return {
           instructionColor: '#881337',
           pulseColor: '#9F1239',
+          heartColor: '#881337',
+          ...oocaCIOrb,
         };
       case 'night':
         return {
           instructionColor: '#F8FAFC',
           pulseColor: '#CBD5E1',
+          heartColor: '#F87171',
+          ...oocaCIOrb,
         };
       case 'dawn':
         return {
           instructionColor: '#78350F',
           pulseColor: '#92400E',
+          heartColor: '#B45309',
+          ...oocaCIOrb,
         };
       default:
         return {
           instructionColor: '#004D40',
           pulseColor: '#64748B',
+          heartColor: '#00C4B3',
+          ...oocaCIOrb,
         };
     }
   };
@@ -222,16 +240,16 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                 ? 'หัวใจเต้นนิ่งลงแล้วนะ! ร่างกายผ่อนคลายเต็มเปี่ยมเลยคนเก่ง'
                 : 'Heart rate is steady and calm! Your nervous system is grounded.'
               : !isStarted
-              ? lang === 'th'
-                ? pattern === 'box'
-                  ? 'แตะวงกลมเพื่อเริ่มฝึกหายใจสมดุล 4-4-4-4 นะ'
-                  : 'แตะวงกลมเพื่อเริ่มฝึกหายใจคลายใจ 4-7-8 นะ'
-                : pattern === 'box'
-                ? 'Tap orb to start Box Breathing 4-4-4-4'
-                : 'Tap orb to start Relaxing 4-7-8'
-              : lang === 'th'
-              ? 'หายใจตามวงกลมไปพร้อม Mooca ช้าๆ สบายๆ นะ'
-              : 'Breathe in rhythm with Mooca, smooth and easy.'
+                ? lang === 'th'
+                  ? pattern === 'box'
+                    ? 'แตะวงกลมเพื่อเริ่มฝึกหายใจสมดุล 4-4-4-4 นะ'
+                    : 'แตะวงกลมเพื่อเริ่มฝึกหายใจคลายใจ 4-7-8 นะ'
+                  : pattern === 'box'
+                    ? 'Tap orb to start Box Breathing 4-4-4-4'
+                    : 'Tap orb to start Relaxing 4-7-8'
+                : lang === 'th'
+                  ? 'หายใจตามวงกลมไปพร้อม Mooca ช้าๆ สบายๆ นะ'
+                  : 'Breathe in rhythm with Mooca, smooth and easy.'
           }
         />
       </View>
@@ -249,8 +267,8 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
               backgroundColor: isFinished
                 ? 'rgba(16, 185, 129, 0.25)'
                 : phase === 'exhale'
-                ? 'rgba(0, 196, 179, 0.28)'
-                : 'rgba(250, 140, 61, 0.25)',
+                  ? 'rgba(0, 203, 167, 0.32)'
+                  : 'rgba(0, 203, 167, 0.20)',
               transform: [{ scale: orbScaleAnim }],
               opacity: auraGlowAnim,
             },
@@ -279,10 +297,10 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                 borderColor: isFinished
                   ? '#10B981'
                   : !isStarted
-                  ? colors.primary
-                  : phase === 'exhale'
-                  ? colors.primary
-                  : colors.secondary,
+                    ? skyColors.orbBorder
+                    : phase === 'exhale'
+                      ? colors.primary
+                      : skyColors.ringProgress,
                 transform: [{ scale: orbScaleAnim }],
               },
             ]}
@@ -297,7 +315,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                 cx={ORB_SIZE / 2}
                 cy={ORB_SIZE / 2}
                 r={SVG_R}
-                stroke="rgba(226, 232, 240, 0.6)"
+                stroke={skyColors.ringTrack}
                 strokeWidth={5}
                 fill="transparent"
               />
@@ -305,7 +323,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                 cx={ORB_SIZE / 2}
                 cy={ORB_SIZE / 2}
                 r={SVG_R}
-                stroke={phase === 'exhale' ? colors.primary : colors.secondary}
+                stroke={isStarted ? (phase === 'exhale' ? colors.primary : skyColors.ringProgress) : skyColors.ringProgress}
                 strokeWidth={6}
                 strokeDasharray={CIRCUMFERENCE}
                 strokeDashoffset={isStarted ? strokeDashoffset : 0}
@@ -318,13 +336,13 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
             <View style={styles.orbContent}>
               {!isStarted ? (
                 <View style={styles.startOrbContainer}>
-                  <Wind size={36} color={colors.primary} strokeWidth={2.4} />
-                  <Text style={styles.startOrbTitle}>
+                  <Wind size={36} color={skyColors.orbBorder} strokeWidth={2.4} />
+                  <Text style={[styles.startOrbTitle, { color: skyColors.secondsColor }]}>
                     {pattern === 'box'
                       ? (lang === 'th' ? 'หายใจ 4-4-4-4' : 'Box Breathing')
                       : (lang === 'th' ? 'หายใจ 4-7-8' : 'Relaxing 4-7-8')}
                   </Text>
-                  <Text style={styles.startOrbSub}>
+                  <Text style={[styles.startOrbSub, { color: skyColors.cycleCounterColor }]}>
                     {lang === 'th' ? 'แตะวงกลมเพื่อเริ่ม' : 'Tap to Start'}
                   </Text>
                 </View>
@@ -337,15 +355,15 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                 </View>
               ) : (
                 <>
-                  <Text style={styles.secondsText}>{phaseSecondsLeft}s</Text>
-                  <Text style={styles.phaseLabelText}>
+                  <Text style={[styles.secondsText, { color: skyColors.secondsColor }]}>{phaseSecondsLeft}s</Text>
+                  <Text style={[styles.phaseLabelText, { color: skyColors.phaseLabelColor }]}>
                     {phase === 'inhale'
                       ? lang === 'th' ? 'สูดเข้า' : 'INHALE'
                       : phase === 'hold1' || phase === 'hold2'
-                      ? lang === 'th' ? 'กลั้นนิ่ง' : 'HOLD'
-                      : lang === 'th' ? 'ผ่อนออก' : 'EXHALE'}
+                        ? lang === 'th' ? 'กลั้นนิ่ง' : 'HOLD'
+                        : lang === 'th' ? 'ผ่อนออก' : 'EXHALE'}
                   </Text>
-                  <Text style={styles.cycleCounterText}>
+                  <Text style={[styles.cycleCounterText, { color: skyColors.cycleCounterColor }]}>
                     {lang === 'th' ? `รอบที่ ${cycleCount + 1}/3` : `Cycle ${cycleCount + 1}/3`}
                   </Text>
                 </>
@@ -366,20 +384,20 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
         </Text>
 
         <View style={styles.pulseIndicatorRow}>
-          <Heart size={13} color="#F26E6E" />
+          <Heart size={13} color={skyColors.heartColor} fill={skyColors.heartColor} />
           <Text style={[styles.pulseIndicatorText, { color: skyColors.pulseColor }]}>
             {lang === 'th' ? `ชีพจร ~${bpmEstimate} BPM` : `~${bpmEstimate} BPM`}
             {isFinished ? ' (สมดุลแล้ว)' : ''}
           </Text>
         </View>
 
-        {isFinished && (
+        {isFinished ? (
           <View style={styles.actionBtnWrapper}>
             <MarshmallowButton
               variant="primary"
-              size="lg"
+              size="md"
               onPress={onComplete}
-              icon={<ArrowRight size={18} color="#FFFFFF" />}
+              icon={<ArrowRight size={16} color="#FFFFFF" />}
               title={
                 lang === 'th'
                   ? 'เข้าสู่หน้าสะท้อนความคิด'
@@ -387,6 +405,8 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
               }
             />
           </View>
+        ) : (
+          <View style={styles.actionBtnPlaceholder} />
         )}
       </View>
     </View>
@@ -402,6 +422,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   mascotWrapper: {
+    overflow: 'visible',
     height: 140,
     width: '100%',
     alignItems: 'center',
@@ -508,6 +529,13 @@ const styles = StyleSheet.create({
   },
   actionBtnWrapper: {
     width: '100%',
-    marginTop: 6,
+    height: 46,
+    justifyContent: 'center',
+    marginTop: 4,
+  },
+  actionBtnPlaceholder: {
+    width: '100%',
+    height: 46,
+    marginTop: 4,
   },
 });

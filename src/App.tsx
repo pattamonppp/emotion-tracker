@@ -75,8 +75,8 @@ export default function App() {
   });
 
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
-  const [currentPhase, setCurrentPhase] = useState<ResetPhase>('phase1_jar');
-  const [activeOption, setActiveOption] = useState<InterventionOption>('A');
+  const [currentPhase, setCurrentPhase] = useState<ResetPhase>('phase2_intervention');
+  const [activeOption, setActiveOption] = useState<InterventionOption>('E');
   const [selectedEmotions, setSelectedEmotions] = useState<EmotionTagId[]>([]);
   const [heartRate, setHeartRate] = useState(105);
   const [feedback, setFeedback] = useState<ShiftFeedback | null>(null);
@@ -323,6 +323,7 @@ export default function App() {
                     {(['A', 'B', 'C', 'D', 'E', 'F', 'G'] as InterventionOption[]).map((opt) => (
                       <TouchableOpacity
                         key={opt}
+                        hitSlop={{ top: 16, bottom: 16, left: 8, right: 8 }}
                         onPress={() => {
                           audioService.stopAllVoice();
                           audioService.triggerHaptic('selection');

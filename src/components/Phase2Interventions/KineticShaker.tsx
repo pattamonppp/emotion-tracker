@@ -147,21 +147,27 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
     switch (activePeriod) {
       case 'sunset':
         return {
-          countColor: '#881337',
-          labelColor: '#9F1239',
-          hintColor: '#BE123C',
+          countColor: '#ffffffff',
+          labelColor: '#fffafbff',
+          hintColor: '#5f0019ff',
+          progressTrack: 'rgba(255, 255, 255, 0.5)',
+          progressFill: ['#E11D48', '#FB7185'] as const,
         };
       case 'night':
         return {
           countColor: '#F8FAFC',
           labelColor: '#E2E8F0',
           hintColor: '#94A3B8',
+          progressTrack: 'rgba(255, 255, 255, 0.25)',
+          progressFill: ['#38BDF8', '#818CF8'] as const,
         };
       case 'dawn':
         return {
           countColor: '#78350F',
           labelColor: '#92400E',
           hintColor: '#B45309',
+          progressTrack: 'rgba(255, 255, 255, 0.65)',
+          progressFill: ['#F59E0B', '#FBBF24'] as const,
         };
       case 'day':
       default:
@@ -169,10 +175,23 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           countColor: '#004D40',
           labelColor: '#065F46',
           hintColor: '#64748B',
+          progressTrack: 'rgba(0, 196, 179, 0.20)',
+          progressFill: ['#00C4B3', '#62A0E9'] as const,
         };
     }
   };
   const skyTheme = getSkyColors();
+
+  // Dynamic fluid gradient: Sunset & Night strictly use Ooca turquoise base as requested
+  const getFluidColors = (): readonly [string, string, ...string[]] => {
+    if (isFinished) {
+      return ['#34D399', '#00C4B3'];
+    }
+    if (activePeriod === 'sunset' || activePeriod === 'night') {
+      return ['#5EEAD4', '#00CBA7', '#0D9488']; // Vibrant Ooca Turquoise base
+    }
+    return ['#5EEAD4', '#00C4B3', '#009688']; // Crisp daylight turquoise
+  };
 
   const starBurstScale = starBurstAnim.interpolate({
     inputRange: [0, 1],
@@ -205,11 +224,11 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
                 : 'All tension discharged! Feeling grounded, peaceful & light.'
               : lang === 'th'
                 ? mode === 'shake'
-                  ? `สะบัดข้อมือเบาๆ ให้สบายตัว (เหลืออีก ${currentCount} ครั้ง)`
-                  : `ทิ้งส้นเท้าลงพื้นเบาๆ ดึงสติสู่ร่างกาย (เหลืออีก ${currentCount} ครั้ง)`
+                  ? 'สะบัดข้อมือเบา ๆ ให้สบายตัว คลายความตึงเครียดนะ'
+                  : 'ทิ้งส้นเท้าลงพื้นเบา ๆ ดึงสติและความมั่นคงกลับสู่ร่างกายนะ'
                 : mode === 'shake'
-                  ? `Gently shake your wrists — ${currentCount} more!`
-                  : `Firmly drop your heels to the ground — ${currentCount} more!`
+                  ? 'Gently shake your wrists to release stored tension'
+                  : 'Firmly drop your heels to ground your body and mind'
           }
         />
       </Animated.View>
@@ -263,13 +282,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             {/* Glowing Discharging Celestial Fluid strictly decreasing with shake count */}
             <View style={styles.fluidContainer}>
               <LinearGradient
-                colors={
-                  isFinished
-                    ? ['#34D399', '#00C4B3']
-                    : progressPercent > 50
-                      ? ['#FBBF24', '#00C4B3']
-                      : ['#FB923C', '#FA8C3D']
-                }
+                colors={getFluidColors()}
                 style={[styles.fluidFill, { height: `${fluidHeightPercent}%` }]}
               />
             </View>
@@ -312,9 +325,9 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           </Text>
 
           {/* Slim glowing 4px progress line */}
-          <View style={styles.organicProgressTrack}>
+          <View style={[styles.organicProgressTrack, { backgroundColor: skyTheme.progressTrack }]}>
             <LinearGradient
-              colors={['#00C4B3', '#62A0E9']}
+              colors={skyTheme.progressFill}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={[styles.organicProgressFill, { width: `${progressPercent}%` }]}
@@ -328,9 +341,9 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         {isFinished ? (
           <MarshmallowButton
             variant="primary"
-            size="lg"
+            size="md"
             onPress={onComplete}
-            icon={<CheckCircle2 size={18} color="#FFFFFF" />}
+            icon={<CheckCircle2 size={16} color="#FFFFFF" />}
             title={
               lang === 'th'
                 ? 'เข้าสู่หน้าสะท้อนความคิด'
@@ -358,6 +371,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   mascotWrapper: {
+    overflow: 'visible',
     alignItems: 'center',
     justifyContent: 'center',
     height: 140,
@@ -538,6 +552,7 @@ const styles = StyleSheet.create({
   actionSection: {
     width: '100%',
     maxWidth: 340,
+    minHeight: 52, // Preserves exact height for proceed button!
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 6,
