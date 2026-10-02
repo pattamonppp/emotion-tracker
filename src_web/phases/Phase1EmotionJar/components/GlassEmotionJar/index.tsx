@@ -2,8 +2,9 @@ import React from 'react';
 import { EmotionTagId } from '../../../../types';
 import { EMOTION_TAGS } from '../../../../data/matrixData';
 import { audioService } from '../../../../services/audioService';
-import { Sparkles, X } from 'lucide-react';
-import { CheckIcon } from '../../../../icons';
+import { SparklesIcon, CloseIcon, CheckIcon } from '../../../../icons';
+import { useLanguage } from '../../../../hooks/useLanguage';
+import { MAX_EMOTIONS } from '../../constants';
 import styles from './styles.module.scss';
 
 export interface GlassEmotionJarProps {
@@ -13,7 +14,7 @@ export interface GlassEmotionJarProps {
   isOverJar: boolean;
   isDraggingAny: boolean;
   recentDropEffect: boolean;
-  lang: 'th' | 'en';
+  lang?: 'th' | 'en';
   jarRef: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -24,9 +25,10 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   isOverJar,
   isDraggingAny,
   recentDropEffect,
-  lang,
   jarRef,
 }) => {
+  const { t, lang } = useLanguage();
+  const strings = t.phases.phase1;
   const handleJarTap = () => {
     audioService.triggerHaptic([15]);
   };
@@ -295,22 +297,18 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                 }`}
               >
                 {isOverJar ? (
-                  <Sparkles className="w-5 h-5 animate-spin text-white" />
+                  <SparklesIcon className={styles.sparkleIconSpin} />
                 ) : (
-                  <Sparkles className="w-4 h-4 text-[#00C4B3] animate-pulse" />
+                  <SparklesIcon className={styles.sparkleIcon} />
                 )}
               </div>
 
               <h3 className={styles.emptyTitle}>
-                {isOverJar
-                  ? (lang === 'th' ? 'ปล่อยลงในโหลแก้ว' : 'Drop into Jar!')
-                  : (lang === 'th' ? 'โหลแก้วว่างพร้อมรับฝาก' : 'Sanctuary Jar')}
+                {isOverJar ? strings.dropTitle : strings.emptyTitle}
               </h3>
 
               <p className={styles.emptySubtitle}>
-                {isOverJar
-                  ? (lang === 'th' ? 'ปล่อยนิ้วได้เลย' : 'Release now')
-                  : (lang === 'th' ? 'ลากหรือแตะอารมณ์จากด้านล่าง' : 'Drag or tap emotions below')}
+                {isOverJar ? strings.dropSubtitle : strings.emptySubtitle}
               </p>
             </div>
           ) : (
@@ -323,14 +321,14 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   <div
                     key={id}
                     onClick={(e) => {
-                      e.stopPropagation();
-                      onRemoveEmotion(id);
+                       e.stopPropagation();
+                       onRemoveEmotion(id);
                     }}
                     className={styles.emotionPill}
                     style={{
                       animation: `moocaFloat 3s ease-in-out infinite ${index * 0.4}s`,
                     }}
-                    title={lang === 'th' ? 'แตะเพื่อนำออกจากโหล' : 'Tap to remove'}
+                    title={strings.tapToRemove}
                   >
                     <div className={styles.emotionPillLeft}>
                       <span
@@ -346,7 +344,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                     </div>
 
                     <span className={styles.removeBtn}>
-                      <X />
+                      <CloseIcon />
                     </span>
                   </div>
                 );
@@ -355,8 +353,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
               {/* Status count and clear button */}
               <div className={styles.statusBar}>
                 <span className={styles.statusCount}>
-                  <CheckIcon className="w-3 h-3 text-[#00C4B3]" />
-                  <span>{selectedEmotions.length}/2</span>
+                  <CheckIcon className={styles.checkIconStatus} />
+                  <span>{selectedEmotions.length}/{MAX_EMOTIONS}</span>
                 </span>
 
                 {onClearAll && (
@@ -368,7 +366,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                     }}
                     className={styles.clearBtn}
                   >
-                    {lang === 'th' ? 'เทออก' : 'Clear'}
+                    {strings.clear}
                   </button>
                 )}
               </div>

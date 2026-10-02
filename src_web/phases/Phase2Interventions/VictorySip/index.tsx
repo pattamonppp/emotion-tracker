@@ -5,6 +5,7 @@ import { MoocaMascot } from '../../../components/MoocaMascot';
 import { GlassWater, Activity, Sparkles } from 'lucide-react';
 import { CheckIcon, GlassWaterIcon } from '../../../icons';
 import { SIP_CONFIG, type BreathPhase } from './constants';
+import { getTranslation } from '../../../locales';
 import styles from './styles.module.scss';
 
 export interface VictorySipProps {
@@ -16,6 +17,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
   onComplete,
   lang,
 }) => {
+  const strings = getTranslation(lang).phases.phase2.victorySip;
   const [liquidLevel, setLiquidLevel] = useState(100);
   const [tiltAngle, setTiltAngle] = useState(0);
   const [sipCount, setSipCount] = useState(0);
@@ -174,7 +176,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         <div className={styles.bannerTitle}>
           <GlassWater />
           <span className={styles.bannerText}>
-            {lang === 'th' ? 'กระตุ้น Vagus Nerve' : 'Vagal Maneuver'}
+            {strings.vagalManeuver}
           </span>
         </div>
 
@@ -192,23 +194,17 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           size="xs"
           speakingBubble={
             sipCount >= SIP_CONFIG.TOTAL_SIPS
-              ? lang === 'th'
-                ? 'ชื่นใจไหมจ๊ะ? หัวใจเต้นช้าลงและสงบแล้วนะ!'
-                : 'Refreshed! Heart rate is calm now!'
-              : lang === 'th'
-                ? 'จิบน้ำกับ Mooca ช้า ๆ 3 อึกนะ หายใจเข้าแล้วกลืนนะ'
-                : 'Take 3 victory sips with Mooca!'
+              ? strings.bubbleDone
+              : strings.bubbleDrinking
           }
         />
 
         <h3 className={styles.guidanceTitle}>
           <Sparkles />
-          {lang === 'th' ? 'ดื่มน้ำชัยชนะ' : 'The Victory Sip'}
+          {strings.title}
         </h3>
         <p className={styles.guidanceDesc}>
-          {lang === 'th'
-            ? '“ยกมือถือขึ้นจรดริมฝีปากและเอียงขึ้น หรือกดปุ่มจิบน้ำช้า ๆ 3 อึก เพื่อกระตุ้นประสาทสงบ”'
-            : '"Tilt phone toward lips or tap button to take 3 slow sips. Swallowing slows pulse."'}
+          {strings.desc}
         </p>
       </div>
 
@@ -228,28 +224,26 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               <div className={styles.completionCard}>
                 <span className={styles.completionMain}>
                   <CheckIcon className="w-4 h-4 inline mr-1 text-teal-600" />
-                  <span>{lang === 'th' ? 'ร่างกายได้รับสัญญาณสงบแล้ว' : 'Vagus Signal Transmitted'}</span>
+                  <span>{strings.calmSignal}</span>
                 </span>
                 <span className={styles.completionSub}>
-                  {lang === 'th'
-                    ? `ชีพจรผ่อนคลายเหลือ ${currentBpm} bpm`
-                    : `Pulse normalized to ${currentBpm} bpm`}
+                  {strings.pulseRelaxed.replace('{bpm}', String(currentBpm))}
                 </span>
               </div>
             ) : isDrinking ? (
               <div className={styles.drinkingCard}>
-                {breathPhase === 'inhale' && (lang === 'th' ? 'สูดหายใจเข้าลึก...' : 'Deep Inhale...')}
+                {breathPhase === 'inhale' && strings.inhalePrompt}
                 {breathPhase === 'swallow' && (
                   <span className={styles.swallowPrompt}>
                     <GlassWaterIcon />
-                    <span>{lang === 'th' ? 'กลืนน้ำช้า ๆ 1 อึก' : 'Swallow Slow Sip'}</span>
+                    <span>{strings.swallowPrompt}</span>
                   </span>
                 )}
-                {breathPhase === 'exhale' && (lang === 'th' ? 'ผ่อนลมหายใจออกยาว...' : 'Slow Exhale...')}
+                {breathPhase === 'exhale' && strings.exhalePrompt}
               </div>
             ) : (
               <div className={styles.sipCounterBadge}>
-                {sipCount} / {SIP_CONFIG.TOTAL_SIPS} {lang === 'th' ? 'อึก' : 'Sips'}
+                {sipCount} / {SIP_CONFIG.TOTAL_SIPS} {strings.sipUnit}
               </div>
             )}
           </div>
@@ -261,7 +255,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         {!hasGyroscope && (
           <div className={styles.tiltControlBar}>
             <span className={styles.tiltLabel}>
-              {lang === 'th' ? 'องศาการเอียงแก้ว:' : 'Liquid Tilt Angle:'}
+              {strings.tiltLabel}
             </span>
             <input
               type="range"
@@ -285,12 +279,10 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           leadingIcon={<GlassWater className="w-4 h-4" />}
           label={
             sipCount >= SIP_CONFIG.TOTAL_SIPS
-              ? lang === 'th'
-                ? 'ดื่มครบ 3 อึก — สบายใจขึ้นแล้ว'
-                : 'Victory Sip Complete'
-              : lang === 'th'
-                ? `จิบน้ำชัยชนะ อึกที่ ${sipCount + 1} / 3`
-                : `Take Victory Sip ${sipCount + 1} of 3`
+              ? strings.sipCompleteBtn
+              : strings.sipActionBtn
+                  .replace('{current}', String(sipCount + 1))
+                  .replace('{total}', String(SIP_CONFIG.TOTAL_SIPS))
           }
         />
 
@@ -301,7 +293,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             size="md"
             fullWidth
             onClick={onComplete}
-            label={lang === 'th' ? 'เข้าสู่หน้าสะท้อนความคิด' : 'Proceed to Reframing'}
+            label={strings.proceedBtn}
           />
         )}
       </div>

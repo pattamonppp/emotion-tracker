@@ -6,13 +6,15 @@ import { audioService } from '../../services/audioService';
 import { Button } from '../../components/Button';
 import { GlassEmotionJar } from './components/GlassEmotionJar';
 import {
-  MapPin,
-  Activity,
-  ArrowRight,
-  GripHorizontal,
-  Check,
-} from 'lucide-react';
-import { HeartIcon } from '../../icons';
+  MapPinIcon,
+  ActivityIcon,
+  ArrowRightIcon,
+  GripHorizontalIcon,
+  CheckIcon,
+  HeartIcon,
+} from '../../icons';
+import { useLanguage } from '../../hooks';
+import { MAX_EMOTIONS } from './constants';
 import styles from './styles.module.scss';
 
 export interface Phase1EmotionJarProps {
@@ -23,7 +25,7 @@ export interface Phase1EmotionJarProps {
   onProceed: () => void;
   onOpenPulseSensor?: () => void;
   onOpenStory?: () => void;
-  lang: 'th' | 'en';
+  lang?: 'th' | 'en';
 }
 
 export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
@@ -33,8 +35,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   onSelectEmotions,
   onProceed,
   onOpenPulseSensor,
-  lang,
 }) => {
+  const { t, lang } = useLanguage();
+  const strings = t.phases.phase1;
   const jarRef = useRef<HTMLDivElement | null>(null);
 
   // Dragging states
@@ -71,8 +74,8 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
         return;
       }
 
-      if (selectedEmotions.length >= 2) {
-        onSelectEmotions([selectedEmotions[1], tagId]);
+      if (selectedEmotions.length >= MAX_EMOTIONS) {
+        onSelectEmotions([...selectedEmotions.slice(1), tagId]);
       } else {
         onSelectEmotions([...selectedEmotions, tagId]);
       }
@@ -148,18 +151,12 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
   const getMoocaSpeech = () => {
     if (selectedEmotions.length === 0) {
-      return lang === 'th'
-        ? 'ลากความกังวลมาฝากไว้ในโหลของ Mooca ได้เลยนะ'
-        : 'Drag any worries into my jar to rest';
+      return strings.moocaSpeech.empty;
     }
     if (selectedEmotions.length === 1) {
-      return lang === 'th'
-        ? 'Mooca เก็บไว้ให้แล้ว มีอีกไหม หรือพร้อมเริ่มเลย?'
-        : 'Safe in the jar! Add 1 more or tap begin';
+      return strings.moocaSpeech.hasOne;
     }
-    return lang === 'th'
-      ? 'พร้อมแล้วนะ! Mooca จะพาไปรีเซ็ตใจให้โล่งสบาย'
-      : 'Ready! Let’s restore your calm together';
+    return strings.moocaSpeech.full;
   };
 
   const activeDraggingTag = EMOTION_TAGS.find((t) => t.id === activeDraggingTagId);
@@ -169,7 +166,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
       {/* 1. TOP CONTEXT STRIP */}
       <div className={styles.topStrip}>
         <div className={styles.locationBadge}>
-          <MapPin />
+          <MapPinIcon />
           <span className={styles.locationText}>{currentLocation}</span>
         </div>
 
@@ -177,9 +174,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           type="button"
           onClick={onOpenPulseSensor}
           className={styles.pulseBtn}
-          title={lang === 'th' ? 'แตะเพื่อวัดชีพจร' : 'Tap to scan pulse'}
+          title={strings.tapToScanPulse}
         >
-          <Activity />
+          <ActivityIcon />
           <span className={styles.pulseValue}>
             {heartRate} <span className={styles.pulseUnit}>bpm</span>
           </span>
@@ -188,18 +185,12 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
       {/* 2. HERO HEADLINE & MOOCA SPEECH BADGE */}
       <div className={styles.heroSection}>
-        <h1 className={styles.title}>
-          {lang === 'th' ? 'ฝากความรู้สึกไว้ในโหลแก้ว' : 'Leave Your Feelings in the Jar'}
-        </h1>
-        <p className={styles.subtitle}>
-          {lang === 'th'
-            ? 'ลากก้อนความกังวลหย่อนลงในโหลแก้ว เพื่อเริ่มรีเซ็ตใจ'
-            : 'Drag or tap your worries into the sanctuary jar'}
-        </p>
+        <h1 className={styles.title}>{strings.heroTitle}</h1>
+        <p className={styles.subtitle}>{strings.heroSubtitle}</p>
 
         <div className={styles.moocaSpeechPill}>
           <span className={styles.moocaEmoji}>
-            <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
+            <HeartIcon />
           </span>
           <span className={styles.moocaSpeechText}>{getMoocaSpeech()}</span>
         </div>
@@ -222,10 +213,8 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
       {/* 4. TACTILE DRAGGABLE EMOTION CAPSULES TRAY */}
       <div className={styles.traySection}>
         <div className={styles.trayHeader}>
-          <span className={styles.trayInstruction}>
-            {lang === 'th' ? 'ลากหรือแตะเพื่อใส่ลงโหล' : 'Drag or tap to drop'}
-          </span>
-          <span className={styles.trayCounter}>{selectedEmotions.length}/2</span>
+          <span className={styles.trayInstruction}>{strings.dragHint}</span>
+          <span className={styles.trayCounter}>{selectedEmotions.length}/{MAX_EMOTIONS}</span>
         </div>
 
         <div className={styles.chipsGrid}>
@@ -242,7 +231,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
                   [styles.beingDragged]: isBeingDragged,
                 })}
               >
-                <GripHorizontal className={styles.gripIcon} />
+                <GripHorizontalIcon className={styles.gripIcon} />
 
                 <span
                   className={styles.colorDot}
@@ -258,10 +247,10 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
                 {isSelected ? (
                   <span className={styles.checkCircle}>
-                    <Check />
+                    <CheckIcon />
                   </span>
                 ) : (
-                  <span className={styles.plusIcon}>＋</span>
+                  <span className={styles.plusIcon}>+</span>
                 )}
               </div>
             );
@@ -295,7 +284,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             </span>
             {isOverJar && (
               <span className={styles.dropHint}>
-                ↓ {lang === 'th' ? 'ปล่อยลงโหล' : 'Drop'}
+                {strings.dropHint}
               </span>
             )}
           </div>
@@ -309,10 +298,10 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             <div className={styles.previewLeft}>
               <span className={styles.previewOptionBadge}>{recommended}</span>
               <span className={styles.previewOptionName}>
-                {recommended === 'A' && (lang === 'th' ? 'ถูซับพลังใจ' : 'Somatic Absorption')}
-                {recommended === 'B' && (lang === 'th' ? 'จิบน้ำชัยชนะ' : 'The Victory Sip')}
-                {recommended === 'C' && (lang === 'th' ? 'สะบัดทิ้งพลังลบ' : 'Kinetic Shaker')}
-                {recommended === 'D' && (lang === 'th' ? 'เสียงคลื่นสมอง' : 'Audio Sanctuary')}
+                {recommended === 'A' && strings.previewA}
+                {recommended === 'B' && strings.previewB}
+                {recommended === 'C' && strings.previewC}
+                {recommended === 'D' && strings.previewD}
               </span>
             </div>
             <span className={styles.previewDuration}>65s</span>
@@ -326,15 +315,11 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           fullWidth
           isDisabled={selectedEmotions.length === 0}
           onClick={onProceed}
-          trailingIcon={<ArrowRight className="w-4 h-4" />}
+          trailingIcon={<ArrowRightIcon className={styles.btnArrowIcon} />}
           label={
             selectedEmotions.length === 0
-              ? lang === 'th'
-                ? 'ลากความรู้สึก 1-2 อย่างลงโหลก่อนนะ'
-                : 'Drag 1-2 emotions into jar'
-              : lang === 'th'
-                ? 'เริ่มรีเซ็ตใจ 65 วินาที ทันที'
-                : 'Begin 65s Somatic Reset'
+              ? strings.emptyButtonPrompt
+              : strings.activeButtonPrompt
           }
         />
       </div>

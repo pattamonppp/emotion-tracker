@@ -92,6 +92,97 @@
   margin-top: 4px;
 }
 
+.instructionSection {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.instructionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ritualTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: #00C4B3;
+  }
+}
+
+.whisperBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #009688;
+  background-color: #E6F9F7;
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 196, 179, 0.3);
+  cursor: pointer;
+  transition: all 150ms ease;
+
+  &:hover {
+    color: #004D40;
+    background-color: #DBF0EE;
+  }
+
+  svg {
+    width: 12px;
+    height: 12px;
+    color: #00C4B3;
+  }
+}
+
+.instructionText {
+  font-size: 0.75rem;
+  color: #475569;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.interactiveZone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+}
+
+.centralContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sigilIconFinished {
+  width: 40px;
+  height: 40px;
+  color: #00C4B3;
+}
+
+.sigilIconActive {
+  width: 40px;
+  height: 40px;
+  color: #F9A000;
+}
+
 .circleZone {
   position: relative;
   width: 256px;

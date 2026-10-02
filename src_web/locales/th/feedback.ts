@@ -24,4 +24,8 @@ export const feedback = {
   successDesc: 'ขอบคุณมากนะ! ความคิดเห็นของเธอช่วยให้ Mooca เข้าใจและปลอบประโลมใจทุกคนได้ดียิ่งขึ้น',
   inspectJson: 'ดูโครงสร้างข้อมูล (JSON)',
   hideJson: 'ซ่อน JSON',
+  skipButton: 'ข้าม',
+  doneButton: 'เสร็จสิ้น',
+  copyJson: 'คัดลอก JSON',
+  copiedJson: 'คัดลอกแล้ว!',
 };

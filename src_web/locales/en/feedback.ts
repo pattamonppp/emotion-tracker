@@ -24,4 +24,8 @@ export const feedback = {
   successDesc: 'Thank you so much! Your thoughts help make Mooca gentler, warmer, and more supportive for everyone.',
   inspectJson: 'Inspect Data Structure (JSON)',
   hideJson: 'Hide JSON',
+  skipButton: 'Skip',
+  doneButton: 'Done',
+  copyJson: 'Copy JSON',
+  copiedJson: 'Copied!',
 };

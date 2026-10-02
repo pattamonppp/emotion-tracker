@@ -3,8 +3,13 @@ import cn from 'classnames';
 import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
-import { Zap, CheckCircle2, Sparkles } from 'lucide-react';
-import { CheckIcon } from '../../../icons';
+import {
+  ZapIcon,
+  CheckCircleIcon,
+  SparklesIcon,
+  CheckIcon,
+} from '../../../icons';
+import { useLanguage } from '../../../hooks';
 import {
   KINETIC_MODE,
   type KineticMode,
@@ -15,13 +20,14 @@ import styles from './styles.module.scss';
 
 export interface KineticShakerProps {
   onComplete: () => void;
-  lang: 'th' | 'en';
+  lang?: 'th' | 'en';
 }
 
 export const KineticShaker: React.FC<KineticShakerProps> = ({
   onComplete,
-  lang,
 }) => {
+  const { t, lang } = useLanguage();
+  const strings = t.phases.phase2.kineticShaker;
   const [mode, setMode] = useState<KineticMode>(KINETIC_MODE.SHAKE);
   const [shakesLeft, setShakesLeft] = useState<number>(KINETIC_CYCLES.shake);
   const [bouncesLeft, setBouncesLeft] = useState<number>(KINETIC_CYCLES.bounce);
@@ -93,9 +99,9 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       {/* Mode Switcher */}
       <div className={styles.modeSwitcher}>
         <div className={styles.modeBadge}>
-          <Zap />
+          <ZapIcon />
           <span className={styles.modeBadgeText}>
-            {lang === 'th' ? 'สะบัดทิ้งพลังลบ' : 'Somatic Discharge'}
+            {strings.badge}
           </span>
         </div>
 
@@ -107,7 +113,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
               [styles.active]: mode === KINETIC_MODE.SHAKE,
             })}
           >
-            {lang === 'th' ? 'สะบัดข้อมือ' : 'Arm Shake'}
+            {strings.modeShake}
           </button>
           <button
             type="button"
@@ -116,7 +122,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
               [styles.active]: mode === KINETIC_MODE.BOUNCE,
             })}
           >
-            {lang === 'th' ? 'กระโดดเบาๆ' : 'Bounce'}
+            {strings.modeBounce}
           </button>
         </div>
       </div>
@@ -128,37 +134,23 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           size="xs"
           speakingBubble={
             isFinished
-              ? lang === 'th'
-                ? 'เย้! พลังลบกระจายหายหมดแล้ว สบายตัวขึ้นเยอะเลย!'
-                : 'All discharged! Feeling light!'
+              ? strings.bubbleDone
               : mode === KINETIC_MODE.SHAKE
-                ? lang === 'th'
-                  ? 'สะบัดข้อมือไปพร้อม Mooca เลย! สะบัด สะบัด สะบัด!'
-                  : 'Shake away bad vibes with Mooca!'
-                : lang === 'th'
-                  ? 'กระโดดดึ๋ง ๆ เบา ๆ เติมออกซิเจนให้สมองสดใสนะ!'
-                  : 'Bounce lightly to recharge brain oxygen!'
+                ? strings.bubbleShake
+                : strings.bubbleBounce
           }
         />
 
         <h3 className={styles.guidanceTitle}>
-          <Sparkles />
+          <SparklesIcon />
           {mode === KINETIC_MODE.SHAKE
-            ? lang === 'th'
-              ? 'สะบัดทิ้งพลังลบ (Kinetic Shaker)'
-              : 'Kinetic Tension Shaker'
-            : lang === 'th'
-              ? 'กระโดดรีเซ็ตสติ (Micro-Bounce)'
-              : 'Oxygenation Micro-Bounce'}
+            ? strings.titleShake
+            : strings.titleBounce}
         </h3>
         <p className={styles.guidanceDesc}>
           {mode === KINETIC_MODE.SHAKE
-            ? lang === 'th'
-              ? '“กำมือถือให้มั่นแล้วสะบัดข้อมือเร็ว ๆ 15 ครั้ง เพื่อคลายกล้ามเนื้อที่เกร็งค้าง”'
-              : '"Grip device securely and shake wrists firmly 15 times to discharge stored tension."'
-            : lang === 'th'
-              ? '“แนบมือถือกับอก แล้วกระโดดหย็อง ๆ 10 ครั้ง เพื่อสูบฉีดออกซิเจนกลับสู่สมอง”'
-              : '"Hold device against chest and bounce lightly 10 times to boost prefrontal oxygen."'}
+            ? strings.descShake
+            : strings.descBounce}
         </p>
       </div>
 
@@ -196,12 +188,12 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             })}
           >
             {isFinished ? (
-              <CheckCircle2 className={styles.checkmarkIcon} />
+              <CheckCircleIcon className={styles.checkmarkIcon} />
             ) : (
               <>
                 <span className={styles.counterNumber}>{currentRemaining}</span>
                 <span className={styles.counterLabel}>
-                  {lang === 'th' ? 'รอบที่เหลือ' : 'Cycles Left'}
+                  {strings.cyclesLeft}
                 </span>
               </>
             )}
@@ -211,10 +203,10 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             {isFinished ? (
               <span className={styles.finishedSubtext}>
                 <CheckIcon />
-                <span>{lang === 'th' ? 'ปลดปล่อยความตึงเครียดหมดแล้ว' : 'Somatic Tension Released'}</span>
+                <span>{strings.released}</span>
               </span>
             ) : (
-              lang === 'th' ? 'สะบัดหรือกดปุ่มด้านล่างได้เลย' : 'Shake device or tap button'
+              strings.idleHint
             )}
           </div>
         </div>
@@ -229,19 +221,13 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           fullWidth
           isDisabled={isFinished}
           onClick={handleCycle}
-          leadingIcon={<Zap className="w-4 h-4" />}
+          leadingIcon={<ZapIcon />}
           label={
             isFinished
-              ? lang === 'th'
-                ? 'ปลดปล่อยพลังลบสำเร็จ'
-                : 'Discharge Complete'
+              ? strings.released
               : mode === KINETIC_MODE.SHAKE
-                ? lang === 'th'
-                  ? `สะบัดข้อมือ! (${shakesLeft} ครั้ง)`
-                  : `Tap / Shake Wrist (${shakesLeft} left)`
-                : lang === 'th'
-                  ? `กระโดดเบาๆ! (${bouncesLeft} ครั้ง)`
-                  : `Tap / Micro-Bounce (${bouncesLeft} left)`
+                ? `${strings.modeShake} (${shakesLeft} ${strings.shakesLeft})`
+                : `${strings.modeBounce} (${bouncesLeft} ${strings.bouncesLeft})`
           }
         />
 
@@ -252,7 +238,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             size="md"
             fullWidth
             onClick={onComplete}
-            label={lang === 'th' ? 'เข้าสู่หน้าสะท้อนความคิด' : 'Proceed to Insight'}
+            label={strings.proceedBtn}
           />
         )}
       </div>

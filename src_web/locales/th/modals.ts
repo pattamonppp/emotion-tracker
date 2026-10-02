@@ -6,6 +6,9 @@ export const modals = {
     verifiedText: '120s Verified',
     previousSessions: 'เซสชันที่ผ่านมา',
     shareSanctuary: 'แชร์การฟื้นฟู',
+    closeButton: 'ปิดหน้าต่าง',
+    copiedAlert: 'คัดลอกข้อความแชร์แล้ว!',
+    quoteTemplate: '“{name} ได้ฟื้นฟูสภาวะประสาท และพร้อมก้าวสู่ภารกิจตรงหน้าด้วยใจที่มั่นคง โดยมีเพื่อน Mooca เคียงข้างเสมอ”',
   },
   onboarding: {
     title: 'เพื่อนคู่ใจ Mooca ยินดีที่ได้รู้จัก!',
@@ -30,5 +33,15 @@ export const modals = {
     subtitle: 'เจ้าก้อนเมฆเพื่อนแท้ในวันที่ใจอ่อนล้า',
     tabStory: 'เรื่องราว',
     tabVibe: 'จิตวิทยาใจ',
+  },
+  mobileFrame: {
+    companionBadge: 'Best Friend Companion',
+    deviceFrame: 'Device Frame',
+    fullView: 'Full View',
+    friendMooca: 'เพื่อน Mooca',
+    storyTooltip: 'เรื่องราวของ Mooca',
+    toggleFrameTooltip: 'สลับกรอบอุปกรณ์มือถือ',
+    toggleLangTooltip: 'สลับภาษา TH / EN',
+    designTokensTooltip: 'Design Tokens & UI',
   },
 };

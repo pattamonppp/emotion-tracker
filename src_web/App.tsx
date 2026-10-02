@@ -23,6 +23,8 @@ import { ResetCompletedView } from './phases/ResetCompletedView';
 import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
 import { audioService } from './services/audioService';
 import { HeartIcon } from './icons';
+import { useLanguage } from './hooks';
+import { STORAGE_KEYS, getStorageJSON, setStorageJSON } from './utils';
 
 const DEFAULT_PROFILE: UserProfile = {
   name: 'Alex',
@@ -38,9 +40,10 @@ const DEFAULT_PROFILE: UserProfile = {
 };
 
 export default function App() {
+  const { lang, setLang, toggleLang, t } = useLanguage();
+
   const [profile, setProfile] = useState<UserProfile>(() => {
-    const saved = localStorage.getItem('kinetic_vibe_profile');
-    return saved ? JSON.parse(saved) : DEFAULT_PROFILE;
+    return getStorageJSON<UserProfile>(STORAGE_KEYS.PROFILE, DEFAULT_PROFILE);
   });
 
   const [currentPhase, setCurrentPhase] = useState<ResetPhase>('phase1_jar');
@@ -49,8 +52,7 @@ export default function App() {
   const [heartRate, setHeartRate] = useState(105);
   const [feedback, setFeedback] = useState<ShiftFeedback | null>(null);
   const [history, setHistory] = useState<ShiftFeedback[]>(() => {
-    const saved = localStorage.getItem('kinetic_vibe_history');
-    return saved ? JSON.parse(saved) : [];
+    return getStorageJSON<ShiftFeedback[]>(STORAGE_KEYS.HISTORY, []);
   });
 
   // 120-second session timer
@@ -67,15 +69,19 @@ export default function App() {
   // Save profile changes
   const handleSaveProfile = (newProfile: UserProfile) => {
     setProfile(newProfile);
-    localStorage.setItem('kinetic_vibe_profile', JSON.stringify(newProfile));
+    setStorageJSON(STORAGE_KEYS.PROFILE, newProfile);
+    if (newProfile.language !== lang) {
+      setLang(newProfile.language);
+    }
     setIsOnboardingOpen(false);
   };
 
   const toggleLanguage = () => {
-    const newLang: 'en' | 'th' = profile.language === 'th' ? 'en' : 'th';
-    const updated: UserProfile = { ...profile, language: newLang };
+    toggleLang();
+    const nextLang = lang === 'th' ? 'en' : 'th';
+    const updated: UserProfile = { ...profile, language: nextLang };
     setProfile(updated);
-    localStorage.setItem('kinetic_vibe_profile', JSON.stringify(updated));
+    setStorageJSON(STORAGE_KEYS.PROFILE, updated);
   };
 
   // Timer lifecycle for 120-second architecture
@@ -83,10 +89,7 @@ export default function App() {
     let interval: ReturnType<typeof setInterval>;
     if (isTimerRunning && elapsedSeconds < 120) {
       interval = setInterval(() => {
-        setElapsedSeconds((prev) => {
-          const next = prev + 1;
-          return next;
-        });
+        setElapsedSeconds((prev) => prev + 1);
       }, 1000);
     }
     return () => clearInterval(interval);
@@ -113,7 +116,7 @@ export default function App() {
     setFeedback(result);
     const updatedHistory = [result, ...history];
     setHistory(updatedHistory);
-    localStorage.setItem('kinetic_vibe_history', JSON.stringify(updatedHistory));
+    setStorageJSON(STORAGE_KEYS.HISTORY, updatedHistory);
     setCurrentPhase('completed');
     setIsTimerRunning(false);
   };
@@ -125,6 +128,8 @@ export default function App() {
     setIsTimerRunning(false);
     setSelectedEmotions([]);
   };
+
+  const locationText = t.phases.phase1.locations[profile.goal] || t.phases.phase1.locations.work;
 
   return (
     <>
@@ -140,31 +145,25 @@ export default function App() {
         {/* Phase 1: Zero-Friction Capture & Tactile Emotion Jar */}
         {currentPhase === 'phase1_jar' && (
           <Phase1EmotionJar
-            currentLocation={
-              profile.goal === 'exam'
-                ? (profile.language === 'th' ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
-                : profile.goal === 'stage'
-                ? (profile.language === 'th' ? 'หลังเวที / ก่อนพรีเซนต์' : 'Backstage / Event')
-                : (profile.language === 'th' ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation')
-            }
+            currentLocation={locationText}
             heartRate={heartRate}
             selectedEmotions={selectedEmotions}
             onSelectEmotions={setSelectedEmotions}
             onProceed={handleStartIntervention}
             onOpenPulseSensor={() => setIsPulseModalOpen(true)}
             onOpenStory={() => setIsStoryModalOpen(true)}
-            lang={profile.language}
+            lang={lang}
           />
         )}
 
         {/* Phase 2: Tailored Intervention Engine (65s Dedicated Focus) */}
         {currentPhase === 'phase2_intervention' && (
           <div className="flex flex-col h-full">
-            {/* Quick Intervention Switcher - Cozy Mooca pastel styling */}
+            {/* Quick Intervention Switcher */}
             <div className="px-3 pt-2 pb-1.5 bg-[#E6F9F7]/80 backdrop-blur-md border-b border-[#00C4B3]/20 flex items-center justify-between text-xs shadow-2xs">
               <span className="text-[10px] text-[#004D40] font-extrabold flex items-center gap-1.5">
                 <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
-                <span>{profile.language === 'th' ? 'โหมดรีเซ็ตใจกับ Mooca:' : 'Reset Mode:'}</span>
+                <span>{t.phases.phase1.resetModeTitle}</span>
               </span>
               <div className="flex gap-1">
                 {(['A', 'B', 'C', 'D'] as InterventionOption[]).map((opt) => (
@@ -180,10 +179,10 @@ export default function App() {
                         : 'bg-white text-[#004D40] hover:bg-[#E6F9F7] border border-slate-200'
                     }`}
                     title={
-                      opt === 'A' ? 'Option A: Somatic Absorption' :
-                      opt === 'B' ? 'Option B: The Victory Sip' :
-                      opt === 'C' ? 'Option C: Kinetic Shaker' :
-                      'Option D: Audio Matrix'
+                      opt === 'A' ? t.phases.phase2.options.optA :
+                      opt === 'B' ? t.phases.phase2.options.optB :
+                      opt === 'C' ? t.phases.phase2.options.optC :
+                      t.phases.phase2.options.optD
                     }
                   >
                     {opt}
@@ -197,53 +196,53 @@ export default function App() {
               {activeOption === 'A' && (
                 <SomaticAbsorption
                   onComplete={handleInterventionComplete}
-                  lang={profile.language}
+                  lang={lang}
                 />
               )}
               {activeOption === 'B' && (
                 <VictorySip
                   onComplete={handleInterventionComplete}
-                  lang={profile.language}
+                  lang={lang}
                 />
               )}
               {activeOption === 'C' && (
                 <KineticShaker
                   onComplete={handleInterventionComplete}
-                  lang={profile.language}
+                  lang={lang}
                 />
               )}
               {activeOption === 'D' && (
                 <AudioMatrixSanctuary
                   mbti={profile.mbti}
                   onComplete={handleInterventionComplete}
-                  lang={profile.language}
+                  lang={lang}
                 />
               )}
             </div>
           </div>
         )}
 
-        {/* Phase 3: The Cognitive Reframing Page (Insight & Next Step) */}
+        {/* Phase 3: Cognitive Reframing (25s) */}
         {currentPhase === 'phase3_reframing' && (
           <Phase3CognitiveReframing
             goal={profile.goal}
             onProceed={handleReframingComplete}
-            lang={profile.language}
+            lang={lang}
           />
         )}
 
-        {/* Phase 4: Closed-Loop Shift Feedback (Delta Check) */}
+        {/* Phase 4: Shift Verification (15s) */}
         {currentPhase === 'phase4_feedback' && (
           <Phase4Feedback
             preHeartRate={heartRate}
             selectedEmotions={selectedEmotions}
             onFinishReset={handleFinishFeedback}
             onRestart={handleRestart}
-            lang={profile.language}
+            lang={lang}
           />
         )}
 
-        {/* Completed View */}
+        {/* Completed View: 120s Hero Keepsake */}
         {currentPhase === 'completed' && (
           <ResetCompletedView
             profile={profile}
@@ -257,45 +256,45 @@ export default function App() {
         )}
       </MobileFrame>
 
-      {/* Mooca Story & Pocket Sanctuary Modal */}
-      <MoocaStoryModal
-        isOpen={isStoryModalOpen}
-        onClose={() => setIsStoryModalOpen(false)}
-        lang={profile.language}
-        userName={profile.name}
-      />
-
       {/* Onboarding / Profile Settings Modal */}
       <OnboardingModal
+        isOpen={isOnboardingOpen}
         initialProfile={profile}
         onSave={handleSaveProfile}
-        isOpen={isOnboardingOpen}
         onClose={() => setIsOnboardingOpen(false)}
       />
 
-      {/* Design System & Tokens Inspector Modal */}
-      <DesignSystemDrawer
-        isOpen={isDesignSystemOpen}
-        onClose={() => setIsDesignSystemOpen(false)}
-        lang={profile.language}
-      />
-
-      {/* Live Optical Pulse & HRV Sensor Modal */}
+      {/* Live Optical PPG Heart Pulse Sensor Modal */}
       <LivePulseSensorModal
         isOpen={isPulseModalOpen}
         onClose={() => setIsPulseModalOpen(false)}
         currentBpm={heartRate}
         onUpdateBpm={setHeartRate}
-        lang={profile.language}
+        lang={lang}
       />
 
-      {/* Reset History & Sanctuary Badge Modal */}
+      {/* Reset Journal / Somatic Sanctuary History Modal */}
       <ResetHistoryModal
         isOpen={isHistoryOpen}
         onClose={() => setIsHistoryOpen(false)}
         profile={profile}
         history={history}
-        lang={profile.language}
+        lang={lang}
+      />
+
+      {/* Mooca Mascot Origin Story Modal */}
+      <MoocaStoryModal
+        isOpen={isStoryModalOpen}
+        onClose={() => setIsStoryModalOpen(false)}
+        lang={lang}
+        userName={profile.name}
+      />
+
+      {/* Design System Inspection Drawer */}
+      <DesignSystemDrawer
+        isOpen={isDesignSystemOpen}
+        onClose={() => setIsDesignSystemOpen(false)}
+        lang={lang}
       />
     </>
   );

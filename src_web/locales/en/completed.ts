@@ -10,4 +10,12 @@ export const completed = {
   feedbackButton: 'Feedback to Mooca',
   shareButton: 'Share Polaroid Keepsake',
   restartButton: 'Start New Session',
+  copiedAlert: 'Copied share text to clipboard!',
+  viewDetails: 'View',
+  stateEmpowered: 'Empowered',
+  stateGrounded: 'Grounded',
+  stateStabilized: 'Stabilized',
+  historyBtn: 'Reset History',
+  designTokensBtn: 'Tokens & UI',
+  shareTextTemplate: '{name} reduced tension by {bpm} BPM with 120s Reset on Mooca!',
 };

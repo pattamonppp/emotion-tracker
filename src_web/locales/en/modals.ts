@@ -6,6 +6,9 @@ export const modals = {
     verifiedText: '120s Verified',
     previousSessions: 'Previous Sessions',
     shareSanctuary: 'Share Sanctuary',
+    closeButton: 'Close',
+    copiedAlert: 'Copied share text to clipboard!',
+    quoteTemplate: '“{name} has re-centered their nervous equilibrium and stands ready for their arena with Mooca by their side.”',
   },
   onboarding: {
     title: 'Mooca Companion Welcome!',
@@ -30,5 +33,15 @@ export const modals = {
     subtitle: 'The warm cloud companion for tired hearts',
     tabStory: 'Story',
     tabVibe: 'Psychology',
+  },
+  mobileFrame: {
+    companionBadge: 'Best Friend Companion',
+    deviceFrame: 'Device Frame',
+    fullView: 'Full View',
+    friendMooca: 'Mooca',
+    storyTooltip: 'Mooca Story',
+    toggleFrameTooltip: 'Toggle mobile device frame',
+    toggleLangTooltip: 'Toggle language TH / EN',
+    designTokensTooltip: 'Design Tokens & UI',
   },
 };

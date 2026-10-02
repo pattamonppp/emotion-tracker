@@ -10,4 +10,12 @@ export const completed = {
   feedbackButton: 'บอกความรู้สึกถึง Mooca',
   shareButton: 'แชร์การ์ดความกล้าหาญ',
   restartButton: 'เริ่มรีเซ็ตครั้งใหม่',
+  copiedAlert: 'คัดลอกข้อความสำหรับแชร์แล้ว!',
+  viewDetails: 'แตะดู',
+  stateEmpowered: 'มั่นใจ / พร้อมลุย',
+  stateGrounded: 'นิ่ง มีสติ',
+  stateStabilized: 'คืนสมดุล',
+  historyBtn: 'ประวัติรีเซ็ต',
+  designTokensBtn: 'Design Tokens',
+  shareTextTemplate: '{name} ลดความตึงเครียดได้ {bpm} BPM ด้วย 120s Reset กับ Mooca!',
 };
