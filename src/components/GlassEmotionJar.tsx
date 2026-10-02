@@ -64,8 +64,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   onMoocaHug,
 }) => {
   const jarSquishAnim = useRef(new Animated.Value(1)).current;
-  const moocaOrbitX = useRef(new Animated.Value(-22)).current;
-  const moocaOrbitY = useRef(new Animated.Value(-16)).current;
+  const moocaOrbitX = useRef(new Animated.Value(-58)).current;
+  const moocaOrbitY = useRef(new Animated.Value(-18)).current;
   const puffBobAnim = useRef(new Animated.Value(0)).current;
 
   // Speech bubble dynamic appear & disappear animation (like Mooca is talking to user)
@@ -78,12 +78,14 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
     if (selectedEmotions.length >= 3) {
       return lang === 'th'
         ? [
-            { text: 'รับฝากครบ 3 อารมณ์แล้วนะ พร้อมเริ่มรีเซ็ตใจเลย!', iconType: 'sparkles' },
+            { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ', iconType: 'cloud' },
+            { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ พร้อมเริ่มรีเซ็ตใจเลย!', iconType: 'sparkles' },
             { text: 'หายใจเข้าลึก ๆ แล้วกดปุ่มเริ่มด้านล่างได้เลยนะ', iconType: 'wind' },
             { text: 'Mooca จะอยู่ข้าง ๆ เธอเสมอ สู้ ๆ นะ!', iconType: 'heart' },
           ]
         : [
-            { text: '3 feelings kept safely! Ready to reset!', iconType: 'sparkles' },
+            { text: 'I can look after up to 3 feelings at a time!', iconType: 'cloud' },
+            { text: 'I can look after up to 3 feelings at a time! Ready to reset!', iconType: 'sparkles' },
             { text: 'Take a deep breath & tap start below', iconType: 'wind' },
             { text: 'Mooca is always right here with you!', iconType: 'heart' },
           ];
@@ -93,28 +95,28 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
         ? [
             { text: `Mooca ช่วยดูแลให้แล้ว ${selectedEmotions.length} ก้อนนะ สบายใจได้เลย!`, iconType: 'shield' },
             { text: 'เก่งมากเลยนะ ที่กล้าเปิดใจยอมรับความรู้สึกตัวเอง', iconType: 'smile' },
+            { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ', iconType: 'cloud' },
             { text: 'ฝากไว้ในโหลแก้วใส ปลอดภัยแน่นอน', iconType: 'sparkles' },
-            { text: 'อยากฝากเพิ่มอีกไหมนะ (ได้สูงสุด 3 ก้อน)', iconType: 'cloud' },
           ]
         : [
             { text: `Holding ${selectedEmotions.length} feelings safely for you!`, iconType: 'shield' },
             { text: 'Proud of you for embracing your feelings', iconType: 'smile' },
+            { text: 'I can look after up to 3 feelings at a time!', iconType: 'cloud' },
             { text: 'Safe inside your clear glass jar', iconType: 'sparkles' },
-            { text: 'Want to store more? (up to 3 feelings)', iconType: 'cloud' },
           ];
     }
     return lang === 'th'
       ? [
           { text: 'พาความกังวลมาฝากไว้กับ Mooca นะ', iconType: 'cloud' },
+          { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ', iconType: 'cloud' },
           { text: 'แตะหรือลากก้อนเมฆอารมณ์ลงโหลได้เลยนะ', iconType: 'sparkles' },
           { text: 'วันนี้ใจเธอเป็นยังไงบ้าง เล่าให้ฟังได้นะ', iconType: 'heart' },
-          { text: 'เลือกฝากได้สูงสุด 3 อารมณ์น้า', iconType: 'cloud' },
         ]
       : [
           { text: 'Rest your worries here with Mooca', iconType: 'cloud' },
+          { text: 'I can look after up to 3 feelings at a time!', iconType: 'cloud' },
           { text: 'Tap or drag emotion clouds into the jar', iconType: 'sparkles' },
           { text: 'How is your heart feeling today?', iconType: 'heart' },
-          { text: 'Choose up to 3 feelings to store', iconType: 'cloud' },
         ];
   };
 
@@ -198,10 +200,70 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   useEffect(() => {
     const orbitLoop = Animated.loop(
       Animated.sequence([
-        // Stage 1: Float from Top-Left (-22, -16) to Top-Center-Right (26, -18)
+        // Stage 1: Float from Left (-58, -18) to Top-Right (66, -22)
         Animated.parallel([
           Animated.timing(moocaOrbitX, {
-            toValue: 26,
+            toValue: 66,
+            duration: 2700,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: -22,
+            duration: 2700,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        // Stage 2: Drift down wide past the Right Shoulder of the Jar (80, 14)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: 80,
+            duration: 2300,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: 14,
+            duration: 2300,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        // Stage 3: Float across the Front Rim / Neck to Center (0, 6)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: 0,
+            duration: 2500,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: 6,
+            duration: 2500,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        // Stage 4: Drift down wide past the Left Shoulder of the Jar (-80, 14)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: -80,
+            duration: 2300,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: 14,
+            duration: 2300,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        // Stage 5: Rise back up along the Left Rim to Top-Left (-58, -18)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: -58,
             duration: 2500,
             easing: Easing.inOut(Easing.sin),
             useNativeDriver: true,
@@ -209,66 +271,6 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           Animated.timing(moocaOrbitY, {
             toValue: -18,
             duration: 2500,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-        ]),
-        // Stage 2: Drift down around Right Shoulder of Jar (34, 14)
-        Animated.parallel([
-          Animated.timing(moocaOrbitX, {
-            toValue: 34,
-            duration: 2100,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-          Animated.timing(moocaOrbitY, {
-            toValue: 14,
-            duration: 2100,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-        ]),
-        // Stage 3: Float across the Front Rim / Neck to Center (0, 8)
-        Animated.parallel([
-          Animated.timing(moocaOrbitX, {
-            toValue: 0,
-            duration: 2300,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-          Animated.timing(moocaOrbitY, {
-            toValue: 8,
-            duration: 2300,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-        ]),
-        // Stage 4: Float to Left Shoulder of Jar (-32, 14)
-        Animated.parallel([
-          Animated.timing(moocaOrbitX, {
-            toValue: -32,
-            duration: 2100,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-          Animated.timing(moocaOrbitY, {
-            toValue: 14,
-            duration: 2100,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-        ]),
-        // Stage 5: Rise back up along the Left Rim to Top-Left (-22, -16)
-        Animated.parallel([
-          Animated.timing(moocaOrbitX, {
-            toValue: -22,
-            duration: 2400,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-          Animated.timing(moocaOrbitY, {
-            toValue: -16,
-            duration: 2400,
             easing: Easing.inOut(Easing.sin),
             useNativeDriver: true,
           }),
@@ -563,21 +565,22 @@ const styles = StyleSheet.create({
   moocaPerchContainer: {
     position: 'absolute',
     top: -24,
-    left: 14,
+    left: 0,
+    right: 0,
     alignItems: 'center',
     zIndex: 25,
   },
   moocaSpeechBubble: {
     backgroundColor: 'rgba(255, 255, 255, 0.96)',
-    paddingHorizontal: 9,
-    paddingVertical: 4,
+    paddingHorizontal: 11,
+    paddingVertical: 4.5,
     borderRadius: radii.full,
     borderWidth: 1.2,
     borderColor: 'rgba(0, 196, 179, 0.35)',
     ...shadows.soft,
     position: 'relative',
     marginBottom: 4,
-    maxWidth: 205,
+    maxWidth: 232,
   },
   speechRow: {
     flexDirection: 'row',
@@ -933,8 +936,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   clearBtnSlot: {
-    height: 28,
-    marginTop: 6,
+    height: 34,
+    marginTop: 26,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -942,12 +945,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    paddingVertical: 2.5,
-    paddingHorizontal: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    paddingVertical: 3.5,
+    paddingHorizontal: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.88)',
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: 'rgba(0, 196, 179, 0.25)',
+    borderColor: 'rgba(0, 196, 179, 0.28)',
     ...shadows.soft,
   },
   clearBtnText: {
@@ -956,6 +959,6 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
   },
   clearBtnPlaceholder: {
-    height: 22,
+    height: 28,
   },
 });

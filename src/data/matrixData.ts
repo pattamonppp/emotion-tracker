@@ -12,8 +12,8 @@ export const EMOTION_TAGS: EmotionTag[] = [
   },
   {
     id: 'forgetting',
-    labelTh: 'กลัวลืม',
-    labelEn: 'Blanking',
+    labelTh: 'ว่างเปล่า',
+    labelEn: 'Empty',
     emoji: '',
     color: '#F26E6E', // Flamingo
     weightDescription: '',

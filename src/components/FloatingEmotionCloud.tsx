@@ -14,6 +14,7 @@ import { audioService } from '../services/audioService';
 import {
   Check,
   Activity,
+  CircleDashed,
   HelpCircle,
   Anchor,
   Snowflake,
@@ -32,7 +33,7 @@ export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
     case 'shaking':
       return <Activity size={size} color={color} strokeWidth={2.4} />;
     case 'forgetting':
-      return <HelpCircle size={size} color={color} strokeWidth={2.4} />;
+      return <CircleDashed size={size} color={color} strokeWidth={2.4} />;
     case 'pressure':
       return <Anchor size={size} color={color} strokeWidth={2.4} />;
     case 'freeze':

@@ -228,15 +228,19 @@ const styles = StyleSheet.create({
   },
   skyCloudsSection: {
     width: '100%',
+    minHeight: 154,
+    justifyContent: 'flex-start',
   },
   cloudsList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
+    alignContent: 'flex-start',
     rowGap: 16,
     columnGap: 8,
     paddingHorizontal: 2,
+    minHeight: 154,
   },
   jarSection: {
     width: '100%',
