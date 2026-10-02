@@ -142,7 +142,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
           scriptTitle: '#9F1239',
           scriptText: '#881337',
           waveColor: '#E11D48',
-          hintText: '#9F1239',
+          hintText: '#ffffffff',
           progressTrack: 'rgba(255, 255, 255, 0.85)',
           progressFill: ['#E11D48', '#FB7185'] as const,
         };

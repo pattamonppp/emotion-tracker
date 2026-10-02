@@ -90,8 +90,8 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           badgeText: '#BE123C',
           badgeIconColor: '#F43F5E',
           progressFill: '#E11D48',
-          progressTrack: 'rgba(255, 190, 212, 0.65)',
-          captionColor: '#881337',
+          progressTrack: 'rgba(255, 190, 212, 0.45)',
+          captionColor: '#ffffffff',
           dots: ['#FB7185', '#FBBF24', '#F43F5E', '#00C4B3'],
         };
       case 'night':

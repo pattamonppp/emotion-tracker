@@ -192,11 +192,11 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     switch (activePeriod) {
       case 'sunset':
         return {
-          countColor: '#881337',
-          labelColor: '#9F1239',
-          hintColor: '#BE123C',
-          progressTrack: 'rgba(255, 255, 255, 0.85)',
-          progressFill: ['#fff3d8ff', '#ffaebbff'] as const,
+          countColor: '#ffffffff',
+          labelColor: '#fffafbff',
+          hintColor: '#5f0019ff',
+          progressTrack: 'rgba(255, 255, 255, 0.45)',
+          progressFill: ['#ffa8bbff', '#fff6b4ff'] as const,
         };
       case 'night':
         return {

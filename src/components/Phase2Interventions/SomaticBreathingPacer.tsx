@@ -61,9 +61,9 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
     switch (activePeriod) {
       case 'sunset':
         return {
-          instructionColor: '#881337',
-          pulseColor: '#9F1239',
-          heartColor: '#881337',
+          instructionColor: '#ffffff',
+          pulseColor: '#ffffff',
+          heartColor: '#ffffff',
           ...oocaCIOrb,
         };
       case 'night':

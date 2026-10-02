@@ -150,8 +150,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           countColor: '#ffffffff',
           labelColor: '#fffafbff',
           hintColor: '#5f0019ff',
-          progressTrack: 'rgba(255, 255, 255, 0.5)',
-          progressFill: ['#E11D48', '#FB7185'] as const,
+          progressTrack: 'rgba(255, 255, 255, 0.45)',
+          progressFill: ['#ffa8bbff', '#fff6b4ff'] as const,
         };
       case 'night':
         return {
