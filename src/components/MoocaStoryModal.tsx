@@ -87,7 +87,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             <View style={styles.storyCardHeader}>
               <Sun size={16} color="#F59E0B" />
               <Text style={styles.storyCardTitle}>
-                {lang === 'th' ? 'กำเนิดของ Mooca (The Cloud Companion)' : 'The Origin of Mooca'}
+                {lang === 'th' ? 'กำเนิดของ Mooca' : 'The Origin of Mooca'}
               </Text>
             </View>
             <Text style={styles.storyParagraph}>

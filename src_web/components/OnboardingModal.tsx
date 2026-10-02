@@ -193,7 +193,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-slate-700 font-bold flex items-center gap-1.5">
                     <Compass className="w-4 h-4 text-[#00C4B3]" />
-                    {profile.language === 'th' ? 'ประเภทบุคลิกภาพ (MBTI)' : 'MBTI Cognitive Profile'}
+                    {profile.language === 'th' ? 'ประเภทบุคลิกภาพ' : 'MBTI Cognitive Profile'}
                   </label>
                   <span className="text-[10px] text-slate-500 font-medium">
                     {profile.language === 'th' ? 'ปรับระดับคำปลอบของ Mooca' : 'Calibrates Mooca Voice'}
@@ -326,7 +326,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         <div className="p-4 border-t border-slate-100 bg-[#F8FAFC] flex items-center justify-between">
           {step === 2 && (
             <Button
-              variant="text"
+              variant="ghost"
               colorTheme="turquoise"
               size="sm"
               onClick={() => setStep(1)}

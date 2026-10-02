@@ -53,7 +53,7 @@ export const DesignSystemDrawer: React.FC<DesignSystemDrawerProps> = ({
 
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           <Text style={styles.sectionHeading}>
-            {lang === 'th' ? 'จานสีหลัก (Color Palette)' : 'Color Palette'}
+            {lang === 'th' ? 'จานสีหลัก' : 'Color Palette'}
           </Text>
 
           <View style={styles.paletteGrid}>
@@ -77,25 +77,25 @@ export const DesignSystemDrawer: React.FC<DesignSystemDrawerProps> = ({
             <View style={styles.timelineItem}>
               <Text style={styles.phaseTime}>0:00 - 0:15</Text>
               <Text style={styles.phaseLabel}>
-                {lang === 'th' ? 'Phase 1: โหลเก็บความกังวล (Emotion Jar)' : 'Phase 1: Emotion Jar Capture'}
+                {lang === 'th' ? 'Phase 1: โหลเก็บความกังวล' : 'Phase 1: Emotion Jar Capture'}
               </Text>
             </View>
             <View style={styles.timelineItem}>
               <Text style={styles.phaseTime}>0:15 - 1:20</Text>
               <Text style={styles.phaseLabel}>
-                {lang === 'th' ? 'Phase 2: กายกรรมรีเซ็ต (Somatic Shift)' : 'Phase 2: Somatic Intervention'}
+                {lang === 'th' ? 'Phase 2: กายกรรมรีเซ็ต' : 'Phase 2: Somatic Intervention'}
               </Text>
             </View>
             <View style={styles.timelineItem}>
               <Text style={styles.phaseTime}>1:20 - 1:45</Text>
               <Text style={styles.phaseLabel}>
-                {lang === 'th' ? 'Phase 3: ปลดล็อกความคิด (Cognitive Insight)' : 'Phase 3: Cognitive Reframing'}
+                {lang === 'th' ? 'Phase 3: ปลดล็อกความคิด' : 'Phase 3: Cognitive Reframing'}
               </Text>
             </View>
             <View style={styles.timelineItem}>
               <Text style={styles.phaseTime}>1:45 - 2:00</Text>
               <Text style={styles.phaseLabel}>
-                {lang === 'th' ? 'Phase 4: วัดผลลัพธ์ใจ (Bio Feedback Delta)' : 'Phase 4: Bio-Delta Check'}
+                {lang === 'th' ? 'Phase 4: วัดผลลัพธ์ใจ' : 'Phase 4: Bio-Delta Check'}
               </Text>
             </View>
           </View>

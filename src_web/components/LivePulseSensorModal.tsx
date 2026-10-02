@@ -100,7 +100,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
 
   // Scan progress calculation
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isFingerOnSensor && scanProgress < 100) {
       interval = setInterval(() => {
         setScanProgress((prev) => {

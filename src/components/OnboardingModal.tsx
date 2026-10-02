@@ -121,7 +121,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {/* Name Field */}
           <View style={styles.fieldSection}>
             <Text style={styles.fieldLabel}>
-              {lang === 'th' ? 'ชื่อของคุณ (Name)' : 'Your Name'}
+              {lang === 'th' ? 'ชื่อของคุณ' : 'Your Name'}
             </Text>
             <View style={styles.inputRow}>
               <User size={16} color={colors.primary} style={{ marginLeft: 12 }} />
@@ -137,7 +137,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {/* Goal Selector */}
           <View style={styles.fieldSection}>
             <Text style={styles.fieldLabel}>
-              {lang === 'th' ? 'สถานการณ์หลักที่ต้องเผชิญ (Current Context)' : 'Primary Context'}
+              {lang === 'th' ? 'สถานการณ์หลักที่ต้องเผชิญ' : 'Primary Context'}
             </Text>
             <View style={styles.goalsGrid}>
               {GOALS.map((g) => {

@@ -194,7 +194,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
         <h3 className="text-base font-bold text-slate-800 tracking-tight flex items-center justify-center gap-1.5 mt-0.5">
           <Sparkles className="w-4 h-4 text-[#00C4B3]" />
-          {lang === 'th' ? 'ดื่มน้ำชัยชนะ (The Victory Sip)' : 'The Victory Sip (Liquid Engine)'}
+          {lang === 'th' ? 'ดื่มน้ำชัยชนะ' : 'The Victory Sip'}
         </h3>
         <p className="text-xs text-slate-600 max-w-xs mt-0.5 leading-snug">
           {lang === 'th'
@@ -287,7 +287,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             size="md"
             fullWidth
             onClick={onComplete}
-            label={lang === 'th' ? 'เข้าสู่หน้าสะท้อนความคิด (Reframing)' : 'Proceed to Reframing'}
+            label={lang === 'th' ? 'เข้าสู่หน้าสะท้อนความคิด' : 'Proceed to Reframing'}
           />
         )}
       </div>

@@ -4,9 +4,9 @@ import { EMOTION_TAGS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
 import { Button } from '../design-system/Button';
 import { GlassEmotionJar } from './GlassEmotionJar';
-import { 
-  MapPin, 
-  Activity, 
+import {
+  MapPin,
+  Activity,
   ArrowRight,
   GripHorizontal,
   Check
@@ -158,7 +158,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
   return (
     <div className="flex flex-col h-full justify-between pb-2 px-3 pt-1.5 animate-in fade-in duration-300 relative select-none overflow-hidden">
-      
+
       {/* 1. TOP CONTEXT STRIP: Unboxed quiet metadata */}
       <div className="flex items-center justify-between text-xs px-1 shrink-0">
         <div className="flex items-center gap-1.5 text-slate-600">
@@ -218,7 +218,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
       <div className="flex flex-col gap-1 shrink-0">
         <div className="flex items-center justify-between px-1">
           <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-            {lang === 'th' ? 'ลากหรือแตะเพื่อใส่ลงโหล (เลือก 1-2 ข้อ)' : 'Drag or tap to drop (1-2)'}
+            {lang === 'th' ? 'ลากหรือแตะเพื่อใส่ลงโหล' : 'Drag or tap to drop'}
           </span>
           <span className="text-[10px] text-[#00C4B3] font-bold">
             {selectedEmotions.length}/2
@@ -235,13 +235,12 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
               <div
                 key={tag.id}
                 onPointerDown={(e) => handlePointerDown(tag.id, e)}
-                className={`relative px-2.5 py-1.5 rounded-xl text-xs font-semibold cursor-grab active:cursor-grabbing transition-all duration-150 flex items-center gap-1.5 select-none border touch-none ${
-                  isBeingDragged
-                    ? 'opacity-30 scale-95 border-dashed border-[#00C4B3]'
-                    : isSelected
+                className={`relative px-2.5 py-1.5 rounded-xl text-xs font-semibold cursor-grab active:cursor-grabbing transition-all duration-150 flex items-center gap-1.5 select-none border touch-none ${isBeingDragged
+                  ? 'opacity-30 scale-95 border-dashed border-[#00C4B3]'
+                  : isSelected
                     ? 'bg-[#E6F9F7] text-[#004D40] border-[#00C4B3] shadow-xs'
                     : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-2xs hover:border-[#00C4B3]/40'
-                }`}
+                  }`}
               >
                 <GripHorizontal className="w-3 h-3 text-slate-300 shrink-0" />
 
@@ -282,11 +281,10 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           }}
         >
           <div
-            className={`px-3 py-1.5 rounded-xl bg-white border-2 shadow-2xl flex items-center gap-2 scale-105 rotate-1 transition-all ${
-              isOverJar
-                ? 'border-[#00C4B3] ring-4 ring-[#00C4B3]/30 shadow-[#00C4B3]/40'
-                : 'border-slate-300'
-            }`}
+            className={`px-3 py-1.5 rounded-xl bg-white border-2 shadow-2xl flex items-center gap-2 scale-105 rotate-1 transition-all ${isOverJar
+              ? 'border-[#00C4B3] ring-4 ring-[#00C4B3]/30 shadow-[#00C4B3]/40'
+              : 'border-slate-300'
+              }`}
           >
             <span
               className="w-2.5 h-2.5 rounded-full shadow-xs"

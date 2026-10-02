@@ -208,7 +208,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           icon={<RotateCcw size={18} color="#FFFFFF" />}
           title={
             lang === 'th'
-              ? 'เริ่มรีเซ็ตครั้งใหม่ (New Reset)'
+              ? 'เริ่มรีเซ็ตครั้งใหม่'
               : 'Start New Session'
           }
         />

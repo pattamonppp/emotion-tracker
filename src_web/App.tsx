@@ -79,7 +79,7 @@ export default function App() {
 
   // Timer lifecycle for 120-second architecture
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isTimerRunning && elapsedSeconds < 120) {
       interval = setInterval(() => {
         setElapsedSeconds((prev) => {

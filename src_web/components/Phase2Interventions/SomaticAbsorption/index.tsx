@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import cn from 'classnames';
-import { audioService } from '@/services/audioService';
-import { Button } from '@/components/Button';
-import { MoocaMascot } from '@/components/MoocaMascot';
+import { audioService } from '../../../services/audioService';
+import { Button } from '../../Button';
+import { MoocaMascot } from '../../MoocaMascot';
 import { Sparkles, Flame, Volume2, Shield } from 'lucide-react';
 import styles from './styles.module.scss';
 
@@ -362,7 +362,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             fullWidth
             onClick={onComplete}
           >
-            {lang === 'th' ? 'เข้าสู่หน้าสะท้อนความคิด (Next Step)' : 'Proceed to Cognitive Reframing'}
+            {lang === 'th' ? 'เข้าสู่หน้าสะท้อนความคิด' : 'Proceed to Cognitive Reframing'}
           </Button>
         </div>
       )}

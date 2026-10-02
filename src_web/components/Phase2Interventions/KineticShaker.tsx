@@ -78,7 +78,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
   return (
     <div className="flex flex-col h-full justify-between items-center text-center p-3 select-none animate-in fade-in duration-300">
-      
+
       {/* Mode Switcher */}
       <div className="w-full flex items-center justify-between text-xs px-3 py-1.5 bg-white/90 shadow-sm rounded-[16px] border border-slate-200">
         <div className="flex items-center gap-1.5 text-[#EF7773]">
@@ -91,17 +91,15 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         <div className="flex gap-1">
           <button
             onClick={() => setMode('shake')}
-            className={`px-3 py-1 rounded-[12px] text-xs font-semibold transition-all ${
-              mode === 'shake' ? 'bg-[#00C4B3] text-white shadow-sm' : 'bg-slate-100 text-slate-600'
-            }`}
+            className={`px-3 py-1 rounded-[12px] text-xs font-semibold transition-all ${mode === 'shake' ? 'bg-[#00C4B3] text-white shadow-sm' : 'bg-slate-100 text-slate-600'
+              }`}
           >
             {lang === 'th' ? 'สะบัดข้อมือ' : 'Arm Shake'}
           </button>
           <button
             onClick={() => setMode('bounce')}
-            className={`px-3 py-1 rounded-[12px] text-xs font-semibold transition-all ${
-              mode === 'bounce' ? 'bg-[#00C4B3] text-white shadow-sm' : 'bg-slate-100 text-slate-600'
-            }`}
+            className={`px-3 py-1 rounded-[12px] text-xs font-semibold transition-all ${mode === 'bounce' ? 'bg-[#00C4B3] text-white shadow-sm' : 'bg-slate-100 text-slate-600'
+              }`}
           >
             {lang === 'th' ? 'กระโดดเบาๆ' : 'Bounce'}
           </button>
@@ -117,8 +115,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             isFinished
               ? (lang === 'th' ? 'เย้! พลังลบกระจายหายหมดแล้ว สบายตัวขึ้นเยอะเลย!' : 'All discharged! Feeling light!')
               : mode === 'shake'
-              ? (lang === 'th' ? 'สะบัดข้อมือไปพร้อม Mooca เลย! สะบัด สะบัด สะบัด!' : 'Shake away bad vibes with Mooca!')
-              : (lang === 'th' ? 'กระโดดดึ๋งๆ เบาๆ เติมออกซิเจนให้สมองสดใสนะ!' : 'Bounce lightly to recharge brain oxygen!')
+                ? (lang === 'th' ? 'สะบัดข้อมือไปพร้อม Mooca เลย! สะบัด สะบัด สะบัด!' : 'Shake away bad vibes with Mooca!')
+                : (lang === 'th' ? 'กระโดดดึ๋ง ๆ เบา ๆ เติมออกซิเจนให้สมองสดใสนะ!' : 'Bounce lightly to recharge brain oxygen!')
           }
         />
 
@@ -131,11 +129,11 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         <p className="text-xs text-slate-600 max-w-xs mt-0.5 leading-snug">
           {mode === 'shake'
             ? (lang === 'th'
-                ? '“กำมือถือให้มั่นแล้วสะบัดข้อมือเร็วๆ 15 ครั้ง เพื่อคลายกล้ามเนื้อที่เกร็งค้าง”'
-                : '"Grip device securely and shake wrists firmly 15 times to discharge stored tension."')
+              ? '“กำมือถือให้มั่นแล้วสะบัดข้อมือเร็ว ๆ 15 ครั้ง เพื่อคลายกล้ามเนื้อที่เกร็งค้าง”'
+              : '"Grip device securely and shake wrists firmly 15 times to discharge stored tension."')
             : (lang === 'th'
-                ? '“แนบมือถือกับอก แล้วกระโดดหย็องๆ 10 ครั้ง เพื่อสูบฉีดออกซิเจนกลับสู่สมอง”'
-                : '"Hold device against chest and bounce lightly 10 times to boost prefrontal oxygen."')}
+              ? '“แนบมือถือกับอก แล้วกระโดดหย็อง ๆ 10 ครั้ง เพื่อสูบฉีดออกซิเจนกลับสู่สมอง”'
+              : '"Hold device against chest and bounce lightly 10 times to boost prefrontal oxygen."')}
         </p>
       </div>
 
@@ -166,13 +164,12 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         {/* Counter Display & Shake Feedback */}
         <div className="flex flex-col items-center">
           <div
-            className={`w-28 h-28 rounded-full border-4 flex flex-col items-center justify-center transition-all ${
-              isShaking
-                ? 'border-[#EF7773] bg-[#EF7773]/15 scale-110 shadow-lg shadow-rose-300'
-                : isFinished
+            className={`w-28 h-28 rounded-full border-4 flex flex-col items-center justify-center transition-all ${isShaking
+              ? 'border-[#EF7773] bg-[#EF7773]/15 scale-110 shadow-lg shadow-rose-300'
+              : isFinished
                 ? 'border-[#00C4B3] bg-[#DBF0EE] shadow-md shadow-[#00C4B3]/30'
                 : 'border-slate-300 bg-white shadow-sm'
-            }`}
+              }`}
           >
             {isFinished ? (
               <CheckCircle2 className="w-12 h-12 text-[#009688] animate-in zoom-in" />
@@ -210,8 +207,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             isFinished
               ? (lang === 'th' ? 'ปลดปล่อยพลังลบสำเร็จ' : 'Discharge Complete')
               : mode === 'shake'
-              ? (lang === 'th' ? `สะบัดข้อมือ! (${shakesLeft} ครั้ง)` : `Tap / Shake Wrist (${shakesLeft} left)`)
-              : (lang === 'th' ? `กระโดดเบาๆ! (${bouncesLeft} ครั้ง)` : `Tap / Micro-Bounce (${bouncesLeft} left)`)
+                ? (lang === 'th' ? `สะบัดข้อมือ! (${shakesLeft} ครั้ง)` : `Tap / Shake Wrist (${shakesLeft} left)`)
+                : (lang === 'th' ? `กระโดดเบาๆ! (${bouncesLeft} ครั้ง)` : `Tap / Micro-Bounce (${bouncesLeft} left)`)
           }
         />
 

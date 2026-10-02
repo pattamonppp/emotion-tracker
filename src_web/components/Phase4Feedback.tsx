@@ -98,7 +98,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
               <span className="text-2xl">⚡</span>
               <div>
                 <div className={`text-xs font-bold ${selectedShift === 'empowered' ? 'text-white' : 'text-[#004D40]'}`}>
-                  {lang === 'th' ? 'พร้อมลุย / มั่นใจขึ้น (Empowered)' : 'Empowered & Confident'}
+                  {lang === 'th' ? 'พร้อมลุย / มั่นใจขึ้น' : 'Empowered & Confident'}
                 </div>
                 <div className={`text-[10px] ${selectedShift === 'empowered' ? 'text-teal-50' : 'text-slate-500'}`}>
                   {lang === 'th' ? 'อะดรีนาลีนเปลี่ยนเป็นสมาธิอันเฉียบคม' : 'Adrenaline converted to peak focus'}
@@ -122,7 +122,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
               <span className="text-2xl">🌿</span>
               <div>
                 <div className={`text-xs font-bold ${selectedShift === 'grounded' ? 'text-white' : 'text-[#004D40]'}`}>
-                  {lang === 'th' ? 'นิ่งขึ้น มีสติ สงบลง (Grounded)' : 'Grounded & Calmer'}
+                  {lang === 'th' ? 'นิ่งขึ้น มีสติ สงบลง' : 'Grounded & Calmer'}
                 </div>
                 <div className={`text-[10px] ${selectedShift === 'grounded' ? 'text-teal-50' : 'text-slate-500'}`}>
                   {lang === 'th' ? 'ระบบประสาทผ่อนคลาย ชีพจรคืนสมดุล' : 'Parasympathetic restoration'}
@@ -146,7 +146,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
               <span className="text-xl">⚖️</span>
               <div>
                 <div className="text-xs font-semibold text-slate-800">
-                  {lang === 'th' ? 'ยังกังวลอยู่บ้าง (Same)' : 'Still Somewhat Anxious'}
+                  {lang === 'th' ? 'ยังกังวลอยู่บ้าง' : 'Still Somewhat Anxious'}
                 </div>
                 <div className="text-[10px] text-slate-400">
                   {lang === 'th' ? 'ไม่เป็นไรนะ ทำซ้ำกับ Mooca อีกรอบได้' : 'Can run another quick loop with Mooca'}
@@ -172,7 +172,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           <div className="grid grid-cols-2 gap-2 text-center text-xs">
             <div className="p-2.5 rounded-[16px] bg-slate-50 border border-slate-200">
               <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">
-                {lang === 'th' ? 'ก่อนเริ่ม (Pre)' : 'Pre-Reset'}
+                {lang === 'th' ? 'ก่อนเริ่ม' : 'Pre-Reset'}
               </span>
               <div className="text-[#F26E6E] font-mono font-black text-base mt-0.5">
                 {preHeartRate} <span className="text-[10px]">bpm</span>
@@ -184,7 +184,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
 
             <div className="p-2.5 rounded-[16px] bg-[#E6F9F7] border border-[#00C4B3]/40">
               <span className="text-[10px] text-[#004D40] uppercase tracking-wider block font-bold">
-                {lang === 'th' ? 'ปัจจุบัน (Post)' : 'Post-Reset'}
+                {lang === 'th' ? 'ปัจจุบัน' : 'Post-Reset'}
               </span>
               <div className="text-[#004D40] font-mono font-black text-base mt-0.5">
                 {postHeartRate} <span className="text-[10px]">bpm</span>
@@ -218,7 +218,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
 
         <div className="flex justify-center">
           <Button
-            variant="text"
+            variant="ghost"
             colorTheme="blue"
             size="sm"
             onClick={onRestart}

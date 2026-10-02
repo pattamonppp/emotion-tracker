@@ -20,6 +20,9 @@ export {
   type ButtonShape,
 } from './constants';
 
+export type ButtonColorTheme = ButtonTheme;
+export type ButtonRadius = '8px' | '24px' | 'circle';
+
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   theme?: ButtonTheme;

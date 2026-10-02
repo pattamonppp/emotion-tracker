@@ -55,7 +55,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
           <View style={styles.headerTitleRow}>
             <Award size={18} color={colors.secondary} />
             <Text style={styles.headerTitle}>
-              {lang === 'th' ? 'บันทึกการรีเซ็ตใจ (Reset History)' : 'Reset History'}
+              {lang === 'th' ? 'บันทึกการรีเซ็ตใจ' : 'Reset History'}
             </Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
