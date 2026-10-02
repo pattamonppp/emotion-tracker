@@ -1,16 +1,19 @@
 import { useState, useCallback } from 'react';
 import { UserProfile } from '../types';
 
-const PROFILE_KEY = 'mooca_user_profile';
+const PROFILE_KEY = 'kinetic_vibe_profile';
 
 const DEFAULT_PROFILE: UserProfile = {
-  name: 'Pattamon',
-  ageBracket: 'working',
-  goal: 'exam',
+  name: 'Alex',
+  ageBracket: '19-24 (มหาวิทยาลัย)',
+  goal: 'burnout',
   mbti: 'INFJ',
-  enableSensors: true,
-  enableHaptics: true,
-  onboardingCompleted: true,
+  language: 'th',
+  permissions: {
+    motion: true,
+    haptics: true,
+    heartRate: true,
+  },
 };
 
 export const useUserProfile = () => {

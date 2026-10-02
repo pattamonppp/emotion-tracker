@@ -142,7 +142,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
       {/* Soft-Touch Mood Stamp Buttons Section */}
       <View style={styles.stampSection}>
         <View style={styles.stampsList}>
-          {/* Stamp 1: ⚡ พร้อมลุย/มั่นใจขึ้น */}
+          {/* Stamp 1: พร้อมลุย/มั่นใจขึ้น */}
           <TouchableOpacity
             activeOpacity={0.88}
             onPress={() => handleSelectStamp('empowered')}
@@ -177,7 +177,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             ) : null}
           </TouchableOpacity>
 
-          {/* Stamp 2: 🌿 นิ่งขึ้น มีสติ */}
+          {/* Stamp 2: นิ่งขึ้น มีสติ */}
           <TouchableOpacity
             activeOpacity={0.88}
             onPress={() => handleSelectStamp('grounded')}
@@ -212,7 +212,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             ) : null}
           </TouchableOpacity>
 
-          {/* Stamp 3: 🧸 ขอกอดเพิ่มหน่อย */}
+          {/* Stamp 3: ขอกอดเพิ่มหน่อย */}
           <TouchableOpacity
             activeOpacity={0.88}
             onPress={() => handleSelectStamp('hug')}
