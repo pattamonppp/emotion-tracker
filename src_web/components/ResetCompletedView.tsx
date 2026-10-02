@@ -2,13 +2,13 @@ import React from 'react';
 import { ShiftFeedback, UserProfile } from '../types';
 import { Button } from '../design-system/Button';
 import { MoocaMascot } from './MoocaMascot';
-import { 
-  Sparkles, 
-  RotateCcw, 
-  Layers, 
-  CheckCircle, 
-  Heart, 
-  Sliders, 
+import {
+  Sparkles,
+  RotateCcw,
+  Layers,
+  CheckCircle,
+  Heart,
+  Sliders,
   Share2,
   Award,
   Sun
@@ -38,7 +38,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
   return (
     <div className="flex flex-col h-full justify-between items-center text-center p-4 select-none animate-in zoom-in-95 duration-300">
-      
+
       {/* Top Badge */}
       <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#7CC954]/20 border border-[#7CC954]/40 text-[#004D40] text-xs font-extrabold shadow-2xs">
         <CheckCircle className="w-3.5 h-3.5 text-[#7CC954]" />
@@ -66,7 +66,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           </h2>
           <p className="text-xs text-slate-600 mt-1 leading-relaxed font-medium">
             {lang === 'th'
-              ? 'ระบบประสาทของเธอคืนสู่สมดุลแล้ว ไม่ว่าจะเจอเรื่องอะไร Mooca จะคอยเป็นกำลังใจอยู่ข้างๆ เสมอนะ!'
+              ? 'ระบบประสาทของเธอคืนสู่สมดุลแล้ว ไม่ว่าจะเจอเรื่องอะไร Mooca จะคอยเป็นกำลังใจอยู่ข้าง ๆ เสมอนะ!'
               : 'Your equilibrium is fully restored. Step forward boldly, Mooca is right beside you.'}
           </p>
         </div>
@@ -90,11 +90,11 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 {feedback.shiftResult === 'empowered'
                   ? (lang === 'th' ? '⚡ มั่นใจ / พร้อมลุย' : '⚡ Empowered')
                   : feedback.shiftResult === 'grounded'
-                  ? (lang === 'th' ? '🌿 นิ่ง มีสติ' : '🌿 Grounded')
-                  : (lang === 'th' ? '⚖️ คืนสมดุล' : '⚖️ Stabilized')}
+                    ? (lang === 'th' ? '🌿 นิ่ง มีสติ' : '🌿 Grounded')
+                    : (lang === 'th' ? '⚖️ คืนสมดุล' : '⚖️ Stabilized')}
               </span>
             </div>
-            
+
             <div className="flex items-center justify-between text-[11px] text-slate-400">
               <span>{lang === 'th' ? 'บันทึกเวลา:' : 'Timestamp:'}</span>
               <span className="font-mono text-slate-600 font-bold">{feedback.timestamp}</span>
@@ -103,7 +103,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         )}
 
         {/* Friendship Badge Card */}
-        <div 
+        <div
           onClick={onOpenStory}
           className="p-2.5 rounded-[18px] bg-gradient-to-r from-[#FFF8E7] via-white to-[#E6F9F7] border border-[#FA8C3D]/30 flex items-center justify-between cursor-pointer hover:shadow-xs transition-all active:scale-98"
         >

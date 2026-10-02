@@ -153,7 +153,9 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             </Text>
             <View style={styles.chinBpmDrop}>
               <Leaf size={11} color="#00C4B3" style={{ marginRight: 2 }} />
-              <Text style={styles.chinBpmText}>-{bpmDrop} BPM</Text>
+              <Text style={styles.chinBpmText} numberOfLines={1}>
+                {`-${bpmDrop}\u00A0BPM`}
+              </Text>
             </View>
           </View>
         </View>
@@ -163,20 +165,22 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
       <View style={styles.metricsSummary}>
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>{lang === 'th' ? 'ก่อนเริ่ม' : 'Initial'}</Text>
-          <Text style={styles.metricVal}>{feedback?.preHeartRate || 105} BPM</Text>
+          <Text style={styles.metricVal} numberOfLines={1}>
+            {`${feedback?.preHeartRate || 105}\u00A0BPM`}
+          </Text>
         </View>
         <View style={styles.metricDivider} />
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>{lang === 'th' ? 'ตอนนี้' : 'Current'}</Text>
-          <Text style={[styles.metricVal, { color: colors.primary }]}>
-            {feedback?.postHeartRate || 87} BPM
+          <Text style={[styles.metricVal, { color: colors.primary }]} numberOfLines={1}>
+            {`${feedback?.postHeartRate || 87}\u00A0BPM`}
           </Text>
         </View>
         <View style={styles.metricDivider} />
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>{lang === 'th' ? 'ความผ่อนคลาย' : 'Calm Shift'}</Text>
-          <Text style={[styles.metricVal, { color: colors.secondary }]}>
-            -{bpmDrop} BPM
+          <Text style={[styles.metricVal, { color: colors.secondary }]} numberOfLines={1}>
+            {`-${bpmDrop}\u00A0BPM`}
           </Text>
         </View>
       </View>
@@ -199,7 +203,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         {/* Start New Session */}
         <MarshmallowButton
           variant="primary"
-          size="lg"
+          size="md"
           onPress={onRestart}
           icon={<RotateCcw size={18} color="#FFFFFF" />}
           title={
@@ -257,10 +261,10 @@ const styles = StyleSheet.create({
   },
   polaroidFrame: {
     width: '100%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#ffffffff',
     borderRadius: 16,
     padding: 12,
-    paddingBottom: 16,
+    paddingBottom: 10,
     borderWidth: 1.5,
     borderColor: '#E2E8F0',
     shadowColor: '#000000',
@@ -377,6 +381,8 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   chinBpmDrop: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#F0FDFA',
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -390,19 +396,20 @@ const styles = StyleSheet.create({
   metricsSummary: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
     width: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 14,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: colors.borderTeal,
-    marginBottom: 12,
+    marginBottom: 14,
     ...shadows.soft,
   },
   metricItem: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   metricLabel: {
     fontFamily: typography.fontPromptRegular,
@@ -417,7 +424,7 @@ const styles = StyleSheet.create({
   },
   metricDivider: {
     width: 1,
-    height: 22,
+    height: 24,
     backgroundColor: '#E2E8F0',
   },
   actionsContainer: {

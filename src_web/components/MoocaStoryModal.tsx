@@ -11,7 +11,8 @@ import {
   X, 
   Sun,
   Shield,
-  Wind
+  Wind,
+  BookOpen,
 } from 'lucide-react';
 
 interface MoocaStoryModalProps {
@@ -63,8 +64,8 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
         {/* Header */}
         <div className="p-4 bg-gradient-to-r from-[#DBF0EE] via-[#E6F9F7] to-[#FFF4DE] border-b border-[#00C4B3]/20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-xs text-base">
-              🐑
+            <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-xs">
+              <Heart className="w-4 h-4 text-[#00C4B3] fill-[#00C4B3]/20" />
             </span>
             <div>
               <h2 className="text-sm font-extrabold text-[#004D40] tracking-tight">
@@ -88,33 +89,36 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
         <div className="flex border-b border-slate-100 bg-white/70 px-3 pt-2 gap-1 text-xs">
           <button
             onClick={() => setActiveTab('story')}
-            className={`flex-1 py-1.5 rounded-t-[14px] font-bold text-center transition-all ${
+            className={`flex-1 py-1.5 rounded-t-[14px] font-bold text-center flex items-center justify-center gap-1.5 transition-all ${
               activeTab === 'story'
                 ? 'bg-white text-[#004D40] border-t-2 border-x border-[#00C4B3]/40 shadow-xs'
                 : 'text-slate-500 hover:text-slate-700'
             }`}
           >
-            {lang === 'th' ? '📖 นิทาน Mooca' : '📖 Story'}
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>{lang === 'th' ? 'นิทาน Mooca' : 'Story'}</span>
           </button>
           <button
             onClick={() => setActiveTab('breath')}
-            className={`flex-1 py-1.5 rounded-t-[14px] font-bold text-center transition-all ${
+            className={`flex-1 py-1.5 rounded-t-[14px] font-bold text-center flex items-center justify-center gap-1.5 transition-all ${
               activeTab === 'breath'
                 ? 'bg-white text-[#004D40] border-t-2 border-x border-[#00C4B3]/40 shadow-xs'
                 : 'text-slate-500 hover:text-slate-700'
             }`}
           >
-            {lang === 'th' ? '🌬️ หายใจกับ Mooca' : '🌬️ Breathe'}
+            <Wind className="w-3.5 h-3.5" />
+            <span>{lang === 'th' ? 'หายใจกับ Mooca' : 'Breathe'}</span>
           </button>
           <button
             onClick={() => setActiveTab('comfort')}
-            className={`flex-1 py-1.5 rounded-t-[14px] font-bold text-center transition-all ${
+            className={`flex-1 py-1.5 rounded-t-[14px] font-bold text-center flex items-center justify-center gap-1.5 transition-all ${
               activeTab === 'comfort'
                 ? 'bg-white text-[#004D40] border-t-2 border-x border-[#00C4B3]/40 shadow-xs'
                 : 'text-slate-500 hover:text-slate-700'
             }`}
           >
-            {lang === 'th' ? '💖 อ้อมกอด' : '💖 Warm Hug'}
+            <Heart className="w-3.5 h-3.5 text-[#F26E6E]" />
+            <span>{lang === 'th' ? 'อ้อมกอด' : 'Warm Hug'}</span>
           </button>
         </div>
 
@@ -147,9 +151,10 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
                     : `On days when the world spins too fast, when your hands tremble before a big test, when your heart races before going on stage, or when your mind feels completely frozen...`}
                 </p>
                 <p className="text-[#004D40] font-bold bg-[#E6F9F7] p-2 rounded-[12px] border border-[#00C4B3]/30">
+                  <Sparkles className="w-3.5 h-3.5 text-[#F59E0B] inline mr-1 -mt-0.5" />
                   {lang === 'th'
-                    ? `🌟 Mooca จะไม่บอกให้เธอหยุดกลัว แต่จะนั่งลงข้างๆ จับมือเธอไว้ ถือความกังวลใส่ขวดโหลแก้ว และพาเธอหายใจจนกว่าแสงอาทิตย์ในใจจะกลับมาส่องสว่างอีกครั้ง!`
-                    : `🌟 Mooca won’t tell you to "just relax". Mooca will sit right by your side, hold your hands, put your heavy thoughts in a safe jar, and breathe with you until your inner sunshine glows!`}
+                    ? `Mooca จะไม่บอกให้เธอหยุดกลัว แต่จะนั่งลงข้างๆ จับมือเธอไว้ ถือความกังวลใส่ขวดโหลแก้ว และพาเธอหายใจจนกว่าแสงอาทิตย์ในใจจะกลับมาส่องสว่างอีกครั้ง!`
+                    : `Mooca won’t tell you to "just relax". Mooca will sit right by your side, hold your hands, put your heavy thoughts in a safe jar, and breathe with you until your inner sunshine glows!`}
                 </p>
               </div>
 

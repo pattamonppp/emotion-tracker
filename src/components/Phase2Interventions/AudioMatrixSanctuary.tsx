@@ -288,7 +288,10 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
           </Text>
         </View>
 
-        <Text style={[styles.scriptText, { color: skyTheme.scriptText }]}>
+        <Text
+          style={[styles.scriptText, { color: skyTheme.scriptText }]}
+          textBreakStrategy="balanced"
+        >
           "{lang === 'th' ? script.th : script.en}"
         </Text>
       </View>

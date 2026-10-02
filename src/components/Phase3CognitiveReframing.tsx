@@ -58,8 +58,8 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header & Mascot */}
-        <View style={styles.header}>
+        {/* 1. Mascot View with Dedicated Bubble Clearance */}
+        <View style={styles.mascotWrapper}>
           <MoocaMascot
             mood={isActionCommitted ? 'celebrating' : 'comforting'}
             size="sm"
@@ -73,13 +73,13 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
                   : 'Read Mooca’s heartfelt letter and make a pinky promise!'
             }
           />
+        </View>
 
-          <View style={styles.phaseBadge}>
-            <Sparkles size={12} color={colors.primary} />
-            <Text style={styles.phaseBadgeText}>
-              {lang === 'th' ? 'จดหมายอบอุ่นจากใจ Mooca' : 'Heartfelt Letter from Mooca'}
-            </Text>
-          </View>
+        <View style={styles.phaseBadge}>
+          <Sparkles size={12} color={colors.primary} />
+          <Text style={styles.phaseBadgeText}>
+            {lang === 'th' ? 'จดหมายอบอุ่นจากใจ Mooca' : 'Heartfelt Letter from Mooca'}
+          </Text>
         </View>
 
         {/* Washi-Tape Letter Card */}
@@ -110,14 +110,14 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             </View>
 
             {/* Emotional Reframing Message */}
-            <Text style={styles.letterBody}>
+            <Text style={styles.letterBody} textBreakStrategy="balanced">
               {lang === 'th' ? insight.reflectionTh : insight.reflectionEn}
             </Text>
 
             {/* Biological Reassurance Note */}
             <View style={styles.biologyNote}>
               <Dna size={15} color={colors.primaryDark} style={{ marginTop: 2 }} />
-              <Text style={styles.biologyText}>
+              <Text style={styles.biologyText} textBreakStrategy="balanced">
                 {lang === 'th' ? insight.biologyFactTh : insight.biologyFactEn}
               </Text>
             </View>
@@ -152,7 +152,10 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
               <View style={{ marginRight: 8 }}>
                 <Sprout size={20} color={colors.primary} strokeWidth={2.4} />
               </View>
-              <Text style={[styles.commitActionText, isActionCommitted && { color: colors.primaryDark }]}>
+              <Text
+                style={[styles.commitActionText, isActionCommitted && { color: colors.primaryDark }]}
+                textBreakStrategy="balanced"
+              >
                 {lang === 'th' ? insight.microActionTh : insight.microActionEn}
               </Text>
             </View>
@@ -166,7 +169,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
                 ]}
               >
                 <View style={styles.mintSealInner}>
-                  <Heart size={14} color="#00C4B3" fill="#00C4B3" />
+                  <Heart size={16} color="#FFFFFF" fill="#FFFFFF" />
                   <Text style={styles.mintSealText}>PROMISED</Text>
                 </View>
               </Animated.View>
@@ -191,20 +194,22 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
         </View>
       </ScrollView>
 
-      {/* Bottom Pinned Proceed Button */}
-      <View style={styles.bottomBar}>
-        <MarshmallowButton
-          variant="primary"
-          size="lg"
-          onPress={onProceed}
-          icon={<ArrowRight size={18} color="#FFFFFF" />}
-          title={
-            lang === 'th'
-              ? 'วัดผลลัพธ์การฟื้นตัวของใจ (Phase 4)'
-              : 'Measure Emotional Shift (Phase 4)'
-          }
-        />
-      </View>
+      {/* Bottom Pinned Proceed Button - Only after stamped! */}
+      {isActionCommitted && (
+        <View style={styles.bottomBar}>
+          <MarshmallowButton
+            variant="primary"
+            size="lg"
+            onPress={onProceed}
+            icon={<ArrowRight size={18} color="#FFFFFF" />}
+            title={
+              lang === 'th'
+                ? 'วัดผลลัพธ์การฟื้นตัวของใจ'
+                : 'Measure Emotional Shift'
+            }
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -222,10 +227,13 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     alignItems: 'center',
   },
-  header: {
+  mascotWrapper: {
+    height: 155,
+    width: '100%',
     alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 8,
+    justifyContent: 'flex-end',
+    overflow: 'visible',
+    marginBottom: 6,
   },
   phaseBadge: {
     flexDirection: 'row',
@@ -391,6 +399,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#E2E8F0',
     gap: 10,
+    minHeight: 74,
   },
   commitBoxActive: {
     backgroundColor: '#F0FDFA',
@@ -413,9 +422,9 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   stampPlaceholder: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     borderWidth: 1.5,
     borderColor: '#CBD5E1',
     borderStyle: 'dashed',

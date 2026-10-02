@@ -128,7 +128,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
     return () => clearTimeout(timer);
   }, [floatAnim, index]);
 
-  // If this is the "+ บอก Mooca..." button: pure TouchableOpacity with NO pan interference!
+  // If this is the "บอก Mooca..." button: pure TouchableOpacity with NO pan interference!
   if (isAddButton) {
     return (
       <Animated.View
@@ -160,7 +160,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
               <Plus size={11} color="#EC4899" strokeWidth={2.8} />
             </View>
             <Text style={[styles.cloudTitle, { color: '#BE185D' }]} numberOfLines={1}>
-              {lang === 'th' ? '+ บอก Mooca' : '+ Note to Mooca'}
+              {lang === 'th' ? 'บอก Mooca' : '+ Note to Mooca'}
             </Text>
             <View style={[styles.downArrowPill, { backgroundColor: '#EC489914' }]}>
               <PenLine size={8} color="#EC4899" strokeWidth={2.4} />
@@ -330,8 +330,8 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
           isSelected
             ? ['#FFFFFF', '#F0FDFA', '#CCFBF1']
             : isCustom
-            ? ['#FFFFFF', '#FDF2F8', '#FCE7F3']
-            : ['#FFFFFF', '#FFFDF9', '#F8FAFC']
+              ? ['#FFFFFF', '#FDF2F8', '#FCE7F3']
+              : ['#FFFFFF', '#FFFDF9', '#F8FAFC']
         }
         style={[
           styles.cloudBody,

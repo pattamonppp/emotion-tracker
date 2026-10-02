@@ -5,11 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { EmotionTagId, ShiftFeedback } from '../types';
 import { audioService } from '../services/audioService';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { MoocaMascot } from './MoocaMascot';
+import { useSky } from './DynamicSkyEngine';
 import { Activity, Check, Plus, Minus, ArrowRight, Zap, Leaf, Heart } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
@@ -28,6 +30,8 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
   onFinishReset,
   lang,
 }) => {
+  const { activePeriod } = useSky();
+  const isNight = activePeriod === 'night';
   const [postHeartRate, setPostHeartRate] = useState(Math.max(65, preHeartRate - 18));
   const [shiftResult, setShiftResult] = useState<MoodStampType>('empowered');
 
@@ -51,33 +55,35 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header & Mascot */}
-      <View style={styles.header}>
-        <MoocaMascot
-          mood={shiftResult === 'hug' ? 'hugging' : 'celebrating'}
-          size="sm"
-          speakingBubble={
-            shiftResult === 'hug'
-              ? lang === 'th'
-                ? 'มากอดกันแน่นๆ นะ! Mooca อยู่ตรงนี้เสมอ ไม่ต้องกลัวเลย'
-                : 'Big warm hugs! Mooca is always by your side'
-              : shiftResult === 'empowered'
-              ? lang === 'th'
-                ? 'เย้! พลังใจมาเต็มแล้ว ลุยได้สบายเลย!'
-                : 'Awesome! Confidence restored and ready to conquer!'
-              : lang === 'th'
-              ? 'ลมหายใจนิ่งขึ้น จิตใจสงบแล้วนะคนเก่ง'
-              : 'Mind is steady and peaceful now'
-          }
-        />
-        <Text style={styles.title}>
+    <View style={styles.screenWrapper}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header & Mascot */}
+        <View style={styles.mascotWrapper}>
+          <MoocaMascot
+            mood={shiftResult === 'hug' ? 'hugging' : 'celebrating'}
+            size="sm"
+            speakingBubble={
+              shiftResult === 'hug'
+                ? lang === 'th'
+                  ? 'มากอดกันแน่น ๆ นะ! Mooca อยู่ตรงนี้เสมอ ไม่ต้องกลัวเลย'
+                  : 'Big warm hugs! Mooca is always by your side'
+                : shiftResult === 'empowered'
+                  ? lang === 'th'
+                    ? 'เย้! พลังใจมาเต็มแล้ว ลุยได้สบายเลย!'
+                    : 'Awesome! Confidence restored and ready to conquer!'
+                  : lang === 'th'
+                    ? 'ลมหายใจนิ่งขึ้น จิตใจสงบแล้วนะคนเก่ง'
+                    : 'Mind is steady and peaceful now'
+            }
+          />
+        </View>
+        <Text style={[styles.title, isNight && { color: '#FFFFFF' }]}>
           {lang === 'th' ? 'ตราประทับวัดผลลัพธ์ใจ' : 'Mind & Body Delta Check'}
         </Text>
-      </View>
 
       {/* Heart Rate Delta Comparison Card */}
       <View style={styles.bpmCard}>
@@ -98,8 +104,8 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
 
           {/* Delta Arrow */}
           <View style={styles.deltaBadge}>
-            <Text style={styles.deltaText}>
-              {bpmDrop >= 0 ? `-${bpmDrop}` : `+${Math.abs(bpmDrop)}`} BPM
+            <Text style={styles.deltaText} numberOfLines={1}>
+              {`${bpmDrop >= 0 ? `-${bpmDrop}` : `+${Math.abs(bpmDrop)}`}\u00A0BPM`}
             </Text>
           </View>
 
@@ -135,12 +141,6 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
 
       {/* Soft-Touch Mood Stamp Buttons Section */}
       <View style={styles.stampSection}>
-        <Text style={styles.stampSectionTitle}>
-          {lang === 'th'
-            ? 'เลือกตราประทับบอกความรู้สึกตอนนี้'
-            : 'Select Your Mood Stamp'}
-        </Text>
-
         <View style={styles.stampsList}>
           {/* Stamp 1: ⚡ พร้อมลุย/มั่นใจขึ้น */}
           <TouchableOpacity
@@ -249,8 +249,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
         </View>
       </View>
 
-      {/* CTA Button to Generate Polaroid */}
-      <View style={styles.actionSection}>
+      </ScrollView>
+
+      {/* Pinned Bottom CTA Button */}
+      <View style={styles.bottomBar}>
         <MarshmallowButton
           variant="primary"
           size="lg"
@@ -263,26 +265,42 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           }
         />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  screenWrapper: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
   container: {
     paddingHorizontal: 20,
     paddingTop: 8,
-    paddingBottom: 28,
+    paddingBottom: 20,
     alignItems: 'center',
   },
-  header: {
+  bottomBar: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+    width: '100%',
+  },
+  mascotWrapper: {
+    height: 155,
+    width: '100%',
     alignItems: 'center',
-    marginBottom: 8,
+    justifyContent: 'flex-end',
+    overflow: 'visible',
+    marginBottom: 6,
   },
   title: {
     fontFamily: typography.fontPromptBold,
     fontSize: 14,
     color: colors.primaryDark,
-    marginTop: 6,
+    marginBottom: 8,
   },
   bpmCard: {
     width: '100%',
@@ -364,12 +382,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 10,
   },
-  stampSectionTitle: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 12,
-    color: colors.primaryDark,
-    marginBottom: 8,
-  },
   stampsList: {
     gap: 8,
   },
@@ -441,9 +453,5 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontPromptBold,
     fontSize: 8,
     color: '#FFFFFF',
-  },
-  actionSection: {
-    width: '100%',
-    marginTop: 6,
   },
 });

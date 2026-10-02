@@ -226,7 +226,9 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
         >
           {displayMessage ? (
             <View style={styles.bubbleContainer}>
-              <Text style={styles.bubbleText}>{displayMessage}</Text>
+              <Text style={styles.bubbleText} textBreakStrategy="balanced">
+                {displayMessage}
+              </Text>
               <View style={styles.bubbleTail} />
             </View>
           ) : null}

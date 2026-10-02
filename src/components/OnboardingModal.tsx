@@ -246,7 +246,11 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   mascotBox: {
+    height: 155,
+    width: '100%',
     alignItems: 'center',
+    justifyContent: 'flex-end',
+    overflow: 'visible',
     marginBottom: 16,
   },
   fieldSection: {

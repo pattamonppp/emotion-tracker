@@ -106,7 +106,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             }`}
           >
             <div className="flex items-center gap-2 flex-1 pr-2">
-              <span className="text-xl">👉</span>
+              <ArrowRight className="w-4 h-4 text-[#00C4B3] shrink-0" />
               <span className="text-xs font-bold leading-snug">
                 {lang === 'th' ? insight.microActionTh : insight.microActionEn}
               </span>
@@ -133,22 +133,24 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 
       </div>
 
-      {/* Footer Proceed Button */}
-      <div className="pt-2 border-t border-slate-100">
-        <Button
-          variant="primary"
-          colorTheme="turquoise"
-          size="lg"
-          fullWidth
-          onClick={onProceed}
-          trailingIcon={<ArrowRight className="w-4 h-4" />}
-          label={
-            lang === 'th'
-              ? 'วัดผลการเปลี่ยนแปลงอารมณ์ (Phase 4: Delta Check)'
-              : 'Measure Emotional Shift (Phase 4)'
-          }
-        />
-      </div>
+      {/* Footer Proceed Button - Only after committed */}
+      {isActionCommitted && (
+        <div className="pt-2 border-t border-slate-100">
+          <Button
+            variant="primary"
+            colorTheme="turquoise"
+            size="lg"
+            fullWidth
+            onClick={onProceed}
+            trailingIcon={<ArrowRight className="w-4 h-4" />}
+            label={
+              lang === 'th'
+                ? 'วัดผลการเปลี่ยนแปลงอารมณ์'
+                : 'Measure Emotional Shift'
+            }
+          />
+        </div>
+      )}
 
     </div>
   );
