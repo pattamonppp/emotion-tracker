@@ -98,17 +98,16 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
         {/* Harmonious Main Stage: Clouds Sky + Apothecary Jar (Balanced Spacing) */}
         <View style={styles.contentBody}>
-          {/* Floating Emotion Clouds Section (Floating in the Sky) */}
+          {/* Floating Emotion Clouds Section (Floating in the Sky - Only Remaining Clouds) */}
           <View style={styles.skyCloudsSection}>
             <View style={styles.cloudsList}>
-              {EMOTION_TAGS.map((tag, idx) => {
-                const isSelected = selectedEmotions.includes(tag.id);
+              {EMOTION_TAGS.filter((tag) => !selectedEmotions.includes(tag.id)).map((tag, idx) => {
                 return (
                   <FloatingEmotionCloud
                     key={tag.id}
                     tag={tag}
                     index={idx}
-                    isSelected={isSelected}
+                    isSelected={false}
                     isJarFull={isJarFull}
                     onToggle={toggleEmotion}
                     onDropIntoJar={handleDropIntoJar}

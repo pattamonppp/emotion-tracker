@@ -11,10 +11,42 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { EmotionTagId } from '../types';
 import { EMOTION_TAGS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
-import { Sparkles, X } from 'lucide-react-native';
+import {
+  Sparkles,
+  X,
+  Heart,
+  Cloud,
+  ShieldCheck,
+  Smile,
+  Wind,
+  RotateCcw,
+} from 'lucide-react-native';
 import { getEmotionIcon } from './FloatingEmotionCloud';
 import { MoocaMascot } from './MoocaMascot';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
+
+interface SpeechMessage {
+  text: string;
+  iconType: 'sparkles' | 'wind' | 'heart' | 'shield' | 'smile' | 'cloud';
+}
+
+const renderSpeechIcon = (iconType: SpeechMessage['iconType']) => {
+  switch (iconType) {
+    case 'sparkles':
+      return <Sparkles size={11} color={colors.primary} strokeWidth={2.4} />;
+    case 'wind':
+      return <Wind size={11} color="#4A90E2" strokeWidth={2.4} />;
+    case 'heart':
+      return <Heart size={11} color="#FF6B8B" fill="#FF6B8B" strokeWidth={1.5} />;
+    case 'shield':
+      return <ShieldCheck size={11} color={colors.primary} strokeWidth={2.4} />;
+    case 'smile':
+      return <Smile size={11} color="#FA8C3D" strokeWidth={2.4} />;
+    case 'cloud':
+    default:
+      return <Cloud size={11} color={colors.primary} strokeWidth={2.4} />;
+  }
+};
 
 interface GlassEmotionJarProps {
   selectedEmotions: EmotionTagId[];
@@ -32,8 +64,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   onMoocaHug,
 }) => {
   const jarSquishAnim = useRef(new Animated.Value(1)).current;
-  const moocaFloatAnim = useRef(new Animated.Value(0)).current;
-  const moocaSwayAnim = useRef(new Animated.Value(0)).current;
+  const moocaOrbitX = useRef(new Animated.Value(-22)).current;
+  const moocaOrbitY = useRef(new Animated.Value(-16)).current;
   const puffBobAnim = useRef(new Animated.Value(0)).current;
 
   // Speech bubble dynamic appear & disappear animation (like Mooca is talking to user)
@@ -41,55 +73,55 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   const bubbleScaleAnim = useRef(new Animated.Value(1)).current;
   const [speechIndex, setSpeechIndex] = useState(0);
 
-  // Pool of comforting messages that cycle dynamically
-  const getSpeechPool = () => {
+  // Pool of comforting messages that cycle dynamically (Zero emojis - Pure Lucide icons)
+  const getSpeechPool = (): SpeechMessage[] => {
     if (selectedEmotions.length >= 3) {
       return lang === 'th'
         ? [
-            'รับฝากครบ 3 อารมณ์แล้วนะ พร้อมเริ่มรีเซ็ตใจเลย! 🌿',
-            'หายใจเข้าลึก ๆ แล้วกดปุ่มเริ่มด้านล่างได้เลยนะ 💫',
-            'Mooca จะอยู่ข้าง ๆ เธอเสมอ สู้ ๆ นะ! 💖',
+            { text: 'รับฝากครบ 3 อารมณ์แล้วนะ พร้อมเริ่มรีเซ็ตใจเลย!', iconType: 'sparkles' },
+            { text: 'หายใจเข้าลึก ๆ แล้วกดปุ่มเริ่มด้านล่างได้เลยนะ', iconType: 'wind' },
+            { text: 'Mooca จะอยู่ข้าง ๆ เธอเสมอ สู้ ๆ นะ!', iconType: 'heart' },
           ]
         : [
-            '3 feelings kept safely! Ready to reset! 🌿',
-            'Take a deep breath & tap start below 💫',
-            'Mooca is always right here with you! 💖',
+            { text: '3 feelings kept safely! Ready to reset!', iconType: 'sparkles' },
+            { text: 'Take a deep breath & tap start below', iconType: 'wind' },
+            { text: 'Mooca is always right here with you!', iconType: 'heart' },
           ];
     }
     if (selectedEmotions.length > 0) {
       return lang === 'th'
         ? [
-            `Mooca ช่วยดูแลให้แล้ว ${selectedEmotions.length} ก้อนนะ สบายใจได้เลย! ☁️`,
-            'เก่งมากเลยนะ ที่กล้าเปิดใจยอมรับความรู้สึกตัวเอง 🌸',
-            'ฝากไว้ในโหลแก้วใส ปลอดภัยแน่นอน ✨',
-            'อยากฝากเพิ่มอีกไหมนะ (ได้สูงสุด 3 ก้อน) 🫧',
+            { text: `Mooca ช่วยดูแลให้แล้ว ${selectedEmotions.length} ก้อนนะ สบายใจได้เลย!`, iconType: 'shield' },
+            { text: 'เก่งมากเลยนะ ที่กล้าเปิดใจยอมรับความรู้สึกตัวเอง', iconType: 'smile' },
+            { text: 'ฝากไว้ในโหลแก้วใส ปลอดภัยแน่นอน', iconType: 'sparkles' },
+            { text: 'อยากฝากเพิ่มอีกไหมนะ (ได้สูงสุด 3 ก้อน)', iconType: 'cloud' },
           ]
         : [
-            `Holding ${selectedEmotions.length} feelings safely for you! ☁️`,
-            'Proud of you for embracing your feelings 🌸',
-            'Safe inside your clear glass jar ✨',
-            'Want to store more? (up to 3 feelings) 🫧',
+            { text: `Holding ${selectedEmotions.length} feelings safely for you!`, iconType: 'shield' },
+            { text: 'Proud of you for embracing your feelings', iconType: 'smile' },
+            { text: 'Safe inside your clear glass jar', iconType: 'sparkles' },
+            { text: 'Want to store more? (up to 3 feelings)', iconType: 'cloud' },
           ];
     }
     return lang === 'th'
       ? [
-          'พาความกังวลมาฝากไว้กับ Mooca นะ ☁️',
-          'แตะหรือลากก้อนเมฆอารมณ์ลงโหลได้เลยนะ ✨',
-          'วันนี้ใจเธอเป็นยังไงบ้าง เล่าให้ฟังได้นะ 💖',
-          'เลือกฝากได้สูงสุด 3 อารมณ์น้า 🫧',
+          { text: 'พาความกังวลมาฝากไว้กับ Mooca นะ', iconType: 'cloud' },
+          { text: 'แตะหรือลากก้อนเมฆอารมณ์ลงโหลได้เลยนะ', iconType: 'sparkles' },
+          { text: 'วันนี้ใจเธอเป็นยังไงบ้าง เล่าให้ฟังได้นะ', iconType: 'heart' },
+          { text: 'เลือกฝากได้สูงสุด 3 อารมณ์น้า', iconType: 'cloud' },
         ]
       : [
-          'Rest your worries here with Mooca ☁️',
-          'Tap or drag emotion clouds into the jar ✨',
-          'How is your heart feeling today? 💖',
-          'Choose up to 3 feelings to store 🫧',
+          { text: 'Rest your worries here with Mooca', iconType: 'cloud' },
+          { text: 'Tap or drag emotion clouds into the jar', iconType: 'sparkles' },
+          { text: 'How is your heart feeling today?', iconType: 'heart' },
+          { text: 'Choose up to 3 feelings to store', iconType: 'cloud' },
         ];
   };
 
   const speechPool = getSpeechPool();
   const currentMessage = speechPool[speechIndex % speechPool.length];
 
-  // Dynamic speech bubble cycle: Appear -> Stay 4.5s -> Fade out -> Wait 2s -> Fade in with next message
+  // Dynamic speech bubble cycle: Appear -> Stay 4.8s -> Fade out -> Wait 0.9s -> Fade in with next message
   useEffect(() => {
     let isMounted = true;
     let timer: ReturnType<typeof setTimeout>;
@@ -162,53 +194,98 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
     };
   }, [selectedEmotions.length, lang]);
 
-  // Gentle floating & smooth drifting motion for Mooca (drifting around the jar)
+  // Mooca 360-degree orbital wandering flight all around the jar
   useEffect(() => {
-    const floatLoop = Animated.loop(
+    const orbitLoop = Animated.loop(
       Animated.sequence([
-        Animated.timing(moocaFloatAnim, {
-          toValue: -5,
-          duration: 2500,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-        Animated.timing(moocaFloatAnim, {
-          toValue: 4,
-          duration: 2500,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
-    // Drifts smoothly back and forth across the upper jar
-    const swayLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(moocaSwayAnim, {
-          toValue: 18,
-          duration: 4200,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-        Animated.timing(moocaSwayAnim, {
-          toValue: -18,
-          duration: 4200,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
+        // Stage 1: Float from Top-Left (-22, -16) to Top-Center-Right (26, -18)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: 26,
+            duration: 2500,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: -18,
+            duration: 2500,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        // Stage 2: Drift down around Right Shoulder of Jar (34, 14)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: 34,
+            duration: 2100,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: 14,
+            duration: 2100,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        // Stage 3: Float across the Front Rim / Neck to Center (0, 8)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: 0,
+            duration: 2300,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: 8,
+            duration: 2300,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        // Stage 4: Float to Left Shoulder of Jar (-32, 14)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: -32,
+            duration: 2100,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: 14,
+            duration: 2100,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        // Stage 5: Rise back up along the Left Rim to Top-Left (-22, -16)
+        Animated.parallel([
+          Animated.timing(moocaOrbitX, {
+            toValue: -22,
+            duration: 2400,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(moocaOrbitY, {
+            toValue: -16,
+            duration: 2400,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
       ])
     );
 
     const puffLoop = Animated.loop(
       Animated.sequence([
         Animated.timing(puffBobAnim, {
-          toValue: -3.5,
+          toValue: -3,
           duration: 1900,
           easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
         }),
         Animated.timing(puffBobAnim, {
-          toValue: 2.5,
+          toValue: 2,
           duration: 1900,
           easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
@@ -216,16 +293,14 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
       ])
     );
 
-    floatLoop.start();
-    swayLoop.start();
+    orbitLoop.start();
     puffLoop.start();
 
     return () => {
-      floatLoop.stop();
-      swayLoop.stop();
+      orbitLoop.stop();
       puffLoop.stop();
     };
-  }, [moocaFloatAnim, moocaSwayAnim, puffBobAnim]);
+  }, [moocaOrbitX, moocaOrbitY, puffBobAnim]);
 
   const handleJarTap = () => {
     audioService.triggerHaptic('light');
@@ -263,19 +338,19 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           ]}
         />
 
-        {/* Mooca Companion floating & drifting back and forth around the jar */}
+        {/* Mooca Companion orbiting all around the jar */}
         <Animated.View
           style={[
             styles.moocaPerchContainer,
             {
               transform: [
-                { translateY: moocaFloatAnim },
-                { translateX: moocaSwayAnim },
+                { translateX: moocaOrbitX },
+                { translateY: moocaOrbitY },
               ],
             },
           ]}
         >
-          {/* Sweet Dynamic Speech Bubble (Appears & Disappears Periodically) */}
+          {/* Sweet Dynamic Speech Bubble (Appears & Disappears Periodically with Lucide Icon) */}
           <Animated.View
             style={[
               styles.moocaSpeechBubble,
@@ -285,7 +360,12 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
               },
             ]}
           >
-            <Text style={styles.moocaSpeechText}>{currentMessage}</Text>
+            <View style={styles.speechRow}>
+              <View style={styles.speechIconSlot}>
+                {renderSpeechIcon(currentMessage.iconType)}
+              </View>
+              <Text style={styles.moocaSpeechText}>{currentMessage.text}</Text>
+            </View>
             <View style={styles.moocaBubbleTail} />
           </Animated.View>
 
@@ -333,7 +413,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
             </View>
           </View>
 
-          {/* True Transparent Storybook Apothecary Glass Body (Scaled & Compact) */}
+          {/* True Transparent Storybook Apothecary Glass Body (Slender Silhouette) */}
           <LinearGradient
             colors={[
               'rgba(255, 255, 255, 0.28)',
@@ -354,7 +434,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                 /* Empty State: Matching Reference Image (Center Sparkle Badge + Subtitle) */
                 <View style={styles.emptyContainer}>
                   <View style={styles.emptyCircleBadge}>
-                    <Sparkles size={22} color="#00C4B3" strokeWidth={2.4} />
+                    <Sparkles size={20} color="#00C4B3" strokeWidth={2.4} />
                   </View>
                   <Text style={styles.emptyBadgeTitle}>
                     {lang === 'th' ? 'โหลแก้วว่างพร้อมรับฝาก' : 'Sanctuary Jar Ready'}
@@ -366,7 +446,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   </Text>
                 </View>
               ) : (
-                /* Filled State: Floating Marshmallow Emotion Pills (1 to 3) */
+                /* Filled State: Floating Cloud Emotions Inside Jar (1 to 3) */
                 <Animated.View
                   style={[
                     styles.puffsContainer,
@@ -377,37 +457,62 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                     const tag = EMOTION_TAGS.find((t) => t.id === id);
                     if (!tag) return null;
                     return (
-                      <View
-                        key={tag.id}
-                        style={[
-                          styles.marshmallowPuff,
-                          {
-                            borderColor: tag.color,
-                            shadowColor: tag.color,
-                          },
-                        ]}
-                      >
-                        <View
+                      <View key={tag.id} style={styles.miniCloudWrapper}>
+                        {/* Mini Fluffy Scallop Puffs on top of each in-jar cloud */}
+                        <View style={styles.miniCloudScallops}>
+                          <View
+                            style={[
+                              styles.miniScallopLeft,
+                              { backgroundColor: '#FFFFFF', borderColor: tag.color },
+                            ]}
+                          />
+                          <View
+                            style={[
+                              styles.miniScallopCenter,
+                              { backgroundColor: '#FFFFFF', borderColor: tag.color },
+                            ]}
+                          />
+                          <View
+                            style={[
+                              styles.miniScallopRight,
+                              { backgroundColor: '#FFFFFF', borderColor: tag.color },
+                            ]}
+                          />
+                        </View>
+
+                        {/* Mini Cloud Body */}
+                        <LinearGradient
+                          colors={['#FFFFFF', '#F0FDFA', '#E6FAF8']}
                           style={[
-                            styles.puffIconWrapper,
-                            { backgroundColor: tag.color + '20' },
+                            styles.miniCloudBody,
+                            {
+                              borderColor: tag.color,
+                              shadowColor: tag.color,
+                            },
                           ]}
                         >
-                          {getEmotionIcon(tag.id, tag.color, 12)}
-                        </View>
-                        <Text style={[styles.puffText, { color: colors.primaryDark }]}>
-                          {lang === 'th' ? tag.labelTh : tag.labelEn}
-                        </Text>
-                        <TouchableOpacity
-                          hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
-                          onPress={() => {
-                            audioService.triggerHaptic('light');
-                            onRemoveEmotion(tag.id);
-                          }}
-                          style={styles.removePuffBtn}
-                        >
-                          <X size={10} color={colors.textMuted} strokeWidth={2.5} />
-                        </TouchableOpacity>
+                          <View
+                            style={[
+                              styles.miniPuffIconWrapper,
+                              { backgroundColor: tag.color + '1A' },
+                            ]}
+                          >
+                            {getEmotionIcon(tag.id, tag.color, 11)}
+                          </View>
+                          <Text style={[styles.miniPuffText, { color: colors.primaryDark }]}>
+                            {lang === 'th' ? tag.labelTh : tag.labelEn}
+                          </Text>
+                          <TouchableOpacity
+                            hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
+                            onPress={() => {
+                              audioService.triggerHaptic('light');
+                              onRemoveEmotion(tag.id);
+                            }}
+                            style={styles.miniRemoveBtn}
+                          >
+                            <X size={9} color={colors.textMuted} strokeWidth={2.6} />
+                          </TouchableOpacity>
+                        </LinearGradient>
                       </View>
                     );
                   })}
@@ -425,14 +530,23 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           </LinearGradient>
         </TouchableOpacity>
 
-        {/* Clear All Link Button */}
-        {selectedEmotions.length > 0 && onClearAll && (
-          <TouchableOpacity onPress={onClearAll} style={styles.clearBtn}>
-            <Text style={styles.clearBtnText}>
-              {lang === 'th' ? 'เทโหลทิ้งทั้งหมด' : 'Clear Jar'}
-            </Text>
-          </TouchableOpacity>
-        )}
+        {/* Preserved Clear Jar Slot (No Vertical Layout Shift) */}
+        <View style={styles.clearBtnSlot}>
+          {selectedEmotions.length > 0 && onClearAll ? (
+            <TouchableOpacity
+              onPress={onClearAll}
+              style={styles.clearBtn}
+              activeOpacity={0.75}
+            >
+              <RotateCcw size={10} color={colors.primaryDark} strokeWidth={2.4} />
+              <Text style={styles.clearBtnText}>
+                {lang === 'th' ? 'เทโหลทิ้งทั้งหมด' : 'Clear Jar'}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.clearBtnPlaceholder} />
+          )}
+        </View>
       </View>
     </Animated.View>
   );
@@ -444,38 +558,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
     marginVertical: 4,
-    width: 240,
+    width: 204,
   },
   moocaPerchContainer: {
     position: 'absolute',
-    top: -22,
-    left: -16,
-    alignItems: 'flex-start',
+    top: -24,
+    left: 14,
+    alignItems: 'center',
     zIndex: 25,
   },
   moocaSpeechBubble: {
     backgroundColor: 'rgba(255, 255, 255, 0.96)',
-    paddingHorizontal: 10,
-    paddingVertical: 4.5,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
     borderRadius: radii.full,
     borderWidth: 1.2,
     borderColor: 'rgba(0, 196, 179, 0.35)',
     ...shadows.soft,
     position: 'relative',
-    marginBottom: 3,
-    maxWidth: 195,
+    marginBottom: 4,
+    maxWidth: 205,
+  },
+  speechRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4.5,
+  },
+  speechIconSlot: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   moocaSpeechText: {
     fontFamily: typography.fontPromptSemiBold,
     fontSize: 9.5,
     color: colors.primaryDark,
     textAlign: 'center',
-    lineHeight: 13.5,
+    lineHeight: 13,
   },
   moocaBubbleTail: {
     position: 'absolute',
     bottom: -5,
-    left: 20,
+    left: '50%',
+    marginLeft: -4.5,
     width: 0,
     height: 0,
     borderLeftWidth: 4.5,
@@ -488,19 +612,19 @@ const styles = StyleSheet.create({
     borderTopColor: 'rgba(0, 196, 179, 0.35)',
   },
   moocaMascotWrapper: {
-    marginLeft: 10,
+    alignItems: 'center',
     zIndex: 30,
   },
   glow: {
     position: 'absolute',
-    bottom: 10,
-    width: 230,
-    height: 95,
-    borderRadius: 70,
+    bottom: 8,
+    width: 195,
+    height: 85,
+    borderRadius: 60,
     shadowColor: '#00C4B3',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.28,
-    shadowRadius: 24,
+    shadowRadius: 22,
     elevation: 3,
     zIndex: 0,
   },
@@ -509,23 +633,23 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   corkKnob: {
-    width: 30,
-    height: 12,
+    width: 26,
+    height: 11,
     backgroundColor: '#C0783E',
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    borderBottomLeftRadius: 2.5,
-    borderBottomRightRadius: 2.5,
-    borderWidth: 1.6,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderBottomLeftRadius: 2,
+    borderBottomRightRadius: 2,
+    borderWidth: 1.5,
     borderColor: '#7C3F13',
     zIndex: 3,
   },
   corkLid: {
-    width: 108,
-    height: 22,
+    width: 94,
+    height: 18,
     backgroundColor: '#B87239',
-    borderRadius: 11,
-    borderWidth: 1.8,
+    borderRadius: 9,
+    borderWidth: 1.6,
     borderColor: '#7C3F13',
     alignItems: 'center',
     justifyContent: 'center',
@@ -534,13 +658,13 @@ const styles = StyleSheet.create({
     shadowColor: '#7C3F13',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.22,
-    shadowRadius: 2.5,
+    shadowRadius: 2,
     elevation: 3,
   },
   corkTealPool: {
-    width: 92,
-    height: 12,
-    borderRadius: 6,
+    width: 78,
+    height: 9.5,
+    borderRadius: 5,
     backgroundColor: '#00A896',
     borderWidth: 1,
     borderColor: '#008577',
@@ -548,22 +672,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   corkReflectionDot: {
-    width: 3.5,
-    height: 3.5,
-    borderRadius: 1.75,
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
     backgroundColor: '#FFFFFF',
     opacity: 0.9,
   },
   neckWrapper: {
-    width: 98,
+    width: 86,
     alignItems: 'center',
     marginTop: -2,
     position: 'relative',
     zIndex: 1,
   },
   glassNeck: {
-    width: 94,
-    height: 7,
+    width: 80,
+    height: 6.5,
     backgroundColor: 'rgba(255, 255, 255, 0.45)',
     borderWidth: 1.3,
     borderColor: 'rgba(0, 196, 179, 0.35)',
@@ -571,30 +695,30 @@ const styles = StyleSheet.create({
   },
   twineCordLine: {
     position: 'absolute',
-    top: 2.5,
-    width: 86,
+    top: 2.2,
+    width: 72,
     height: 2,
     backgroundColor: '#9A5826',
     borderRadius: 1,
   },
   charmHanger: {
     position: 'absolute',
-    right: 15,
-    top: 3,
+    right: 10,
+    top: 2.5,
     alignItems: 'center',
     zIndex: 6,
   },
   charmString: {
     width: 1.5,
-    height: 20,
+    height: 18,
     backgroundColor: '#9A5826',
   },
   charmCircle: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
+    width: 13,
+    height: 13,
+    borderRadius: 6.5,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1.8,
+    borderWidth: 1.6,
     borderColor: '#00BFA5',
     alignItems: 'center',
     justifyContent: 'center',
@@ -605,22 +729,22 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   charmInnerDot: {
-    width: 3,
-    height: 3,
-    borderRadius: 1.5,
+    width: 2.8,
+    height: 2.8,
+    borderRadius: 1.4,
     backgroundColor: '#00BFA5',
   },
   jarBody: {
-    width: 236,
-    height: 168,
-    borderTopLeftRadius: 62,
-    borderTopRightRadius: 62,
-    borderBottomLeftRadius: 36,
-    borderBottomRightRadius: 36,
+    width: 200,
+    height: 172,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     borderWidth: 2,
     borderColor: 'rgba(255, 255, 255, 0.92)',
     marginTop: -2,
-    padding: 8,
+    padding: 7,
     position: 'relative',
     overflow: 'hidden',
     shadowColor: '#00C4B3',
@@ -632,27 +756,27 @@ const styles = StyleSheet.create({
   glassReflectionLeft: {
     position: 'absolute',
     top: 12,
-    left: 8,
-    width: 4,
-    height: 105,
+    left: 7,
+    width: 3.5,
+    height: 108,
     borderRadius: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     zIndex: 2,
   },
   glassReflectionTop: {
     position: 'absolute',
-    top: 7,
-    left: 24,
-    right: 24,
-    height: 2.8,
-    borderRadius: 1.4,
+    top: 6,
+    left: 20,
+    right: 20,
+    height: 2.6,
+    borderRadius: 1.3,
     backgroundColor: 'rgba(255, 255, 255, 0.72)',
     zIndex: 2,
   },
   glassReflectionRight: {
     position: 'absolute',
     top: 18,
-    right: 8,
+    right: 7,
     width: 3,
     height: 75,
     borderRadius: 1.5,
@@ -662,8 +786,8 @@ const styles = StyleSheet.create({
   glassReflectionBottom: {
     position: 'absolute',
     bottom: 5,
-    left: 20,
-    right: 20,
+    left: 16,
+    right: 16,
     height: 3,
     borderRadius: 1.5,
     backgroundColor: 'rgba(255, 255, 255, 0.65)',
@@ -681,9 +805,9 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   emptyCircleBadge: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -692,77 +816,135 @@ const styles = StyleSheet.create({
     shadowColor: '#00C4B3',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.16,
-    shadowRadius: 6,
+    shadowRadius: 5,
     elevation: 2,
     marginBottom: 3,
   },
   emptyBadgeTitle: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 12.5,
+    fontSize: 11.5,
     color: '#064E3B',
     textAlign: 'center',
   },
   emptyBadgeSubtitle: {
     fontFamily: typography.fontPromptMedium,
-    fontSize: 9.5,
+    fontSize: 9,
     color: '#475569',
     textAlign: 'center',
     marginTop: 1,
   },
   puffsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 6,
+    paddingHorizontal: 4,
     paddingVertical: 4,
-    maxWidth: 215,
+    maxWidth: 185,
   },
-  marshmallowPuff: {
+  miniCloudWrapper: {
+    position: 'relative',
+    marginVertical: 2,
+    alignItems: 'center',
+  },
+  miniCloudScallops: {
+    position: 'absolute',
+    top: -4,
+    left: 8,
+    right: 8,
+    height: 8,
+    flexDirection: 'row',
+    zIndex: 1,
+  },
+  miniScallopLeft: {
+    position: 'absolute',
+    left: 4,
+    top: 1,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderBottomWidth: 0,
+  },
+  miniScallopCenter: {
+    position: 'absolute',
+    left: 12,
+    top: -2.5,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderBottomWidth: 0,
+  },
+  miniScallopRight: {
+    position: 'absolute',
+    left: 22,
+    top: 1.5,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderBottomWidth: 0,
+  },
+  miniCloudBody: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 9,
-    paddingVertical: 4.5,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderRadius: radii.full,
-    borderWidth: 1.4,
+    borderWidth: 1.2,
+    borderBottomWidth: 2,
     gap: 4,
+    zIndex: 2,
     backgroundColor: '#FFFFFF',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
     elevation: 2,
   },
-  puffIconWrapper: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+  miniPuffIconWrapper: {
+    width: 17,
+    height: 17,
+    borderRadius: 8.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  puffText: {
-    fontFamily: typography.fontPromptBold,
+  miniPuffText: {
+    fontFamily: typography.fontPromptSemiBold,
     fontSize: 10.5,
   },
-  removePuffBtn: {
-    padding: 1.5,
-    marginLeft: 1,
+  miniRemoveBtn: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 2,
   },
   liquidBase: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: 32,
-    borderBottomLeftRadius: 34,
-    borderBottomRightRadius: 34,
+    height: 30,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
     zIndex: 1,
   },
+  clearBtnSlot: {
+    height: 28,
+    marginTop: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   clearBtn: {
-    marginTop: 2,
-    paddingVertical: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 2.5,
     paddingHorizontal: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.78)',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: radii.full,
     borderWidth: 1,
     borderColor: 'rgba(0, 196, 179, 0.25)',
@@ -770,8 +952,10 @@ const styles = StyleSheet.create({
   },
   clearBtnText: {
     fontSize: 9.5,
-    fontFamily: typography.fontPromptMedium,
+    fontFamily: typography.fontPromptSemiBold,
     color: colors.primaryDark,
-    fontWeight: '600',
+  },
+  clearBtnPlaceholder: {
+    height: 22,
   },
 });
