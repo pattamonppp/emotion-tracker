@@ -1,0 +1,53 @@
+@use 'abstracts' as *;
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-family: $font-display;
+
+  &.sizeSm {
+    height: 24px;
+    font-size: 0.875rem;
+  }
+
+  &.sizeMd {
+    height: 28px;
+    font-size: 1.125rem;
+  }
+
+  &.sizeLg {
+    height: 40px;
+    font-size: 1.5rem;
+  }
+}
+
+.letterIWrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heartDot {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: -10px;
+}
+
+.letterUWrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.smileCurve {
+  width: 14px;
+  height: 8px;
+  position: absolute;
+  bottom: -4px;
+}

@@ -1,0 +1,226 @@
+@use 'abstracts' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 16px;
+  user-select: none;
+  font-family: $font-sans;
+  animation: zoomIn 300ms ease-out;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.topBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: $radius-pill;
+  background-color: rgba(124, 201, 84, 0.2);
+  border: 1px solid rgba(124, 201, 84, 0.4);
+  color: $color-brand-contrast;
+  font-size: 0.75rem;
+  font-weight: 800;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: #7CC954;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Hero Affirmation
+// -----------------------------------------------------------------------------
+.heroSection {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+}
+
+.mascotWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.heroHeading {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: $color-brand-contrast;
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-size: 0.75rem;
+  color: $color-slate-600;
+  margin-top: 4px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+// -----------------------------------------------------------------------------
+// Delta Summary Card
+// -----------------------------------------------------------------------------
+.deltaCard {
+  padding: 14px;
+  border-radius: 22px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 196, 179, 0.35);
+  box-shadow: $elevation-1;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deltaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: $color-slate-700;
+}
+
+.deltaTitle {
+  font-weight: 800;
+  color: $color-brand-contrast;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: $color-turquoise-1;
+  }
+}
+
+.deltaBpmPill {
+  color: $color-brand-contrast;
+  font-family: $font-mono;
+  font-weight: 900;
+  background-color: #E6F9F7;
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(0, 196, 179, 0.3);
+}
+
+.deltaStateRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: $color-slate-500;
+  padding-top: 6px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.stateLabel {
+  font-weight: 500;
+}
+
+.stateValue {
+  color: $color-brand-contrast;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.timestampRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: $color-slate-400;
+}
+
+.timestampValue {
+  font-family: $font-mono;
+  color: $color-slate-600;
+  font-weight: 700;
+}
+
+// -----------------------------------------------------------------------------
+// Friendship Badge Card
+// -----------------------------------------------------------------------------
+.badgeCard {
+  padding: 10px;
+  border-radius: 18px;
+  background: linear-gradient(90deg, #FFF8E7 0%, #FFFFFF 50%, #E6F9F7 100%);
+  border: 1px solid rgba(250, 140, 61, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 180ms ease;
+
+  &:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.badgeLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.medalIcon {
+  font-size: 1.25rem;
+}
+
+.badgeTitle {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: $color-brand-contrast;
+}
+
+.badgeSubtitle {
+  font-size: 0.5625rem;
+  color: #FA8C3D;
+  font-weight: 700;
+}
+
+.badgeChevron {
+  font-size: 0.75rem;
+  color: $color-turquoise-1;
+  font-weight: 700;
+}
+
+// -----------------------------------------------------------------------------
+// Action Buttons Footer
+// -----------------------------------------------------------------------------
+.actionFooter {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.secondaryBtnGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}

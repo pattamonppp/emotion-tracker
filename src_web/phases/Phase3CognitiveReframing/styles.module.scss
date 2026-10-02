@@ -1,0 +1,289 @@
+@use 'abstracts' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  padding: 4px 16px 12px 16px;
+  user-select: none;
+  font-family: $font-sans;
+  animation: fadeIn 300ms ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.phaseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 12px;
+  border-radius: $radius-pill;
+  background-color: #E6F9F7;
+  border: 1px solid rgba(0, 196, 179, 0.35);
+  color: $color-brand-contrast;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  box-shadow: 0 1px 2px rgba(0, 196, 179, 0.08);
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: $color-turquoise-1;
+  }
+}
+
+.heading {
+  font-size: 1rem;
+  font-weight: 800;
+  color: $color-brand-contrast;
+  letter-spacing: -0.015em;
+  text-align: center;
+}
+
+// -----------------------------------------------------------------------------
+// Cards Scrollable Area
+// -----------------------------------------------------------------------------
+.contentArea {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 4px 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.reflectionCard {
+  padding: 14px;
+  border-radius: 22px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 196, 179, 0.3);
+  box-shadow: $elevation-1;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.cardAccentBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100%;
+  background-color: $color-turquoise-1;
+}
+
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $color-brand-contrast;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: $color-flamingo-1;
+    fill: $color-flamingo-1;
+  }
+}
+
+.reflectionText {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $color-slate-800;
+  line-height: 1.6;
+}
+
+.biologyFactRow {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #F1F5F9;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.6875rem;
+  color: $color-brand-contrast;
+  font-weight: 500;
+  background-color: rgba(230, 249, 247, 0.6);
+  padding: 8px;
+  border-radius: 12px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: $color-blue-1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+
+.microActionCard {
+  padding: 14px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFFDF9 100%);
+  border: 2px solid rgba(250, 140, 61, 0.4);
+  box-shadow: $elevation-1;
+  text-align: left;
+}
+
+.microActionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.actionBadgeLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #FA8C3D;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: #FA8C3D;
+  }
+}
+
+.immediatePill {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: $color-brand-contrast;
+  background-color: #E6F9F7;
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(0, 196, 179, 0.3);
+}
+
+.commitButtonBox {
+  padding: 12px;
+  border-radius: 16px;
+  border: 2px solid #E2E8F0;
+  cursor: pointer;
+  transition: all 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFFFFF;
+  color: $color-slate-800;
+
+  &:hover {
+    border-color: $color-turquoise-1;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.committed {
+    background-color: #E6F9F7;
+    border-color: $color-turquoise-1;
+    color: $color-brand-contrast;
+    box-shadow: 0 1px 3px rgba(0, 196, 179, 0.2);
+  }
+}
+
+.commitContentRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding-right: 8px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: $color-turquoise-1;
+    flex-shrink: 0;
+  }
+}
+
+.commitActionText {
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.checkIndicator {
+  width: 28px;
+  height: 28px;
+  border-radius: $radius-circle;
+  border: 2px solid #CBD5E1;
+  background-color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 180ms ease;
+
+  &.active {
+    border-color: $color-turquoise-1;
+    background-color: $color-turquoise-1;
+    color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 196, 179, 0.3);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 3;
+  }
+}
+
+.tapHint {
+  font-size: 0.625rem;
+  color: #94A3B8;
+}
+
+.microActionHint {
+  font-size: 0.625rem;
+  color: $color-slate-500;
+  margin-top: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  svg {
+    width: 12px;
+    height: 12px;
+    color: $color-flamingo-1;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer Button
+// -----------------------------------------------------------------------------
+.footerArea {
+  padding-top: 8px;
+  border-top: 1px solid #F1F5F9;
+  flex-shrink: 0;
+}

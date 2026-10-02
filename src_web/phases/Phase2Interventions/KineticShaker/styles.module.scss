@@ -1,0 +1,275 @@
+@use 'abstracts' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+  user-select: none;
+  font-family: $font-sans;
+  animation: fadeIn 300ms ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Top Mode Switcher Bar
+// -----------------------------------------------------------------------------
+.modeSwitcher {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: $radius-actionable-lg;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: $elevation-1;
+}
+
+.modeBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: $color-flamingo-1;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    animation: zapBounce 1.6s infinite ease-in-out;
+  }
+}
+
+@keyframes zapBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.modeBadgeText {
+  font-weight: 600;
+  color: $color-slate-800;
+}
+
+.modeGroup {
+  display: flex;
+  gap: 4px;
+}
+
+.modeBtn {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background-color: #F1F5F9;
+  color: $color-slate-600;
+  transition: all 180ms ease;
+
+  &:hover {
+    background-color: #E2E8F0;
+  }
+
+  &.active {
+    background-color: $color-turquoise-1;
+    color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 196, 179, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Guidance & Mascot Section
+// -----------------------------------------------------------------------------
+.guidanceSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.guidanceTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: $color-slate-800;
+  letter-spacing: -0.01em;
+  margin-top: 4px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: $color-flamingo-1;
+  }
+}
+
+.guidanceDesc {
+  font-size: 0.75rem;
+  color: $color-slate-600;
+  max-width: 320px;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+// -----------------------------------------------------------------------------
+// Tension Gauge Zone
+// -----------------------------------------------------------------------------
+.gaugeZone {
+  position: relative;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.tensionMeterTube {
+  position: relative;
+  width: 48px;
+  height: 208px;
+  border-radius: $radius-pill;
+  border: 4px solid #CBD5E1;
+  background-color: rgba(255, 255, 255, 0.85);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 4px;
+  box-shadow: $elevation-1;
+}
+
+.tensionFluid {
+  width: 100%;
+  border-radius: $radius-pill;
+  transition: height 240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scaleMarkings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 0;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.scaleMark {
+  width: 100%;
+  height: 2px;
+  background-color: #94A3B8;
+}
+
+// -----------------------------------------------------------------------------
+// Counter Circle Display
+// -----------------------------------------------------------------------------
+.counterCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.counterCircle {
+  width: 112px;
+  height: 112px;
+  border-radius: $radius-circle;
+  border: 4px solid #CBD5E1;
+  background-color: #FFFFFF;
+  box-shadow: $elevation-1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 180ms ease;
+
+  &.shaking {
+    border-color: $color-flamingo-1;
+    background-color: rgba(239, 119, 115, 0.15);
+    transform: scale(1.1);
+    box-shadow: 0 10px 25px -3px rgba(239, 119, 115, 0.35);
+  }
+
+  &.finished {
+    border-color: $color-turquoise-1;
+    background-color: $color-turquoise-3;
+    box-shadow: 0 4px 14px rgba(0, 196, 179, 0.3);
+  }
+}
+
+.counterNumber {
+  font-family: $font-mono;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: $color-slate-800;
+  line-height: 1;
+}
+
+.counterLabel {
+  font-size: 0.625rem;
+  color: $color-slate-500;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 3px;
+}
+
+.checkmarkIcon {
+  width: 48px;
+  height: 48px;
+  color: #009688;
+  animation: checkmarkZoom 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes checkmarkZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.counterSubtext {
+  font-size: 0.6875rem;
+  color: $color-slate-500;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+// -----------------------------------------------------------------------------
+// Action Trigger Zone
+// -----------------------------------------------------------------------------
+.actionZone {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

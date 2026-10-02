@@ -1,0 +1,256 @@
+@use 'abstracts' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+  user-select: none;
+  font-family: $font-sans;
+  animation: fadeIn 300ms ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Top Header Bar
+// -----------------------------------------------------------------------------
+.headerBar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: $radius-actionable-lg;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: $elevation-1;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #009688;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: $color-turquoise-1;
+  }
+}
+
+.headerTitle {
+  font-weight: 600;
+  color: $color-slate-800;
+}
+
+.mbtiBadge {
+  font-family: $font-mono;
+  font-size: 0.6875rem;
+  color: #009688;
+  background-color: #DBF0EE;
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  font-weight: 700;
+  border: 1px solid rgba(0, 196, 179, 0.3);
+}
+
+// -----------------------------------------------------------------------------
+// Guidance Section
+// -----------------------------------------------------------------------------
+.guidanceSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.guidanceTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: $color-slate-800;
+  letter-spacing: -0.01em;
+  margin-top: 4px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: $color-turquoise-1;
+  }
+}
+
+.guidanceDesc {
+  font-size: 0.75rem;
+  color: $color-slate-600;
+  max-width: 320px;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+// -----------------------------------------------------------------------------
+// Visualizer Card
+// -----------------------------------------------------------------------------
+.visualizerCard {
+  margin: 4px 0;
+  padding: 10px;
+  border-radius: 16px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: $elevation-1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.canvas {
+  width: 224px;
+  height: 48px;
+}
+
+.visualizerMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 6px;
+  font-size: 0.625rem;
+  color: $color-slate-500;
+  font-family: $font-mono;
+  font-weight: 500;
+}
+
+.alphaText {
+  color: #009688;
+  font-weight: 700;
+}
+
+.timerText {
+  font-weight: 700;
+  color: $color-slate-800;
+}
+
+.noiseText {
+  color: $color-blue-1;
+}
+
+// -----------------------------------------------------------------------------
+// Voice Sanctuary Card
+// -----------------------------------------------------------------------------
+.transcriptCard {
+  width: 100%;
+  max-width: 320px;
+  background-color: #FFFFFF;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  text-align: left;
+  box-shadow: $elevation-1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.transcriptHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: $color-slate-500;
+}
+
+.transcriptLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  color: #009688;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: $color-turquoise-1;
+  }
+}
+
+.replayBtn {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: $color-turquoise-1;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.transcriptBody {
+  font-size: 0.75rem;
+  color: $color-slate-700;
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid $color-turquoise-1;
+  padding-left: 10px;
+}
+
+// -----------------------------------------------------------------------------
+// Action Zone & Brainwave Selector
+// -----------------------------------------------------------------------------
+.actionZone {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.brainwaveGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  font-size: 0.625rem;
+}
+
+.brainwaveBtn {
+  padding: 4px 0;
+  border-radius: 10px;
+  font-family: $font-mono;
+  text-transform: capitalize;
+  transition: all 150ms ease;
+  border: 1px solid #E2E8F0;
+  background-color: #FFFFFF;
+  color: $color-slate-600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #F8FAFC;
+  }
+
+  &.active {
+    background-color: $color-turquoise-1;
+    color: #FFFFFF;
+    font-weight: 700;
+    border-color: $color-turquoise-1;
+    box-shadow: 0 1px 2px rgba(0, 196, 179, 0.2);
+  }
+}

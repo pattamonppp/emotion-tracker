@@ -8,19 +8,19 @@ import {
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { MobileFrame } from './components/MobileFrame';
-import { OnboardingModal } from './components/OnboardingModal';
 import { DesignSystemDrawer } from './design-system/DesignSystemDrawer';
-import { Phase1EmotionJar } from './components/Phase1EmotionJar';
-import { SomaticAbsorption } from './components/Phase2Interventions/SomaticAbsorption';
-import { VictorySip } from './components/Phase2Interventions/VictorySip';
-import { KineticShaker } from './components/Phase2Interventions/KineticShaker';
-import { AudioMatrixSanctuary } from './components/Phase2Interventions/AudioMatrixSanctuary';
-import { Phase3CognitiveReframing } from './components/Phase3CognitiveReframing';
-import { Phase4Feedback } from './components/Phase4Feedback';
-import { ResetCompletedView } from './components/ResetCompletedView';
-import { LivePulseSensorModal } from './components/LivePulseSensorModal';
-import { ResetHistoryModal } from './components/ResetHistoryModal';
-import { MoocaStoryModal } from './components/MoocaStoryModal';
+import { Phase1EmotionJar } from './phases/Phase1EmotionJar';
+import { OnboardingModal } from './phases/Phase1EmotionJar/modals/OnboardingModal';
+import { LivePulseSensorModal } from './phases/Phase1EmotionJar/modals/LivePulseSensorModal';
+import { MoocaStoryModal } from './phases/Phase1EmotionJar/modals/MoocaStoryModal';
+import { SomaticAbsorption } from './phases/Phase2Interventions/SomaticAbsorption';
+import { VictorySip } from './phases/Phase2Interventions/VictorySip';
+import { KineticShaker } from './phases/Phase2Interventions/KineticShaker';
+import { AudioMatrixSanctuary } from './phases/Phase2Interventions/AudioMatrixSanctuary';
+import { Phase3CognitiveReframing } from './phases/Phase3CognitiveReframing';
+import { Phase4Feedback } from './phases/Phase4Feedback';
+import { ResetCompletedView } from './phases/ResetCompletedView';
+import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
 import { audioService } from './services/audioService';
 
 const DEFAULT_PROFILE: UserProfile = {

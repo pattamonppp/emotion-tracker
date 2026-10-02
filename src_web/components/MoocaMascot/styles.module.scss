@@ -1,0 +1,124 @@
+@use 'abstracts' as *;
+
+.container {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+.tapHeartEffect {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translate(-50%, -25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translate(-50%, 0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.tapHeartIcon {
+  font-size: 1rem;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.tapHeartBadge {
+  font-size: 0.75rem;
+  color: $color-turquoise-1;
+  font-weight: 700;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  box-shadow: $elevation-1;
+  border: 1px solid rgba(0, 196, 179, 0.3);
+  white-space: nowrap;
+}
+
+.speakingBubble {
+  margin-bottom: 8px;
+  max-width: 260px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(0, 196, 179, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 196, 179, 0.12);
+  font-size: 0.75rem;
+  color: $color-brand-contrast;
+  font-weight: 500;
+  text-align: center;
+  position: relative;
+  animation: bubblePop 300ms ease;
+  line-height: 1.5;
+}
+
+@keyframes bubblePop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.speakingBubbleTail {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background-color: #FFFFFF;
+  border-right: 2px solid rgba(0, 196, 179, 0.35);
+  border-bottom: 2px solid rgba(0, 196, 179, 0.35);
+}
+
+.vectorWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.interactive {
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.svgRoot {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 14px rgba(0, 196, 179, 0.15));
+  overflow: visible;
+}

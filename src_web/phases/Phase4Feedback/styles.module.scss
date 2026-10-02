@@ -1,0 +1,306 @@
+@use 'abstracts' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  padding: 4px 16px 12px 16px;
+  user-select: none;
+  font-family: $font-sans;
+  animation: fadeIn 300ms ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.phaseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 12px;
+  border-radius: $radius-pill;
+  background-color: #E6F9F7;
+  border: 1px solid rgba(0, 196, 179, 0.35);
+  color: $color-brand-contrast;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  box-shadow: 0 1px 2px rgba(0, 196, 179, 0.08);
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: $color-turquoise-1;
+  }
+}
+
+.heading {
+  font-size: 1rem;
+  font-weight: 800;
+  color: $color-brand-contrast;
+  letter-spacing: -0.015em;
+  text-align: center;
+}
+
+// -----------------------------------------------------------------------------
+// Options List Area
+// -----------------------------------------------------------------------------
+.mainContentArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  margin: 4px 0;
+  flex: 1;
+}
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.optionCard {
+  width: 100%;
+  padding: 12px;
+  border-radius: 20px;
+  border: 2px solid #E2E8F0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 160ms ease;
+  box-shadow: $elevation-1;
+  cursor: pointer;
+  background-color: #FFFFFF;
+
+  &:hover {
+    border-color: $color-turquoise-1;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.activeEmpowered {
+    background-color: $color-turquoise-1;
+    color: #FFFFFF;
+    border-color: $color-turquoise-1;
+    box-shadow: 0 4px 14px rgba(0, 196, 179, 0.3);
+    transform: scale(1.01);
+  }
+
+  &.activeGrounded {
+    background-color: $color-turquoise-1;
+    color: #FFFFFF;
+    border-color: $color-turquoise-1;
+    box-shadow: 0 4px 14px rgba(0, 196, 179, 0.3);
+    transform: scale(1.01);
+  }
+
+  &.activeSame {
+    background-color: #E2E8F0;
+    border-color: #94A3B8;
+    color: #1E293B;
+    font-weight: 700;
+  }
+}
+
+.optionLeftRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.optionEmoji {
+  font-size: 1.5rem;
+}
+
+.optionTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $color-brand-contrast;
+
+  &.selectedWhite {
+    color: #FFFFFF;
+  }
+}
+
+.optionSubtitle {
+  font-size: 0.625rem;
+  color: $color-slate-500;
+  margin-top: 1px;
+
+  &.selectedLight {
+    color: #E0F2FE;
+  }
+}
+
+.checkIcon {
+  width: 20px;
+  height: 20px;
+  color: #FFFFFF;
+}
+
+// -----------------------------------------------------------------------------
+// Real-time Delta Feedback Card
+// -----------------------------------------------------------------------------
+.deltaCard {
+  padding: 14px;
+  border-radius: 22px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 196, 179, 0.3);
+  box-shadow: $elevation-1;
+  text-align: left;
+}
+
+.deltaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: $color-slate-600;
+  margin-bottom: 8px;
+}
+
+.deltaLabel {
+  font-weight: 800;
+  color: $color-brand-contrast;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: $color-turquoise-1;
+  }
+}
+
+.deltaPill {
+  color: $color-brand-contrast;
+  font-family: $font-mono;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background-color: #E6F9F7;
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(0, 196, 179, 0.3);
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: $color-turquoise-1;
+  }
+}
+
+.deltaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.deltaPreCol {
+  padding: 10px;
+  border-radius: 16px;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+.deltaPostCol {
+  padding: 10px;
+  border-radius: 16px;
+  background-color: #E6F9F7;
+  border: 1px solid rgba(0, 196, 179, 0.4);
+}
+
+.deltaColHeader {
+  font-size: 0.625rem;
+  color: $color-slate-500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  font-weight: 700;
+}
+
+.deltaPreValue {
+  color: $color-flamingo-1;
+  font-family: $font-mono;
+  font-weight: 900;
+  font-size: 1rem;
+  margin-top: 2px;
+
+  span {
+    font-size: 0.625rem;
+  }
+}
+
+.deltaPostValue {
+  color: $color-brand-contrast;
+  font-family: $font-mono;
+  font-weight: 900;
+  font-size: 1rem;
+  margin-top: 2px;
+
+  span {
+    font-size: 0.625rem;
+  }
+}
+
+.deltaEmotionTag {
+  font-size: 0.625rem;
+  color: $color-slate-500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.deltaShiftStatus {
+  font-size: 0.625rem;
+  color: $color-brand-contrast;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+  font-weight: 700;
+}
+
+// -----------------------------------------------------------------------------
+// Action Footer
+// -----------------------------------------------------------------------------
+.footerArea {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #F1F5F9;
+  flex-shrink: 0;
+}
+
+.restartRow {
+  display: flex;
+  justify-content: center;
+}
