@@ -81,11 +81,11 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   // Configure unique floating physics per cloud index
   useEffect(() => {
     const configs = [
-      { duration: 2500, amplitude: -6, delay: 0 },
-      { duration: 3200, amplitude: -9, delay: 250 },
-      { duration: 2700, amplitude: -7, delay: 500 },
-      { duration: 3600, amplitude: -10, delay: 150 },
-      { duration: 2900, amplitude: -8, delay: 350 },
+      { duration: 2800, amplitude: -4.5, delay: 0 },
+      { duration: 3400, amplitude: -6, delay: 250 },
+      { duration: 2900, amplitude: -5, delay: 500 },
+      { duration: 3800, amplitude: -6.5, delay: 150 },
+      { duration: 3100, amplitude: -5, delay: 350 },
     ];
     const cfg = configs[index % configs.length];
 

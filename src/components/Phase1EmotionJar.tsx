@@ -96,36 +96,39 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           </TouchableOpacity>
         </View>
 
-        {/* Floating Emotion Clouds Section (Floating in the Sky) */}
-        <View style={styles.skyCloudsSection}>
-          <View style={styles.cloudsList}>
-            {EMOTION_TAGS.map((tag, idx) => {
-              const isSelected = selectedEmotions.includes(tag.id);
-              return (
-                <FloatingEmotionCloud
-                  key={tag.id}
-                  tag={tag}
-                  index={idx}
-                  isSelected={isSelected}
-                  isJarFull={isJarFull}
-                  onToggle={toggleEmotion}
-                  onDropIntoJar={handleDropIntoJar}
-                  lang={lang}
-                />
-              );
-            })}
+        {/* Harmonious Main Stage: Clouds Sky + Apothecary Jar (Balanced Spacing) */}
+        <View style={styles.contentBody}>
+          {/* Floating Emotion Clouds Section (Floating in the Sky) */}
+          <View style={styles.skyCloudsSection}>
+            <View style={styles.cloudsList}>
+              {EMOTION_TAGS.map((tag, idx) => {
+                const isSelected = selectedEmotions.includes(tag.id);
+                return (
+                  <FloatingEmotionCloud
+                    key={tag.id}
+                    tag={tag}
+                    index={idx}
+                    isSelected={isSelected}
+                    isJarFull={isJarFull}
+                    onToggle={toggleEmotion}
+                    onDropIntoJar={handleDropIntoJar}
+                    lang={lang}
+                  />
+                );
+              })}
+            </View>
           </View>
-        </View>
 
-        {/* The Sanctuary Apothecary Glass Emotion Jar with Perched Mooca */}
-        <View style={styles.jarSection}>
-          <GlassEmotionJar
-            selectedEmotions={selectedEmotions}
-            onRemoveEmotion={(id) => toggleEmotion(id)}
-            onClearAll={handleClearAll}
-            lang={lang}
-            onMoocaHug={onOpenStory}
-          />
+          {/* The Sanctuary Apothecary Glass Emotion Jar with Perched Mooca */}
+          <View style={styles.jarSection}>
+            <GlassEmotionJar
+              selectedEmotions={selectedEmotions}
+              onRemoveEmotion={(id) => toggleEmotion(id)}
+              onClearAll={handleClearAll}
+              lang={lang}
+              onMoocaHug={onOpenStory}
+            />
+          </View>
         </View>
       </View>
 
@@ -158,9 +161,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     paddingHorizontal: 12,
-    paddingTop: 2,
-    paddingBottom: 2,
-    justifyContent: 'flex-start',
+    paddingTop: 6,
+    paddingBottom: 8,
     alignItems: 'center',
   },
   stickyBottomBar: {
@@ -180,8 +182,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 4,
-    paddingHorizontal: 2,
+    marginBottom: 5,
+    marginTop: 10,
+    paddingHorizontal: 4,
   },
   badgePill: {
     flexDirection: 'row',
@@ -217,24 +220,27 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.secondary,
   },
+  contentBody: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    paddingVertical: 2,
+  },
   skyCloudsSection: {
     width: '100%',
-    marginTop: 0,
-    marginBottom: 6,
   },
   cloudsList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
-    rowGap: 12,
-    columnGap: 6,
+    rowGap: 16,
+    columnGap: 8,
     paddingHorizontal: 2,
   },
   jarSection: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 'auto',
   },
 });

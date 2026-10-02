@@ -132,9 +132,9 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
               if (!isMounted) return;
               cycleBubble();
             });
-          }, 2000);
+          }, 900);
         });
-      }, 4200);
+      }, 4800);
     };
 
     // When emotions count changes: trigger an immediate fresh fade-in

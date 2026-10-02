@@ -520,10 +520,8 @@ const styles = StyleSheet.create({
   },
   dynamicIslandContainer: {
     alignItems: 'center',
-    paddingVertical: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 196, 179, 0.1)',
+    paddingVertical: 4,
+    backgroundColor: 'transparent',
   },
   dynamicIslandRow: {
     flexDirection: 'row',
