@@ -68,7 +68,7 @@
 }
 
 body {
-  font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', Sarabun, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -77,14 +77,37 @@ body {
 }
 
 /* Custom Elevation Classes */
-.elevation-1 { box-shadow: var(--elevation-1); }
-.elevation-2 { box-shadow: var(--elevation-2); }
-.elevation-3 { box-shadow: var(--elevation-3); }
-.elevation-4 { box-shadow: var(--elevation-4); }
-.elevation-5 { box-shadow: var(--elevation-5); }
-.elevation-6 { box-shadow: var(--elevation-6); }
-.elevation-7 { box-shadow: var(--elevation-7); }
-.elevation-8 { box-shadow: var(--elevation-8); }
+.elevation-1 {
+  box-shadow: var(--elevation-1);
+}
+
+.elevation-2 {
+  box-shadow: var(--elevation-2);
+}
+
+.elevation-3 {
+  box-shadow: var(--elevation-3);
+}
+
+.elevation-4 {
+  box-shadow: var(--elevation-4);
+}
+
+.elevation-5 {
+  box-shadow: var(--elevation-5);
+}
+
+.elevation-6 {
+  box-shadow: var(--elevation-6);
+}
+
+.elevation-7 {
+  box-shadow: var(--elevation-7);
+}
+
+.elevation-8 {
+  box-shadow: var(--elevation-8);
+}
 
 /* Cozy Backgrounds from Background.png */
 .bg-mooca-default {
@@ -110,11 +133,25 @@ body {
 
 /* Pulse animation for heartbeat */
 @keyframes heart-pulse {
-  0% { transform: scale(1); }
-  14% { transform: scale(1.15); }
-  28% { transform: scale(1); }
-  42% { transform: scale(1.1); }
-  70% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  14% {
+    transform: scale(1.15);
+  }
+
+  28% {
+    transform: scale(1);
+  }
+
+  42% {
+    transform: scale(1.1);
+  }
+
+  70% {
+    transform: scale(1);
+  }
 }
 
 .animate-heart-pulse {
@@ -123,8 +160,15 @@ body {
 
 /* Floating animation */
 @keyframes mooca-float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 .animate-float {
@@ -133,26 +177,65 @@ body {
 
 /* Floating Emotion Cloud Harmonic Physics */
 @keyframes float-cloud-1 {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-7px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
 }
 
 @keyframes float-cloud-2 {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes float-cloud-3 {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 @keyframes float-cloud-4 {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-9px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-9px);
+  }
 }
 
-.animate-cloud-1 { animation: float-cloud-1 2.8s ease-in-out infinite; }
-.animate-cloud-2 { animation: float-cloud-2 3.4s ease-in-out infinite 0.2s; }
-.animate-cloud-3 { animation: float-cloud-3 3.0s ease-in-out infinite 0.5s; }
-.animate-cloud-4 { animation: float-cloud-4 3.6s ease-in-out infinite 0.15s; }
+.animate-cloud-1 {
+  animation: float-cloud-1 2.8s ease-in-out infinite;
+}
+
+.animate-cloud-2 {
+  animation: float-cloud-2 3.4s ease-in-out infinite 0.2s;
+}
+
+.animate-cloud-3 {
+  animation: float-cloud-3 3.0s ease-in-out infinite 0.5s;
+}
+
+.animate-cloud-4 {
+  animation: float-cloud-4 3.6s ease-in-out infinite 0.15s;
+}

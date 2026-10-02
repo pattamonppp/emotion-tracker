@@ -50,6 +50,7 @@
 }
 
 .tapHeartBadge {
+  font-family: $font-th;
   font-size: 0.75rem;
   color: $color-turquoise-1;
   font-weight: 700;
@@ -62,6 +63,7 @@
 }
 
 .speakingBubble {
+  font-family: $font-th;
   margin-bottom: 8px;
   max-width: 260px;
   padding: 8px 14px;

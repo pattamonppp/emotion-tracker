@@ -13,7 +13,7 @@ import {
 import { Sparkles, X, ArrowDown, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
 import { audioService } from '../services/audioService';
 import { MoocaMascot } from './MoocaMascot';
-import { colors, shadows } from '../design-system/tokens';
+import { colors, shadows, typography, radii } from '../design-system/tokens';
 import { getTranslation } from '../locales';
 import { MODAL_CONFIG } from '../constants';
 
@@ -275,14 +275,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerTitle: {
+    fontFamily: typography.fontPromptExtraBold,
     fontSize: 14,
-    fontWeight: '800',
     color: colors.primaryDark,
+    ...(Platform.OS !== 'android' ? { fontWeight: '800' } : {}),
   },
   headerSubtitle: {
+    fontFamily: typography.fontPromptMedium,
     fontSize: 11,
     color: colors.textMuted,
-    fontWeight: '500',
+    ...(Platform.OS !== 'android' ? { fontWeight: '500' } : {}),
   },
   closeBtn: {
     padding: 4,
@@ -302,10 +304,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mascotBubbleText: {
+    fontFamily: typography.fontPromptSemiBold,
     fontSize: 11,
     color: '#9D174D',
-    fontWeight: '600',
     lineHeight: 16,
+    ...(Platform.OS !== 'android' ? { fontWeight: '600' } : {}),
   },
   inputWrapper: {
     position: 'relative',
@@ -319,7 +322,7 @@ const styles = StyleSheet.create({
     paddingBottom: 26,
     fontSize: 13,
     color: colors.textPrimary,
-    fontWeight: '600',
+    fontFamily: typography.fontPromptMedium,
     borderWidth: 1.5,
     borderColor: '#E2E8F0',
   },
@@ -329,16 +332,18 @@ const styles = StyleSheet.create({
     right: 12,
     fontSize: 10,
     color: colors.textMuted,
-    fontWeight: '600',
+    fontFamily: typography.fontPromptSemiBold,
+    ...(Platform.OS !== 'android' ? { fontWeight: '600' } : {}),
   },
   suggestionsContainer: {
     marginBottom: 16,
   },
   suggestionsLabel: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 11,
-    fontWeight: '700',
     color: colors.textSecondary,
     marginBottom: 8,
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   suggestionsList: {
     gap: 6,
@@ -357,13 +362,15 @@ const styles = StyleSheet.create({
     borderColor: '#F472B6',
   },
   suggestionText: {
+    fontFamily: typography.fontPromptMedium,
     fontSize: 11,
     color: colors.textSecondary,
-    fontWeight: '600',
+    ...(Platform.OS !== 'android' ? { fontWeight: '600' } : {}),
   },
   suggestionTextActive: {
+    fontFamily: typography.fontPromptBold,
     color: '#BE185D',
-    fontWeight: '700',
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   actionsRow: {
     flexDirection: 'row',
@@ -380,9 +387,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEE2E2',
   },
   clearBtnText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 11,
-    fontWeight: '700',
     color: '#EF4444',
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   saveSkyBtn: {
     flex: 1,
@@ -397,9 +405,10 @@ const styles = StyleSheet.create({
     borderColor: colors.borderTeal,
   },
   saveSkyText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 12,
-    fontWeight: '700',
     color: colors.primaryDark,
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   saveJarBtn: {
     flex: 1,
@@ -412,9 +421,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   saveJarText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 12,
-    fontWeight: '700',
     color: '#FFFFFF',
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   btnDisabled: {
     opacity: 0.45,

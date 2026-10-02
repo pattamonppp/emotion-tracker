@@ -24,7 +24,7 @@ import {
   RotateCcw,
   GlassWater
 } from 'lucide-react-native';
-import { colors } from '../design-system/tokens';
+import { colors, typography } from '../design-system/tokens';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { audioService } from '../services/audioService';
 import { getTranslation } from '../locales';
@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 13,
     color: colors.textPrimary,
+    fontFamily: typography.fontPromptMedium,
     minHeight: 70,
     textAlignVertical: 'top',
   },

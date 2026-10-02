@@ -6,7 +6,8 @@ import {
   StyleSheet, 
   TextInput, 
   TouchableOpacity, 
-  ScrollView
+  ScrollView,
+  Platform
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserProfile, GoalType } from '../types';
@@ -21,7 +22,7 @@ import {
   X,
   User,
 } from 'lucide-react-native';
-import { colors, radii } from '../design-system/tokens';
+import { colors, radii, typography } from '../design-system/tokens';
 import { audioService } from '../services/audioService';
 import { getTranslation } from '../locales';
 import { MODAL_CONFIG } from '../constants';
@@ -220,9 +221,10 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.borderSubtle,
   },
   headerTitle: {
+    fontFamily: typography.fontPromptExtraBold,
     fontSize: 16,
-    fontWeight: '800',
     color: colors.primaryDark,
+    ...(Platform.OS !== 'android' ? { fontWeight: '800' } : {}),
   },
   closeBtn: {
     padding: 6,
@@ -240,10 +242,11 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   fieldLabel: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 12,
-    fontWeight: '700',
     color: colors.textSecondary,
     marginLeft: 2,
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   inputRow: {
     flexDirection: 'row',
@@ -259,7 +262,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 14,
     color: colors.textPrimary,
-    fontWeight: '600',
+    fontFamily: typography.fontPromptSemiBold,
+    ...(Platform.OS !== 'android' ? { fontWeight: '600' } : {}),
   },
   goalsGrid: {
     flexDirection: 'row',
