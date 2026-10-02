@@ -67,4 +67,15 @@ export const phase2 = {
     testBounceBtn: 'Simulate Bounce (1x)',
     proceedBtn: 'Proceed to Cognitive Reframing',
   },
+  audioMatrix: {
+    header: 'Neural Audio Matrix',
+    bubbleDone: 'Your mind is peacefully focused!',
+    bubblePlaying: 'Close your eyes, Mooca is here with you',
+    title: 'Neural Entrainment & Sanctuary',
+    description: '"Listen with headphones or close to ear. 10Hz Alpha waves induce calm focus."',
+    voiceLabel: 'Mooca Voice Sanctuary:',
+    replay: 'Replay ↺',
+    proceed: 'Proceed to Reframing Page',
+    ready: 'I Feel Grounded & Focused',
+  },
 };

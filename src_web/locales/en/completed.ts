@@ -1,5 +1,7 @@
 export const completed = {
   badge: '120s Reset with Mooca Completed',
+  shareTitle: 'Mooca 120s Somatic Reset',
+  mascotBubble: 'You did wonderful, {name}! Mooca is so proud of you!',
   readyTitle: "You're all set, {name}!",
   readySubtitle: 'Your nervous system has returned to equilibrium. Whatever you face, Mooca is right here supporting you!',
   bioShiftTitle: 'Tension Relief Shift',

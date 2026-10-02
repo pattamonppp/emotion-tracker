@@ -5,6 +5,7 @@ import { REFRAMING_INSIGHTS } from '../../data/matrixData';
 import { audioService } from '../../services/audioService';
 import { Button } from '../../components/Button';
 import { MoocaMascot } from '../../components/MoocaMascot';
+import { getTranslation } from '../../locales';
 import {
   ArrowRight,
   Dna,
@@ -26,6 +27,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
   onProceed,
   lang,
 }) => {
+  const strings = getTranslation(lang).phases.phase3;
   const [isActionCommitted, setIsActionCommitted] = useState(false);
   const insight = REFRAMING_INSIGHTS[goal];
 
@@ -43,25 +45,19 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           mood={isActionCommitted ? 'celebrating' : 'comforting'}
           size="sm"
           speakingBubble={
-            isActionCommitted
-              ? lang === 'th'
-                ? 'สัญญากันแล้วนะ! Mooca จะคอยเชียร์อยู่ข้างๆ เสมอ!'
-                : 'Pinky promise! Mooca is right beside you!'
-              : lang === 'th'
-                ? 'รู้ไหม? อาการตื่นเต้นนี้ ไม่ใช่ความกลัวนะ แต่คือร่างกายกำลังช่วยเธออยู่!'
-                : 'Physical surges are your body priming peak focus, not fear!'
+            isActionCommitted ? strings.bubbleCommitted : strings.bubbleDefault
           }
         />
 
         <div className={styles.phaseBadge}>
           <Sparkles />
           <span>
-            {lang === 'th' ? 'จดหมายสะท้อนใจจาก Mooca (1:20 - 1:45)' : 'Phase 3: Cognitive Insight'}
+            {strings.badge}
           </span>
         </div>
 
         <h2 className={styles.heading}>
-          {lang === 'th' ? 'ความจริงทางชีววิทยาที่ Mooca อยากบอก' : 'Biological Insight & 1 Action'}
+          {strings.heading}
         </h2>
       </div>
 
@@ -73,7 +69,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 
           <div className={styles.cardHeaderRow}>
             <Heart />
-            <span>{lang === 'th' ? 'ข้อความคลายใจจากเพื่อน Mooca' : 'Behavioral Reflection'}</span>
+            <span>{strings.reflectionLabel}</span>
           </div>
 
           <p className={styles.reflectionText}>
@@ -91,10 +87,10 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           <div className={styles.microActionHeader}>
             <div className={styles.actionBadgeLeft}>
               <Footprints />
-              <span>{lang === 'th' ? '1 ก้าวถัดไปที่ทำได้ทันที' : 'The 1 Micro-Action'}</span>
+              <span>{strings.microActionLabel}</span>
             </div>
             <span className={styles.immediatePill}>
-              {lang === 'th' ? 'ทำทันที' : 'Immediate'}
+              {strings.immediate}
             </span>
           </div>
 
@@ -116,16 +112,14 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
                 [styles.active]: isActionCommitted,
               })}
             >
-              {isActionCommitted ? <Check /> : <span className={styles.tapHint}>แตะ</span>}
+              {isActionCommitted ? <Check /> : <span className={styles.tapHint}>{strings.tap}</span>}
             </div>
           </div>
 
           <p className={styles.microActionHint}>
             <Heart />
             <span>
-              {lang === 'th'
-                ? 'แตะที่กล่องเพื่อสัญญากับ Mooca แล้วเตรียมก้าวไปลุยนะ'
-                : 'Tap to commit this micro-action with Mooca.'}
+              {strings.actionHint}
             </span>
           </p>
         </div>
@@ -141,11 +135,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             fullWidth
             onClick={onProceed}
             trailingIcon={<ArrowRight className="w-4 h-4" />}
-            label={
-              lang === 'th'
-                ? 'วัดผลการเปลี่ยนแปลงอารมณ์'
-                : 'Measure Emotional Shift'
-            }
+            label={strings.nextPhase}
           />
         </div>
       )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShiftFeedback, UserProfile } from '../../../../types';
 import { Button } from '../../../../components/Button';
+import { getTranslation } from '../../../../locales';
 import { X, Share2, CheckCircle2, Award } from 'lucide-react';
 import { HeartIcon, ZapIcon, LeafIcon, ScaleIcon } from '../../../../icons';
 import styles from './styles.module.scss';
@@ -20,6 +21,8 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
   history,
   lang,
 }) => {
+  const strings = getTranslation(lang).modals.history;
+  const completedStrings = getTranslation(lang).phases.completed;
   if (!isOpen) return null;
 
   const mockDefaultHistory: ShiftFeedback[] = [
@@ -50,10 +53,10 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
             </div>
             <div className={styles.headerTextCol}>
               <h3 className={styles.headerTitle}>
-                {lang === 'th' ? 'บันทึกการรีเซ็ตใจกับ Mooca' : 'Reset History & Bio-Delta'}
+                {strings.title}
               </h3>
               <p className={styles.headerSubtitle}>
-                {lang === 'th' ? 'บันทึกการฟื้นฟูระบบประสาท' : 'Somatic recovery logs'}
+                {strings.subtitle}
               </p>
             </div>
           </div>
@@ -74,7 +77,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
             <div className={styles.sanctuaryCardHeader}>
               <span className={styles.sanctuaryTitle}>
                 <HeartIcon />
-                <span>MOOCA SANCTUARY CARD</span>
+                <span>{strings.sanctuaryCardTitle}</span>
               </span>
               <span className={styles.mbtiTag}>
                 MBTI: {profile.mbti}
@@ -82,14 +85,12 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
             </div>
 
             <p className={styles.sanctuaryQuote}>
-              {lang === 'th'
-                ? `“${profile.name} ได้ฟื้นฟูสภาวะประสาท และพร้อมก้าวสู่ภารกิจตรงหน้าด้วยใจที่มั่นคง โดยมีเพื่อน Mooca เคียงข้างเสมอ”`
-                : `“${profile.name} has re-centered their nervous equilibrium and stands ready for their arena with Mooca by their side.”`}
+              {strings.quoteTemplate.replace('{name}', profile.name)}
             </p>
 
             <div className={styles.sanctuaryFooter}>
               <span className={styles.verifiedBadge}>
-                <CheckCircle2 /> 120s Verified
+                <CheckCircle2 /> {strings.verifiedText}
               </span>
               <span className={styles.brandSignature}>mindfull / Ooca</span>
             </div>
@@ -98,7 +99,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
           {/* Past Sessions List */}
           <div className={styles.sessionsList}>
             <span className={styles.sessionsHeading}>
-              {lang === 'th' ? 'เซสชันที่ผ่านมา' : 'Previous Sessions'}
+              {strings.previousSessions}
             </span>
 
             {displayHistory.map((item, idx) => {
@@ -124,10 +125,10 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
                     <div>
                       <div className={styles.historyStateTitle}>
                         {item.shiftResult === 'empowered'
-                          ? (lang === 'th' ? 'มั่นใจ / พร้อมลุย' : 'Empowered')
+                          ? completedStrings.stateEmpowered
                           : item.shiftResult === 'grounded'
-                          ? (lang === 'th' ? 'นิ่ง มีสติ' : 'Grounded')
-                          : (lang === 'th' ? 'คืนสมดุล' : 'Stabilized')}
+                            ? completedStrings.stateGrounded
+                            : completedStrings.stateStabilized}
                       </div>
                       <div className={styles.historyTimestamp}>
                         {item.timestamp} • {item.preHeartRate} bpm → {item.postHeartRate} bpm
@@ -151,7 +152,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
             colorTheme="blue"
             size="sm"
             onClick={onClose}
-            label={lang === 'th' ? 'ปิดหน้าต่าง' : 'Close'}
+            label={strings.closeButton}
           />
 
           <Button
@@ -162,16 +163,16 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
             onClick={() => {
               if (navigator.share) {
                 navigator.share({
-                  title: 'KINETIC VIBE with Mooca',
-                  text: `${profile.name} completed a 120s somatic reset with Mooca!`,
+                  title: strings.sanctuaryCardTitle,
+                  text: strings.quoteTemplate.replace('{name}', profile.name),
                   url: window.location.href,
                 }).catch(() => {});
               } else {
-                navigator.clipboard.writeText(`${profile.name} completed a 120s reset with Mooca!`);
-                alert(lang === 'th' ? 'คัดลอกข้อความแชร์แล้ว!' : 'Copied share text!');
+                navigator.clipboard.writeText(strings.quoteTemplate.replace('{name}', profile.name));
+                alert(strings.copiedAlert);
               }
             }}
-            label={lang === 'th' ? 'แชร์การฟื้นฟู' : 'Share Sanctuary'}
+            label={strings.shareSanctuary}
           />
         </div>
       </div>

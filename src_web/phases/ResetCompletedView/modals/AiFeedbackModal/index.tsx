@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { UserProfile, ShiftFeedback, Feedback } from '../../../../types';
 import { Button } from '../../../../components/Button';
 import { audioService } from '../../../../services/audioService';
+import { getTranslation } from '../../../../locales';
 import {
   CloseIcon,
   SparklesIcon,
@@ -32,6 +33,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
   feedback,
   lang,
 }) => {
+  const strings = getTranslation(lang).feedback;
   const [rating, setRating] = useState<number>(5);
   const [accuracy, setAccuracy] = useState<'spot_on' | 'helpful' | 'needs_work'>('spot_on');
   const [selectedAspects, setSelectedAspects] = useState<string[]>([
@@ -104,12 +106,10 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
             </div>
             <div className={styles.headerTitleGroup}>
               <h3 className={styles.headerTitle}>
-                {lang === 'th' ? 'บอกความรู้สึกถึง Mooca' : 'Feedback to Mooca'}
+                {strings.modalTitle}
               </h3>
               <p className={styles.headerSubtitle}>
-                {lang === 'th'
-                  ? 'ความคิดเห็นของเธอช่วยให้ Mooca ดูแลใจได้ดียิ่งขึ้น'
-                  : 'Your thoughts help Mooca support you even better'}
+                {strings.modalSubtitle}
               </p>
             </div>
           </div>
@@ -135,9 +135,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                     <SparklesIcon />
                   </span>
                   <span>
-                    {lang === 'th'
-                      ? 'เซสชันนี้ช่วยให้เธอรู้สึกผ่อนคลายแค่ไหน?'
-                      : 'How much did this session help relieve tension?'}
+                    {strings.ratingQuestion}
                   </span>
                 </label>
 
@@ -170,9 +168,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                     <TargetIcon />
                   </span>
                   <span>
-                    {lang === 'th'
-                      ? 'คำปลอบและกิจกรรมตรงกับความต้องการไหม?'
-                      : 'Did the comforting advice and exercises fit your state?'}
+                    {strings.accuracyQuestion}
                   </span>
                 </label>
 
@@ -208,9 +204,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                     <MessageHeartIcon />
                   </span>
                   <span>
-                    {lang === 'th'
-                      ? 'จุดที่ทำได้ดีเป็นพิเศษ (เลือกได้หลายข้อ):'
-                      : 'Key highlights that felt especially good (choose any):'}
+                    {strings.aspectsQuestion}
                   </span>
                 </label>
 
@@ -242,9 +236,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                     <PenLineIcon />
                   </span>
                   <span>
-                    {lang === 'th'
-                      ? 'อยากบอกอะไรกับ Mooca เพื่อให้ดูแลใจเธอได้ดียิ่งขึ้น? (ถ้ามี)'
-                      : 'Anything you want to tell Mooca to support you better? (Optional)'}
+                    {strings.commentQuestion}
                   </span>
                 </label>
 
@@ -252,11 +244,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                   rows={4}
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder={
-                    lang === 'th'
-                      ? 'เช่น ชอบเสียงคลื่นทะเลมาก, อยากให้มีจังหวะหายใจช้าลงอีกนิด...'
-                      : 'e.g. Loved the ocean soundscape, would like a slightly slower breath pace...'
-                  }
+                  placeholder={strings.commentPlaceholder}
                   className={styles.textarea}
                 />
               </div>
@@ -268,12 +256,10 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 <CelebrationIcon />
               </div>
               <h4 className={styles.successTitle}>
-                {lang === 'th' ? 'บันทึกความคิดเห็นสำเร็จ!' : 'Feedback Saved!'}
+                {strings.successTitle}
               </h4>
               <p className={styles.successDesc}>
-                {lang === 'th'
-                  ? 'ขอบคุณมากนะ! ความคิดเห็นของเธอช่วยให้ Mooca เข้าใจและปลอบประโลมใจทุกคนได้ดียิ่งขึ้น'
-                  : 'Thank you so much! Your thoughts help make Mooca gentler, warmer, and more supportive for everyone.'}
+                {strings.successDesc}
               </p>
 
               <button
@@ -282,8 +268,8 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 className={styles.jsonToggleBtn}
               >
                 {showJson
-                  ? (lang === 'th' ? 'ซ่อน JSON' : 'Hide JSON')
-                  : (lang === 'th' ? 'ดูโครงสร้างข้อมูล (JSON)' : 'Inspect Data Structure (JSON)')}
+                  ? strings.hideJson
+                  : strings.inspectJson}
               </button>
 
               {showJson && savedRecord && (
@@ -304,7 +290,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 colorTheme="turquoise"
                 size="sm"
                 onClick={onClose}
-                label={lang === 'th' ? 'ข้าม' : 'Skip'}
+                label={strings.skipButton}
               />
 
               <Button
@@ -313,7 +299,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 size="sm"
                 onClick={handleSubmit}
                 leadingIcon={<CheckCircleIcon />}
-                label={lang === 'th' ? 'ส่งความรู้สึก' : 'Submit Feedback'}
+                label={strings.submitButton}
               />
             </>
           ) : (
@@ -324,7 +310,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 size="sm"
                 onClick={handleCopyJson}
                 leadingIcon={copied ? <CheckIcon /> : <CopyIcon />}
-                label={copied ? (lang === 'th' ? 'คัดลอกแล้ว!' : 'Copied!') : (lang === 'th' ? 'คัดลอก JSON' : 'Copy JSON')}
+                label={copied ? strings.copiedJson : strings.copyJson}
               />
 
               <Button
@@ -332,7 +318,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 colorTheme="turquoise"
                 size="sm"
                 onClick={onClose}
-                label={lang === 'th' ? 'เสร็จสิ้น' : 'Done'}
+                label={strings.doneButton}
               />
             </>
           )}

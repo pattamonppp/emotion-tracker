@@ -1,7 +1,8 @@
 export const phase4 = {
   title: 'Phase 4: วัดผลลัพธ์ใจ',
+  badge: 'Phase 4: วัดผลลัพธ์ใจ (1:45 - 2:00)',
   heading: 'ตอนนี้รู้สึกอย่างไรเมื่อเทียบกับตอนเริ่ม?',
-  bubbleEmpowered: 'ยอดเยี่ยมมาก! อะดรีนาลีนกลายเป็นพลังโฟกัสแล้ว',
+  bubbleEmpowered: 'สุดยอดเลย! Mooca ส่งใจให้เต็มร้อย พร้อมลุยแล้ว!',
   bubbleGrounded: 'ใจสงบนิ่งและมีสติแล้วนะ เก่งมาก ๆ เลย',
   bubbleDefault: 'ตอนนี้รู้สึกอย่างไรบ้างแล้วจ๊ะ? บอก Mooca ได้เลยนะ',
   empowered: 'มั่นใจ / พร้อมลุย',
@@ -21,4 +22,6 @@ export const phase4 = {
   restoredCalm: 'นิ่ง & มีสติ',
   restartCycle: 'รีเซ็ตอีก 1 รอบกับ Mooca',
   alertHigh: 'ตื่นตัวสูง',
+  completeSelected: 'เสร็จสิ้น 120 วินาที — รับการ์ดใจฟูจาก Mooca',
+  completePrompt: 'แตะเลือกความรู้สึกด้านบนก่อนนะ',
 };

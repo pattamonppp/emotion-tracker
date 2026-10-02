@@ -3,7 +3,6 @@ import cn from 'classnames';
 import { 
   Wifi, 
   Battery, 
-  Layers, 
   Languages, 
   Maximize2, 
   Minimize2 
@@ -18,7 +17,6 @@ export interface MobileFrameProps {
   profile: UserProfile;
   currentPhase: ResetPhase;
   phaseTime: number; // in seconds
-  onOpenDesignSystem: () => void;
   onOpenProfile: () => void;
   onToggleLanguage: () => void;
   onOpenStory?: () => void;
@@ -29,7 +27,6 @@ export function MobileFrame({
   profile,
   currentPhase,
   phaseTime,
-  onOpenDesignSystem,
   onOpenProfile,
   onToggleLanguage,
   onOpenStory,
@@ -118,18 +115,8 @@ export function MobileFrame({
             </button>
           )}
 
-          {/* Zone 3: Primary Actions (Language, Profile, Inspector) */}
+          {/* Zone 3: Primary Actions (Language and Profile) */}
           <div className={styles.actionsZone}>
-            {/* Design Tokens Inspector Trigger */}
-            <button
-              type="button"
-              onClick={onOpenDesignSystem}
-              className={styles.iconBtn}
-              title="Design Tokens"
-            >
-              <Layers className="w-3 h-3" />
-            </button>
-
             {/* Language Switch */}
             <button
               type="button"

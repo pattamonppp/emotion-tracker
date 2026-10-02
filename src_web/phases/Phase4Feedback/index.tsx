@@ -5,6 +5,7 @@ import { EMOTION_TAGS } from '../../data/matrixData';
 import { audioService } from '../../services/audioService';
 import { Button } from '../../components/Button';
 import { MoocaMascot } from '../../components/MoocaMascot';
+import { getTranslation } from '../../locales';
 import {
   Activity,
   TrendingDown,
@@ -30,6 +31,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
   onRestart,
   lang,
 }) => {
+  const strings = getTranslation(lang).phases.phase4;
   const [selectedShift, setSelectedShift] = useState<'empowered' | 'grounded' | 'same' | null>(null);
   const [postHeartRate] = useState(() => Math.max(72, preHeartRate - Math.floor(Math.random() * 8 + 18)));
 
@@ -61,28 +63,22 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           size="sm"
           speakingBubble={
             selectedShift === 'empowered'
-              ? lang === 'th'
-                ? 'สุดยอดเลย! Mooca ส่งใจให้เต็มร้อย พร้อมลุยแล้ว!'
-                : 'Empowered! Mooca is cheering for you!'
+              ? strings.bubbleEmpowered
               : selectedShift === 'grounded'
-                ? lang === 'th'
-                  ? 'ใจนิ่งสงบแล้ว ดีใจด้วยนะคนเก่ง!'
-                  : 'Calm and steady, wonderful!'
-                : lang === 'th'
-                  ? 'ตอนนี้รู้สึกอย่างไรบ้างแล้วจ๊ะ? บอก Mooca ได้เลยนะ'
-                  : 'How does your heart feel now?'
+                ? strings.bubbleGrounded
+                : strings.bubbleDefault
           }
         />
 
         <div className={styles.phaseBadge}>
           <ShieldCheck />
           <span>
-            {lang === 'th' ? 'Phase 4: วัดผลลัพธ์ใจ (1:45 - 2:00)' : 'Phase 4: Closed-Loop Shift'}
+            {strings.badge}
           </span>
         </div>
 
         <h2 className={styles.heading}>
-          {lang === 'th' ? 'ตอนนี้รู้สึกอย่างไรเมื่อเทียบกับตอนเริ่ม?' : 'How Do You Feel Right Now?'}
+          {strings.heading}
         </h2>
       </div>
 
@@ -108,14 +104,14 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                     [styles.selectedWhite]: selectedShift === 'empowered',
                   })}
                 >
-                  {lang === 'th' ? 'พร้อมลุย / มั่นใจขึ้น' : 'Empowered & Confident'}
+                  {strings.empoweredTitle}
                 </div>
                 <div
                   className={cn(styles.optionSubtitle, {
                     [styles.selectedLight]: selectedShift === 'empowered',
                   })}
                 >
-                  {lang === 'th' ? 'อะดรีนาลีนเปลี่ยนเป็นสมาธิอันเฉียบคม' : 'Adrenaline converted to peak focus'}
+                  {strings.empoweredSub}
                 </div>
               </div>
             </div>
@@ -140,14 +136,14 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                     [styles.selectedWhite]: selectedShift === 'grounded',
                   })}
                 >
-                  {lang === 'th' ? 'นิ่งขึ้น มีสติ สงบลง' : 'Grounded & Calmer'}
+                  {strings.groundedTitle}
                 </div>
                 <div
                   className={cn(styles.optionSubtitle, {
                     [styles.selectedLight]: selectedShift === 'grounded',
                   })}
                 >
-                  {lang === 'th' ? 'ระบบประสาทผ่อนคลาย ชีพจรคืนสมดุล' : 'Parasympathetic restoration'}
+                  {strings.groundedSub}
                 </div>
               </div>
             </div>
@@ -168,10 +164,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
               </span>
               <div>
                 <div className={styles.optionTitle}>
-                  {lang === 'th' ? 'ยังกังวลอยู่บ้าง' : 'Still Somewhat Anxious'}
+                  {strings.sameTitle}
                 </div>
                 <div className={styles.optionSubtitle}>
-                  {lang === 'th' ? 'ไม่เป็นไรนะ ทำซ้ำกับ Mooca อีกรอบได้' : 'Can run another quick loop with Mooca'}
+                  {strings.sameSub}
                 </div>
               </div>
             </div>
@@ -184,7 +180,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           <div className={styles.deltaHeader}>
             <span className={styles.deltaLabel}>
               <Activity />
-              {lang === 'th' ? 'ชีพจรลดลงอย่างสงบ:' : 'Objective Bio-Delta Feedback:'}
+              {strings.bioDeltaLabel}
             </span>
             <span className={styles.deltaPill}>
               <TrendingDown /> -{hrDelta} bpm
@@ -194,31 +190,25 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           <div className={styles.deltaGrid}>
             <div className={styles.deltaPreCol}>
               <span className={styles.deltaColHeader}>
-                {lang === 'th' ? 'ก่อนเริ่ม' : 'Pre-Reset'}
+                {strings.preReset}
               </span>
               <div className={styles.deltaPreValue}>
                 {preHeartRate} <span>bpm</span>
               </div>
               <div className={styles.deltaEmotionTag}>
-                {primaryEmotion ? (lang === 'th' ? primaryEmotion.labelTh : primaryEmotion.labelEn) : 'High Alert'}
+                {primaryEmotion ? (lang === 'th' ? primaryEmotion.labelTh : primaryEmotion.labelEn) : strings.alertHigh}
               </div>
             </div>
 
             <div className={styles.deltaPostCol}>
               <span className={styles.deltaColHeader} style={{ color: '#004D40' }}>
-                {lang === 'th' ? 'ปัจจุบัน' : 'Post-Reset'}
+                {strings.postReset}
               </span>
               <div className={styles.deltaPostValue}>
                 {postHeartRate} <span>bpm</span>
               </div>
               <div className={styles.deltaShiftStatus}>
-                {selectedShift === 'empowered'
-                  ? lang === 'th'
-                    ? 'มั่นใจสูงสุด'
-                    : 'Peak Ready'
-                  : lang === 'th'
-                    ? 'นิ่ง & มีสติ'
-                    : 'Restored Calm'}
+                {selectedShift === 'empowered' ? strings.peakReady : strings.restoredCalm}
               </div>
             </div>
           </div>
@@ -235,13 +225,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           isDisabled={!selectedShift}
           onClick={handleFinish}
           label={
-            selectedShift
-              ? lang === 'th'
-                ? 'เสร็จสิ้น 120 วินาที — รับการ์ดใจฟูจาก Mooca'
-                : 'Complete 120s — Receive Mooca Badge'
-              : lang === 'th'
-                ? 'แตะเลือกความรู้สึกด้านบนก่อนนะ'
-                : 'Complete 120s — Receive Mooca Badge'
+            selectedShift ? strings.completeSelected : strings.completePrompt
           }
         />
 
@@ -252,7 +236,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             size="sm"
             onClick={onRestart}
             leadingIcon={<RotateCcw className="w-3.5 h-3.5" />}
-            label={lang === 'th' ? 'รีเซ็ตอีก 1 รอบกับ Mooca' : 'Restart Reset Cycle'}
+            label={strings.restartCycle}
           />
         </div>
       </div>

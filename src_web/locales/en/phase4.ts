@@ -1,7 +1,8 @@
 export const phase4 = {
   title: 'Phase 4: Emotional Shift Check',
+  badge: 'Phase 4: Closed-Loop Shift',
   heading: 'How do you feel now compared to before?',
-  bubbleEmpowered: 'Adrenaline converted to peak focus!',
+  bubbleEmpowered: 'Empowered! Mooca is cheering for you!',
   bubbleGrounded: 'Calm and steady, wonderful!',
   bubbleDefault: 'How does your heart feel now?',
   empowered: 'Empowered / Ready',
@@ -21,4 +22,6 @@ export const phase4 = {
   restoredCalm: 'Restored Calm',
   restartCycle: 'Restart Reset Cycle',
   alertHigh: 'High Alert',
+  completeSelected: 'Complete 120s — Receive Mooca Badge',
+  completePrompt: 'Complete 120s — Receive Mooca Badge',
 };

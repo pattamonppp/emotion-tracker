@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { ShiftFeedback, UserProfile } from '../../types';
 import { Button } from '../../components/Button';
 import { MoocaMascot } from '../../components/MoocaMascot';
+import { getTranslation } from '../../locales';
 import { AiFeedbackModal } from './modals/AiFeedbackModal';
 import {
   SparklesIcon,
   RotateCcwIcon,
-  LayersIcon,
   CheckCircleIcon,
   ShareIcon,
   MessageHeartIcon,
@@ -23,7 +23,6 @@ export interface ResetCompletedViewProps {
   profile: UserProfile;
   feedback: ShiftFeedback | null;
   onRestart: () => void;
-  onOpenDesignSystem: () => void;
   onOpenProfile: () => void;
   onOpenHistory?: () => void;
   onOpenStory?: () => void;
@@ -33,26 +32,26 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
   profile,
   feedback,
   onRestart,
-  onOpenDesignSystem,
   onOpenProfile,
   onOpenHistory,
   onOpenStory,
 }) => {
   const lang = profile.language;
+  const strings = getTranslation(lang).phases.completed;
   const bpmDrop = feedback ? feedback.preHeartRate - feedback.postHeartRate : 22;
   const [isAiFeedbackOpen, setIsAiFeedbackOpen] = useState(false);
 
   const handleShareKeepsake = () => {
-    const shareText = `${profile.name} ลดความตึงเครียดได้ ${bpmDrop} BPM ด้วย 120s Reset กับ Mooca!`;
+    const shareText = strings.shareTextTemplate.replace('{name}', profile.name).replace('{bpm}', String(bpmDrop));
     if (navigator.share) {
       navigator.share({
-        title: 'Mooca 120s Somatic Reset',
+        title: strings.shareTitle,
         text: shareText,
         url: window.location.href,
       }).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareText);
-      alert(lang === 'th' ? 'คัดลอกข้อความสำหรับแชร์แล้ว!' : 'Copied share text to clipboard!');
+      alert(strings.copiedAlert);
     }
   };
 
@@ -63,21 +62,21 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         return (
           <span className={styles.stateValueEmpowered}>
             <ZapIcon />
-            <span>{lang === 'th' ? 'มั่นใจ / พร้อมลุย' : 'Empowered'}</span>
+            <span>{strings.stateEmpowered}</span>
           </span>
         );
       case 'grounded':
         return (
           <span className={styles.stateValueGrounded}>
             <LeafIcon />
-            <span>{lang === 'th' ? 'นิ่ง มีสติ' : 'Grounded'}</span>
+            <span>{strings.stateGrounded}</span>
           </span>
         );
       default:
         return (
           <span className={styles.stateValueSame}>
             <ScaleIcon />
-            <span>{lang === 'th' ? 'คืนสมดุล' : 'Stabilized'}</span>
+            <span>{strings.stateStabilized}</span>
           </span>
         );
     }
@@ -89,7 +88,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
       <div className={styles.topBadge}>
         <CheckCircleIcon />
         <span>
-          {lang === 'th' ? 'รีเซ็ตใจ 120 วินาที กับ Mooca สำเร็จ' : '120s Reset Completed with Mooca'}
+          {strings.badge}
         </span>
       </div>
 
@@ -101,21 +100,17 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             size="md"
             showSunny={true}
             speakingBubble={
-              lang === 'th'
-                ? `เก่งมากเลยนะ ${profile.name}! Mooca ภูมิใจในตัวเธอเสมอ!`
-                : `You did wonderful, ${profile.name}! Mooca is so proud of you!`
+              strings.mascotBubble.replace('{name}', profile.name)
             }
           />
         </div>
 
         <div>
           <h2 className={styles.heroHeading}>
-            {lang === 'th' ? `เธอพร้อมแล้วนะ ${profile.name}!` : `You are Ready, ${profile.name}!`}
+            {strings.readyTitle.replace('{name}', profile.name)}
           </h2>
           <p className={styles.heroSubtitle}>
-            {lang === 'th'
-              ? 'ระบบประสาทของเธอคืนสู่สมดุลแล้ว ไม่ว่าจะเจอเรื่องอะไร Mooca จะคอยเป็นกำลังใจอยู่ข้าง ๆ เสมอนะ!'
-              : 'Your equilibrium is fully restored. Step forward boldly, Mooca is right beside you.'}
+            {strings.readySubtitle}
           </p>
         </div>
 
@@ -125,7 +120,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             <div className={styles.deltaHeader}>
               <span className={styles.deltaTitle}>
                 <SparklesIcon />
-                {lang === 'th' ? 'ผลลัพธ์การลดความตึงเครียด' : 'Bio-Shift Result'}
+                {strings.bioShiftTitle}
               </span>
               <span className={styles.deltaBpmPill}>
                 -{bpmDrop} bpm
@@ -133,14 +128,14 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             </div>
 
             <div className={styles.deltaStateRow}>
-              <span className={styles.stateLabel}>{lang === 'th' ? 'สภาวะจิตใจ:' : 'State:'}</span>
+              <span className={styles.stateLabel}>{strings.stateLabel}</span>
               <span className={styles.stateValue}>
                 {renderStateValue()}
               </span>
             </div>
 
             <div className={styles.timestampRow}>
-              <span>{lang === 'th' ? 'บันทึกเวลา:' : 'Timestamp:'}</span>
+              <span>{strings.timestampLabel}</span>
               <span className={styles.timestampValue}>{feedback.timestamp}</span>
             </div>
           </div>
@@ -154,15 +149,15 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             </span>
             <div>
               <div className={styles.badgeTitle}>
-                {lang === 'th' ? 'เหรียญตรา Mooca Best Friend' : 'Mooca Best Friend Badge'}
+                {strings.medalTitle}
               </div>
               <div className={styles.badgeSubtitle}>
-                {lang === 'th' ? 'เพื่อนแท้ที่จะอยู่เคียงข้างเธอตลอดไป' : 'Always by your side'}
+                {strings.medalSubtitle}
               </div>
             </div>
           </div>
           <span className={styles.badgeChevron}>
-            <span>{lang === 'th' ? 'แตะดู' : 'View'}</span>
+            <span>{strings.viewDetails}</span>
             <ChevronRightIcon />
           </span>
         </div>
@@ -178,7 +173,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           fullWidth
           onClick={() => setIsAiFeedbackOpen(true)}
           leadingIcon={<MessageHeartIcon />}
-          label={lang === 'th' ? 'บอกความรู้สึกถึง Mooca' : 'Feedback to Mooca'}
+          label={strings.feedbackButton}
         />
 
         {/* 2. ปุ่มแชร์ */}
@@ -189,7 +184,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           fullWidth
           onClick={handleShareKeepsake}
           leadingIcon={<ShareIcon />}
-          label={lang === 'th' ? 'แชร์การ์ดความกล้าหาญ' : 'Share Polaroid Keepsake'}
+          label={strings.shareButton}
         />
 
         {/* 3. ปุ่มเริ่มรีเซ็ตครั้งใหม่ */}
@@ -200,7 +195,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           fullWidth
           onClick={onRestart}
           leadingIcon={<RotateCcwIcon />}
-          label={lang === 'th' ? 'เริ่มรีเซ็ตครั้งใหม่' : 'Start New Session'}
+          label={strings.restartButton}
         />
 
         {/* 4. Secondary actions */}
@@ -212,18 +207,10 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
               size="sm"
               onClick={onOpenHistory}
               leadingIcon={<HistoryIcon />}
-              label={lang === 'th' ? 'ประวัติรีเซ็ต' : 'Reset History'}
+              label={strings.historyBtn}
             />
           )}
 
-          <Button
-            variant="outline"
-            colorTheme="blue"
-            size="sm"
-            onClick={onOpenDesignSystem}
-            leadingIcon={<LayersIcon />}
-            label={lang === 'th' ? 'Design Tokens' : 'Tokens & UI'}
-          />
         </div>
       </div>
 

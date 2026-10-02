@@ -5,6 +5,7 @@ import { MBTI_SANCTUARY_SCRIPTS, getMBTIArchetype } from '../../../data/matrixDa
 import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
+import { getTranslation } from '../../../locales';
 import { Headphones, Volume2, Sparkles } from 'lucide-react';
 import {
   AUDIO_SANCTUARY_CONFIG,
@@ -24,6 +25,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
   onComplete,
   lang,
 }) => {
+  const strings = getTranslation(lang).phases.phase2.audioMatrix;
   const [isPlaying, setIsPlaying] = useState(false);
   const [soundMode] = useState<SoundMode>('both');
   const [brainwave, setBrainwave] = useState<BrainwaveMode>('alpha');
@@ -126,7 +128,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         <div className={styles.headerLeft}>
           <Headphones />
           <span className={styles.headerTitle}>
-            {lang === 'th' ? 'คลื่นเสียงสงบใจ' : 'Neural Audio Matrix'}
+            {strings.header}
           </span>
         </div>
         <span className={styles.mbtiBadge}>
@@ -140,24 +142,16 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
           mood={isDone ? 'celebrating' : 'listening'}
           size="xs"
           speakingBubble={
-            isDone
-              ? lang === 'th'
-                ? 'ใจสงบลงแล้วใช่ไหมจ๊ะ? ไปก้าวต่อไปด้วยกันนะ!'
-                : 'Your mind is peacefully focused!'
-              : lang === 'th'
-                ? 'หลับตาลงนะ Mooca จะเปิดเสียงสบาย ๆ กล่อมใจเธอเอง'
-                : 'Close your eyes, Mooca is here with you'
+            isDone ? strings.bubbleDone : strings.bubblePlaying
           }
         />
 
         <h3 className={styles.guidanceTitle}>
           <Sparkles />
-          {lang === 'th' ? 'คลื่นเสียงปรับสมดุล & เสียงนำใจ' : 'Neural Entrainment & Sanctuary'}
+          {strings.title}
         </h3>
         <p className={styles.guidanceDesc}>
-          {lang === 'th'
-            ? '“สวมหูฟังหรือแนบมือถือใกล้ใบหู ปล่อยให้คลื่น Alpha 10Hz นำสติเข้าสู่ความสงบ”'
-            : '"Listen with headphones or close to ear. 10Hz Alpha waves induce calm focus."'}
+          {strings.description}
         </p>
       </div>
 
@@ -176,14 +170,14 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         <div className={styles.transcriptHeader}>
           <span className={styles.transcriptLabel}>
             <Volume2 />
-            {lang === 'th' ? 'เสียงปลอบประโลมจาก Mooca:' : 'Mooca Voice Sanctuary:'}
+            {strings.voiceLabel}
           </span>
           <button
             type="button"
             onClick={replayVoice}
             className={styles.replayBtn}
           >
-            {lang === 'th' ? 'ฟังซ้ำ ↺' : 'Replay ↺'}
+            {strings.replay}
           </button>
         </div>
         <p className={styles.transcriptBody}>
@@ -218,13 +212,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
           fullWidth
           onClick={onComplete}
           label={
-            isDone
-              ? lang === 'th'
-                ? 'เข้าสู่หน้าสะท้อนความคิด'
-                : 'Proceed to Reframing Page'
-              : lang === 'th'
-                ? 'รู้สึกสงบแล้ว พร้อมก้าวต่อไป'
-                : 'I Feel Grounded & Focused'
+            isDone ? strings.proceed : strings.ready
           }
         />
       </div>

@@ -8,7 +8,6 @@ import {
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { MobileFrame } from './components/MobileFrame';
-import { DesignSystemDrawer } from './design-system/DesignSystemDrawer';
 import { Phase1EmotionJar } from './phases/Phase1EmotionJar';
 import { OnboardingModal } from './phases/Phase1EmotionJar/modals/OnboardingModal';
 import { LivePulseSensorModal } from './phases/Phase1EmotionJar/modals/LivePulseSensorModal';
@@ -61,7 +60,6 @@ export default function App() {
 
   // Modals
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
-  const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
   const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
@@ -137,7 +135,6 @@ export default function App() {
         profile={profile}
         currentPhase={currentPhase}
         phaseTime={elapsedSeconds}
-        onOpenDesignSystem={() => setIsDesignSystemOpen(true)}
         onOpenProfile={() => setIsOnboardingOpen(true)}
         onToggleLanguage={toggleLanguage}
         onOpenStory={() => setIsStoryModalOpen(true)}
@@ -248,7 +245,6 @@ export default function App() {
             profile={profile}
             feedback={feedback}
             onRestart={handleRestart}
-            onOpenDesignSystem={() => setIsDesignSystemOpen(true)}
             onOpenProfile={() => setIsOnboardingOpen(true)}
             onOpenHistory={() => setIsHistoryOpen(true)}
             onOpenStory={() => setIsStoryModalOpen(true)}
@@ -290,12 +286,6 @@ export default function App() {
         userName={profile.name}
       />
 
-      {/* Design System Inspection Drawer */}
-      <DesignSystemDrawer
-        isOpen={isDesignSystemOpen}
-        onClose={() => setIsDesignSystemOpen(false)}
-        lang={lang}
-      />
     </>
   );
 }
