@@ -12,19 +12,23 @@ import { Accelerometer } from 'expo-sensors';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
+import { useSky } from '../DynamicSkyEngine';
 import { Zap, Activity, CheckCircle2, RotateCw, Star, Sparkles, Cloud } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface KineticShakerProps {
   onComplete: () => void;
   lang: 'th' | 'en';
+  activityType?: 'shake' | 'jump';
 }
 
 export const KineticShaker: React.FC<KineticShakerProps> = ({
   onComplete,
   lang,
+  activityType = 'shake',
 }) => {
-  const [mode, setMode] = useState<'shake' | 'bounce'>('shake');
+  const { activePeriod } = useSky();
+  const [mode, setMode] = useState<'shake' | 'bounce'>(activityType === 'jump' ? 'bounce' : 'shake');
   const [shakesLeft, setShakesLeft] = useState(15);
   const [bouncesLeft, setBouncesLeft] = useState(10);
   const [isFinished, setIsFinished] = useState(false);
@@ -32,16 +36,31 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
   const lastShakeTime = useRef(0);
   const shakeAnim = useRef(new Animated.Value(0)).current;
+  const jumpAnim = useRef(new Animated.Value(0)).current;
   const starBurstAnim = useRef(new Animated.Value(0)).current;
 
+  // Sync mode if activityType changes
+  useEffect(() => {
+    setMode(activityType === 'jump' ? 'bounce' : 'shake');
+  }, [activityType]);
+
   const triggerShakeVisual = () => {
-    // Shake wiggle
-    Animated.sequence([
-      Animated.timing(shakeAnim, { toValue: 8, duration: 35, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: -8, duration: 35, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: 5, duration: 35, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: 0, duration: 35, useNativeDriver: true }),
-    ]).start();
+    if (mode === 'shake') {
+      // Lateral Shake wiggle
+      Animated.sequence([
+        Animated.timing(shakeAnim, { toValue: 10, duration: 35, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: -10, duration: 35, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: 6, duration: 35, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: 0, duration: 35, useNativeDriver: true }),
+      ]).start();
+    } else {
+      // Vertical Jump bounce
+      Animated.sequence([
+        Animated.timing(jumpAnim, { toValue: -32, duration: 160, easing: Easing.out(Easing.quad), useNativeDriver: true }),
+        Animated.timing(jumpAnim, { toValue: 4, duration: 140, easing: Easing.in(Easing.quad), useNativeDriver: true }),
+        Animated.timing(jumpAnim, { toValue: 0, duration: 80, useNativeDriver: true }),
+      ]).start();
+    }
 
     // Burst stars from shattered grumpy cloud
     setStarBurstCount((prev) => prev + 1);
@@ -54,17 +73,29 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
     }).start();
   };
 
-  // Accelerometer listener
+  // Accelerometer listener with distinct physics for Shake vs Jump
   useEffect(() => {
     let subscription: { remove: () => void } | null = null;
     try {
-      Accelerometer.setUpdateInterval(100);
+      Accelerometer.setUpdateInterval(80);
       subscription = Accelerometer.addListener(({ x, y, z }) => {
-        const total = Math.sqrt(x * x + y * y + z * z);
         const now = Date.now();
-        if (total > 1.8 && now - lastShakeTime.current > 250) {
-          lastShakeTime.current = now;
-          handleCycle();
+        if (mode === 'shake') {
+          // Detect rapid lateral vibration / shake (horizontal plane)
+          const lateral = Math.sqrt(x * x + z * z);
+          const total = Math.sqrt(x * x + y * y + z * z);
+          if ((lateral > 1.6 || total > 2.0) && now - lastShakeTime.current > 220) {
+            lastShakeTime.current = now;
+            handleCycle();
+          }
+        } else {
+          // Detect vertical jump impact (Y-axis vertical impulse followed by heel landing)
+          const verticalAbs = Math.abs(y);
+          const total = Math.sqrt(x * x + y * y + z * z);
+          if ((verticalAbs > 1.9 || total > 2.3) && now - lastShakeTime.current > 380) {
+            lastShakeTime.current = now;
+            handleCycle();
+          }
         }
       });
     } catch {
@@ -104,16 +135,44 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
     setIsFinished(true);
     audioService.triggerHaptic('success');
     audioService.playChimeShockwave();
-    setTimeout(() => {
-      onComplete();
-    }, 1400);
+    // No auto-advance: require user to tap proceed button
   };
 
   const currentCount = mode === 'shake' ? shakesLeft : bouncesLeft;
   const maxCount = mode === 'shake' ? 15 : 10;
   const progressPercent = Math.round(((maxCount - currentCount) / maxCount) * 100);
-  // Mercury height drops from 95% down to 15%
-  const mercuryHeightPercent = Math.max(15, 95 - progressPercent * 0.8);
+  const fluidHeightPercent = isFinished ? 0 : Math.round((currentCount / maxCount) * 100);
+
+  const getSkyColors = () => {
+    switch (activePeriod) {
+      case 'sunset':
+        return {
+          countColor: '#881337',
+          labelColor: '#9F1239',
+          hintColor: '#BE123C',
+        };
+      case 'night':
+        return {
+          countColor: '#F8FAFC',
+          labelColor: '#E2E8F0',
+          hintColor: '#94A3B8',
+        };
+      case 'dawn':
+        return {
+          countColor: '#78350F',
+          labelColor: '#92400E',
+          hintColor: '#B45309',
+        };
+      case 'day':
+      default:
+        return {
+          countColor: '#004D40',
+          labelColor: '#065F46',
+          hintColor: '#64748B',
+        };
+    }
+  };
+  const skyTheme = getSkyColors();
 
   const starBurstScale = starBurstAnim.interpolate({
     inputRange: [0, 1],
@@ -127,42 +186,11 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* Mode Switcher */}
-      <View style={styles.modeRow}>
-        <TouchableOpacity
-          onPress={() => {
-            audioService.triggerHaptic('selection');
-            setMode('shake');
-          }}
-          activeOpacity={0.8}
-          style={[styles.modeTab, mode === 'shake' && styles.modeTabActive]}
-        >
-          <Zap size={14} color={mode === 'shake' ? '#FFFFFF' : colors.primaryDark} />
-          <Text style={[styles.modeTabText, mode === 'shake' && styles.modeTabTextActive]}>
-            {lang === 'th' ? '⚡ สะบัดข้อมือ 15 ครั้ง' : '⚡ Wrist Shake x15'}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            audioService.triggerHaptic('selection');
-            setMode('bounce');
-          }}
-          activeOpacity={0.8}
-          style={[styles.modeTab, mode === 'bounce' && styles.modeTabActive]}
-        >
-          <Activity size={14} color={mode === 'bounce' ? '#FFFFFF' : colors.primaryDark} />
-          <Text style={[styles.modeTabText, mode === 'bounce' && styles.modeTabTextActive]}>
-            {lang === 'th' ? 'แกว่งแขน Heel Bounce' : 'Heel Bounce'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Mascot View with Shake Feedback */}
+      {/* 1. Mascot View - Standardized 140px Height across all screens */}
       <Animated.View
         style={[
           styles.mascotWrapper,
-          { transform: [{ translateX: shakeAnim }] },
+          { transform: [{ translateX: shakeAnim }, { translateY: jumpAnim }] },
         ]}
       >
         <MoocaMascot
@@ -171,18 +199,27 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'เมฆหน้าบึ้งแตกเป็นดาวหมดแล้ว! ตัวเบาสบายเลย'
-                : 'All grumpy clouds shattered into shining stars!'
+                ? mode === 'shake'
+                  ? 'สะบัดสลัดความกังวลหมดแล้ว ตัวเบาสบายเลยคนเก่ง!'
+                  : 'ทิ้งส้นเท้าลงพื้นมั่นคง จิตใจกลับมาสงบแล้วนะคนเก่ง!'
+                : 'All tension discharged! Feeling grounded, peaceful & light.'
               : lang === 'th'
-              ? `สะบัดแกว่งหรือคว้างแขน Accelerometer จับได้ — เหลือ ${currentCount} ครั้ง!`
-              : `Shake detected by Accelerometer — ${currentCount} more!`
+                ? mode === 'shake'
+                  ? `สะบัดข้อมือเบาๆ ให้สบายตัว (เหลืออีก ${currentCount} ครั้ง)`
+                  : `ทิ้งส้นเท้าลงพื้นเบาๆ ดึงสติสู่ร่างกาย (เหลืออีก ${currentCount} ครั้ง)`
+                : mode === 'shake'
+                  ? `Gently shake your wrists — ${currentCount} more!`
+                  : `Firmly drop your heels to the ground — ${currentCount} more!`
           }
         />
       </Animated.View>
 
-      {/* Stress Thermometer & Shattering Clouds Container */}
-      <View style={styles.thermometerSection}>
-        {/* Star Burst Particles overlay (NO EMOJI - ALWAYS ICONS) */}
+      {/* 2. Hero Centerpiece: Centered Fantasy Apothecary Tension Vial */}
+      <View style={styles.centerStage}>
+        {/* Soft Ambient Radiating Halo behind the centered vial */}
+        <View style={styles.capsuleAuraHalo} pointerEvents="none" />
+
+        {/* Star Burst Particles overlay on shake */}
         <Animated.View
           style={[
             styles.starBurstOverlay,
@@ -199,111 +236,114 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           <View style={styles.burstStar4}><Sparkles size={16} color="#F59E0B" fill="#FDE047" /></View>
         </Animated.View>
 
-        {/* The Cute Glass Thermometer Tube */}
+        {/* Centered Enchanted Apothecary Vial */}
         <Animated.View
           style={[
-            styles.thermometerWrapper,
-            { transform: [{ translateX: shakeAnim }] },
+            styles.capsuleWrapper,
+            { transform: [{ translateX: shakeAnim }, { translateY: jumpAnim }] },
           ]}
         >
-          {/* Glass Stem */}
-          <View style={styles.thermoStem}>
-            {/* Tick Marks */}
-            <View style={styles.tickMarks}>
-              <View style={[styles.tick, { top: '15%' }]} />
-              <View style={[styles.tick, { top: '35%' }]} />
-              <View style={[styles.tick, { top: '55%' }]} />
-              <View style={[styles.tick, { top: '75%' }]} />
-            </View>
-
-            {/* Mercury Liquid Fill */}
-            <LinearGradient
-              colors={
-                progressPercent > 70
-                  ? ['#2DD4BF', '#00C4B3']
-                  : progressPercent > 40
-                  ? ['#FBBF24', '#F59E0B']
-                  : ['#FB7185', '#E11D48']
-              }
-              style={[styles.mercuryFill, { height: `${mercuryHeightPercent}%` }]}
-            />
+          {/* Top Wooden / Runic Cork Cap with Golden Star Seal */}
+          <View style={styles.capsuleCorkTop}>
+            <Star size={10} color="#FEF08A" fill="#FDE047" />
           </View>
 
-          {/* Bulb Base with Grumpy Cloud / Stars */}
-          <View style={styles.thermoBulb}>
-            <LinearGradient
-              colors={
-                isFinished
-                  ? ['#CCFBF1', '#99F6E4']
-                  : progressPercent > 60
-                  ? ['#FEF08A', '#FDE047']
-                  : ['#FFE4E6', '#FECDD3']
-              }
-              style={styles.bulbGradient}
-            >
+          {/* Transparent Fantasy Glass Cylinder */}
+          <View style={styles.capsuleGlass}>
+            {/* Specular Highlight Curved Streak */}
+            <View style={styles.capsuleGlassReflection} />
+
+            {/* Ancient Alchemical Scale Ticks */}
+            <View style={styles.capsuleTicks}>
+              <View style={[styles.capsuleTickLine, { top: '25%' }]} />
+              <View style={[styles.capsuleTickLine, { top: '50%' }]} />
+              <View style={[styles.capsuleTickLine, { top: '75%' }]} />
+            </View>
+
+            {/* Glowing Discharging Celestial Fluid strictly decreasing with shake count */}
+            <View style={styles.fluidContainer}>
+              <LinearGradient
+                colors={
+                  isFinished
+                    ? ['#34D399', '#00C4B3']
+                    : progressPercent > 50
+                      ? ['#FBBF24', '#00C4B3']
+                      : ['#FB923C', '#FA8C3D']
+                }
+                style={[styles.fluidFill, { height: `${fluidHeightPercent}%` }]}
+              />
+            </View>
+
+            {/* Floating Magical Starlight Sparkles Inside Potion */}
+            <View style={styles.fluidStarParticle1} pointerEvents="none">
+              <Sparkles size={11} color="rgba(255,255,255,0.9)" />
+            </View>
+            <View style={styles.fluidStarParticle2} pointerEvents="none">
+              <Star size={9} color="rgba(255,255,255,0.85)" fill="#FFFFFF" />
+            </View>
+
+            {/* Center Star Emblem */}
+            <View style={styles.capsuleCenterIcon}>
               {isFinished ? (
                 <Star size={24} color="#F59E0B" fill="#FDE047" />
               ) : (
-                <View style={styles.grumpyCloud}>
-                  <Cloud size={24} color="#94A3B8" fill="#E2E8F0" />
-                  <Text style={styles.grumpyFace}>&gt;_&lt;</Text>
-                </View>
+                <Sparkles size={20} color="rgba(255,255,255,0.95)" />
               )}
-            </LinearGradient>
+            </View>
           </View>
+
+          {/* Bottom Cork Base */}
+          <View style={styles.capsuleCorkBottom} />
         </Animated.View>
 
-        {/* Tension Gauge Label */}
-        <View style={styles.gaugeInfo}>
-          <Text style={styles.gaugeTitle}>
-            {lang === 'th' ? 'หลอดปรอทสะบัดความตึงเครียด' : 'Stress Discharge Mercury'}
+        {/* 3. Organic Count Display (NO block, NO badge!) */}
+        <View style={styles.organicCountSection}>
+          <Text style={[styles.organicCountNumber, { color: skyTheme.countColor }]}>
+            {isFinished ? 0 : currentCount}
           </Text>
-          <Text style={styles.gaugeSub}>
+          <Text style={[styles.organicCountLabel, { color: skyTheme.labelColor }]}>
             {isFinished
-              ? lang === 'th'
-                ? 'ความตึงเครียดแตกสลายหมดแล้ว 100%'
-                : 'Tension fully discharged 100%'
-              : lang === 'th'
-              ? `เหลือเมฆหน้าบึ้งอีก ${currentCount} ก้อน`
-              : `${currentCount} grumpy clouds remaining`}
+              ? (lang === 'th' ? 'ระบายความตึงเครียดหมดแล้ว' : 'All tension fully released')
+              : (lang === 'th'
+                ? mode === 'shake'
+                  ? `สะบัดข้อมืออีก ${currentCount} ครั้ง`
+                  : `ทิ้งส้นเท้าอีก ${currentCount} ครั้ง`
+                : `${currentCount} ${mode === 'shake' ? 'shakes' : 'drops'} left`)}
           </Text>
 
-          {/* Progress Bar */}
-          <View style={styles.progressBarBg}>
+          {/* Slim glowing 4px progress line */}
+          <View style={styles.organicProgressTrack}>
             <LinearGradient
               colors={['#00C4B3', '#62A0E9']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={[styles.progressBarFill, { width: `${progressPercent}%` }]}
+              style={[styles.organicProgressFill, { width: `${progressPercent}%` }]}
             />
           </View>
         </View>
       </View>
 
-      {/* Tactile Marshmallow Tap Action */}
+      {/* 4. Action / Sensor Status Section - Clean Organic Typography, No Block/Badge */}
       <View style={styles.actionSection}>
-        <MarshmallowButton
-          variant={isFinished ? 'mint' : 'secondary'}
-          size="lg"
-          onPress={handleCycle}
-          disabled={isFinished}
-          icon={
-            isFinished ? (
-              <CheckCircle2 size={18} color="#004D40" />
-            ) : (
-              <RotateCw size={18} color="#FFFFFF" />
-            )
-          }
-          title={
-            isFinished
-              ? lang === 'th'
-                ? 'สลัดพลังลบแตกกระจายสำเร็จ!'
-                : 'Tension Discharged!'
-              : lang === 'th'
-              ? `แตะเพื่อสะบัดทิ้งพลังลบ (${currentCount} ครั้ง)`
-              : `Tap to Shake / Discharge (${currentCount} left)`
-          }
-        />
+        {isFinished ? (
+          <MarshmallowButton
+            variant="primary"
+            size="lg"
+            onPress={onComplete}
+            icon={<CheckCircle2 size={18} color="#FFFFFF" />}
+            title={
+              lang === 'th'
+                ? 'เข้าสู่หน้าสะท้อนความคิด'
+                : 'Proceed to Cognitive Reframing'
+            }
+          />
+        ) : (
+          <Text style={[styles.organicSensorHint, { color: skyTheme.hintColor }]}>
+            {mode === 'shake'
+              ? (lang === 'th' ? 'เซนเซอร์ตรวจจับแรงสะบัด' : 'Physical shake sensor active')
+              : (lang === 'th' ? 'เซนเซอร์ตรวจจับแรงกระแทกส้นเท้า' : 'Physical heel drop sensor active')}
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -317,159 +357,196 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  modeRow: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderRadius: radii.full,
-    padding: 3,
-    borderWidth: 1,
-    borderColor: colors.borderTeal,
-    width: '100%',
-    gap: 4,
-  },
-  modeTab: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 7,
-    borderRadius: radii.full,
-    gap: 5,
-  },
-  modeTabActive: {
-    backgroundColor: colors.secondary,
-  },
-  modeTabText: {
-    fontFamily: typography.fontPromptSemiBold,
-    fontSize: 11,
-    color: colors.primaryDark,
-  },
-  modeTabTextActive: {
-    color: '#FFFFFF',
-  },
   mascotWrapper: {
     alignItems: 'center',
-    marginVertical: 2,
-  },
-  thermometerSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 14,
-    borderWidth: 1.5,
-    borderColor: '#FED7AA',
+    justifyContent: 'center',
+    height: 140,
     width: '100%',
-    gap: 16,
+  },
+  centerStage: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
     position: 'relative',
-    ...shadows.soft,
+    gap: 12,
+  },
+  capsuleAuraHalo: {
+    position: 'absolute',
+    top: 10,
+    width: 140,
+    height: 180,
+    borderRadius: 70,
+    backgroundColor: 'rgba(0, 196, 179, 0.14)',
+    shadowColor: '#00C4B3',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.45,
+    shadowRadius: 28,
   },
   starBurstOverlay: {
     position: 'absolute',
-    left: 20,
     top: 20,
-    width: 80,
-    height: 120,
+    width: 180,
+    height: 180,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
   },
-  burstStar1: { position: 'absolute', top: 5, left: 10, fontSize: 18 },
-  burstStar2: { position: 'absolute', top: 20, right: 10, fontSize: 16 },
-  burstStar3: { position: 'absolute', bottom: 25, left: 15, fontSize: 20 },
-  burstStar4: { position: 'absolute', bottom: 10, right: 15, fontSize: 16 },
-  thermometerWrapper: {
+  burstStar1: { position: 'absolute', top: 10, left: 20, fontSize: 18 },
+  burstStar2: { position: 'absolute', top: 25, right: 20, fontSize: 16 },
+  burstStar3: { position: 'absolute', bottom: 30, left: 25, fontSize: 20 },
+  burstStar4: { position: 'absolute', bottom: 15, right: 25, fontSize: 16 },
+  capsuleWrapper: {
     alignItems: 'center',
-    width: 54,
-  },
-  thermoStem: {
-    width: 20,
-    height: 100,
-    backgroundColor: '#F3F4F6',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    borderWidth: 2,
-    borderBottomWidth: 0,
-    borderColor: '#D1D5DB',
-    overflow: 'hidden',
-    justifyContent: 'flex-end',
-    position: 'relative',
-  },
-  tickMarks: {
-    position: 'absolute',
-    left: 2,
-    top: 0,
-    bottom: 0,
-    width: 4,
+    width: 90,
     zIndex: 2,
   },
-  tick: {
-    position: 'absolute',
-    width: 5,
-    height: 1.5,
-    backgroundColor: '#9CA3AF',
-  },
-  mercuryFill: {
-    width: '100%',
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-  },
-  thermoBulb: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    borderWidth: 2.5,
-    borderColor: '#D1D5DB',
-    overflow: 'hidden',
-    marginTop: -8,
+  capsuleCorkTop: {
+    width: 44,
+    height: 18,
+    backgroundColor: '#D97706',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 2,
+    borderBottomRightRadius: 2,
+    borderWidth: 1.5,
+    borderColor: '#B45309',
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 3,
-    ...shadows.card,
+    shadowColor: '#78350F',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  bulbGradient: {
-    flex: 1,
+  capsuleGlass: {
+    width: 80,
+    height: 172,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.82)',
+    borderWidth: 2.5,
+    borderColor: '#7DD3FC',
+    overflow: 'hidden',
+    position: 'relative',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    justifyContent: 'center',
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.16,
+    shadowRadius: 14,
+    elevation: 4,
   },
-  grumpyCloud: {
+  capsuleGlassReflection: {
+    position: 'absolute',
+    top: 10,
+    left: 8,
+    width: 6.5,
+    bottom: 14,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    zIndex: 6,
+  },
+  capsuleTicks: {
+    position: 'absolute',
+    right: 8,
+    top: 0,
+    bottom: 0,
+    width: 10,
+    zIndex: 5,
+  },
+  capsuleTickLine: {
+    position: 'absolute',
+    right: 0,
+    width: 10,
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: 'rgba(125, 211, 252, 0.85)',
+  },
+  fluidContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    top: 0,
+    justifyContent: 'flex-end',
+  },
+  fluidFill: {
+    width: '100%',
+    borderBottomLeftRadius: 38,
+    borderBottomRightRadius: 38,
+  },
+  fluidStarParticle1: {
+    position: 'absolute',
+    bottom: 30,
+    left: 18,
+    zIndex: 4,
+  },
+  fluidStarParticle2: {
+    position: 'absolute',
+    bottom: 60,
+    right: 18,
+    zIndex: 4,
+  },
+  capsuleCenterIcon: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '42%',
+    zIndex: 7,
+  },
+  capsuleCorkBottom: {
+    width: 44,
+    height: 12,
+    backgroundColor: '#D97706',
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderWidth: 1.5,
+    borderColor: '#B45309',
+    marginTop: -3,
+    zIndex: 3,
+  },
+  organicCountSection: {
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 3,
+    marginTop: 4,
   },
-  cloudEmoji: {
-    fontSize: 20,
-  },
-  grumpyFace: {
-    fontSize: 7,
-    fontWeight: '900',
-    color: '#9F1239',
-    marginTop: -8,
-  },
-  gaugeInfo: {
-    flex: 1,
-    gap: 4,
-  },
-  gaugeTitle: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 12,
+  organicCountNumber: {
+    fontFamily: typography.fontPromptExtraBold,
+    fontSize: 36,
     color: colors.primaryDark,
+    letterSpacing: -1,
   },
-  gaugeSub: {
-    fontFamily: typography.fontPromptRegular,
-    fontSize: 10,
-    color: colors.textMuted,
+  organicCountLabel: {
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 12.5,
+    color: colors.primaryDark,
+    textAlign: 'center',
   },
-  progressBarBg: {
-    height: 8,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 4,
+  organicProgressTrack: {
+    width: 130,
+    height: 4,
+    backgroundColor: 'rgba(0, 196, 179, 0.16)',
+    borderRadius: 2,
     overflow: 'hidden',
     marginTop: 6,
   },
-  progressBarFill: {
+  organicProgressFill: {
     height: '100%',
-    borderRadius: 4,
+    borderRadius: 2,
   },
   actionSection: {
     width: '100%',
-    marginTop: 4,
+    maxWidth: 340,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 6,
+  },
+  organicSensorHint: {
+    fontFamily: typography.fontPromptRegular,
+    fontSize: 11.5,
+    color: colors.primaryDark,
+    opacity: 0.72,
+    textAlign: 'center',
   },
 });

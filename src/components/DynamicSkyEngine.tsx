@@ -148,6 +148,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
   const sunPulseAnim = useRef(new Animated.Value(1)).current;
   const dreamOrbAnim1 = useRef(new Animated.Value(0.92)).current;
   const dreamOrbAnim2 = useRef(new Animated.Value(1.08)).current;
+  const shimmerGentleAnim = useRef(new Animated.Value(0)).current;
+  const shimmerGentleOpacity = useRef(new Animated.Value(0.25)).current;
 
   // Background Cloud Drift Animations (Continuous looping)
   const cloudDrift1 = useRef(new Animated.Value(-160)).current;
@@ -407,6 +409,40 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
     );
     orbLoop2.start();
 
+    const shimmerLoop = Animated.loop(
+      Animated.parallel([
+        Animated.sequence([
+          Animated.timing(shimmerGentleAnim, {
+            toValue: -6,
+            duration: 7500,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(shimmerGentleAnim, {
+            toValue: 6,
+            duration: 7500,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.sequence([
+          Animated.timing(shimmerGentleOpacity, {
+            toValue: 0.95,
+            duration: 4200,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(shimmerGentleOpacity, {
+            toValue: 0.52,
+            duration: 4200,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
+      ])
+    );
+    shimmerLoop.start();
+
     return () => {
       driftLoop1.stop();
       bobLoop1.stop();
@@ -421,6 +457,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
       sunLoop.stop();
       orbLoop1.stop();
       orbLoop2.stop();
+      shimmerLoop.stop();
     };
   }, []);
 
@@ -431,7 +468,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
       case 'day':
         return ['#BAE6FD', '#CFFAFE', '#E0F2FE', '#F0FDFA', '#FFFBEB'];
       case 'sunset':
-        return ['#FED7AA', '#FDBA74', '#F472B6', '#E879F9', '#818CF8', '#312E81'];
+        return ['#BAE6FD', '#FEF08A', '#FDE68A', '#FBCFE8', '#F472B6', '#FB7185', '#FDA4AF'];
       case 'night':
       default:
         return ['#090D16', '#1E1B4B', '#1E293B', '#0F172A'];
@@ -832,6 +869,65 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
             </Animated.View>
           </View>
         )}
+
+        {/* Whimsical Fantasy Stardust & Fairy Mote Shimmer at Mid/Lower Sky */}
+        <Animated.View
+          style={[
+            styles.bottomShimmerContainer,
+            {
+              opacity: shimmerGentleOpacity,
+              transform: [{ translateY: shimmerGentleAnim }],
+            },
+          ]}
+          pointerEvents="none"
+        >
+          {/* Fairy Mote 1: Stardust Gold / Rose with soft ambient aura */}
+          <View style={{ position: 'absolute', bottom: 24, left: '8%' }}>
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'sunset' ? '#F472B6' : '#FDE047', opacity: 0.35 }]} />
+            <View style={[styles.fairyMoteCore, { backgroundColor: activePeriod === 'sunset' ? '#FFF1F2' : '#FEF08A' }]} />
+          </View>
+
+          {/* Fairy Mote 2: Pastel Peach / Celestial Cyan */}
+          <View style={{ position: 'absolute', bottom: 74, left: '22%' }}>
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#38BDF8' : '#FBBF24', opacity: 0.3 }]} />
+            <View style={[styles.fairyMoteCore, { backgroundColor: '#FFFFFF' }]} />
+          </View>
+
+          {/* Fairy Mote 3: Rose Stardust */}
+          <View style={{ position: 'absolute', bottom: 16, right: '18%' }}>
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#A7F3D0' : '#FDA4AF', opacity: 0.35 }]} />
+            <View style={[styles.fairyMoteCore, { backgroundColor: '#FFFFFF' }]} />
+          </View>
+
+          {/* Fairy Mote 4: Twilight Violet / Mint */}
+          <View style={{ position: 'absolute', bottom: 92, right: '12%' }}>
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#C084FC' : '#5EEAD4', opacity: 0.32 }]} />
+            <View style={[styles.fairyMoteCore, { backgroundColor: '#FEF08A' }]} />
+          </View>
+
+          {/* Fairy Mote 5: Center subtle float */}
+          <View style={{ position: 'absolute', bottom: 44, left: '46%' }}>
+            <View style={[styles.fairyMoteGlow, { width: 14, height: 14, backgroundColor: activePeriod === 'sunset' ? '#FB7185' : '#67E8F9', opacity: 0.3 }]} />
+            <View style={[styles.fairyMoteCore, { width: 4.5, height: 4.5, backgroundColor: '#FFFFFF' }]} />
+          </View>
+
+          {/* Whimsical Fantasy Twinkling Diamond Stars */}
+          <View style={{ position: 'absolute', bottom: 84, left: '14%' }}>
+            <SvgDiamondStar size={11} color={activePeriod === 'sunset' ? '#FDE047' : activePeriod === 'night' ? '#BAE6FD' : '#FBBF24'} opacity={0.9} />
+          </View>
+          <View style={{ position: 'absolute', bottom: 36, left: '32%' }}>
+            <SvgDiamondStar size={8} color={activePeriod === 'sunset' ? '#F472B6' : activePeriod === 'night' ? '#67E8F9' : '#FFFFFF'} opacity={0.85} />
+          </View>
+          <View style={{ position: 'absolute', bottom: 78, right: '28%' }}>
+            <SvgDiamondStar size={10} color={activePeriod === 'sunset' ? '#FDE047' : activePeriod === 'night' ? '#FDE047' : '#5EEAD4'} opacity={0.92} />
+          </View>
+          <View style={{ position: 'absolute', bottom: 58, right: '40%' }}>
+            <SvgDiamondStar size={7.5} color={activePeriod === 'sunset' ? '#FDA4AF' : activePeriod === 'night' ? '#C084FC' : '#FDE68A'} opacity={0.8} />
+          </View>
+          <View style={{ position: 'absolute', bottom: 104, right: '35%' }}>
+            <SvgDiamondStar size={8.5} color="#FFFFFF" opacity={0.88} />
+          </View>
+        </Animated.View>
 
         {/* Content */}
         <View style={styles.content}>{children}</View>
@@ -1301,5 +1397,40 @@ const styles = StyleSheet.create({
   },
   optionTextActive: {
     color: '#FFFFFF',
+  },
+  bottomShimmerContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 110,
+    height: 120,
+    zIndex: 0,
+    elevation: 0,
+  },
+  shimmerDot: {
+    position: 'absolute',
+    borderRadius: 9999,
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+  },
+  fairyMoteGlow: {
+    position: 'absolute',
+    top: -4,
+    left: -4,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+  },
+  fairyMoteCore: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 1,
   },
 });

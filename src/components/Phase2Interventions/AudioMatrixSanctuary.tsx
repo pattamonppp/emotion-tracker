@@ -122,7 +122,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         <View style={styles.mbtiBadge}>
           <Headphones size={13} color={colors.primary} />
           <Text style={styles.mbtiBadgeText}>
-            {lang === 'th' ? '🎧 คลื่นเสียงสมาธิ 10Hz • Alpha Wave + Brown Noise' : '🎧 Acoustic Sanctuary 10Hz • Alpha + Brown Noise'}
+            {lang === 'th' ? 'คลื่นเสียงสมาธิ 10Hz • Alpha Wave + Brown Noise' : 'Acoustic Sanctuary 10Hz • Alpha + Brown Noise'}
           </Text>
         </View>
 
@@ -186,14 +186,6 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
                 : 'Tap the speaker to play sanctuary'
             }
           />
-
-          {/* Turquoise Headphones Visual Accent Badge */}
-          <View style={styles.headphonesBadge}>
-            <Headphones size={12} color="#00C4B3" />
-            <Text style={styles.headphonesBadgeText}>
-              {lang === 'th' ? 'หูฟังสีเทอร์ควอยซ์เชื่อมต่อแล้ว' : 'Turquoise Headphones Connected'}
-            </Text>
-          </View>
         </View>
       </LinearGradient>
 
@@ -223,26 +215,33 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         </View>
       </View>
 
-      {/* Complete Button */}
+      {/* Action / Complete Button (No skip allowed during therapy) */}
       <View style={styles.actionSection}>
-        <MarshmallowButton
-          variant="primary"
-          size="lg"
-          onPress={() => {
-            audioService.stopAllVoice();
-            onComplete();
-          }}
-          icon={<Check size={18} color="#FFFFFF" />}
-          title={
-            countdown > 0
-              ? lang === 'th'
-                ? `ฟังเสียงสมาธิต่อ (${countdown}s) หรือแตะเพื่อไปต่อ`
-                : `Listening (${countdown}s) • Tap to Proceed`
-              : lang === 'th'
-              ? 'สงบจิตใจเรียบร้อยแล้ว ก้าวต่อไป'
-              : 'Sanctuary Complete • Step Forward'
-          }
-        />
+        {countdown > 0 ? (
+          <View style={styles.sensorStatusPill}>
+            <Sparkles size={14} color={colors.primary} />
+            <Text style={styles.sensorStatusPillText}>
+              {lang === 'th'
+                ? `กำลังบำบัดด้วยคลื่นสมอง Alpha Wave • ${countdown}s`
+                : `Alpha Wave Therapy Active • ${countdown}s remaining`}
+            </Text>
+          </View>
+        ) : (
+          <MarshmallowButton
+            variant="primary"
+            size="lg"
+            onPress={() => {
+              audioService.stopAllVoice();
+              onComplete();
+            }}
+            icon={<Check size={18} color="#FFFFFF" />}
+            title={
+              lang === 'th'
+                ? 'สงบจิตใจเรียบร้อยแล้ว ก้าวต่อไป'
+                : 'Sanctuary Complete • Step Forward'
+            }
+          />
+        )}
       </View>
     </View>
   );
@@ -391,5 +390,24 @@ const styles = StyleSheet.create({
   actionSection: {
     width: '100%',
     marginTop: 4,
+    alignItems: 'center',
+  },
+  sensorStatusPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: radii.full,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: colors.borderTeal,
+    ...shadows.soft,
+  },
+  sensorStatusPillText: {
+    fontFamily: typography.fontPromptMedium,
+    fontSize: 12,
+    color: colors.primaryDark,
   },
 });

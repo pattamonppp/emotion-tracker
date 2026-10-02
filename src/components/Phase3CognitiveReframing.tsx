@@ -66,8 +66,8 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
                 ? 'ประทับตราสัญญาใจแล้ว! Mooca อยู่เคียงข้างเสมอ สู้ไปด้วยกันนะ!'
                 : 'Pinky promise sealed! Mooca is right beside you!'
               : lang === 'th'
-              ? 'เปิดอ่านจดหมายจากใจ Mooca แล้วทำสัญญาใจ 1 ก้าวด้วยกันนะ'
-              : 'Read Mooca’s heartfelt letter and make a pinky promise!'
+                ? 'เปิดอ่านจดหมายจากใจ Mooca แล้วทำสัญญาใจ 1 ก้าวด้วยกันนะ'
+                : 'Read Mooca’s heartfelt letter and make a pinky promise!'
           }
         />
 
@@ -126,7 +126,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           </View>
           <View style={styles.promiseBadge}>
             <Text style={styles.promiseBadgeText}>
-              {lang === 'th' ? 'ก้าวเล็กๆ ชนะใจ' : 'Micro Step'}
+              {lang === 'th' ? 'ก้าวเล็ก ๆ ชนะใจ' : 'Micro Step'}
             </Text>
           </View>
         </View>
@@ -176,8 +176,8 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
               ? 'สัญญาใจถูกประทับเรียบร้อยแล้ว มีพลังก้าวต่อไปได้เลย!'
               : 'Sealed with a mint heart! You have got this!'
             : lang === 'th'
-            ? 'แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca'
-            : 'Tap box to stamp your pinky-promise mint heart.'}
+              ? 'แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca'
+              : 'Tap box to stamp your pinky-promise mint heart.'}
         </Text>
       </View>
 

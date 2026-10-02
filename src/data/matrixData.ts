@@ -44,7 +44,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#00C4B3', // Brand turquoise
     weightDescription: '',
-    recommendedOption: 'D', // Pre-Generated Studio Audio Matrix
+    recommendedOption: 'G', // Pre-Generated Studio Audio Matrix
   },
   {
     id: 'anxious',
@@ -53,14 +53,14 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#F59E0B', // Warm Amber
     weightDescription: '',
-    recommendedOption: 'A',
+    recommendedOption: 'E', // Somatic Breathwork Pacer (Box 4-4-4-4)
   },
   {
     id: 'overthinking',
     labelTh: 'คิดมาก',
     labelEn: 'Overthinking',
     emoji: '',
-    color: '#8B5CF6', // Soft Purple
+    color: '#0EA5E9', // Ocean Cyan
     weightDescription: '',
     recommendedOption: 'B',
   },
@@ -71,7 +71,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#0284C7', // Gentle Sky Blue
     weightDescription: '',
-    recommendedOption: 'D',
+    recommendedOption: 'G', // Audio Matrix Sanctuary
   },
   {
     id: 'confused',
@@ -80,7 +80,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#10B981', // Mint Emerald
     weightDescription: '',
-    recommendedOption: 'C',
+    recommendedOption: 'D', // Vertical Grounding / Jump
   },
   {
     id: 'custom',
@@ -152,11 +152,11 @@ export function getMBTIArchetype(mbti: MBTIType): 'analytical' | 'empathetic' | 
 
 export const MBTI_SANCTUARY_SCRIPTS: Record<'analytical' | 'empathetic' | 'action', { th: string; en: string }> = {
   analytical: {
-    th: 'ความเหนื่อยล้าตอนนี้คือข้อจำกัดทางกายภาพตามธรรมชาติ ไม่ใช่ความล้มเหลวของการวางแผน ข้อมูลและองค์ความรู้ทั้งหมดของคุณยังคงอยู่ครบถ้วนในสมองอย่างมั่นคง หายใจเข้าลึกๆ แล้วดำเนินการตามระบบที่คุณเตรียมมา',
+    th: 'ความเหนื่อยล้าตอนนี้คือข้อจำกัดทางกายภาพตามธรรมชาติ ไม่ใช่ความล้มเหลวของการวางแผน ข้อมูลและองค์ความรู้ทั้งหมดของคุณยังคงอยู่ครบถ้วนในสมองอย่างมั่นคง หายใจเข้าลึก ๆ แล้วดำเนินการตามระบบที่คุณเตรียมมา',
     en: 'This physical surge is your natural fight-or-flight energy activating. It is not an error in your preparation; your mental architecture is solid. Breathe deeply and trust your methodology.',
   },
   empathetic: {
-    th: 'วางภาระและความคาดหวังของทุกคนลงก่อน ในวินาทีนี้ พื้นที่ตรงนี้ปลอดภัยสำหรับคุณเสมอ คุณได้พยายามอย่างเต็มที่แล้ว และตัวตนของคุณมีคุณค่ามากกว่าผลลัพธ์ใดๆ ในโลกภายนอก',
+    th: 'วางภาระและความคาดหวังของทุกคนลงก่อน ในวินาทีนี้ พื้นที่ตรงนี้ปลอดภัยสำหรับคุณเสมอ คุณได้พยายามอย่างเต็มที่แล้ว และตัวตนของคุณมีคุณค่ามากกว่าผลลัพธ์ใด ๆ ในโลกภายนอก',
     en: 'Gently set down the weight of other people’s expectations. In this very second, this sanctuary is safe for you. You have done your best, and your worth is beyond any external score.',
   },
   action: {

@@ -26,10 +26,10 @@ export interface EmotionTag {
   emoji: string;
   color: string;
   weightDescription: string;
-  recommendedOption: 'A' | 'B' | 'C' | 'D';
+  recommendedOption: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
 }
 
-export type InterventionOption = 'A' | 'B' | 'C' | 'D';
+export type InterventionOption = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
 
 export interface UserProfile {
   name: string;

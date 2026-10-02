@@ -47,10 +47,10 @@ interface MoocaMascotProps {
 
 const SWEET_MESSAGES = [
   'งื้อออ รักเธอนะ!',
-  'Mooca กอดแน่นๆ เลย!',
+  'Mooca กอดแน่น ๆ เลย!',
   'คนเก่งของ Mooca เก่งมากแล้วนะ',
-  'อยู่ข้างๆ เสมอนะ ไม่ทิ้งไปไหนหรอก',
-  'สูดหายใจเข้าลึกๆ น้า มี Mooca ตรงนี้',
+  'อยู่ข้าง ๆ เสมอนะ ไม่ทิ้งไปไหนหรอก',
+  'สูดหายใจเข้าลึก ๆ น้า มี Mooca ตรงนี้',
   'เก่งที่สุดเลยยย พักใจแป๊บเดียวนะคะ',
 ];
 
@@ -449,11 +449,11 @@ const styles = StyleSheet.create({
   },
   bubbleContainer: {
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 16,
     marginBottom: 4,
-    maxWidth: 240,
+    maxWidth: 320,
     borderWidth: 1.2,
     borderColor: '#00C4B3',
     shadowColor: '#004D40',
@@ -465,11 +465,11 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   bubbleText: {
-    fontSize: 11,
+    fontSize: 11.5,
     fontWeight: '700',
     color: '#004D40',
     textAlign: 'center',
-    lineHeight: 15,
+    lineHeight: 17,
   },
   bubbleTail: {
     position: 'absolute',

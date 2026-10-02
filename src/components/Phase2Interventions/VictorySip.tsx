@@ -7,11 +7,11 @@ import {
   Easing,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Gyroscope } from 'expo-sensors';
+import { Accelerometer } from 'expo-sensors';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
-import { Heart, Check, Wind, GlassWater, Sparkles } from 'lucide-react-native';
+import { Heart, Check, Wind, GlassWater, Sparkles, Compass } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface VictorySipProps {
@@ -27,10 +27,13 @@ export const VictorySip: React.FC<VictorySipProps> = ({
   const [sipCount, setSipCount] = useState(0); // 0 to 3
   const [breathPhase, setBreathPhase] = useState<'ready' | 'inhale' | 'swallow' | 'exhale'>('ready');
   const [isFinished, setIsFinished] = useState(false);
+  const [tiltAngle, setTiltAngle] = useState(0);
+  const [isTiltingToDrink, setIsTiltingToDrink] = useState(false);
 
   // Boba bubble bobbing animation
   const bobbingAnim = useRef(new Animated.Value(0)).current;
   const waveAnim = useRef(new Animated.Value(0)).current;
+  const tiltHoldTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const bobLoop = Animated.loop(
@@ -75,14 +78,37 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     };
   }, [bobbingAnim, waveAnim]);
 
-  // Gyroscope tilt listener
+  // Real Accelerometer inclination angle detection with low-pass smoothing
+  const smoothedTilt = useRef(0);
+
   useEffect(() => {
     let subscription: { remove: () => void } | null = null;
     try {
-      Gyroscope.setUpdateInterval(150);
-      subscription = Gyroscope.addListener(({ x }) => {
-        if (Math.abs(x) > 2.5 && !isFinished) {
-          triggerSip();
+      Accelerometer.setUpdateInterval(80);
+      subscription = Accelerometer.addListener(({ x, y, z }) => {
+        // Physical pitch inclination angle when held in portrait:
+        // y is vertical (-1 when upright), z is screen perpendicular (+1/-1)
+        const rad = Math.atan2(z, -y);
+        const rawDeg = Math.max(0, Math.min(90, Math.round(rad * (180 / Math.PI))));
+        // Exponential moving average for buttery smooth sensory display
+        smoothedTilt.current = Math.round(smoothedTilt.current * 0.65 + rawDeg * 0.35);
+        setTiltAngle(smoothedTilt.current);
+
+        // When tilted past 28° like drinking from a glass
+        if (smoothedTilt.current >= 28 && !isFinished) {
+          setIsTiltingToDrink(true);
+          if (!tiltHoldTimer.current) {
+            tiltHoldTimer.current = setTimeout(() => {
+              triggerSip();
+              tiltHoldTimer.current = null;
+            }, 900);
+          }
+        } else {
+          setIsTiltingToDrink(false);
+          if (tiltHoldTimer.current) {
+            clearTimeout(tiltHoldTimer.current);
+            tiltHoldTimer.current = null;
+          }
         }
       });
     } catch {
@@ -91,6 +117,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
     return () => {
       subscription?.remove();
+      if (tiltHoldTimer.current) clearTimeout(tiltHoldTimer.current);
     };
   }, [sipCount, isFinished]);
 
@@ -113,25 +140,13 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     if (nextSip >= 3) {
       setIsFinished(true);
       audioService.triggerHaptic('success');
-      setTimeout(() => {
-        onComplete();
-      }, 1800);
+      // No auto-advance: require user to tap proceed button
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Vagus Nerve Badge */}
-      <View style={styles.instructionBadge}>
-        <GlassWater size={14} color="#F43F5E" />
-        <Text style={styles.instructionText}>
-          {lang === 'th'
-            ? '🥤 จิบน้ำชัยชนะ • กระตุ้น Vagus Nerve ลดอัตราชีพจร'
-            : '🥤 Victory Sip • Vagal Breath to slow heart rate'}
-        </Text>
-      </View>
-
-      {/* Mascot View */}
+      {/* 1. Mascot View - Standardized 140px Height */}
       <View style={styles.mascotWrapper}>
         <MoocaMascot
           mood={isFinished ? 'celebrating' : 'drinking'}
@@ -139,30 +154,38 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'จิบครบแล้วนะ! เส้นประสาท Vagus Nerve ผ่อนคลายเต็มที่แล้ว'
-                : 'All 3 sips complete! Your nervous system is settled.'
+                ? 'จิบน้ำครบ 3 อึกแล้วนะ! ร่างกายได้รับความสดชื่นเต็มเปี่ยม หัวใจเต้นช้าลงแล้ว'
+                : 'All 3 sips complete! Your body is refreshed and heart rate is calm.'
               : lang === 'th'
-              ? `เอียงโทรศัพท์ทำท่าจิบน้ำช้าๆ แล้วหายใจลึกควบคู่ ${sipCount + 1}/3`
-              : `Tilt to sip slowly, exhale deeply ${sipCount + 1}/3`
+                ? `ยกมือถือทำท่าจิบน้ำช้าๆ แล้วค่อยๆ กลืนนะคนเก่ง (${sipCount + 1}/3)`
+                : `Raise phone gently like drinking water & swallow slowly (${sipCount + 1}/3)`
           }
         />
       </View>
 
-      {/* Smiling Boba Cup Visual Container */}
+      {/* 2. Fantasy Crystal Potion Tumbler Container */}
       <View style={styles.cupContainer}>
-        {/* Pastel Striped Straw */}
+        {/* Soft Ambient Radiating Halo behind the tumbler */}
+        <View style={styles.cupAuraHalo} pointerEvents="none" />
+
+        {/* Straw Top Star Topper */}
+        <View style={styles.strawStarTopper}>
+          <Sparkles size={14} color="#F59E0B" fill="#FDE047" />
+        </View>
+
+        {/* Iridescent Striped Straw */}
         <View style={styles.straw}>
           <View style={[styles.strawStripe, { backgroundColor: '#F472B6' }]} />
-          <View style={[styles.strawStripe, { backgroundColor: '#A7F3D0' }]} />
-          <View style={[styles.strawStripe, { backgroundColor: '#F472B6' }]} />
-          <View style={[styles.strawStripe, { backgroundColor: '#A7F3D0' }]} />
+          <View style={[styles.strawStripe, { backgroundColor: '#5EEAD4' }]} />
+          <View style={[styles.strawStripe, { backgroundColor: '#FDE047' }]} />
+          <View style={[styles.strawStripe, { backgroundColor: '#5EEAD4' }]} />
           <View style={[styles.strawStripe, { backgroundColor: '#F472B6' }]} />
         </View>
 
         {/* Cup Dome Rim */}
         <View style={styles.cupDome} />
 
-        {/* Boba Cup Glass Body */}
+        {/* Crystal Potion Cup Glass Body */}
         <View style={styles.cupBody}>
           {/* Glass Highlight */}
           <View style={styles.glassReflection} />
@@ -222,11 +245,23 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           </View>
         </View>
 
-        {/* Counter Badge */}
-        <View style={styles.sipCounterBadge}>
-          <GlassWater size={12} color={colors.primary} />
-          <Text style={styles.sipCounterText}>
-            {sipCount} / 3 {lang === 'th' ? 'อึกแห่งชัยชนะ' : 'Victory Sips'}
+        {/* Real Accelerometer Inclinometer & Sip Counter */}
+        <View
+          style={[
+            styles.inclinometerBadge,
+            isTiltingToDrink && styles.inclinometerBadgeActive,
+          ]}
+        >
+          <Compass size={13} color={isTiltingToDrink ? '#004D40' : colors.primaryDark} />
+          <Text
+            style={[
+              styles.inclinometerText,
+              isTiltingToDrink && styles.inclinometerTextActive,
+            ]}
+          >
+            {lang === 'th'
+              ? `${sipCount}/3 อึก • เอียงแก้ว ${tiltAngle}° / 28° ${isTiltingToDrink ? '• กำลังจิบ...' : ''}`
+              : `${sipCount}/3 Sips • Tilt ${tiltAngle}° / 28° ${isTiltingToDrink ? '• Sipping...' : ''}`}
           </Text>
         </View>
       </View>
@@ -240,43 +275,43 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               ? '1. สูดหายใจเข้า แล้วแตะจิบน้ำ...'
               : '1. Inhale gently and sip...'
             : breathPhase === 'swallow'
-            ? lang === 'th'
-              ? '2. ค่อยๆ กลืนน้ำ... กระตุ้นเส้นประสาทเวกัส'
-              : '2. Swallow slowly... activating vagal tone'
-            : breathPhase === 'exhale'
-            ? lang === 'th'
-              ? '3. ผ่อนลมหายใจออกยาวๆ สบายๆ...'
-              : '3. Exhale fully and relax muscles...'
-            : lang === 'th'
-            ? 'พร้อมจิบน้ำอึกถัดไปเพื่อเพิ่มความสดชื่น'
-            : 'Ready for next restorative sip'}
+              ? lang === 'th'
+                ? '2. ค่อย ๆ กลืนน้ำ... กระตุ้นเส้นประสาทเวกัส'
+                : '2. Swallow slowly... activating vagal tone'
+              : breathPhase === 'exhale'
+                ? lang === 'th'
+                  ? '3. ผ่อนลมหายใจออกยาว ๆ สบาย ๆ ...'
+                  : '3. Exhale fully and relax muscles...'
+                : lang === 'th'
+                  ? 'พร้อมจิบน้ำอึกถัดไปเพื่อเพิ่มความสดชื่น'
+                  : 'Ready for next restorative sip'}
         </Text>
       </View>
 
-      {/* Marshmallow Tap Button */}
+      {/* Action / Sensor Status Section (No tap substitution allowed) */}
       <View style={styles.actionSection}>
-        <MarshmallowButton
-          variant={isFinished ? 'mint' : 'primary'}
-          size="lg"
-          onPress={triggerSip}
-          disabled={isFinished}
-          icon={
-            isFinished ? (
-              <Check size={18} color="#004D40" />
-            ) : (
-              <GlassWater size={18} color="#FFFFFF" />
-            )
-          }
-          title={
-            isFinished
-              ? lang === 'th'
-                ? 'จิบน้ำชัยชนะสำเร็จแล้ว!'
-                : 'Victory Sip Achieved!'
-              : lang === 'th'
-              ? `จิบน้ำชัยชนะคำที่ ${sipCount + 1} (Tap to Sip)`
-              : `Drink Victory Sip ${sipCount + 1} of 3`
-          }
-        />
+        {isFinished ? (
+          <MarshmallowButton
+            variant="primary"
+            size="lg"
+            onPress={onComplete}
+            icon={<Check size={18} color="#FFFFFF" />}
+            title={
+              lang === 'th'
+                ? 'เข้าสู่หน้าสะท้อนความคิด'
+                : 'Proceed to Cognitive Reframing'
+            }
+          />
+        ) : (
+          <View style={styles.sensorStatusPill}>
+            <GlassWater size={14} color={colors.primary} />
+            <Text style={styles.sensorStatusPillText}>
+              {lang === 'th'
+                ? `ยกโทรศัพท์ทำท่าจิบน้ำจริง (เอียง > 28° • อึกที่ ${sipCount + 1}/3)`
+                : `Tilt phone to sip for real (> 28° • Sip ${sipCount + 1}/3)`}
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -308,13 +343,32 @@ const styles = StyleSheet.create({
     color: '#9F1239',
   },
   mascotWrapper: {
+    height: 140,
+    width: '100%',
     alignItems: 'center',
-    marginVertical: 2,
+    justifyContent: 'center',
   },
   cupContainer: {
     alignItems: 'center',
     position: 'relative',
     marginVertical: 4,
+  },
+  cupAuraHalo: {
+    position: 'absolute',
+    top: 20,
+    width: 130,
+    height: 150,
+    borderRadius: 65,
+    backgroundColor: 'rgba(94, 234, 212, 0.18)',
+    shadowColor: '#2DD4BF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+  },
+  strawStarTopper: {
+    marginBottom: -8,
+    zIndex: 5,
+    transform: [{ translateX: 6 }],
   },
   straw: {
     width: 14,
@@ -395,16 +449,20 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#78350F',
+    backgroundColor: 'rgba(255, 255, 255, 0.92)',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    borderColor: '#FEF3C7',
-    ...shadows.card,
+    borderColor: '#99F6E4',
+    shadowColor: '#00C4B3',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 2,
   },
   pearlFace: {
     fontSize: 7,
-    color: '#FEF3C7',
+    color: '#004D40',
     fontWeight: '800',
   },
   floatingBubble: {
@@ -435,6 +493,32 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
     fontWeight: '900',
     marginTop: -4,
+  },
+  inclinometerBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: radii.full,
+    borderWidth: 1.5,
+    borderColor: colors.borderTeal,
+    gap: 6,
+    marginTop: 8,
+    ...shadows.soft,
+  },
+  inclinometerBadgeActive: {
+    backgroundColor: '#CCFBF1',
+    borderColor: colors.primary,
+  },
+  inclinometerText: {
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 10.5,
+    color: colors.primaryDark,
+  },
+  inclinometerTextActive: {
+    fontFamily: typography.fontPromptBold,
+    color: '#004D40',
   },
   sipCounterBadge: {
     flexDirection: 'row',
@@ -472,5 +556,23 @@ const styles = StyleSheet.create({
   actionSection: {
     width: '100%',
     marginTop: 4,
+    alignItems: 'center',
+  },
+  sensorStatusPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: radii.full,
+    borderWidth: 1.5,
+    borderColor: colors.borderTeal,
+    gap: 8,
+    ...shadows.soft,
+  },
+  sensorStatusPillText: {
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 11,
+    color: colors.primaryDark,
   },
 });

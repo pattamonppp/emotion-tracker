@@ -29,6 +29,7 @@ interface Phase1EmotionJarProps {
   onOpenPulseSensor?: () => void;
   onOpenStory?: () => void;
   lang: 'th' | 'en';
+  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
 }
 
 const MAX_SELECTED_EMOTIONS = 3;
@@ -42,6 +43,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   onOpenPulseSensor,
   onOpenStory,
   lang,
+  skyPeriod,
 }) => {
   const selectedEmotionsRef = React.useRef(selectedEmotions);
   selectedEmotionsRef.current = selectedEmotions;
@@ -148,15 +150,15 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
     customText?: string;
     isAddButton?: boolean;
   }> = [
-    ...presetsInSky.map((t) => ({ id: t.id, tag: t })),
-    ...customInSky.map((c) => ({
-      id: c.id,
-      tag: c,
-      isCustom: true,
-      customText: c.customText,
-    })),
-    ...(showAddButton
-      ? [
+      ...presetsInSky.map((t) => ({ id: t.id, tag: t })),
+      ...customInSky.map((c) => ({
+        id: c.id,
+        tag: c,
+        isCustom: true,
+        customText: c.customText,
+      })),
+      ...(showAddButton
+        ? [
           {
             id: 'btn_add_custom',
             tag: {
@@ -171,8 +173,8 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             isAddButton: true,
           },
         ]
-      : []),
-  ];
+        : []),
+    ];
 
   // 4) STRICTLY MAXIMUM 3 CLOUDS PER ROW! ("สูงสุดแถวละ 3 ก้อนอารมณ์ที")
   const chunkedRows: typeof allSkyItems[] = [];
@@ -218,7 +220,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
                           index={rowIdx * 3 + colIdx}
                           isSelected={false}
                           isJarFull={isJarFull}
-                          onToggle={() => {}}
+                          onToggle={() => { }}
                           lang={lang}
                           isAddButton={true}
                           onEditCustom={() => {
@@ -242,9 +244,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
                         onEditCustom={
                           item.isCustom
                             ? () => {
-                                setEditingMessageId(item.id);
-                                setIsCustomModalOpen(true);
-                              }
+                              setEditingMessageId(item.id);
+                              setIsCustomModalOpen(true);
+                            }
                             : undefined
                         }
                       />
@@ -264,6 +266,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
               lang={lang}
               onMoocaHug={onOpenStory}
               customMessages={customMessages}
+              skyPeriod={skyPeriod}
             />
           </View>
         </View>

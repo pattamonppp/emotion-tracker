@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
+import {
+  View,
+  Text,
+  StyleSheet,
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
@@ -10,12 +10,12 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { 
-  UserProfile, 
-  ResetPhase, 
-  EmotionTagId, 
-  InterventionOption, 
-  ShiftFeedback 
+import {
+  UserProfile,
+  ResetPhase,
+  EmotionTagId,
+  InterventionOption,
+  ShiftFeedback
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { storageService } from './services/storageService';
@@ -27,6 +27,7 @@ import { Phase1EmotionJar } from './components/Phase1EmotionJar';
 import { SomaticAbsorption } from './components/Phase2Interventions/SomaticAbsorption';
 import { VictorySip } from './components/Phase2Interventions/VictorySip';
 import { KineticShaker } from './components/Phase2Interventions/KineticShaker';
+import { SomaticBreathingPacer } from './components/Phase2Interventions/SomaticBreathingPacer';
 import { AudioMatrixSanctuary } from './components/Phase2Interventions/AudioMatrixSanctuary';
 import { Phase3CognitiveReframing } from './components/Phase3CognitiveReframing';
 import { Phase4Feedback } from './components/Phase4Feedback';
@@ -40,12 +41,12 @@ import { MoocaStoryModal } from './components/MoocaStoryModal';
 
 import { Languages, Sparkles, Volume2, VolumeX } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from './design-system/tokens';
-import { 
-  useFonts, 
-  Prompt_300Light, 
-  Prompt_400Regular, 
-  Prompt_500Medium, 
-  Prompt_600SemiBold, 
+import {
+  useFonts,
+  Prompt_300Light,
+  Prompt_400Regular,
+  Prompt_500Medium,
+  Prompt_600SemiBold,
   Prompt_700Bold,
   Prompt_800ExtraBold
 } from '@expo-google-fonts/prompt';
@@ -210,11 +211,8 @@ export default function App() {
         lang={profile.language}
       >
         <SafeAreaView style={styles.safeArea}>
-          {/* Top Bar (Wordmark, Language Actions, Profile Avatar) */}
-          <View style={[
-            styles.topBar,
-            isDark && { backgroundColor: 'rgba(15, 23, 42, 0.88)', borderBottomColor: 'rgba(99,102,241,0.25)' },
-          ]}>
+          {/* Top Bar (Wordmark, Language Actions, Profile Avatar) - Stable CI */}
+          <View style={styles.topBar}>
             {/* Zone 1: Logo */}
             <View style={styles.logoRow}>
               <MindfullLogo size="sm" />
@@ -226,13 +224,10 @@ export default function App() {
               <TouchableOpacity
                 onPress={toggleLanguage}
                 activeOpacity={0.8}
-                style={[
-                  styles.langBtn,
-                  isDark && { backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.18)' },
-                ]}
+                style={styles.langBtn}
               >
-                <Languages size={13} color={isDark ? '#E2E8F0' : colors.primary} />
-                <Text style={[styles.langText, isDark && { color: '#E2E8F0' }]}>{profile.language.toUpperCase()}</Text>
+                <Languages size={13} color={colors.primary} />
+                <Text style={styles.langText}>{profile.language.toUpperCase()}</Text>
               </TouchableOpacity>
 
               {/* Sound / Music Toggle Button (Between Language & Avatar) */}
@@ -244,13 +239,12 @@ export default function App() {
                 style={[
                   styles.soundBtn,
                   isMusicPlaying && styles.soundBtnActive,
-                  isDark && { backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.18)' },
                 ]}
               >
                 {isMusicPlaying ? (
-                  <Volume2 size={13} color={isDark ? '#E2E8F0' : colors.primaryDark} />
+                  <Volume2 size={13} color={colors.primaryDark} />
                 ) : (
-                  <VolumeX size={13} color={isDark ? '#94A3B8' : colors.textMuted} />
+                  <VolumeX size={13} color={colors.textMuted} />
                 )}
               </TouchableOpacity>
 
@@ -277,17 +271,14 @@ export default function App() {
             </View>
           </View>
 
-          {/* Dynamic Island Session Pill with Countdown & Sky Atmosphere Switcher */}
+          {/* Dynamic Island Session Pill with Countdown & Sky Atmosphere Switcher - Stable CI */}
           <View style={styles.dynamicIslandContainer}>
             <View style={styles.dynamicIslandRow}>
-              <View style={[
-                styles.dynamicPill,
-                isDark && { backgroundColor: 'rgba(30,41,59,0.9)', borderColor: 'rgba(99,102,241,0.35)' },
-              ]}>
-                <View style={[styles.pingDot, isDark && { backgroundColor: '#818CF8' }]} />
-                <Text style={[styles.phaseLabelText, isDark && { color: '#E2E8F0' }]}>{getPhaseName()}</Text>
-                <View style={[styles.timerChip, isDark && { backgroundColor: 'rgba(255,255,255,0.12)' }]}>
-                  <Text style={[styles.timerChipText, isDark && { color: '#E2E8F0' }]}>{formatSeconds(elapsedSeconds)}</Text>
+              <View style={styles.dynamicPill}>
+                <View style={styles.pingDot} />
+                <Text style={styles.phaseLabelText}>{getPhaseName()}</Text>
+                <View style={styles.timerChip}>
+                  <Text style={styles.timerChipText}>{formatSeconds(elapsedSeconds)}</Text>
                 </View>
               </View>
 
@@ -304,8 +295,8 @@ export default function App() {
                   profile.goal === 'exam'
                     ? (profile.language === 'th' ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
                     : profile.goal === 'stage'
-                    ? (profile.language === 'th' ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
-                    : (profile.language === 'th' ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation')
+                      ? (profile.language === 'th' ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
+                      : (profile.language === 'th' ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation')
                 }
                 heartRate={heartRate}
                 selectedEmotions={selectedEmotions}
@@ -314,24 +305,22 @@ export default function App() {
                 onOpenPulseSensor={() => setIsPulseModalOpen(true)}
                 onOpenStory={() => setIsStoryModalOpen(true)}
                 lang={profile.language}
+                skyPeriod={skyPeriod}
               />
             )}
 
             {currentPhase === 'phase2_intervention' && (
               <View style={styles.interventionContainer}>
-                {/* Intervention Option Switcher */}
-                <View style={[
-                  styles.interventionHeader,
-                  isDark && { backgroundColor: 'rgba(30,41,59,0.88)', borderBottomColor: 'rgba(99,102,241,0.25)' },
-                ]}>
+                {/* Intervention Option Switcher - Pure CI, No Purple */}
+                <View style={styles.interventionHeader}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                    <Sparkles size={13} color={isDark ? '#818CF8' : colors.primary} />
-                    <Text style={[styles.interventionHeaderTitle, isDark && { color: '#E2E8F0' }]}>
+                    <Sparkles size={13} color={colors.primary} />
+                    <Text style={styles.interventionHeaderTitle}>
                       {profile.language === 'th' ? 'โหมดรีเซ็ตใจ:' : 'Reset Mode:'}
                     </Text>
                   </View>
                   <View style={styles.optionsRow}>
-                    {(['A', 'B', 'C', 'D'] as InterventionOption[]).map((opt) => (
+                    {(['A', 'B', 'C', 'D', 'E', 'F', 'G'] as InterventionOption[]).map((opt) => (
                       <TouchableOpacity
                         key={opt}
                         onPress={() => {
@@ -342,15 +331,12 @@ export default function App() {
                         style={[
                           styles.optionBtn,
                           activeOption === opt && styles.optionBtnActive,
-                          isDark && { backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.18)' },
-                          isDark && activeOption === opt && { backgroundColor: '#818CF8', borderColor: '#6366F1' },
                         ]}
                       >
                         <Text
                           style={[
                             styles.optionBtnText,
                             activeOption === opt && styles.optionBtnTextActive,
-                            isDark && !( activeOption === opt) && { color: '#E2E8F0' },
                           ]}
                         >
                           {opt}
@@ -366,6 +352,7 @@ export default function App() {
                     <SomaticAbsorption
                       onComplete={handleInterventionComplete}
                       lang={profile.language}
+                      skyPeriod={skyPeriod}
                     />
                   )}
                   {activeOption === 'B' && (
@@ -376,11 +363,33 @@ export default function App() {
                   )}
                   {activeOption === 'C' && (
                     <KineticShaker
+                      activityType="shake"
                       onComplete={handleInterventionComplete}
                       lang={profile.language}
                     />
                   )}
                   {activeOption === 'D' && (
+                    <KineticShaker
+                      activityType="jump"
+                      onComplete={handleInterventionComplete}
+                      lang={profile.language}
+                    />
+                  )}
+                  {activeOption === 'E' && (
+                    <SomaticBreathingPacer
+                      pattern="box"
+                      onComplete={handleInterventionComplete}
+                      lang={profile.language}
+                    />
+                  )}
+                  {activeOption === 'F' && (
+                    <SomaticBreathingPacer
+                      pattern="relax478"
+                      onComplete={handleInterventionComplete}
+                      lang={profile.language}
+                    />
+                  )}
+                  {activeOption === 'G' && (
                     <AudioMatrixSanctuary
                       mbti={profile.mbti}
                       onComplete={handleInterventionComplete}
@@ -608,12 +617,12 @@ const styles = StyleSheet.create({
   },
   optionsRow: {
     flexDirection: 'row',
-    gap: 6,
+    gap: 4,
   },
   optionBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: colors.borderSubtle,
@@ -626,7 +635,7 @@ const styles = StyleSheet.create({
   },
   optionBtnText: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 12,
+    fontSize: 11,
     color: colors.primaryDark,
   },
   optionBtnTextActive: {
