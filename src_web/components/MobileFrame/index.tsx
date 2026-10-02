@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import type { UserProfile, ResetPhase } from '@/types';
 import { MindfullLogo } from '../MindfullLogo';
+import { HeartIcon } from '@/icons';
 import styles from './styles.module.scss';
 
 export interface MobileFrameProps {
@@ -60,7 +61,10 @@ export function MobileFrame({
           <span className={styles.pulseDot} />
           <span className={styles.helperTitle}>
             <span>Mooca & mindfull CI</span>
-            <span className={styles.helperBadge}>♥ Best Friend Companion</span>
+            <span className={styles.helperBadge}>
+              <HeartIcon className="w-2.5 h-2.5 inline mr-1 text-[#00C4B3]" />
+              Best Friend Companion
+            </span>
           </span>
         </div>
 
@@ -109,7 +113,7 @@ export function MobileFrame({
               className={styles.storyBtn}
               title="เรื่องราวของ Mooca"
             >
-              <span>🐑</span>
+              <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
               <span>{profile.language === 'th' ? 'เพื่อน Mooca' : 'Mooca'}</span>
             </button>
           )}

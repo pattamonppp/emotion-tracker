@@ -3,6 +3,7 @@ import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { GlassWater, Activity, Sparkles } from 'lucide-react';
+import { CheckIcon, GlassWaterIcon } from '../../../icons';
 import { SIP_CONFIG, type BreathPhase } from './constants';
 import styles from './styles.module.scss';
 
@@ -226,7 +227,8 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             {sipCount >= SIP_CONFIG.TOTAL_SIPS ? (
               <div className={styles.completionCard}>
                 <span className={styles.completionMain}>
-                  {lang === 'th' ? '✓ ร่างกายได้รับสัญญาณสงบแล้ว' : '✓ Vagus Signal Transmitted'}
+                  <CheckIcon className="w-4 h-4 inline mr-1 text-teal-600" />
+                  <span>{lang === 'th' ? 'ร่างกายได้รับสัญญาณสงบแล้ว' : 'Vagus Signal Transmitted'}</span>
                 </span>
                 <span className={styles.completionSub}>
                   {lang === 'th'
@@ -237,7 +239,12 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             ) : isDrinking ? (
               <div className={styles.drinkingCard}>
                 {breathPhase === 'inhale' && (lang === 'th' ? 'สูดหายใจเข้าลึก...' : 'Deep Inhale...')}
-                {breathPhase === 'swallow' && (lang === 'th' ? '💧 กลืนน้ำช้า ๆ 1 อึก' : '💧 Swallow Slow Sip')}
+                {breathPhase === 'swallow' && (
+                  <span className="inline-flex items-center gap-1">
+                    <GlassWaterIcon className="w-4 h-4 text-sky-500" />
+                    <span>{lang === 'th' ? 'กลืนน้ำช้า ๆ 1 อึก' : 'Swallow Slow Sip'}</span>
+                  </span>
+                )}
                 {breathPhase === 'exhale' && (lang === 'th' ? 'ผ่อนลมหายใจออกยาว...' : 'Slow Exhale...')}
               </div>
             ) : (

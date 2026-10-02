@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { audioService } from '../../services/audioService';
+import { HeartIcon } from '../../icons';
 import styles from './styles.module.scss';
 
 export type MoocaMood = 
@@ -76,7 +77,9 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
       {/* Cute Floating Hearts on Tap */}
       {tapHeartEffect && (
         <div className={styles.tapHeartEffect}>
-          <span className={styles.tapHeartIcon}>💖</span>
+          <span className={styles.tapHeartIcon}>
+            <HeartIcon className="w-5 h-5 text-rose-500 fill-rose-400" />
+          </span>
           <span className={styles.tapHeartBadge}>
             ~Mooca loves you!~
           </span>

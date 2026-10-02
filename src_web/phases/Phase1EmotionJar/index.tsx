@@ -12,6 +12,7 @@ import {
   GripHorizontal,
   Check,
 } from 'lucide-react';
+import { HeartIcon } from '../../icons';
 import styles from './styles.module.scss';
 
 export interface Phase1EmotionJarProps {
@@ -197,7 +198,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
         </p>
 
         <div className={styles.moocaSpeechPill}>
-          <span className={styles.moocaEmoji}>🐑</span>
+          <span className={styles.moocaEmoji}>
+            <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
+          </span>
           <span className={styles.moocaSpeechText}>{getMoocaSpeech()}</span>
         </div>
       </div>

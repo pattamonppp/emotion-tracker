@@ -4,6 +4,7 @@ import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { Sparkles, Flame, Volume2, Shield } from 'lucide-react';
+import { SparklesIcon, WindIcon, FlameIcon } from '../../../icons';
 import styles from './styles.module.scss';
 
 export interface SomaticAbsorptionProps {
@@ -240,12 +241,19 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
         <span className={styles.tempStatus}>
           {pointersCount > 1 ? (
             <span className={styles.tempActive}>
-              {lang === 'th' ? '✨ ถูสองนิ้วหัวแม่มือ' : '✨ Dual-Thumb Active'}
+              <SparklesIcon className="w-3.5 h-3.5 inline mr-1 text-amber-500" />
+              <span>{lang === 'th' ? 'ถูสองนิ้วหัวแม่มือ' : 'Dual-Thumb Active'}</span>
             </span>
           ) : handTemp < 32 ? (
-            lang === 'th' ? '❄️ มือเย็นตื่นเต้น' : '❄️ Cool Nerves'
+            <span className="inline-flex items-center gap-1 text-sky-500">
+              <WindIcon className="w-3.5 h-3.5" />
+              <span>{lang === 'th' ? 'มือเย็นตื่นเต้น' : 'Cool Nerves'}</span>
+            </span>
           ) : (
-            lang === 'th' ? '🔥 เลือดลมไหลเวียนอบอุ่น' : '🔥 Restored Warmth'
+            <span className="inline-flex items-center gap-1 text-orange-500">
+              <FlameIcon className="w-3.5 h-3.5" />
+              <span>{lang === 'th' ? 'เลือดลมไหลเวียนอบอุ่น' : 'Restored Warmth'}</span>
+            </span>
           )}
         </span>
       </div>

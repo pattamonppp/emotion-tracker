@@ -4,6 +4,7 @@ import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { Zap, CheckCircle2, Sparkles } from 'lucide-react';
+import { CheckIcon } from '../../../icons';
 import {
   KINETIC_MODE,
   type KineticMode,
@@ -207,13 +208,14 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           </div>
 
           <div className={styles.counterSubtext}>
-            {isFinished
-              ? lang === 'th'
-                ? '✓ ปลดปล่อยความตึงเครียดหมดแล้ว'
-                : '✓ Somatic Tension Released'
-              : lang === 'th'
-                ? 'สะบัดหรือกดปุ่มด้านล่างได้เลย'
-                : 'Shake device or tap button'}
+            {isFinished ? (
+              <span className="inline-flex items-center gap-1 text-emerald-600">
+                <CheckIcon className="w-3.5 h-3.5" />
+                <span>{lang === 'th' ? 'ปลดปล่อยความตึงเครียดหมดแล้ว' : 'Somatic Tension Released'}</span>
+              </span>
+            ) : (
+              lang === 'th' ? 'สะบัดหรือกดปุ่มด้านล่างได้เลย' : 'Shake device or tap button'
+            )}
           </div>
         </div>
       </div>

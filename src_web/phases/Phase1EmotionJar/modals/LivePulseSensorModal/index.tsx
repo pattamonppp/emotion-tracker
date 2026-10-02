@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { audioService } from '../../../../services/audioService';
 import { Button } from '../../../../components/Button';
 import { Activity, X, Heart } from 'lucide-react';
+import { LeafIcon, ZapIcon } from '../../../../icons';
 import styles from './styles.module.scss';
 
 export interface LivePulseSensorModalProps {
@@ -205,7 +206,17 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
           <div className={styles.metricBox}>
             <span className={styles.metricBoxLabel}>Autonomic State</span>
             <div className={styles.stateBoxValue}>
-              {measuredBpm < 85 ? '🌿 Parasympathetic' : '⚡ High Sympathetic'}
+              {measuredBpm < 85 ? (
+                <span className="inline-flex items-center gap-1 text-emerald-600">
+                  <LeafIcon className="w-3.5 h-3.5" />
+                  <span>Parasympathetic</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-amber-600">
+                  <ZapIcon className="w-3.5 h-3.5" />
+                  <span>High Sympathetic</span>
+                </span>
+              )}
             </div>
           </div>
         </div>

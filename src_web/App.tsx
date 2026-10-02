@@ -22,6 +22,7 @@ import { Phase4Feedback } from './phases/Phase4Feedback';
 import { ResetCompletedView } from './phases/ResetCompletedView';
 import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
 import { audioService } from './services/audioService';
+import { HeartIcon } from './icons';
 
 const DEFAULT_PROFILE: UserProfile = {
   name: 'Alex',
@@ -161,8 +162,8 @@ export default function App() {
           <div className="flex flex-col h-full">
             {/* Quick Intervention Switcher - Cozy Mooca pastel styling */}
             <div className="px-3 pt-2 pb-1.5 bg-[#E6F9F7]/80 backdrop-blur-md border-b border-[#00C4B3]/20 flex items-center justify-between text-xs shadow-2xs">
-              <span className="text-[10px] text-[#004D40] font-extrabold flex items-center gap-1">
-                <span>🐑</span>
+              <span className="text-[10px] text-[#004D40] font-extrabold flex items-center gap-1.5">
+                <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
                 <span>{profile.language === 'th' ? 'โหมดรีเซ็ตใจกับ Mooca:' : 'Reset Mode:'}</span>
               </span>
               <div className="flex gap-1">

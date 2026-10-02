@@ -2,6 +2,7 @@ import React from 'react';
 import { ShiftFeedback, UserProfile } from '../../../../types';
 import { Button } from '../../../../components/Button';
 import { X, Share2, CheckCircle2, Award } from 'lucide-react';
+import { HeartIcon, ZapIcon, LeafIcon, ScaleIcon } from '../../../../icons';
 import styles from './styles.module.scss';
 
 export interface ResetHistoryModalProps {
@@ -72,7 +73,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
           <div className={styles.sanctuaryCard}>
             <div className={styles.sanctuaryCardHeader}>
               <span className={styles.sanctuaryTitle}>
-                <span>🐑</span>
+                <HeartIcon className="w-4 h-4 text-teal-600 inline mr-1" />
                 <span>MOOCA SANCTUARY CARD</span>
               </span>
               <span className={styles.mbtiTag}>
@@ -106,7 +107,13 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
                 <div key={idx} className={styles.historyItem}>
                   <div className={styles.historyLeft}>
                     <span className={styles.historyEmoji}>
-                      {item.shiftResult === 'empowered' ? '⚡' : item.shiftResult === 'grounded' ? '🌿' : '⚖️'}
+                      {item.shiftResult === 'empowered' ? (
+                        <ZapIcon className="w-4 h-4 text-amber-500" />
+                      ) : item.shiftResult === 'grounded' ? (
+                        <LeafIcon className="w-4 h-4 text-emerald-500" />
+                      ) : (
+                        <ScaleIcon className="w-4 h-4 text-teal-600" />
+                      )}
                     </span>
                     <div>
                       <div className={styles.historyStateTitle}>

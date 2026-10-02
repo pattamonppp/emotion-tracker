@@ -46,3 +46,20 @@ export interface ShiftFeedback {
   postHeartRate: number;
   timestamp: string;
 }
+
+export interface Feedback {
+  id: string;
+  timestamp: string;
+  rating: number; // 1 to 5
+  accuracy: 'spot_on' | 'helpful' | 'needs_work';
+  aspects: string[];
+  comment?: string;
+  context: {
+    mbti: MBTIType;
+    goal: GoalType;
+    shiftResult: 'empowered' | 'grounded' | 'same';
+    deltaBpm: number;
+    intervention?: string;
+  };
+}
+

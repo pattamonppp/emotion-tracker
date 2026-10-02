@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   RotateCcw,
 } from 'lucide-react';
+import { ZapIcon, LeafIcon, ScaleIcon } from '../../icons';
 import styles from './styles.module.scss';
 
 export interface Phase4FeedbackProps {
@@ -98,7 +99,9 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             })}
           >
             <div className={styles.optionLeftRow}>
-              <span className={styles.optionEmoji}>⚡</span>
+              <span className={styles.optionEmoji}>
+                <ZapIcon className="w-5 h-5 text-amber-500" />
+              </span>
               <div>
                 <div
                   className={cn(styles.optionTitle, {
@@ -128,7 +131,9 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             })}
           >
             <div className={styles.optionLeftRow}>
-              <span className={styles.optionEmoji}>🌿</span>
+              <span className={styles.optionEmoji}>
+                <LeafIcon className="w-5 h-5 text-emerald-500" />
+              </span>
               <div>
                 <div
                   className={cn(styles.optionTitle, {
@@ -158,7 +163,9 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             })}
           >
             <div className={styles.optionLeftRow}>
-              <span className={styles.optionEmoji}>⚖️</span>
+              <span className={styles.optionEmoji}>
+                <ScaleIcon className="w-5 h-5 text-teal-600" />
+              </span>
               <div>
                 <div className={styles.optionTitle}>
                   {lang === 'th' ? 'ยังกังวลอยู่บ้าง' : 'Still Somewhat Anxious'}

@@ -3,6 +3,7 @@ import { EmotionTagId } from '../../../../types';
 import { EMOTION_TAGS } from '../../../../data/matrixData';
 import { audioService } from '../../../../services/audioService';
 import { Sparkles, X } from 'lucide-react';
+import { CheckIcon } from '../../../../icons';
 import styles from './styles.module.scss';
 
 export interface GlassEmotionJarProps {
@@ -354,7 +355,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
               {/* Status count and clear button */}
               <div className={styles.statusBar}>
                 <span className={styles.statusCount}>
-                  <span className={styles.checkmark}>✓</span>
+                  <CheckIcon className="w-3 h-3 text-[#00C4B3]" />
                   <span>{selectedEmotions.length}/2</span>
                 </span>
 

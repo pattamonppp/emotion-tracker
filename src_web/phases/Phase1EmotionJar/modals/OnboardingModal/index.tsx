@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Check,
 } from 'lucide-react';
+import { LightbulbIcon } from '../../../../icons';
 import styles from './styles.module.scss';
 
 export interface OnboardingModalProps {
@@ -207,9 +208,12 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   })}
                 </div>
                 <p className={styles.mbtiExplanation}>
-                  {profile.mbti.startsWith('IN') || profile.mbti.startsWith('EN') 
-                    ? '💡 Mooca จะปรับใช้คำพูดปลอบใจเชิงหลักการทางชีววิทยาและคุณค่าในตัวเธอ'
-                    : '💡 Mooca จะปรับใช้คำพูดปลอบใจเชิงการลงมือทำจริงและความผ่อนคลาย'}
+                  <LightbulbIcon className="w-3.5 h-3.5 inline mr-1 text-amber-500" />
+                  <span>
+                    {profile.mbti.startsWith('IN') || profile.mbti.startsWith('EN') 
+                      ? 'Mooca จะปรับใช้คำพูดปลอบใจเชิงหลักการทางชีววิทยาและคุณค่าในตัวเธอ'
+                      : 'Mooca จะปรับใช้คำพูดปลอบใจเชิงการลงมือทำจริงและความผ่อนคลาย'}
+                  </span>
                 </p>
               </div>
 

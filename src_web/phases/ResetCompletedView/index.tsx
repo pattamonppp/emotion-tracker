@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ShiftFeedback, UserProfile } from '../../types';
 import { Button } from '../../components/Button';
 import { MoocaMascot } from '../../components/MoocaMascot';
+import { AiFeedbackModal } from './modals/AiFeedbackModal';
 import {
-  Sparkles,
-  RotateCcw,
-  Layers,
-  CheckCircle,
-  Sliders,
-  Share2,
-} from 'lucide-react';
+  SparklesIcon,
+  RotateCcwIcon,
+  LayersIcon,
+  CheckCircleIcon,
+  ShareIcon,
+  MessageHeartIcon,
+  HistoryIcon,
+  MedalIcon,
+  ZapIcon,
+  LeafIcon,
+  ScaleIcon,
+  ArrowRightIcon,
+} from '../../icons';
 import styles from './styles.module.scss';
 
 export interface ResetCompletedViewProps {
@@ -33,12 +40,54 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 }) => {
   const lang = profile.language;
   const bpmDrop = feedback ? feedback.preHeartRate - feedback.postHeartRate : 22;
+  const [isAiFeedbackOpen, setIsAiFeedbackOpen] = useState(false);
+
+  const handleShareKeepsake = () => {
+    const shareText = `${profile.name} ลดความตึงเครียดได้ ${bpmDrop} BPM ด้วย 120s Reset กับ Mooca!`;
+    if (navigator.share) {
+      navigator.share({
+        title: 'Mooca 120s Somatic Reset',
+        text: shareText,
+        url: window.location.href,
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(shareText);
+      alert(lang === 'th' ? 'คัดลอกข้อความสำหรับแชร์แล้ว!' : 'Copied share text to clipboard!');
+    }
+  };
+
+  const renderStateValue = () => {
+    if (!feedback) return null;
+    switch (feedback.shiftResult) {
+      case 'empowered':
+        return (
+          <span className="inline-flex items-center gap-1 text-amber-600 font-semibold">
+            <ZapIcon className="w-3.5 h-3.5" />
+            <span>{lang === 'th' ? 'มั่นใจ / พร้อมลุย' : 'Empowered'}</span>
+          </span>
+        );
+      case 'grounded':
+        return (
+          <span className="inline-flex items-center gap-1 text-emerald-600 font-semibold">
+            <LeafIcon className="w-3.5 h-3.5" />
+            <span>{lang === 'th' ? 'นิ่ง มีสติ' : 'Grounded'}</span>
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 text-teal-600 font-semibold">
+            <ScaleIcon className="w-3.5 h-3.5" />
+            <span>{lang === 'th' ? 'คืนสมดุล' : 'Stabilized'}</span>
+          </span>
+        );
+    }
+  };
 
   return (
     <div className={styles.container}>
       {/* Top Badge */}
       <div className={styles.topBadge}>
-        <CheckCircle />
+        <CheckCircleIcon className="w-4 h-4 text-teal-600" />
         <span>
           {lang === 'th' ? 'รีเซ็ตใจ 120 วินาที กับ Mooca สำเร็จ' : '120s Reset Completed with Mooca'}
         </span>
@@ -75,7 +124,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           <div className={styles.deltaCard}>
             <div className={styles.deltaHeader}>
               <span className={styles.deltaTitle}>
-                <Sparkles />
+                <SparklesIcon className="w-4 h-4 text-teal-500" />
                 {lang === 'th' ? 'ผลลัพธ์การลดความตึงเครียด' : 'Bio-Shift Result'}
               </span>
               <span className={styles.deltaBpmPill}>
@@ -86,11 +135,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             <div className={styles.deltaStateRow}>
               <span className={styles.stateLabel}>{lang === 'th' ? 'สภาวะจิตใจ:' : 'State:'}</span>
               <span className={styles.stateValue}>
-                {feedback.shiftResult === 'empowered'
-                  ? (lang === 'th' ? '⚡ มั่นใจ / พร้อมลุย' : '⚡ Empowered')
-                  : feedback.shiftResult === 'grounded'
-                    ? (lang === 'th' ? '🌿 นิ่ง มีสติ' : '🌿 Grounded')
-                    : (lang === 'th' ? '⚖️ คืนสมดุล' : '⚖️ Stabilized')}
+                {renderStateValue()}
               </span>
             </div>
 
@@ -104,7 +149,9 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         {/* Friendship Badge Card */}
         <div onClick={onOpenStory} className={styles.badgeCard}>
           <div className={styles.badgeLeft}>
-            <span className={styles.medalIcon}>🎖️</span>
+            <span className={styles.medalIcon}>
+              <MedalIcon className="w-5 h-5 text-amber-500" />
+            </span>
             <div>
               <div className={styles.badgeTitle}>
                 {lang === 'th' ? 'เหรียญตรา Mooca Best Friend' : 'Mooca Best Friend Badge'}
@@ -114,56 +161,84 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
               </div>
             </div>
           </div>
-          <span className={styles.badgeChevron}>แตะดู ❯</span>
+          <span className={styles.badgeChevron}>
+            <span>{lang === 'th' ? 'แตะดู' : 'View'}</span>
+            <ArrowRightIcon className="w-3.5 h-3.5 inline ml-1" />
+          </span>
         </div>
       </div>
 
       {/* Action Buttons */}
       <div className={styles.actionFooter}>
+        {/* 1. ปุ่ม Feedback เป็นปุ่มแรกเหนือแชร์ */}
+        <Button
+          variant="secondary"
+          colorTheme="turquoise"
+          size="md"
+          fullWidth
+          onClick={() => setIsAiFeedbackOpen(true)}
+          leadingIcon={<MessageHeartIcon className="w-4 h-4" />}
+          label={lang === 'th' ? 'บอกความรู้สึกถึง Mooca' : 'Feedback to Mooca'}
+        />
+
+        {/* 2. ปุ่มแชร์ */}
+        <Button
+          variant="secondary"
+          colorTheme="blue"
+          size="md"
+          fullWidth
+          onClick={handleShareKeepsake}
+          leadingIcon={<ShareIcon className="w-4 h-4" />}
+          label={lang === 'th' ? 'แชร์การ์ดความกล้าหาญ' : 'Share Polaroid Keepsake'}
+        />
+
+        {/* 3. ปุ่มเริ่มรีเซ็ตครั้งใหม่ */}
         <Button
           variant="primary"
           colorTheme="turquoise"
           size="lg"
           fullWidth
           onClick={onRestart}
-          leadingIcon={<RotateCcw className="w-4 h-4" />}
-          label={lang === 'th' ? 'เริ่มเซสชันใหม่กับ Mooca' : 'Start Another Session with Mooca'}
+          leadingIcon={<RotateCcwIcon className="w-4 h-4" />}
+          label={lang === 'th' ? 'เริ่มรีเซ็ตครั้งใหม่' : 'Start New Session'}
         />
 
+        {/* 4. Secondary actions */}
         <div className={styles.secondaryBtnGrid}>
-          <Button
-            variant="secondary"
-            colorTheme="blue"
-            size="sm"
-            onClick={onOpenDesignSystem}
-            leadingIcon={<Layers className="w-3.5 h-3.5" />}
-            label={lang === 'th' ? 'Design Tokens' : 'Tokens & UI'}
-          />
-
-          {onOpenHistory ? (
+          {onOpenHistory && (
             <Button
-              variant="secondary"
+              variant="outline"
               colorTheme="turquoise"
               size="sm"
               onClick={onOpenHistory}
-              leadingIcon={<Share2 className="w-3.5 h-3.5" />}
+              leadingIcon={<HistoryIcon className="w-3.5 h-3.5" />}
               label={lang === 'th' ? 'ประวัติรีเซ็ต' : 'Reset History'}
             />
-          ) : (
-            <Button
-              variant="secondary"
-              colorTheme="turquoise"
-              size="sm"
-              onClick={onOpenProfile}
-              leadingIcon={<Sliders className="w-3.5 h-3.5" />}
-              label={lang === 'th' ? 'โปรไฟล์' : 'Profile'}
-            />
           )}
+
+          <Button
+            variant="outline"
+            colorTheme="blue"
+            size="sm"
+            onClick={onOpenDesignSystem}
+            leadingIcon={<LayersIcon className="w-3.5 h-3.5" />}
+            label={lang === 'th' ? 'Design Tokens' : 'Tokens & UI'}
+          />
         </div>
       </div>
+
+      {/* Feedback Modal */}
+      <AiFeedbackModal
+        isOpen={isAiFeedbackOpen}
+        onClose={() => setIsAiFeedbackOpen(false)}
+        profile={profile}
+        feedback={feedback}
+        lang={lang}
+      />
     </div>
   );
 };
 
 export default ResetCompletedView;
 export * from './modals/ResetHistoryModal';
+export * from './modals/AiFeedbackModal';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { UserProfile, ShiftFeedback } from '../types';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { MoocaMascot } from './MoocaMascot';
+import { FeedbackModal } from './FeedbackModal';
 import { useSky } from './DynamicSkyEngine';
 import { audioService } from '../services/audioService';
 import {
@@ -22,6 +23,7 @@ import {
   Star,
   Heart,
   Leaf,
+  MessageSquareHeart,
 } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
@@ -45,6 +47,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
   const isNight = activePeriod === 'night';
   const lang = profile.language;
   const bpmDrop = feedback ? feedback.preHeartRate - feedback.postHeartRate : 18;
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   const handleShareKeepsake = async () => {
     audioService.triggerHaptic('medium');
@@ -187,6 +190,19 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
       {/* Action Buttons */}
       <View style={styles.actionsContainer}>
+        {/* Feedback Button - ปุ่มแรกเหนือแชร์ */}
+        <MarshmallowButton
+          variant="mint"
+          size="md"
+          onPress={() => setIsFeedbackModalOpen(true)}
+          icon={<MessageSquareHeart size={18} color={colors.primaryDark} />}
+          title={
+            lang === 'th'
+              ? 'บอกความรู้สึกถึง Mooca'
+              : 'Feedback to Mooca'
+          }
+        />
+
         {/* Share Keepsake Button */}
         <MarshmallowButton
           variant="secondary"
@@ -224,6 +240,15 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           }
         />
       </View>
+
+      {/* AI Feedback Modal */}
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        profile={profile}
+        feedback={feedback}
+        lang={lang}
+      />
     </ScrollView>
   );
 };
