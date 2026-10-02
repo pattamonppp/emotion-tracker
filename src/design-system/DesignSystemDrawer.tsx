@@ -19,12 +19,12 @@ interface DesignSystemDrawerProps {
 }
 
 const PALETTE = [
-  { name: 'Mindfull Brand Turquoise', hex: '#00C4B3', role: 'Primary calm & restorative' },
-  { name: 'Deep Vagal Teal', hex: '#004D40', role: 'Anchoring text & structure' },
-  { name: 'Warm Sunshade Orange', hex: '#FA8C3D', role: 'Energy & sympathetic discharge' },
-  { name: 'Flamingo Pink', hex: '#F26E6E', role: 'Soft emotional warmth' },
-  { name: 'Acoustic Solfeggio Blue', hex: '#3B82F6', role: 'Alpha wave sanctuary' },
-  { name: 'Gentle Cloud White', hex: '#FFFFFF', role: 'Base card & clean space' },
+  { name: 'Mindfull Brand Turquoise', hex: colors.primary, role: 'Primary calm & restorative' },
+  { name: 'Deep Vagal Teal', hex: colors.primaryDark, role: 'Anchoring text & structure' },
+  { name: 'Warm Sunshade Orange', hex: colors.secondary, role: 'Energy & sympathetic discharge' },
+  { name: 'Flamingo Pink', hex: colors.accentPink, role: 'Soft emotional warmth' },
+  { name: 'Acoustic Solfeggio Blue', hex: colors.accentBlue, role: 'Alpha wave sanctuary' },
+  { name: 'Gentle Cloud White', hex: colors.white, role: 'Base card & clean space' },
 ];
 
 export const DesignSystemDrawer: React.FC<DesignSystemDrawerProps> = ({

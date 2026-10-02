@@ -1,6 +1,5 @@
-import { MBTIType } from '../../types';
+import { MBTIType, SkyTimePeriod } from '../../types';
 import { Language } from '../../locales';
-import { SkyTimePeriod } from '../DynamicSkyEngine';
 
 export interface BaseInterventionProps {
   onComplete: () => void;
@@ -11,7 +10,7 @@ export interface SomaticAbsorptionProps extends BaseInterventionProps {
   skyPeriod?: SkyTimePeriod;
 }
 
-export interface VictorySipProps extends BaseInterventionProps {}
+export interface VictorySipProps extends BaseInterventionProps { }
 
 export interface KineticShakerProps extends BaseInterventionProps {
   activityType?: 'shake' | 'jump';

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import { colors } from '../design-system/tokens';
 
 interface MindfullLogoProps {
   variant?: 'color' | 'white' | 'dark';
@@ -11,9 +12,9 @@ export const MindfullLogo: React.FC<MindfullLogoProps> = ({
   variant = 'color',
   size = 'md',
 }) => {
-  const textColor = variant === 'white' ? '#FFFFFF' : '#00C4B3';
-  const heartColor = variant === 'white' ? '#FFFFFF' : '#1F77DF';
-  const smileColor = variant === 'white' ? '#FFFFFF' : '#1F77DF';
+  const textColor = variant === 'white' ? colors.white : colors.primary;
+  const heartColor = variant === 'white' ? colors.white : colors.accentBlue;
+  const smileColor = variant === 'white' ? colors.white : colors.accentBlue;
 
   const fontSize = size === 'sm' ? 16 : size === 'lg' ? 24 : 19;
   const heartSize = size === 'sm' ? 8 : size === 'lg' ? 12 : 10;

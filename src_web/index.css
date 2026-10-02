@@ -50,6 +50,21 @@
   --elevation-6: 0px 16px 24px 0px rgba(0, 196, 179, 0.16), 0px 4px 8px -4px rgba(0, 196, 179, 0.12);
   --elevation-7: 0px 16px 32px 0px rgba(0, 196, 179, 0.16), 0px 4px 12px -4px rgba(0, 196, 179, 0.12);
   --elevation-8: 0px 24px 40px 0px rgba(0, 196, 179, 0.16), 0px 8px 24px -4px rgba(0, 196, 179, 0.12);
+
+  /* Centralized Sky Colors & Gradients per Time Period */
+  --sky-dawn-grad: linear-gradient(180deg, #FFEBE5 0%, #FED7AA 25%, #FDE68A 50%, #E0F2FE 75%, #F0FDFA 100%);
+  --sky-day-grad: linear-gradient(180deg, #BAE6FD 0%, #CFFAFE 25%, #E0F2FE 50%, #F0FDFA 75%, #FFFBEB 100%);
+  --sky-sunset-grad: linear-gradient(180deg, #BAE6FD 0%, #FEF08A 20%, #FBCFE8 45%, #F472B6 70%, #FB7185 100%);
+  --sky-night-grad: linear-gradient(180deg, #090D16 0%, #1E1B4B 35%, #1E293B 70%, #0F172A 100%);
+
+  --sky-dawn-text: #78350F;
+  --sky-dawn-accent: #B45309;
+  --sky-day-text: #004D40;
+  --sky-day-accent: #00C4B3;
+  --sky-sunset-text: #881337;
+  --sky-sunset-accent: #E11D48;
+  --sky-night-text: #F8FAFC;
+  --sky-night-accent: #38BDF8;
 }
 
 body {

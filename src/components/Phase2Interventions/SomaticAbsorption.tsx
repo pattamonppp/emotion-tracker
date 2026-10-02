@@ -129,16 +129,16 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           middleBorder: 'rgba(20, 184, 166, 0.58)',
           innerBorder: 'rgba(94, 234, 212, 0.45)',
           circleBg: 'rgba(255, 255, 255, 0.82)',
-          starColor: 'rgba(0, 196, 179, 0.32)',
-          textColor: '#004D40',
-          badgeBg: '#F0FDFB',
-          badgeBorder: '#99F6E4',
-          badgeText: '#065F46',
-          badgeIconColor: '#00C4B3',
-          progressFill: '#00C4B3',
-          progressTrack: 'rgba(0, 196, 179, 0.18)',
-          captionColor: '#064E3B',
-          dots: ['#00C4B3', '#10B981', '#FBBF24', '#38BDF8'],
+          starColor: colors.borderTeal,
+          textColor: colors.primaryDark,
+          badgeBg: colors.primaryLight,
+          badgeBorder: colors.borderTeal,
+          badgeText: colors.primaryDark,
+          badgeIconColor: colors.primary,
+          progressFill: colors.primary,
+          progressTrack: colors.ringTrack,
+          captionColor: colors.primaryDark,
+          dots: [colors.primary, colors.success, colors.warning, colors.accentBlue],
         };
     }
   };
@@ -702,19 +702,19 @@ const styles = StyleSheet.create({
   guideTitle: {
     fontFamily: typography.fontPromptBold,
     fontSize: 16,
-    color: '#0F172A',
+    color: colors.textPrimary,
     textAlign: 'center',
     marginBottom: 16,
   },
   guideStepsBox: {
     width: '100%',
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
+    backgroundColor: colors.bgLight,
+    borderRadius: radii.lg,
     padding: 14,
     gap: 12,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.borderSubtle,
   },
   guideStepRow: {
     flexDirection: 'row',
@@ -724,7 +724,7 @@ const styles = StyleSheet.create({
   stepNumBadge: {
     width: 22,
     height: 22,
-    borderRadius: 11,
+    borderRadius: radii.full,
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -733,13 +733,13 @@ const styles = StyleSheet.create({
   stepNumText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: colors.white,
   },
   guideStepText: {
     flex: 1,
     fontFamily: typography.fontPromptRegular,
     fontSize: 12.5,
-    color: '#334155',
+    color: colors.textSecondary,
     lineHeight: 18,
   },
   guideConfirmBtn: {
@@ -756,6 +756,6 @@ const styles = StyleSheet.create({
   guideConfirmText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 13.5,
-    color: '#FFFFFF',
+    color: colors.white,
   },
 });

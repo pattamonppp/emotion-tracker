@@ -1,40 +1,93 @@
 import { Platform, TextStyle } from 'react-native';
 
+export const OOCA_TOKENS = {
+  color: {
+    brand: {
+      turquoise: {
+        primary: '#00C4B3',
+        light: '#33D0C2',
+        pale: '#E6F9F7',
+        text: '#004D40',
+        ringTrack: 'rgba(0, 196, 179, 0.16)',
+        border: 'rgba(0, 196, 179, 0.25)',
+      },
+    },
+    accent: {
+      blue: {
+        500: '#1F77DF',
+        300: '#62A0E9',
+        200: '#8FBBEF',
+        100: '#C7DDF7',
+        50: '#E4EFFB',
+      },
+    },
+    feedback: {
+      error: '#F26E6E',
+      warning: '#FA8C3D',
+      success: '#7CC954',
+      emerald: '#10B981',
+    },
+    gray: {
+      black: '#000000',
+      darkText: '#1E293B',
+      muted: '#64748B',
+      border: '#E2E8F0',
+      surface: '#F8FAFC',
+      white: '#FFFFFF',
+    },
+  },
+  geometry: {
+    borderRadius: {
+      controls: 9999,
+      avatars: 12,
+      actionablesSm: 8,
+      actionablesLg: 24,
+      containers: 0,
+    },
+  },
+} as const;
+
 export const colors = {
-  primary: '#00C4B3',
-  primaryDark: '#004D40',
-  primaryLight: '#E6F9F7',
+  primary: OOCA_TOKENS.color.brand.turquoise.primary,
+  primaryDark: OOCA_TOKENS.color.brand.turquoise.text,
+  primaryLight: OOCA_TOKENS.color.brand.turquoise.pale,
+  primaryPale: OOCA_TOKENS.color.brand.turquoise.pale,
+  primaryLight2: OOCA_TOKENS.color.brand.turquoise.light,
   primaryMuted: '#B3EDE8',
+  ringTrack: OOCA_TOKENS.color.brand.turquoise.ringTrack,
   
-  secondary: '#FA8C3D', // Warm accent
+  secondary: OOCA_TOKENS.color.feedback.warning, // Warm accent Sunshade
   secondaryLight: '#FFF4EB',
   
-  accentPink: '#F26E6E',
+  accentPink: OOCA_TOKENS.color.feedback.error, // Flamingo
   accentPinkLight: '#FEECEC',
   
-  accentBlue: '#3B82F6',
-  accentBlueLight: '#EFF6FF',
+  accentBlue: OOCA_TOKENS.color.accent.blue[500],
+  accentBlueLight: OOCA_TOKENS.color.accent.blue[50],
   
   bgLight: '#FFFDF9',
-  cardBg: '#FFFFFF',
+  cardBg: OOCA_TOKENS.color.gray.white,
+  white: OOCA_TOKENS.color.gray.white,
   
-  textPrimary: '#0F172A',
+  textPrimary: OOCA_TOKENS.color.gray.darkText,
   textSecondary: '#475569',
-  textMuted: '#94A3B8',
+  textMuted: OOCA_TOKENS.color.gray.muted,
+  darkText: OOCA_TOKENS.color.gray.darkText,
   
-  borderSubtle: '#E2E8F0',
-  borderTeal: 'rgba(0, 196, 179, 0.25)',
+  borderSubtle: OOCA_TOKENS.color.gray.border,
+  borderTeal: OOCA_TOKENS.color.brand.turquoise.border,
   
-  success: '#10B981',
-  warning: '#F59E0B',
+  success: OOCA_TOKENS.color.feedback.emerald,
+  guava: OOCA_TOKENS.color.feedback.success,
+  warning: OOCA_TOKENS.color.feedback.warning,
 };
 
 export const radii = {
-  sm: 8,
-  md: 12,
+  sm: OOCA_TOKENS.geometry.borderRadius.actionablesSm, // 8
+  md: OOCA_TOKENS.geometry.borderRadius.avatars, // 12
   lg: 18,
-  xl: 24,
-  full: 9999,
+  xl: OOCA_TOKENS.geometry.borderRadius.actionablesLg, // 24
+  full: OOCA_TOKENS.geometry.borderRadius.controls, // 9999
 };
 
 export const shadows = {
@@ -99,3 +152,13 @@ export const typography = {
     ...(Platform.OS !== 'android' ? { fontWeight: '800' as const } : {}),
   } as TextStyle,
 };
+
+export {
+  SKY_THEMES,
+  getPeriodFromHour,
+  getSkyTheme,
+} from '../../src_web/design-system/tokens';
+export type {
+  SkyTimePeriod,
+  SkyMode,
+} from '../types';

@@ -21,7 +21,7 @@ import Svg, {
 } from 'react-native-svg';
 import { audioService } from '../services/audioService';
 import { Heart, Sparkles } from 'lucide-react-native';
-import { typography } from '../design-system/tokens';
+import { typography, colors, radii } from '../design-system/tokens';
 
 export type MoocaMood =
   | 'happy'
@@ -252,11 +252,11 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
           <Svg width={width} height={height} viewBox="0 0 160 160">
             <Defs>
               <LinearGradient id="moocaRainbowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <Stop offset="0%" stopColor="#F26E6E" />
-                <Stop offset="30%" stopColor="#FA8C3D" />
-                <Stop offset="65%" stopColor="#7CC954" />
-                <Stop offset="85%" stopColor="#00C4B3" />
-                <Stop offset="100%" stopColor="#62A0E9" />
+                <Stop offset="0%" stopColor={colors.accentPink} />
+                <Stop offset="30%" stopColor={colors.secondary} />
+                <Stop offset="65%" stopColor={colors.guava} />
+                <Stop offset="85%" stopColor={colors.primary} />
+                <Stop offset="100%" stopColor={colors.accentBlue} />
               </LinearGradient>
               <LinearGradient id="sunnyRayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <Stop offset="0%" stopColor="#FFD54F" />
@@ -322,12 +322,12 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
 
             {/* Sparkling Starry Anime Eyes */}
             {mood === 'praying' || mood === 'rubbing' || mood === 'comforting' ? (
-              <G stroke="#004D40" strokeWidth="3.2" strokeLinecap="round" fill="none">
+              <G stroke={colors.primaryDark} strokeWidth="3.2" strokeLinecap="round" fill="none">
                 <Path d="M 48 76 Q 58 67 68 76" />
                 <Path d="M 92 76 Q 102 67 112 76" />
               </G>
             ) : mood === 'sleepy' ? (
-              <G stroke="#004D40" strokeWidth="2.8" strokeLinecap="round" fill="none">
+              <G stroke={colors.primaryDark} strokeWidth="2.8" strokeLinecap="round" fill="none">
                 <Path d="M 50 78 Q 58 83 66 78" />
                 <Path d="M 94 78 Q 102 83 110 78" />
               </G>
@@ -340,14 +340,14 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
             ) : (
               <G>
                 {/* Big Sparkling Pupils */}
-                <Circle cx="58" cy="74" r="5" fill="#004D40" />
-                <Circle cx="102" cy="74" r="5" fill="#004D40" />
+                <Circle cx="58" cy="74" r="5" fill={colors.primaryDark} />
+                <Circle cx="102" cy="74" r="5" fill={colors.primaryDark} />
                 {/* Primary Reflection Sparkle */}
-                <Circle cx="56.5" cy="72" r="2.2" fill="#FFFFFF" />
-                <Circle cx="100.5" cy="72" r="2.2" fill="#FFFFFF" />
+                <Circle cx="56.5" cy="72" r="2.2" fill={colors.white} />
+                <Circle cx="100.5" cy="72" r="2.2" fill={colors.white} />
                 {/* Secondary Star Twinkle */}
-                <Circle cx="60" cy="76" r="1.1" fill="#FFFFFF" />
-                <Circle cx="104" cy="76" r="1.1" fill="#FFFFFF" />
+                <Circle cx="60" cy="76" r="1.1" fill={colors.white} />
+                <Circle cx="104" cy="76" r="1.1" fill={colors.white} />
               </G>
             )}
 
@@ -355,19 +355,19 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
             {mood === 'sad' ? (
               <Path
                 d="M 76 86 Q 80 82 84 86"
-                stroke="#004D40"
+                stroke={colors.primaryDark}
                 strokeWidth="2.6"
                 strokeLinecap="round"
                 fill="none"
               />
             ) : mood === 'drinking' ? (
-              <Ellipse cx="80" cy="85" rx="3.5" ry="4.5" fill="#004D40" />
+              <Ellipse cx="80" cy="85" rx="3.5" ry="4.5" fill={colors.primaryDark} />
             ) : mood === 'celebrating' || mood === 'happy' || isBlushing ? (
               <G>
                 <Path
                   d="M 72 81 Q 80 94 88 81 Z"
                   fill="#FF8080"
-                  stroke="#004D40"
+                  stroke={colors.primaryDark}
                   strokeWidth="2.5"
                   strokeLinejoin="round"
                 />
@@ -375,7 +375,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
             ) : (
               <Path
                 d="M 73 81 Q 80 89 87 81"
-                stroke="#004D40"
+                stroke={colors.primaryDark}
                 strokeWidth="2.8"
                 strokeLinecap="round"
                 fill="none"
@@ -482,15 +482,15 @@ const styles = StyleSheet.create({
   },
   // Inner: fit-content bubble box with min/max width constraints
   bubbleContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 16,
+    borderRadius: radii.lg,
     minWidth: 100,
     maxWidth: 280,
     borderWidth: 1.2,
-    borderColor: '#00C4B3',
-    shadowColor: '#004D40',
+    borderColor: colors.primary,
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 5,
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
   bubbleText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 11.5,
-    color: '#004D40',
+    color: colors.primaryDark,
     textAlign: 'center',
     lineHeight: 18,
   },
@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: '#00C4B3',
+    borderTopColor: colors.primary,
   },
   floatingHeartsContainer: {
     position: 'absolute',

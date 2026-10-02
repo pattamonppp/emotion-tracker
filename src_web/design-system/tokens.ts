@@ -69,3 +69,128 @@ export const DESIGN_TOKENS = {
     companion: 'Sunny',
   },
 };
+
+import type { SkyTimePeriod, SkyMode } from '../types';
+export type { SkyTimePeriod, SkyMode };
+
+export const SKY_THEMES = {
+  dawn: {
+    id: 'dawn' as const,
+    nameTh: 'ยามรุ่งอรุณ',
+    nameEn: 'Dawn',
+    timeRange: '05:00 - 09:00',
+    gradients: ['#FFEBE5', '#FED7AA', '#FDE68A', '#E0F2FE', '#F0FDFA'] as const,
+    cssGradient: 'linear-gradient(180deg, #FFEBE5 0%, #FED7AA 25%, #FDE68A 50%, #E0F2FE 75%, #F0FDFA 100%)',
+    ambientCore: '#FED7AA',
+    ambientMid: '#FDE68A',
+    ambientOuter: '#FFEBE5',
+    dreamOrb1: 'rgba(254, 215, 170, 0.35)',
+    dreamOrb2: 'rgba(253, 230, 138, 0.32)',
+    cardBg: 'rgba(255, 255, 255, 0.92)',
+    cardBorder: '#FDE68A',
+    badgeBg: '#FFFBEB',
+    badgeBorder: '#FDE68A',
+    badgeText: '#B45309',
+    textColor: '#78350F',
+    accentColor: '#B45309',
+    pulseColor: '#92400E',
+    heartColor: '#B45309',
+    cloud: {
+      fill: '#FFF7ED',
+      shadow: '#FED7AA',
+      opacity: 0.85,
+    },
+  },
+  day: {
+    id: 'day' as const,
+    nameTh: 'กลางวัน',
+    nameEn: 'Day',
+    timeRange: '09:00 - 17:00',
+    gradients: ['#BAE6FD', '#CFFAFE', '#E0F2FE', '#F0FDFA', '#FFFBEB'] as const,
+    cssGradient: 'linear-gradient(180deg, #BAE6FD 0%, #CFFAFE 25%, #E0F2FE 50%, #F0FDFA 75%, #FFFBEB 100%)',
+    ambientCore: '#BAE6FD',
+    ambientMid: '#E0F2FE',
+    ambientOuter: '#CFFAFE',
+    dreamOrb1: 'rgba(186, 230, 253, 0.38)',
+    dreamOrb2: 'rgba(204, 251, 241, 0.38)',
+    cardBg: 'rgba(255, 255, 255, 0.95)',
+    cardBorder: '#99F6E4',
+    badgeBg: '#E6F9F7',
+    badgeBorder: 'rgba(0, 196, 179, 0.25)',
+    badgeText: '#004D40',
+    textColor: '#004D40',
+    accentColor: '#00C4B3',
+    pulseColor: '#64748B',
+    heartColor: '#00C4B3',
+    cloud: {
+      fill: '#FFFFFF',
+      shadow: '#E0F2FE',
+      opacity: 0.92,
+    },
+  },
+  sunset: {
+    id: 'sunset' as const,
+    nameTh: 'ยามเย็น',
+    nameEn: 'Sunset',
+    timeRange: '17:00 - 19:00',
+    gradients: ['#BAE6FD', '#FEF08A', '#FDE68A', '#FBCFE8', '#F472B6', '#FB7185', '#FDA4AF'] as const,
+    cssGradient: 'linear-gradient(180deg, #BAE6FD 0%, #FEF08A 20%, #FBCFE8 45%, #F472B6 70%, #FB7185 100%)',
+    ambientCore: '#F472B6',
+    ambientMid: '#FB7185',
+    ambientOuter: '#FDA4AF',
+    dreamOrb1: 'rgba(244, 114, 182, 0.28)',
+    dreamOrb2: 'rgba(232, 121, 249, 0.25)',
+    cardBg: 'rgba(255, 255, 255, 0.90)',
+    cardBorder: '#FECDD3',
+    badgeBg: '#FFF1F2',
+    badgeBorder: '#FECDD3',
+    badgeText: '#BE123C',
+    textColor: '#881337',
+    accentColor: '#E11D48',
+    pulseColor: '#FFFFFF',
+    heartColor: '#FFFFFF',
+    cloud: {
+      fill: '#FFF1F2',
+      shadow: '#F472B6',
+      opacity: 0.82,
+    },
+  },
+  night: {
+    id: 'night' as const,
+    nameTh: 'กลางคืน',
+    nameEn: 'Night',
+    timeRange: '19:00 - 05:00',
+    gradients: ['#090D16', '#1E1B4B', '#1E293B', '#0F172A'] as const,
+    cssGradient: 'linear-gradient(180deg, #090D16 0%, #1E1B4B 35%, #1E293B 70%, #0F172A 100%)',
+    ambientCore: '#1E1B4B',
+    ambientMid: '#1E293B',
+    ambientOuter: '#0F172A',
+    dreamOrb1: 'rgba(99, 102, 241, 0.22)',
+    dreamOrb2: 'rgba(56, 189, 248, 0.18)',
+    cardBg: 'rgba(30, 41, 59, 0.92)',
+    cardBorder: 'rgba(56, 189, 248, 0.4)',
+    badgeBg: 'rgba(15, 23, 42, 0.85)',
+    badgeBorder: 'rgba(56, 189, 248, 0.4)',
+    badgeText: '#7DD3FC',
+    textColor: '#F8FAFC',
+    accentColor: '#38BDF8',
+    pulseColor: '#CBD5E1',
+    heartColor: '#F87171',
+    cloud: {
+      fill: '#1E293B',
+      shadow: '#0F172A',
+      opacity: 0.42,
+    },
+  },
+} as const;
+
+export const getPeriodFromHour = (hour: number): SkyTimePeriod => {
+  if (hour >= 5 && hour < 9) return 'dawn';
+  if (hour >= 9 && hour < 17) return 'day';
+  if (hour >= 17 && hour < 19) return 'sunset';
+  return 'night';
+};
+
+export const getSkyTheme = (period: SkyTimePeriod) => {
+  return SKY_THEMES[period] || SKY_THEMES.day;
+};

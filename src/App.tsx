@@ -15,7 +15,8 @@ import {
   ResetPhase,
   EmotionTagId,
   InterventionOption,
-  ShiftFeedback
+  ShiftFeedback,
+  SkyTimePeriod
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { storageService } from './services/storageService';
@@ -23,7 +24,7 @@ import { audioService } from './services/audioService';
 import { DEV_MODE, DEV_START } from './config';
 
 import { MindfullLogo } from './components/MindfullLogo';
-import { DynamicSkyEngine, SkyPeriodSwitcher, SkyTimePeriod } from './components/DynamicSkyEngine';
+import { DynamicSkyEngine, SkyPeriodSwitcher } from './components/DynamicSkyEngine';
 import { Phase1EmotionJar } from './components/Phase1EmotionJar';
 import { SomaticAbsorption } from './components/Phase2Interventions/SomaticAbsorption';
 import { VictorySip } from './components/Phase2Interventions/VictorySip';
@@ -263,7 +264,7 @@ export default function App() {
                 style={styles.avatarWrapper}
               >
                 <LinearGradient
-                  colors={['#00C4B3', '#62A0E9']}
+                  colors={[colors.primary, colors.accentBlue]}
                   start={{ x: 0, y: 1 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.avatarGradient}
@@ -532,12 +533,12 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   soundBtnActive: {
-    backgroundColor: '#E6F9F7',
-    borderColor: 'rgba(0, 196, 179, 0.45)',
+    backgroundColor: colors.primaryLight,
+    borderColor: colors.borderTeal,
   },
   avatarWrapper: {
-    borderRadius: 12,
-    shadowColor: '#00C4B3',
+    borderRadius: radii.md,
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -546,7 +547,7 @@ const styles = StyleSheet.create({
   avatarGradient: {
     width: 32,
     height: 32,
-    borderRadius: 12,
+    borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',
   },

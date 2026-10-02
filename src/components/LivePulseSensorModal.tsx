@@ -101,8 +101,8 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             >
               <Heart
                 size={44}
-                color={isScanning ? '#F26E6E' : colors.primary}
-                fill={isScanning ? '#F26E6E' : 'transparent'}
+                color={isScanning ? colors.accentPink : colors.primary}
+                fill={isScanning ? colors.accentPink : 'transparent'}
               />
               <Text style={styles.sensorPrompt}>
                 {isScanning
@@ -196,17 +196,17 @@ const styles = StyleSheet.create({
     height: 170,
     borderRadius: 85,
     borderWidth: 2,
-    borderColor: 'rgba(0, 196, 179, 0.2)',
+    borderColor: colors.borderTeal,
   },
   pulseRingActive: {
-    borderColor: '#F26E6E',
+    borderColor: colors.accentPink,
     backgroundColor: 'rgba(242, 110, 110, 0.08)',
   },
   sensorPad: {
     width: 130,
     height: 130,
     borderRadius: 65,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',

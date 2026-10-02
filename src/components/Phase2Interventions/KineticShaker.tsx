@@ -171,11 +171,11 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       case 'day':
       default:
         return {
-          countColor: '#004D40',
-          labelColor: '#065F46',
-          hintColor: '#64748B',
-          progressTrack: 'rgba(0, 196, 179, 0.20)',
-          progressFill: ['#00C4B3', '#62A0E9'] as const,
+          countColor: colors.primaryDark,
+          labelColor: colors.primaryDark,
+          hintColor: colors.textMuted,
+          progressTrack: colors.ringTrack,
+          progressFill: [colors.primary, colors.accentBlue] as const,
         };
     }
   };
@@ -184,12 +184,12 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
   // Dynamic fluid gradient: Sunset & Night strictly use Ooca turquoise base as requested
   const getFluidColors = (): readonly [string, string, ...string[]] => {
     if (isFinished) {
-      return ['#34D399', '#00C4B3'];
+      return [colors.success, colors.primary];
     }
     if (activePeriod === 'sunset' || activePeriod === 'night') {
-      return ['#5EEAD4', '#00CBA7', '#0D9488']; // Vibrant Ooca Turquoise base
+      return [colors.primaryLight, colors.primary, colors.primaryDark]; // Vibrant Ooca Turquoise base
     }
-    return ['#5EEAD4', '#00C4B3', '#009688']; // Crisp daylight turquoise
+    return [colors.primaryLight, colors.primary, colors.primaryDark]; // Crisp daylight turquoise
   };
 
   const starBurstScale = starBurstAnim.interpolate({
@@ -527,7 +527,7 @@ const styles = StyleSheet.create({
   organicProgressTrack: {
     width: 130,
     height: 4,
-    backgroundColor: 'rgba(0, 196, 179, 0.16)',
+    backgroundColor: colors.ringTrack,
     borderRadius: 2,
     overflow: 'hidden',
     marginTop: 6,

@@ -49,3 +49,5 @@ export const AUDIO_SANCTUARY_CONFIG = {
   BINAURAL_BASE_HZ: 216,
   TARGET_DURATION_SEC: 65,
 } as const;
+
+export { SKY_PERIOD } from '../../types';

@@ -21,6 +21,7 @@ import { audioService } from '../services/audioService';
 import { Sun, Moon, Sunrise, Sunset, Clock, ChevronDown } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 import { getTranslation } from '../locales';
+import { SKY_PERIOD, type SkyTimePeriod, type SkyMode } from '../types';
 
 /**
  * Dreamy Celestial Aura - Pure SVG Radial Gradient for an ethereal, soft-diffused glow
@@ -48,8 +49,8 @@ const DreamyCelestialAura: React.FC<{
   );
 };
 
-export type SkyTimePeriod = 'dawn' | 'day' | 'sunset' | 'night';
-export type SkyMode = 'auto' | SkyTimePeriod;
+export { SKY_PERIOD };
+export type { SkyTimePeriod, SkyMode };
 
 export interface SkyContextType {
   activePeriod: SkyTimePeriod;
@@ -59,9 +60,9 @@ export interface SkyContextType {
 }
 
 const SkyContext = createContext<SkyContextType>({
-  activePeriod: 'day',
+  activePeriod: SKY_PERIOD.DAY,
   skyMode: 'auto',
-  setSkyMode: () => {},
+  setSkyMode: () => { },
   lang: 'th',
 });
 
@@ -93,22 +94,22 @@ export const SvgFluffyCloud: React.FC<{
   shadowColor = 'rgba(255, 255, 255, 0.4)',
   opacity = 0.85,
 }) => {
-  const gradId = `cloudGrad_${Math.round(width)}_${Math.round(height)}`;
-  return (
-    <Svg width={width} height={height} viewBox="0 0 110 55" style={{ opacity }}>
-      <Defs>
-        <SvgLinearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <Stop offset="0" stopColor={fillColor} stopOpacity="1" />
-          <Stop offset="1" stopColor={shadowColor} stopOpacity="0.9" />
-        </SvgLinearGradient>
-      </Defs>
-      <Path
-        d="M25 46 C12 46 2 38 2 26 C2 15 12 8 22 9 C26 3 37 0 52 0 C68 0 80 7 85 16 C93 14 104 18 107 27 C110 37 100 46 88 46 Z"
-        fill={`url(#${gradId})`}
-      />
-    </Svg>
-  );
-};
+    const gradId = `cloudGrad_${Math.round(width)}_${Math.round(height)}`;
+    return (
+      <Svg width={width} height={height} viewBox="0 0 110 55" style={{ opacity }}>
+        <Defs>
+          <SvgLinearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={fillColor} stopOpacity="1" />
+            <Stop offset="1" stopColor={shadowColor} stopOpacity="0.9" />
+          </SvgLinearGradient>
+        </Defs>
+        <Path
+          d="M25 46 C12 46 2 38 2 26 C2 15 12 8 22 9 C26 3 37 0 52 0 C68 0 80 7 85 16 C93 14 104 18 107 27 C110 37 100 46 88 46 Z"
+          fill={`url(#${gradId})`}
+        />
+      </Svg>
+    );
+  };
 
 /**
  * 4-Point Diamond Twinkle Star (Vector Icon, NO EMOJI)
@@ -570,10 +571,10 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
                   activePeriod === 'sunset'
                     ? 'rgba(244, 114, 182, 0.28)'
                     : activePeriod === 'night'
-                    ? 'rgba(99, 102, 241, 0.22)'
-                    : activePeriod === 'dawn'
-                    ? 'rgba(254, 215, 170, 0.35)'
-                    : 'rgba(186, 230, 253, 0.38)',
+                      ? 'rgba(99, 102, 241, 0.22)'
+                      : activePeriod === 'dawn'
+                        ? 'rgba(254, 215, 170, 0.35)'
+                        : 'rgba(186, 230, 253, 0.38)',
                 transform: [{ scale: dreamOrbAnim1 }],
               },
             ]}
@@ -586,10 +587,10 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
                   activePeriod === 'sunset'
                     ? 'rgba(232, 121, 249, 0.25)'
                     : activePeriod === 'night'
-                    ? 'rgba(56, 189, 248, 0.18)'
-                    : activePeriod === 'dawn'
-                    ? 'rgba(253, 230, 138, 0.32)'
-                    : 'rgba(204, 251, 241, 0.38)',
+                      ? 'rgba(56, 189, 248, 0.18)'
+                      : activePeriod === 'dawn'
+                        ? 'rgba(253, 230, 138, 0.32)'
+                        : 'rgba(204, 251, 241, 0.38)',
                 transform: [{ scale: dreamOrbAnim2 }],
               },
             ]}
@@ -1028,7 +1029,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
 
           {skyMode === 'auto' ? (
             <View style={styles.autoTag}>
-              <Clock size={8.5} color="#00C4B3" strokeWidth={2.5} />
+              <Clock size={8.5} color={colors.primary} strokeWidth={2.5} />
               <Text style={styles.autoTagText}>Auto</Text>
             </View>
           ) : (

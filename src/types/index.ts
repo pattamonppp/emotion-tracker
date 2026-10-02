@@ -70,3 +70,13 @@ export interface SpeechMessage {
   text: string;
   iconType: 'sparkles' | 'wind' | 'heart' | 'shield' | 'smile' | 'cloud';
 }
+
+export type SkyTimePeriod = 'dawn' | 'day' | 'sunset' | 'night';
+export type SkyMode = 'auto' | SkyTimePeriod;
+
+export const SKY_PERIOD = {
+  DAWN: 'dawn',
+  DAY: 'day',
+  SUNSET: 'sunset',
+  NIGHT: 'night',
+} as const;

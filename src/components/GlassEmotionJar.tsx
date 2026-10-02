@@ -40,7 +40,7 @@ const renderSpeechIcon = (iconType: SpeechMessage['iconType']) => {
     case 'shield':
       return <ShieldCheck size={11} color={colors.primary} strokeWidth={2.4} />;
     case 'smile':
-      return <Smile size={11} color="#FA8C3D" strokeWidth={2.4} />;
+      return <Smile size={11} color={colors.secondary} strokeWidth={2.4} />;
     case 'cloud':
     default:
       return <Cloud size={11} color={colors.primary} strokeWidth={2.4} />;
@@ -318,7 +318,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   const firstTag = selectedEmotions.length > 0
     ? (isFirstCustom ? { color: '#EC4899' } : EMOTION_TAGS.find((t) => t.id === firstId))
     : null;
-  const jarAmbientColor = firstTag?.color || '#00C4B3';
+  const jarAmbientColor = firstTag?.color || colors.primary;
 
   const getJarSunAuraColors = () => {
     switch (skyPeriod) {
@@ -483,7 +483,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                 /* Empty State: Matching Reference Image (Center Sparkle Badge + Subtitle) */
                 <View style={styles.emptyContainer}>
                   <View style={styles.emptyCircleBadge}>
-                    <Sparkles size={20} color="#00C4B3" strokeWidth={2.4} />
+                    <Sparkles size={20} color={colors.primary} strokeWidth={2.4} />
                   </View>
                   <Text
                     style={[
@@ -708,7 +708,7 @@ const styles = StyleSheet.create({
     width: 195,
     height: 85,
     borderRadius: 60,
-    shadowColor: '#00C4B3',
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.28,
     shadowRadius: 22,
@@ -842,7 +842,7 @@ const styles = StyleSheet.create({
     padding: 7,
     position: 'relative',
     overflow: 'hidden',
-    shadowColor: '#00C4B3',
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 18,
@@ -903,12 +903,12 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#99F6E4',
-    shadowColor: '#00C4B3',
+    borderColor: colors.borderTeal,
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.16,
     shadowRadius: 5,

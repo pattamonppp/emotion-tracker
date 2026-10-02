@@ -228,15 +228,15 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         };
       default:
         return {
-          countColor: '#004D40',
-          labelColor: '#065F46',
-          hintColor: '#64748B',
-          progressTrack: 'rgba(0, 196, 179, 0.20)',
-          progressFill: ['#00C4B3', '#62A0E9'] as const,
+          countColor: colors.primaryDark,
+          labelColor: colors.primaryDark,
+          hintColor: colors.textMuted,
+          progressTrack: colors.ringTrack,
+          progressFill: [colors.primary, colors.accentBlue] as const,
           badgeBg: 'rgba(255, 255, 255, 0.90)',
-          badgeBorder: 'rgba(0, 196, 179, 0.35)',
-          badgeTextColor: '#065F46',
-          badgeIconColor: '#00C4B3',
+          badgeBorder: colors.borderTeal,
+          badgeTextColor: colors.primaryDark,
+          badgeIconColor: colors.primary,
         };
     }
   };
@@ -759,29 +759,29 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#E6F9F7',
+    backgroundColor: colors.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
     borderWidth: 2,
-    borderColor: '#99F6E4',
+    borderColor: colors.borderTeal,
   },
   guideTitle: {
     fontFamily: typography.fontPromptBold,
     fontSize: 16,
-    color: '#0F172A',
+    color: colors.textPrimary,
     textAlign: 'center',
     marginBottom: 16,
   },
   guideStepsBox: {
     width: '100%',
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
+    backgroundColor: colors.bgLight,
+    borderRadius: radii.lg,
     padding: 14,
     gap: 12,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.borderSubtle,
   },
   guideStepRow: {
     flexDirection: 'row',
@@ -791,7 +791,7 @@ const styles = StyleSheet.create({
   stepNumBadge: {
     width: 22,
     height: 22,
-    borderRadius: 11,
+    borderRadius: radii.full,
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -800,13 +800,13 @@ const styles = StyleSheet.create({
   stepNumText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: colors.white,
   },
   guideStepText: {
     flex: 1,
     fontFamily: typography.fontPromptRegular,
     fontSize: 12.5,
-    color: '#334155',
+    color: colors.textSecondary,
     lineHeight: 18,
   },
   guideConfirmBtn: {
@@ -823,6 +823,6 @@ const styles = StyleSheet.create({
   guideConfirmText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 13.5,
-    color: '#FFFFFF',
+    color: colors.white,
   },
 });

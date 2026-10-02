@@ -17,6 +17,8 @@ import { Wind, Heart, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react-na
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 
+import { BREATHING_CONFIG } from './constants';
+
 interface SomaticBreathingPacerProps {
   onComplete: () => void;
   lang: 'th' | 'en';
@@ -53,41 +55,41 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
   const getSkyColors = () => {
     // Center orb & pacing circle ALWAYS strictly use Ooca CI Turquoise / Teal
     const oocaCIOrb = {
-      ringTrack: 'rgba(0, 203, 167, 0.16)',
-      ringProgress: colors.primary, // #00C4B3 / #00CBA7 Ooca Primary
+      ringTrack: colors.ringTrack,
+      ringProgress: colors.primary,
       orbBorder: colors.primary,
-      secondsColor: '#004D40', // Deep pine teal on white orb body
-      phaseLabelColor: '#00796B',
-      cycleCounterColor: '#0D9488',
+      secondsColor: colors.primaryDark,
+      phaseLabelColor: colors.primaryDark,
+      cycleCounterColor: colors.primary,
     };
 
     switch (activePeriod) {
       case 'sunset':
         return {
-          instructionColor: '#ffffff',
-          pulseColor: '#ffffff',
-          heartColor: '#ffffff',
+          instructionColor: colors.white,
+          pulseColor: colors.white,
+          heartColor: colors.white,
           ...oocaCIOrb,
         };
       case 'night':
         return {
-          instructionColor: '#F8FAFC',
-          pulseColor: '#CBD5E1',
-          heartColor: '#F87171',
+          instructionColor: colors.borderSubtle,
+          pulseColor: colors.textMuted,
+          heartColor: colors.accentPink,
           ...oocaCIOrb,
         };
       case 'dawn':
         return {
-          instructionColor: '#78350F',
-          pulseColor: '#92400E',
-          heartColor: '#B45309',
+          instructionColor: colors.secondary,
+          pulseColor: colors.secondary,
+          heartColor: colors.secondary,
           ...oocaCIOrb,
         };
       default:
         return {
-          instructionColor: '#004D40',
-          pulseColor: '#64748B',
-          heartColor: '#00C4B3',
+          instructionColor: colors.primaryDark,
+          pulseColor: colors.textMuted,
+          heartColor: colors.primary,
           ...oocaCIOrb,
         };
     }
@@ -96,11 +98,11 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
 
   // Pattern durations in seconds
   const getPhaseDuration = (pat: BreathPattern, ph: PhaseType): number => {
-    if (pat === 'box') return 4;
+    if (pat === 'box') return BREATHING_CONFIG.BOX_PATTERN.inhale;
     switch (ph) {
-      case 'inhale': return 4;
-      case 'hold1': return 7;
-      case 'exhale': return 8;
+      case 'inhale': return BREATHING_CONFIG.PATTERN_478.inhale;
+      case 'hold1': return BREATHING_CONFIG.PATTERN_478.hold;
+      case 'exhale': return BREATHING_CONFIG.PATTERN_478.exhale;
       case 'hold2': return 1;
     }
   };
@@ -432,7 +434,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   orbBody: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     borderWidth: 4,
     alignItems: 'center',
     justifyContent: 'center',
@@ -464,7 +466,7 @@ const styles = StyleSheet.create({
   cycleCounterText: {
     fontFamily: typography.fontPromptMedium,
     fontSize: 10,
-    color: '#94A3B8',
+    color: colors.textMuted,
     marginTop: 4,
   },
   finishedContent: {
@@ -487,7 +489,7 @@ const styles = StyleSheet.create({
   organicInstructionText: {
     fontFamily: typography.fontPromptMedium,
     fontSize: 12,
-    color: '#004D40',
+    color: colors.primaryDark,
     textAlign: 'center',
     lineHeight: 18,
     maxWidth: 290,
@@ -502,7 +504,7 @@ const styles = StyleSheet.create({
   pulseIndicatorText: {
     fontFamily: typography.fontPromptMedium,
     fontSize: 11,
-    color: '#64748B',
+    color: colors.textMuted,
   },
   actionBtnWrapper: {
     width: '100%',

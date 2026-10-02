@@ -177,15 +177,15 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         return {
           cardBg: 'rgba(255, 255, 255, 0.92)',
           cardBorder: colors.borderTeal,
-          badgeBg: '#F0FDFB',
-          badgeBorder: '#99F6E4',
+          badgeBg: colors.primaryLight,
+          badgeBorder: colors.borderTeal,
           badgeText: colors.primaryDark,
           scriptTitle: colors.secondary,
-          scriptText: '#1E293B',
+          scriptText: colors.textPrimary,
           waveColor: colors.primary,
-          hintText: '#64748B',
-          progressTrack: 'rgba(0, 196, 179, 0.20)',
-          progressFill: ['#00C4B3', '#62A0E9'] as const,
+          hintText: colors.textMuted,
+          progressTrack: colors.ringTrack,
+          progressFill: [colors.primary, colors.accentBlue] as const,
         };
     }
   };

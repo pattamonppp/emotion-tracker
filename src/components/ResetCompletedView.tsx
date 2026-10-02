@@ -151,7 +151,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
               {currentDate} • {c.resetDurationLabel}
             </Text>
             <View style={styles.chinBpmDrop}>
-              <Leaf size={11} color="#00C4B3" style={{ marginRight: 2 }} />
+              <Leaf size={11} color={colors.primary} style={{ marginRight: 2 }} />
               <Text style={styles.chinBpmText} numberOfLines={1}>
                 {`-${bpmDrop}\u00A0BPM`}
               </Text>

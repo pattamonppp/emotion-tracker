@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     marginVertical: 1.5,
     marginHorizontal: 2,
     position: 'relative',
-    shadowColor: '#00C4B3',
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 1.5 },
     shadowOpacity: 0.08,
     shadowRadius: 3,

@@ -195,10 +195,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 <View
                   style={[
                     styles.stampSealIcon,
-                    { backgroundColor: '#CCFBF1', borderColor: '#00C4B3' },
+                    { backgroundColor: colors.primaryLight, borderColor: colors.primary },
                   ]}
                 >
-                  <Leaf size={18} color="#00C4B3" fill="#00C4B3" />
+                  <Leaf size={18} color={colors.primary} fill={colors.primary} />
                 </View>
                 <View style={styles.stampTextCol}>
                   <Text style={styles.stampMainLabel}>
