@@ -18,6 +18,10 @@ import {
   Anchor,
   Snowflake,
   BatteryLow,
+  Wind,
+  Brain,
+  CloudRain,
+  Shuffle,
   Sparkles,
   ArrowDown,
 } from 'lucide-react-native';
@@ -35,6 +39,14 @@ export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
       return <Snowflake size={size} color={color} strokeWidth={2.4} />;
     case 'burnout':
       return <BatteryLow size={size} color={color} strokeWidth={2.4} />;
+    case 'anxious':
+      return <Wind size={size} color={color} strokeWidth={2.4} />;
+    case 'overthinking':
+      return <Brain size={size} color={color} strokeWidth={2.4} />;
+    case 'lonely':
+      return <CloudRain size={size} color={color} strokeWidth={2.4} />;
+    case 'confused':
+      return <Shuffle size={size} color={color} strokeWidth={2.4} />;
     default:
       return <Sparkles size={size} color={color} strokeWidth={2.4} />;
   }
@@ -47,6 +59,7 @@ interface FloatingEmotionCloudProps {
   onToggle: (id: EmotionTag['id']) => void;
   onDropIntoJar?: (id: EmotionTag['id']) => void;
   lang: 'th' | 'en';
+  isJarFull?: boolean;
 }
 
 export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
@@ -56,6 +69,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   onToggle,
   onDropIntoJar,
   lang,
+  isJarFull = false,
 }) => {
   // Floating harmonic animations (animate-cloud-1 to 4)
   const floatAnim = useRef(new Animated.Value(0)).current;
@@ -216,7 +230,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
             { translateY: Animated.add(panAnim.y, floatAnim) },
             { scale: scaleAnim },
           ],
-          opacity: opacityAnim,
+          opacity: isJarFull && !isSelected ? 0.62 : opacityAnim,
         },
       ]}
       {...panResponder.panHandlers}

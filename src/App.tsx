@@ -38,7 +38,7 @@ import { LivePulseSensorModal } from './components/LivePulseSensorModal';
 import { ResetHistoryModal } from './components/ResetHistoryModal';
 import { MoocaStoryModal } from './components/MoocaStoryModal';
 
-import { Languages, Sparkles } from 'lucide-react-native';
+import { Languages, Sparkles, Volume2, VolumeX } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from './design-system/tokens';
 import { 
   useFonts, 
@@ -92,11 +92,15 @@ export default function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
   const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>('day');
+  const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(true);
 
-  // Load saved profile & history on mount
+  // Load saved profile & history on mount + start soothing cute ambient music
   useEffect(() => {
     storageService.getProfile(DEFAULT_PROFILE).then(setProfile);
     storageService.getHistory().then(setHistory);
+    audioService.startBackgroundMusic();
+    const unsub = audioService.subscribeBgm(setIsMusicPlaying);
+    return () => unsub();
   }, []);
 
   // Timer lifecycle for 120-second architecture
@@ -219,6 +223,21 @@ export default function App() {
               >
                 <Languages size={13} color={colors.primary} />
                 <Text style={styles.langText}>{profile.language.toUpperCase()}</Text>
+              </TouchableOpacity>
+
+              {/* Sound / Music Toggle Button (Between Language & Avatar) */}
+              <TouchableOpacity
+                onPress={() => {
+                  audioService.toggleBackgroundMusic();
+                }}
+                activeOpacity={0.8}
+                style={[styles.soundBtn, isMusicPlaying && styles.soundBtnActive]}
+              >
+                {isMusicPlaying ? (
+                  <Volume2 size={13} color={colors.primaryDark} />
+                ) : (
+                  <VolumeX size={13} color={colors.textMuted} />
+                )}
               </TouchableOpacity>
 
               {/* Profile Avatar (Rounded 12px Turquoise-Blue Gradient) */}
@@ -463,6 +482,21 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontPromptBold,
     fontSize: 11,
     color: colors.primaryDark,
+  },
+  soundBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: radii.full,
+    backgroundColor: '#F0FDFB',
+    borderWidth: 1.5,
+    borderColor: '#BFEFEB',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadows.soft,
+  },
+  soundBtnActive: {
+    backgroundColor: '#E6F9F7',
+    borderColor: 'rgba(0, 196, 179, 0.45)',
   },
   avatarWrapper: {
     borderRadius: 12,

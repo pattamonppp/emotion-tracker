@@ -143,6 +143,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
 
   // Celestial animations
   const starTwinkleAnim = useRef(new Animated.Value(0.4)).current;
+  const starTwinkleAnim2 = useRef(new Animated.Value(0.8)).current;
+  const dayBeamAnim = useRef(new Animated.Value(0.35)).current;
   const sunPulseAnim = useRef(new Animated.Value(1)).current;
   const dreamOrbAnim1 = useRef(new Animated.Value(0.92)).current;
   const dreamOrbAnim2 = useRef(new Animated.Value(1.08)).current;
@@ -314,6 +316,42 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
     );
     starLoop.start();
 
+    const starLoop2 = Animated.loop(
+      Animated.sequence([
+        Animated.timing(starTwinkleAnim2, {
+          toValue: 0.2,
+          duration: 1900,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(starTwinkleAnim2, {
+          toValue: 1,
+          duration: 1900,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    starLoop2.start();
+
+    const beamLoop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(dayBeamAnim, {
+          toValue: 0.6,
+          duration: 4200,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+        Animated.timing(dayBeamAnim, {
+          toValue: 0.25,
+          duration: 4200,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    beamLoop.start();
+
     const sunLoop = Animated.loop(
       Animated.sequence([
         Animated.timing(sunPulseAnim, {
@@ -378,6 +416,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
       bobLoop3.stop();
       driftLoop4.stop();
       starLoop.stop();
+      starLoop2.stop();
+      beamLoop.stop();
       sunLoop.stop();
       orbLoop1.stop();
       orbLoop2.stop();
@@ -622,30 +662,72 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               />
               <Moon size={32} color="#FEF08A" fill="#FEF08A" />
             </View>
+
+            {/* Night Twinkling Diamond Stars Layer 1 */}
             <Animated.View style={[styles.starsLayer, { opacity: starTwinkleAnim }]}>
-              <View style={[styles.vectorStarItem, { top: 95, left: 35 }]}>
+              <View style={[styles.vectorStarItem, { top: 75, left: 30 }]}>
+                <SvgDiamondStar size={13} color="#FDE047" />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 90, left: 155 }]}>
+                <SvgDiamondStar size={9} color="#FFFFFF" opacity={0.85} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 110, right: 80 }]}>
+                <SvgDiamondStar size={11} color="#FEF08A" opacity={0.9} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 145, left: 60 }]}>
                 <SvgDiamondStar size={14} color="#FDE047" />
               </View>
-              <View style={[styles.vectorStarItem, { top: 135, right: 60 }]}>
-                <SvgDiamondStar size={10} color="#FDE047" opacity={0.85} />
+              <View style={[styles.vectorStarItem, { top: 175, right: 40 }]}>
+                <SvgDiamondStar size={8} color="#FEF08A" opacity={0.8} />
               </View>
-              <View style={[styles.vectorStarItem, { top: 215, left: 55 }]}>
+              <View style={[styles.vectorStarItem, { top: 220, left: 40 }]}>
+                <SvgDiamondStar size={12} color="#FFFFFF" opacity={0.9} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 260, right: 115 }]}>
+                <SvgDiamondStar size={10} color="#FDE047" opacity={0.75} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 310, left: 85 }]}>
                 <SvgDiamondStar size={13} color="#FEF08A" />
               </View>
-              <View style={[styles.vectorStarItem, { top: 185, right: 35 }]}>
-                <SvgDiamondStar size={9} color="#FDE047" opacity={0.75} />
+              <View style={[styles.vectorStarItem, { top: 355, right: 65 }]}>
+                <SvgDiamondStar size={11} color="#FDE047" opacity={0.85} />
               </View>
-              <View style={[styles.vectorStarItem, { top: 285, left: 35 }]}>
-                <SvgDiamondStar size={11} color="#FEF08A" />
+            </Animated.View>
+
+            {/* Night Twinkling Diamond Stars Layer 2 (Alternating Cadence) */}
+            <Animated.View style={[styles.starsLayer, { opacity: starTwinkleAnim2 }]}>
+              <View style={[styles.vectorStarItem, { top: 65, right: 45 }]}>
+                <SvgDiamondStar size={10} color="#FEF08A" opacity={0.8} />
               </View>
-              <View style={[styles.vectorStarItem, { top: 335, right: 70 }]}>
+              <View style={[styles.vectorStarItem, { top: 125, left: 110 }]}>
+                <SvgDiamondStar size={8} color="#FFFFFF" opacity={0.85} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 160, right: 135 }]}>
+                <SvgDiamondStar size={12} color="#FDE047" opacity={0.7} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 195, left: 170 }]}>
+                <SvgDiamondStar size={10} color="#FEF08A" opacity={0.8} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 235, right: 35 }]}>
+                <SvgDiamondStar size={13} color="#FDE047" />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 280, left: 25 }]}>
+                <SvgDiamondStar size={9} color="#FFFFFF" opacity={0.8} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 330, left: 140 }]}>
+                <SvgDiamondStar size={12} color="#FEF08A" opacity={0.85} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 380, right: 45 }]}>
                 <SvgDiamondStar size={14} color="#FDE047" />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 405, left: 50 }]}>
+                <SvgDiamondStar size={8} color="#FEF08A" opacity={0.75} />
               </View>
             </Animated.View>
           </View>
         )}
 
-        {/* Dawn Sunrise */}
+        {/* Dawn Sunrise (Pure Diffused Glowing Circle Sun - NO ICON) */}
         {activePeriod === 'dawn' && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
             <Animated.View
@@ -655,22 +737,63 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               ]}
             >
               <DreamyCelestialAura
-                size={130}
-                coreColor="#FDBA74"
-                midColor="#FDE68A"
-                outerColor="#FFF7ED"
+                size={145}
+                coreColor="#FFF7ED"
+                midColor="#FDBA74"
+                outerColor="#FED7AA"
                 id="dawnBloom"
               />
-              <Sunrise size={38} color="#F59E0B" />
+              <View style={styles.diffusedSunCoreDawn} />
             </Animated.View>
             <View style={styles.morningMist1} />
             <View style={styles.morningMist2} />
           </View>
         )}
 
-        {/* Day Sun */}
+        {/* Daytime Sky: Radiant Sunbeams, Sunlight Sparkles & Diffused Sun (NO ICON) */}
         {activePeriod === 'day' && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
+            {/* Dreamy Sunlight Beams radiating across the sky */}
+            <Animated.View style={[styles.daySunbeamsLayer, { opacity: dayBeamAnim }]}>
+              <Svg width={SCREEN_WIDTH} height={420} viewBox="0 0 390 420">
+                <Defs>
+                  <SvgLinearGradient id="beamGrad1" x1="1" y1="0.3" x2="0" y2="1">
+                    <Stop offset="0%" stopColor="#FFFBEB" stopOpacity="0.35" />
+                    <Stop offset="55%" stopColor="#FEF08A" stopOpacity="0.12" />
+                    <Stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                  </SvgLinearGradient>
+                  <SvgLinearGradient id="beamGrad2" x1="0.9" y1="0.25" x2="0.25" y2="1">
+                    <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.38" />
+                    <Stop offset="60%" stopColor="#FEF08A" stopOpacity="0.1" />
+                    <Stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                  </SvgLinearGradient>
+                </Defs>
+                <Path d="M 330 180 L 120 420 L 50 420 L 320 180 Z" fill="url(#beamGrad1)" />
+                <Path d="M 345 190 L 270 420 L 210 420 L 335 190 Z" fill="url(#beamGrad2)" />
+                <Path d="M 320 170 L 30 380 L 0 380 L 305 170 Z" fill="url(#beamGrad1)" opacity={0.5} />
+              </Svg>
+            </Animated.View>
+
+            {/* Sunlight Floating Sparkles */}
+            <Animated.View style={[styles.daySparklesLayer, { opacity: starTwinkleAnim }]}>
+              <View style={[styles.vectorStarItem, { top: 110, left: 45 }]}>
+                <SvgDiamondStar size={11} color="#FDE047" opacity={0.65} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 150, left: 160 }]}>
+                <SvgDiamondStar size={13} color="#FFFFFF" opacity={0.8} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 205, left: 75 }]}>
+                <SvgDiamondStar size={10} color="#FDE047" opacity={0.6} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 260, right: 60 }]}>
+                <SvgDiamondStar size={12} color="#FEF08A" opacity={0.7} />
+              </View>
+              <View style={[styles.vectorStarItem, { top: 315, left: 35 }]}>
+                <SvgDiamondStar size={11} color="#FFFFFF" opacity={0.75} />
+              </View>
+            </Animated.View>
+
+            {/* Pure Diffused Glowing Circle Day Sun - NO ICON */}
             <Animated.View
               style={[
                 styles.daySunContainer,
@@ -678,18 +801,18 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               ]}
             >
               <DreamyCelestialAura
-                size={130}
-                coreColor="#FDE047"
+                size={155}
+                coreColor="#FFFFFF"
                 midColor="#FEF08A"
-                outerColor="#FFFBEB"
+                outerColor="#FDE047"
                 id="daySunBloom"
               />
-              <Sun size={32} color="#F59E0B" strokeWidth={2.4} />
+              <View style={styles.diffusedSunCoreDay} />
             </Animated.View>
           </View>
         )}
 
-        {/* Sunset Sun */}
+        {/* Sunset Sun (Pure Diffused Glowing Circle Sun - NO ICON) */}
         {activePeriod === 'sunset' && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
             <Animated.View
@@ -699,13 +822,13 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               ]}
             >
               <DreamyCelestialAura
-                size={130}
-                coreColor="#FB923C"
-                midColor="#F472B6"
-                outerColor="#FDF4FF"
+                size={145}
+                coreColor="#FFF1F2"
+                midColor="#FDA4AF"
+                outerColor="#F43F5E"
                 id="sunsetBloom"
               />
-              <Sunset size={36} color="#FB7185" />
+              <View style={styles.diffusedSunCoreSunset} />
             </Animated.View>
           </View>
         )}
@@ -1040,19 +1163,54 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 1,
   },
-  sunDreamAuraOuterSunset: {
-    position: 'absolute',
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    backgroundColor: 'rgba(244, 114, 182, 0.32)',
+  diffusedSunCoreDawn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#FFF7ED',
+    shadowColor: '#F59E0B',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.85,
+    shadowRadius: 18,
+    elevation: 6,
   },
-  sunDreamAuraMidSunset: {
+  diffusedSunCoreDay: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#FDE047',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.9,
+    shadowRadius: 22,
+    elevation: 8,
+  },
+  diffusedSunCoreSunset: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#FFF1F2',
+    shadowColor: '#F43F5E',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.85,
+    shadowRadius: 20,
+    elevation: 6,
+  },
+  daySunbeamsLayer: {
     position: 'absolute',
-    width: 62,
-    height: 62,
-    borderRadius: 31,
-    backgroundColor: 'rgba(251, 113, 133, 0.45)',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 0,
+  },
+  daySparklesLayer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 0,
   },
   switcherContainer: {
     alignItems: 'center',

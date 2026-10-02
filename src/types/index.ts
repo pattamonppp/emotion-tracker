@@ -6,7 +6,16 @@ export type MBTIType =
   | 'ISTJ' | 'ISFJ' | 'ESTJ' | 'ESFJ'
   | 'ISTP' | 'ISFP' | 'ESTP' | 'ESFP';
 
-export type EmotionTagId = 'shaking' | 'forgetting' | 'pressure' | 'freeze' | 'burnout';
+export type EmotionTagId = 
+  | 'shaking' 
+  | 'forgetting' 
+  | 'pressure' 
+  | 'freeze' 
+  | 'burnout'
+  | 'anxious'
+  | 'overthinking'
+  | 'lonely'
+  | 'confused';
 
 export interface EmotionTag {
   id: EmotionTagId;

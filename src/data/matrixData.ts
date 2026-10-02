@@ -46,6 +46,42 @@ export const EMOTION_TAGS: EmotionTag[] = [
     weightDescription: '',
     recommendedOption: 'D', // Pre-Generated Studio Audio Matrix
   },
+  {
+    id: 'anxious',
+    labelTh: 'กังวล',
+    labelEn: 'Anxious',
+    emoji: '',
+    color: '#F59E0B', // Warm Amber
+    weightDescription: '',
+    recommendedOption: 'A',
+  },
+  {
+    id: 'overthinking',
+    labelTh: 'คิดมาก',
+    labelEn: 'Overthinking',
+    emoji: '',
+    color: '#8B5CF6', // Soft Purple
+    weightDescription: '',
+    recommendedOption: 'B',
+  },
+  {
+    id: 'lonely',
+    labelTh: 'โดดเดี่ยว',
+    labelEn: 'Lonely',
+    emoji: '',
+    color: '#0284C7', // Gentle Sky Blue
+    weightDescription: '',
+    recommendedOption: 'D',
+  },
+  {
+    id: 'confused',
+    labelTh: 'สับสน',
+    labelEn: 'Confused',
+    emoji: '',
+    color: '#10B981', // Mint Emerald
+    weightDescription: '',
+    recommendedOption: 'C',
+  },
 ];
 
 export const CONTEXT_LOCATIONS = [

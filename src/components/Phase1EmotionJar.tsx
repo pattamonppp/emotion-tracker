@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import { audioService } from '../services/audioService';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { FloatingEmotionCloud } from './FloatingEmotionCloud';
 import { GlassEmotionJar } from './GlassEmotionJar';
-import { MapPin, Activity, Sparkles, ArrowRight, Volume2, VolumeX } from 'lucide-react-native';
+import { MapPin, Activity, Sparkles, ArrowRight } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 interface Phase1EmotionJarProps {
@@ -25,6 +25,8 @@ interface Phase1EmotionJarProps {
   lang: 'th' | 'en';
 }
 
+const MAX_SELECTED_EMOTIONS = 3;
+
 export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   currentLocation,
   heartRate,
@@ -35,31 +37,33 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   onOpenStory,
   lang,
 }) => {
-  const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(true);
-
-  useEffect(() => {
-    // Start peaceful ambient music when entering emotion sanctuary
-    audioService.startBackgroundMusic();
-    const unsub = audioService.subscribeBgm((playing) => {
-      setIsMusicPlaying(playing);
-    });
-    return () => {
-      unsub();
-    };
-  }, []);
+  const selectedEmotionsRef = React.useRef(selectedEmotions);
+  selectedEmotionsRef.current = selectedEmotions;
 
   const toggleEmotion = (id: EmotionTagId) => {
-    audioService.playJarDrop();
-    if (selectedEmotions.includes(id)) {
-      onSelectEmotions(selectedEmotions.filter((item) => item !== id));
+    const current = selectedEmotionsRef.current;
+    if (current.includes(id)) {
+      audioService.triggerHaptic('light');
+      onSelectEmotions(current.filter((item) => item !== id));
     } else {
-      onSelectEmotions([...selectedEmotions, id]);
+      if (current.length >= MAX_SELECTED_EMOTIONS) {
+        audioService.triggerHaptic('warning');
+        return;
+      }
+      audioService.playJarDrop();
+      onSelectEmotions([...current, id]);
     }
   };
 
   const handleDropIntoJar = (id: EmotionTagId) => {
-    if (!selectedEmotions.includes(id)) {
-      onSelectEmotions([...selectedEmotions, id]);
+    const current = selectedEmotionsRef.current;
+    if (!current.includes(id)) {
+      if (current.length >= MAX_SELECTED_EMOTIONS) {
+        audioService.triggerHaptic('warning');
+        return;
+      }
+      audioService.playJarDrop();
+      onSelectEmotions([...current, id]);
     }
   };
 
@@ -68,10 +72,12 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
     onSelectEmotions([]);
   };
 
+  const isJarFull = selectedEmotions.length >= MAX_SELECTED_EMOTIONS;
+
   return (
     <View style={styles.root}>
       <View style={styles.viewportContent}>
-        {/* Top Status Indicators (Location, Live Pulse, and Dreamscape Music Toggle) */}
+        {/* Top Status Indicators (Location & Live Pulse) */}
         <View style={styles.statusRow}>
           <View style={styles.badgePill}>
             <MapPin size={11} color={colors.primary} />
@@ -88,27 +94,6 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             <Activity size={11} color={colors.secondary} />
             <Text style={styles.pulseText}>{heartRate} BPM</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              audioService.toggleBackgroundMusic();
-            }}
-            style={[
-              styles.musicPill,
-              isMusicPlaying && styles.musicPillActive,
-            ]}
-          >
-            {isMusicPlaying ? (
-              <Volume2 size={11} color={colors.primaryDark} />
-            ) : (
-              <VolumeX size={11} color={colors.textMuted} />
-            )}
-            <Text style={[styles.musicText, isMusicPlaying && styles.musicTextActive]}>
-              {lang === 'th'
-                ? (isMusicPlaying ? 'ดนตรี' : 'ปิดเสียง')
-                : (isMusicPlaying ? 'Music' : 'Mute')}
-            </Text>
-          </TouchableOpacity>
         </View>
 
         {/* Floating Emotion Clouds Section (Floating in the Sky) */}
@@ -116,7 +101,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           <View style={styles.sectionHeaderRow}>
             <Sparkles size={11} color={colors.primary} />
             <Text style={styles.sectionTitle}>
-              {lang === 'th' ? 'ก้อนเมฆอารมณ์ในใจ' : 'Emotion Clouds'}
+              {lang === 'th'
+                ? `ก้อนเมฆอารมณ์ในใจ (${selectedEmotions.length}/${MAX_SELECTED_EMOTIONS})`
+                : `Emotion Clouds (${selectedEmotions.length}/${MAX_SELECTED_EMOTIONS})`}
             </Text>
           </View>
 
@@ -129,6 +116,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
                   tag={tag}
                   index={idx}
                   isSelected={isSelected}
+                  isJarFull={isJarFull}
                   onToggle={toggleEmotion}
                   onDropIntoJar={handleDropIntoJar}
                   lang={lang}
@@ -237,30 +225,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
     color: colors.secondary,
-  },
-  musicPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 8,
-    paddingVertical: 2.5,
-    borderRadius: radii.full,
-    borderWidth: 1.2,
-    borderColor: 'rgba(160, 174, 192, 0.3)',
-    gap: 4,
-    ...shadows.soft,
-  },
-  musicPillActive: {
-    borderColor: 'rgba(0, 196, 179, 0.35)',
-    backgroundColor: 'rgba(230, 249, 247, 0.6)',
-  },
-  musicText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: colors.textMuted,
-  },
-  musicTextActive: {
-    color: colors.primaryDark,
   },
   skyCloudsSection: {
     width: '100%',
