@@ -31,6 +31,9 @@ import {
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
+  if (tagId.startsWith('custom')) {
+    return <PenLine size={size} color={color} strokeWidth={2.4} />;
+  }
   switch (tagId) {
     case 'shaking':
       return <Activity size={size} color={color} strokeWidth={2.4} />;
@@ -82,6 +85,8 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   onEditCustom,
   isAddButton = false,
 }) => {
+  const isCustom = tag.id.startsWith('custom') || Boolean(customText);
+
   // Floating harmonic animations (animate-cloud-1 to 4)
   const floatAnim = useRef(new Animated.Value(0)).current;
   const panAnim = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
@@ -324,15 +329,16 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
         colors={
           isSelected
             ? ['#FFFFFF', '#F0FDFA', '#CCFBF1']
-            : tag.id === 'custom'
+            : isCustom
             ? ['#FFFFFF', '#FDF2F8', '#FCE7F3']
             : ['#FFFFFF', '#FFFDF9', '#F8FAFC']
         }
         style={[
           styles.cloudBody,
+          isCustom && styles.customCloudBody,
           {
-            borderColor: isSelected ? tag.color : tag.id === 'custom' ? 'rgba(236, 72, 153, 0.4)' : 'rgba(0, 0, 0, 0.08)',
-            borderBottomColor: isSelected ? tag.color : tag.id === 'custom' ? '#F472B6' : '#CBD5E1',
+            borderColor: isSelected ? tag.color : isCustom ? 'rgba(236, 72, 153, 0.4)' : 'rgba(0, 0, 0, 0.08)',
+            borderBottomColor: isSelected ? tag.color : isCustom ? '#F472B6' : '#CBD5E1',
           },
         ]}
       >
@@ -348,15 +354,17 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
           {getEmotionIcon(tag.id, tag.color, 11)}
         </View>
 
-        {/* Short Punchy Emotion Word (No Description) */}
+        {/* Short Punchy Emotion Word with Ellipsis */}
         <Text
           style={[
             styles.cloudTitle,
+            isCustom && styles.customCloudTitle,
             { color: isSelected ? colors.primaryDark : colors.textPrimary },
           ]}
           numberOfLines={1}
+          ellipsizeMode="tail"
         >
-          {tag.id === 'custom' && customText
+          {isCustom && customText
             ? customText
             : lang === 'th' ? tag.labelTh : tag.labelEn}
         </Text>
@@ -448,6 +456,10 @@ const styles = StyleSheet.create({
     gap: 3.5,
     zIndex: 2,
     backgroundColor: '#FFFFFF',
+    maxWidth: 114,
+  },
+  customCloudBody: {
+    maxWidth: 108,
   },
   iconBubble: {
     width: 17,
@@ -459,6 +471,10 @@ const styles = StyleSheet.create({
   cloudTitle: {
     fontFamily: typography.fontPromptSemiBold,
     fontSize: 9.8,
+    flexShrink: 1,
+  },
+  customCloudTitle: {
+    maxWidth: 62,
   },
   checkBadge: {
     width: 13,

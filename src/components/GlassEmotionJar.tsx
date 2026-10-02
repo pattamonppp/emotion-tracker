@@ -510,9 +510,14 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
 
                         {/* Mini Cloud Body */}
                         <LinearGradient
-                          colors={['#FFFFFF', '#F0FDFA', '#E6FAF8']}
+                          colors={
+                            isCustom
+                              ? ['#FFFFFF', '#FDF2F8', '#FCE7F3']
+                              : ['#FFFFFF', '#F0FDFA', '#E6FAF8']
+                          }
                           style={[
                             styles.miniCloudBody,
+                            isCustom && styles.customMiniCloudBody,
                             {
                               borderColor: tag.color,
                               shadowColor: tag.color,
@@ -527,7 +532,15 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                           >
                             {getEmotionIcon(isCustom ? 'custom' : tag.id, tag.color, 11)}
                           </View>
-                          <Text style={[styles.miniPuffText, { color: colors.primaryDark }]} numberOfLines={1}>
+                          <Text
+                            style={[
+                              styles.miniPuffText,
+                              isCustom && styles.customMiniPuffText,
+                              { color: colors.primaryDark },
+                            ]}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                          >
                             {isCustom
                               ? (customItem?.text || customEmotionText || tag.labelTh)
                               : (lang === 'th' ? tag.labelTh : tag.labelEn)}
@@ -932,6 +945,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 3,
     elevation: 2,
+    maxWidth: 165,
+  },
+  customMiniCloudBody: {
+    maxWidth: 155,
   },
   miniPuffIconWrapper: {
     width: 17,
@@ -943,6 +960,10 @@ const styles = StyleSheet.create({
   miniPuffText: {
     fontFamily: typography.fontPromptSemiBold,
     fontSize: 10.5,
+    flexShrink: 1,
+  },
+  customMiniPuffText: {
+    maxWidth: 95,
   },
   miniRemoveBtn: {
     width: 15,
