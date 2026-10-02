@@ -9,10 +9,43 @@ import {
   Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
+import Svg, {
+  Path,
+  Defs,
+  LinearGradient as SvgLinearGradient,
+  RadialGradient as SvgRadialGradient,
+  Circle,
+  Stop,
+} from 'react-native-svg';
 import { audioService } from '../services/audioService';
 import { Sun, Moon, Sunrise, Sunset, Clock, ChevronDown } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
+
+/**
+ * Dreamy Celestial Aura - Pure SVG Radial Gradient for an ethereal, soft-diffused glow
+ */
+const DreamyCelestialAura: React.FC<{
+  size: number;
+  coreColor: string;
+  midColor: string;
+  outerColor: string;
+  id: string;
+}> = ({ size, coreColor, midColor, outerColor, id }) => {
+  const r = size / 2;
+  return (
+    <Svg width={size} height={size} style={{ position: 'absolute' }}>
+      <Defs>
+        <SvgRadialGradient id={id} cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%">
+          <Stop offset="0%" stopColor={coreColor} stopOpacity="0.8" />
+          <Stop offset="35%" stopColor={midColor} stopOpacity="0.45" />
+          <Stop offset="68%" stopColor={outerColor} stopOpacity="0.18" />
+          <Stop offset="100%" stopColor={outerColor} stopOpacity="0" />
+        </SvgRadialGradient>
+      </Defs>
+      <Circle cx={r} cy={r} r={r} fill={`url(#${id})`} />
+    </Svg>
+  );
+};
 
 export type SkyTimePeriod = 'dawn' | 'day' | 'sunset' | 'night';
 export type SkyMode = 'auto' | SkyTimePeriod;
@@ -111,6 +144,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
   // Celestial animations
   const starTwinkleAnim = useRef(new Animated.Value(0.4)).current;
   const sunPulseAnim = useRef(new Animated.Value(1)).current;
+  const dreamOrbAnim1 = useRef(new Animated.Value(0.92)).current;
+  const dreamOrbAnim2 = useRef(new Animated.Value(1.08)).current;
 
   // Background Cloud Drift Animations (Continuous looping)
   const cloudDrift1 = useRef(new Animated.Value(-160)).current;
@@ -297,6 +332,43 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
     );
     sunLoop.start();
 
+    // Dreamy ambient Aurora / Bokeh orb breathing animations
+    const orbLoop1 = Animated.loop(
+      Animated.sequence([
+        Animated.timing(dreamOrbAnim1, {
+          toValue: 1.15,
+          duration: 7000,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+        Animated.timing(dreamOrbAnim1, {
+          toValue: 0.9,
+          duration: 7000,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    orbLoop1.start();
+
+    const orbLoop2 = Animated.loop(
+      Animated.sequence([
+        Animated.timing(dreamOrbAnim2, {
+          toValue: 0.88,
+          duration: 8500,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+        Animated.timing(dreamOrbAnim2, {
+          toValue: 1.12,
+          duration: 8500,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    orbLoop2.start();
+
     return () => {
       driftLoop1.stop();
       bobLoop1.stop();
@@ -307,20 +379,22 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
       driftLoop4.stop();
       starLoop.stop();
       sunLoop.stop();
+      orbLoop1.stop();
+      orbLoop2.stop();
     };
   }, []);
 
   const getSkyGradients = (): [string, string, ...string[]] => {
     switch (activePeriod) {
       case 'dawn':
-        return ['#FFE4D6', '#FFEDD5', '#FEF3C7', '#E0F2FE'];
+        return ['#FFEBE5', '#FED7AA', '#FDE68A', '#E0F2FE', '#F0FDFA'];
       case 'day':
-        return ['#BAE6FD', '#E0F2FE', '#F0FDFA', '#FFFFFF'];
+        return ['#BAE6FD', '#CFFAFE', '#E0F2FE', '#F0FDFA', '#FFFBEB'];
       case 'sunset':
-        return ['#FED7AA', '#FDBA74', '#F472B6', '#C084FC', '#4F46E5'];
+        return ['#FED7AA', '#FDBA74', '#F472B6', '#E879F9', '#818CF8', '#312E81'];
       case 'night':
       default:
-        return ['#0B1120', '#1E1B4B', '#0F172A', '#020617'];
+        return ['#090D16', '#1E1B4B', '#1E293B', '#0F172A'];
     }
   };
 
@@ -407,6 +481,42 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
           colors={getSkyGradients()}
           style={StyleSheet.absoluteFill}
         />
+
+        {/* Dreamy Ambient Floating Light Orbs (Aurora / Dream Bokeh) */}
+        <View style={StyleSheet.absoluteFill} pointerEvents="none">
+          <Animated.View
+            style={[
+              styles.dreamOrb1,
+              {
+                backgroundColor:
+                  activePeriod === 'sunset'
+                    ? 'rgba(244, 114, 182, 0.28)'
+                    : activePeriod === 'night'
+                    ? 'rgba(99, 102, 241, 0.22)'
+                    : activePeriod === 'dawn'
+                    ? 'rgba(254, 215, 170, 0.35)'
+                    : 'rgba(186, 230, 253, 0.38)',
+                transform: [{ scale: dreamOrbAnim1 }],
+              },
+            ]}
+          />
+          <Animated.View
+            style={[
+              styles.dreamOrb2,
+              {
+                backgroundColor:
+                  activePeriod === 'sunset'
+                    ? 'rgba(232, 121, 249, 0.25)'
+                    : activePeriod === 'night'
+                    ? 'rgba(56, 189, 248, 0.18)'
+                    : activePeriod === 'dawn'
+                    ? 'rgba(253, 230, 138, 0.32)'
+                    : 'rgba(204, 251, 241, 0.38)',
+                transform: [{ scale: dreamOrbAnim2 }],
+              },
+            ]}
+          />
+        </View>
 
         {/* Floating Fluffy Background Clouds (Always Active across all skies) */}
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
@@ -502,21 +612,27 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
         {/* Night Stars & Moon (Pure Vector Icons & Svg, NO EMOJI) */}
         {activePeriod === 'night' && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
-            <View style={styles.nightMoon}>
-              <Moon size={34} color="#FDE047" fill="#FDE047" />
-              <View style={styles.moonGlow} />
+            <View style={styles.nightMoonContainer}>
+              <DreamyCelestialAura
+                size={120}
+                coreColor="#FEF08A"
+                midColor="#818CF8"
+                outerColor="#38BDF8"
+                id="moonBloom"
+              />
+              <Moon size={32} color="#FEF08A" fill="#FEF08A" />
             </View>
             <Animated.View style={[styles.starsLayer, { opacity: starTwinkleAnim }]}>
-              <View style={[styles.vectorStarItem, { top: 85, left: 35 }]}>
+              <View style={[styles.vectorStarItem, { top: 95, left: 35 }]}>
                 <SvgDiamondStar size={14} color="#FDE047" />
               </View>
-              <View style={[styles.vectorStarItem, { top: 125, right: 60 }]}>
+              <View style={[styles.vectorStarItem, { top: 135, right: 60 }]}>
                 <SvgDiamondStar size={10} color="#FDE047" opacity={0.85} />
               </View>
               <View style={[styles.vectorStarItem, { top: 215, left: 55 }]}>
                 <SvgDiamondStar size={13} color="#FEF08A" />
               </View>
-              <View style={[styles.vectorStarItem, { top: 175, right: 35 }]}>
+              <View style={[styles.vectorStarItem, { top: 185, right: 35 }]}>
                 <SvgDiamondStar size={9} color="#FDE047" opacity={0.75} />
               </View>
               <View style={[styles.vectorStarItem, { top: 285, left: 35 }]}>
@@ -534,11 +650,18 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
             <Animated.View
               style={[
-                styles.sunriseSun,
+                styles.sunriseSunContainer,
                 { transform: [{ scale: sunPulseAnim }] },
               ]}
             >
-              <Sunrise size={40} color="#F59E0B" />
+              <DreamyCelestialAura
+                size={130}
+                coreColor="#FDBA74"
+                midColor="#FDE68A"
+                outerColor="#FFF7ED"
+                id="dawnBloom"
+              />
+              <Sunrise size={38} color="#F59E0B" />
             </Animated.View>
             <View style={styles.morningMist1} />
             <View style={styles.morningMist2} />
@@ -554,7 +677,14 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
                 { transform: [{ scale: sunPulseAnim }] },
               ]}
             >
-              <Sun size={32} color="#F59E0B" strokeWidth={2.2} />
+              <DreamyCelestialAura
+                size={130}
+                coreColor="#FDE047"
+                midColor="#FEF08A"
+                outerColor="#FFFBEB"
+                id="daySunBloom"
+              />
+              <Sun size={32} color="#F59E0B" strokeWidth={2.4} />
             </Animated.View>
           </View>
         )}
@@ -562,9 +692,21 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
         {/* Sunset Sun */}
         {activePeriod === 'sunset' && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
-            <View style={styles.sunsetSun}>
-              <Sunset size={38} color="#FB7185" />
-            </View>
+            <Animated.View
+              style={[
+                styles.sunsetSunContainer,
+                { transform: [{ scale: sunPulseAnim }] },
+              ]}
+            >
+              <DreamyCelestialAura
+                size={130}
+                coreColor="#FB923C"
+                midColor="#F472B6"
+                outerColor="#FDF4FF"
+                id="sunsetBloom"
+              />
+              <Sunset size={36} color="#FB7185" />
+            </Animated.View>
           </View>
         )}
 
@@ -780,19 +922,43 @@ const styles = StyleSheet.create({
   floatingBgCloud: {
     position: 'absolute',
   },
-  nightMoon: {
+  dreamOrb1: {
     position: 'absolute',
-    top: 85,
-    right: 28,
+    top: 90,
+    left: -40,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+  },
+  dreamOrb2: {
+    position: 'absolute',
+    top: 250,
+    right: -50,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+  },
+  nightMoonContainer: {
+    position: 'absolute',
+    top: 185,
+    right: 22,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 1,
   },
-  moonGlow: {
+  moonDreamAuraOuter: {
     position: 'absolute',
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(253, 224, 71, 0.15)',
+    width: 86,
+    height: 86,
+    borderRadius: 43,
+    backgroundColor: 'rgba(129, 140, 248, 0.22)',
+  },
+  moonDreamAuraMid: {
+    position: 'absolute',
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: 'rgba(253, 224, 71, 0.25)',
   },
   starsLayer: {
     position: 'absolute',
@@ -804,16 +970,31 @@ const styles = StyleSheet.create({
   vectorStarItem: {
     position: 'absolute',
   },
-  sunriseSun: {
+  sunriseSunContainer: {
     position: 'absolute',
-    top: 95,
-    right: 32,
+    top: 185,
+    left: 22,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 1,
+  },
+  sunDreamAuraOuterDawn: {
+    position: 'absolute',
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    backgroundColor: 'rgba(254, 215, 170, 0.35)',
+  },
+  sunDreamAuraMidDawn: {
+    position: 'absolute',
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: 'rgba(251, 146, 60, 0.35)',
   },
   morningMist1: {
     position: 'absolute',
-    top: 150,
+    top: 180,
     left: -40,
     right: -40,
     height: 50,
@@ -822,7 +1003,7 @@ const styles = StyleSheet.create({
   },
   morningMist2: {
     position: 'absolute',
-    top: 230,
+    top: 250,
     left: -20,
     right: -20,
     height: 40,
@@ -831,13 +1012,47 @@ const styles = StyleSheet.create({
   },
   daySunContainer: {
     position: 'absolute',
-    top: 90,
-    right: 32,
+    top: 185,
+    right: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
   },
-  sunsetSun: {
+  sunDreamAuraOuterDay: {
     position: 'absolute',
-    top: 95,
-    right: 32,
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    backgroundColor: 'rgba(254, 240, 138, 0.32)',
+  },
+  sunDreamAuraMidDay: {
+    position: 'absolute',
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: 'rgba(253, 224, 71, 0.42)',
+  },
+  sunsetSunContainer: {
+    position: 'absolute',
+    top: 185,
+    right: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+  },
+  sunDreamAuraOuterSunset: {
+    position: 'absolute',
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: 'rgba(244, 114, 182, 0.32)',
+  },
+  sunDreamAuraMidSunset: {
+    position: 'absolute',
+    width: 62,
+    height: 62,
+    borderRadius: 31,
+    backgroundColor: 'rgba(251, 113, 133, 0.45)',
   },
   switcherContainer: {
     alignItems: 'center',

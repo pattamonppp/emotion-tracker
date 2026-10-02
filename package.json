@@ -19,6 +19,8 @@
     "@types/react-dom": "~19.2.2",
     "classnames": "^2.5.1",
     "expo": "~57.0.26",
+    "expo-audio": "~57.0.5",
+    "expo-av": "^16.0.8",
     "expo-font": "^57.0.4",
     "expo-haptics": "^57.0.3",
     "expo-linear-gradient": "^57.0.2",

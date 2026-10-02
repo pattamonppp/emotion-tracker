@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Animated,
+  Easing,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { EmotionTagId } from '../types';
@@ -12,6 +13,7 @@ import { EMOTION_TAGS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
 import { Sparkles, X } from 'lucide-react-native';
 import { getEmotionIcon } from './FloatingEmotionCloud';
+import { MoocaMascot } from './MoocaMascot';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 interface GlassEmotionJarProps {
@@ -19,6 +21,7 @@ interface GlassEmotionJarProps {
   onRemoveEmotion: (id: EmotionTagId) => void;
   onClearAll?: () => void;
   lang: 'th' | 'en';
+  onMoocaHug?: () => void;
 }
 
 export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
@@ -26,8 +29,53 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   onRemoveEmotion,
   onClearAll,
   lang,
+  onMoocaHug,
 }) => {
   const jarSquishAnim = useRef(new Animated.Value(1)).current;
+  const moocaFloatAnim = useRef(new Animated.Value(0)).current;
+  const moocaSwayAnim = useRef(new Animated.Value(0)).current;
+
+  // Gentle floating & swaying animation for Mooca playfully orbiting with the jar
+  useEffect(() => {
+    const floatLoop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(moocaFloatAnim, {
+          toValue: -6,
+          duration: 2500,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+        Animated.timing(moocaFloatAnim, {
+          toValue: 4,
+          duration: 2500,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    const swayLoop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(moocaSwayAnim, {
+          toValue: 5,
+          duration: 3400,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+        Animated.timing(moocaSwayAnim, {
+          toValue: -5,
+          duration: 3400,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    floatLoop.start();
+    swayLoop.start();
+    return () => {
+      floatLoop.stop();
+      swayLoop.stop();
+    };
+  }, [moocaFloatAnim, moocaSwayAnim]);
 
   const handleJarTap = () => {
     audioService.triggerHaptic('light');
@@ -53,11 +101,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
 
   return (
     <Animated.View style={{ transform: [{ scale: jarSquishAnim }] }}>
-      <TouchableOpacity
-        activeOpacity={0.96}
-        onPress={handleJarTap}
-        style={styles.container}
-      >
+      <View style={styles.container}>
         {/* Soft Magic Ambient Glow */}
         <View
           style={[
@@ -69,105 +113,149 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           ]}
         />
 
-        {/* Storybook Apothecary Jar: Cork Lid & Knitted Scarf Bow */}
-        <View style={styles.lidSection}>
-          {/* Wooden Cork Stopper */}
-          <View style={styles.corkCap}>
-            <View style={styles.corkWoodGrain1} />
-            <View style={styles.corkWoodGrain2} />
+        {/* Mooca Companion playfully perched with the Jar */}
+        <Animated.View
+          style={[
+            styles.moocaPerchContainer,
+            {
+              transform: [
+                { translateY: moocaFloatAnim },
+                { translateX: moocaSwayAnim },
+              ],
+            },
+          ]}
+        >
+          {/* Sweet Speech Bubble from Mooca */}
+          <View style={styles.moocaSpeechBubble}>
+            <Text style={styles.moocaSpeechText}>
+              {selectedEmotions.length > 0
+                ? (lang === 'th'
+                  ? `Mooca ช่วยดูแลให้แล้ว ${selectedEmotions.length} ก้อน!`
+                  : `Holding ${selectedEmotions.length} feelings safely!`)
+                : (lang === 'th'
+                  ? 'พาความกังวลมาฝากไว้กับ Mooca นะ'
+                  : 'Rest your worries here with Mooca')}
+            </Text>
+            <View style={styles.moocaBubbleTail} />
           </View>
-          <View style={styles.corkBase} />
 
-          {/* Jar Glass Lip / Rim */}
-          <View style={styles.glassRim} />
+          {/* Interactive Mooca Mascot perched on the bottle */}
+          <View style={styles.moocaMascotWrapper}>
+            <MoocaMascot
+              mood={selectedEmotions.length > 0 ? 'comforting' : 'happy'}
+              size="xs"
+              interactive={true}
+              onHug={onMoocaHug}
+            />
+          </View>
+        </Animated.View>
 
-          {/* Mooca's Knitted Scarf Ribbon Bow Tied Around Neck */}
-          <View style={styles.bowContainer}>
-            <View style={styles.bowKnot}>
-              <View style={styles.bowLeftLoop} />
-              <View style={styles.bowRightLoop} />
-              <View style={styles.bowCenterRibbon} />
-              <View style={styles.bowTailLeft} />
-              <View style={styles.bowTailRight} />
+        <TouchableOpacity
+          activeOpacity={0.96}
+          onPress={handleJarTap}
+          style={{ alignItems: 'center' }}
+        >
+          {/* Storybook Apothecary Jar: Cork Lid & Knitted Scarf Bow */}
+          <View style={styles.lidSection}>
+            {/* Wooden Cork Stopper */}
+            <View style={styles.corkCap}>
+              <View style={styles.corkWoodGrain1} />
+              <View style={styles.corkWoodGrain2} />
+            </View>
+            <View style={styles.corkBase} />
+
+            {/* Jar Glass Lip / Rim */}
+            <View style={styles.glassRim} />
+
+            {/* Mooca's Knitted Scarf Ribbon Bow Tied Around Neck */}
+            <View style={styles.bowContainer}>
+              <View style={styles.bowKnot}>
+                <View style={styles.bowLeftLoop} />
+                <View style={styles.bowRightLoop} />
+                <View style={styles.bowCenterRibbon} />
+                <View style={styles.bowTailLeft} />
+                <View style={styles.bowTailRight} />
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Curvy Apothecary Glass Body */}
-        <LinearGradient
-          colors={[
-            'rgba(255, 255, 255, 0.96)',
-            'rgba(230, 249, 247, 0.88)',
-            'rgba(255, 255, 255, 0.94)',
-          ]}
-          style={styles.jarBody}
-        >
-          {/* Glass Wall Reflection Highlights */}
-          <View style={styles.glassReflectionLeft} />
-          <View style={styles.glassReflectionRight} />
+          {/* Curvy Apothecary Glass Body */}
+          <LinearGradient
+            colors={[
+              'rgba(255, 255, 255, 0.98)',
+              'rgba(230, 249, 247, 0.88)',
+              'rgba(255, 255, 255, 0.94)',
+            ]}
+            style={styles.jarBody}
+          >
+            {/* Glass Wall Reflection Highlights */}
+            <View style={styles.glassReflectionLeft} />
+            <View style={styles.glassReflectionTop} />
+            <View style={styles.glassReflectionRight} />
 
-          {/* Magical Contents Inside Jar */}
-          <View style={styles.jarInner}>
-            {selectedEmotions.length === 0 ? (
-              <View style={styles.emptyContainer}>
-                <View style={styles.sparkleIconWrapper}>
-                  <Sparkles size={16} color={colors.primary} />
+            {/* Magical Contents Inside Jar */}
+            <View style={styles.jarInner}>
+              {selectedEmotions.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <View style={styles.sparkleIconWrapper}>
+                    <Sparkles size={16} color={colors.primary} />
+                  </View>
+                  <Text style={styles.emptyTitle}>
+                    {lang === 'th' ? 'โหลพักใจของเธอ' : 'Your Sanctuary Jar'}
+                  </Text>
+                  <Text style={styles.emptySubtitle}>
+                    {lang === 'th'
+                      ? 'ฝากความรู้สึกไว้ แล้วให้ Mooca โอบกอดใจนะ'
+                      : 'Rest feelings here & let Mooca hold your heart'}
+                  </Text>
                 </View>
-                <Text style={styles.emptyTitle}>
-                  {lang === 'th' ? 'โหลแก้วพักใจของ Mooca' : "Mooca's Magic Jar"}
-                </Text>
-                <Text style={styles.emptySubtitle}>
-                  {lang === 'th'
-                    ? 'แตะหรือลากเมฆด้านบนลงมาที่นี่น้า'
-                    : 'Tap or drag clouds above here'}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.puffsContainer}>
-                {selectedEmotions.map((id) => {
-                  const tag = EMOTION_TAGS.find((t) => t.id === id);
-                  if (!tag) return null;
-                  return (
-                    <View
-                      key={tag.id}
-                      style={[
-                        styles.marshmallowPuff,
-                        {
-                          backgroundColor: tag.color + '22',
-                          borderColor: tag.color,
-                        },
-                      ]}
-                    >
-                      <View style={{ marginRight: 4 }}>
-                        {getEmotionIcon(tag.id, tag.color, 13)}
-                      </View>
-                      <Text style={[styles.puffText, { color: colors.primaryDark }]}>
-                        {lang === 'th' ? tag.labelTh : tag.labelEn}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          audioService.triggerHaptic('light');
-                          onRemoveEmotion(tag.id);
-                        }}
-                        style={styles.removePuffBtn}
+              ) : (
+                <View style={styles.puffsContainer}>
+                  {selectedEmotions.map((id) => {
+                    const tag = EMOTION_TAGS.find((t) => t.id === id);
+                    if (!tag) return null;
+                    return (
+                      <View
+                        key={tag.id}
+                        style={[
+                          styles.marshmallowPuff,
+                          {
+                            backgroundColor: tag.color + '22',
+                            borderColor: tag.color,
+                          },
+                        ]}
                       >
-                        <X size={10} color={colors.textSecondary} />
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })}
-              </View>
-            )}
+                        <View style={{ marginRight: 4 }}>
+                          {getEmotionIcon(tag.id, tag.color, 13)}
+                        </View>
+                        <Text style={[styles.puffText, { color: colors.primaryDark }]}>
+                          {lang === 'th' ? tag.labelTh : tag.labelEn}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            audioService.triggerHaptic('light');
+                            onRemoveEmotion(tag.id);
+                          }}
+                          style={styles.removePuffBtn}
+                        >
+                          <X size={10} color={colors.textSecondary} />
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
 
-            {/* Glowing Liquid Base */}
-            {selectedEmotions.length > 0 && (
-              <LinearGradient
-                colors={['transparent', jarAmbientColor + '30', jarAmbientColor + '55']}
-                style={styles.liquidBase}
-              />
-            )}
-          </View>
-        </LinearGradient>
+              {/* Glowing Liquid Base */}
+              {selectedEmotions.length > 0 && (
+                <LinearGradient
+                  colors={['transparent', jarAmbientColor + '30', jarAmbientColor + '55']}
+                  style={styles.liquidBase}
+                />
+              )}
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
 
         {/* Clear All Link Button */}
         {selectedEmotions.length > 0 && onClearAll && (
@@ -177,7 +265,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
             </Text>
           </TouchableOpacity>
         )}
-      </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 };
@@ -187,17 +275,61 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    marginVertical: 2,
+    marginVertical: 4,
+  },
+  moocaPerchContainer: {
+    alignItems: 'center',
+    marginBottom: 2,
+    zIndex: 25,
+  },
+  moocaSpeechBubble: {
+    backgroundColor: 'rgba(255, 255, 255, 0.96)',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: radii.full,
+    borderWidth: 1.2,
+    borderColor: 'rgba(0, 196, 179, 0.35)',
+    ...shadows.soft,
+    position: 'relative',
+    marginBottom: 4,
+    maxWidth: 260,
+  },
+  moocaSpeechText: {
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 10.5,
+    color: colors.primaryDark,
+    textAlign: 'center',
+  },
+  moocaBubbleTail: {
+    position: 'absolute',
+    bottom: -5,
+    alignSelf: 'center',
+    width: 0,
+    height: 0,
+    borderLeftWidth: 5,
+    borderRightWidth: 5,
+    borderTopWidth: 5,
+    borderStyle: 'solid',
+    backgroundColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: 'rgba(0, 196, 179, 0.35)',
+  },
+  moocaMascotWrapper: {
+    marginTop: -2,
+    marginBottom: -8,
+    zIndex: 30,
   },
   glow: {
     position: 'absolute',
-    width: 220,
+    bottom: 25,
+    width: 240,
     height: 120,
-    borderRadius: 70,
+    borderRadius: 80,
     shadowColor: '#00C4B3',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.35,
-    shadowRadius: 22,
+    shadowRadius: 28,
     elevation: 4,
     zIndex: 0,
   },
@@ -331,34 +463,46 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   jarBody: {
-    width: 220,
-    minHeight: 110,
-    maxHeight: 135,
-    borderRadius: 26,
-    borderWidth: 1.8,
-    borderColor: 'rgba(0, 196, 179, 0.35)',
+    width: 258,
+    minHeight: 136,
+    maxHeight: 168,
+    borderRadius: 30,
+    borderTopLeftRadius: 36,
+    borderTopRightRadius: 36,
+    borderWidth: 2,
+    borderColor: 'rgba(0, 196, 179, 0.42)',
     marginTop: -3,
-    padding: 8,
+    padding: 10,
     position: 'relative',
     overflow: 'hidden',
     ...shadows.tealGlow,
   },
   glassReflectionLeft: {
     position: 'absolute',
-    top: 10,
+    top: 12,
     left: 10,
-    width: 6,
-    height: 75,
+    width: 5.5,
+    height: 85,
     borderRadius: 3,
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     zIndex: 2,
   },
+  glassReflectionTop: {
+    position: 'absolute',
+    top: 6,
+    left: 26,
+    right: 26,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    zIndex: 2,
+  },
   glassReflectionRight: {
     position: 'absolute',
-    top: 14,
+    top: 16,
     right: 10,
     width: 3.5,
-    height: 50,
+    height: 60,
     borderRadius: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.55)',
     zIndex: 2,
@@ -372,12 +516,12 @@ const styles = StyleSheet.create({
   emptyContainer: {
     alignItems: 'center',
     gap: 3,
-    paddingVertical: 4,
+    paddingVertical: 6,
   },
   sparkleIconWrapper: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     backgroundColor: '#E6F9F7',
     alignItems: 'center',
     justifyContent: 'center',
@@ -385,16 +529,16 @@ const styles = StyleSheet.create({
     borderColor: '#B3EDE8',
   },
   emptyTitle: {
-    fontSize: 11.5,
+    fontSize: 12,
     fontWeight: '700',
     color: colors.primaryDark,
     textAlign: 'center',
   },
   emptySubtitle: {
-    fontSize: 9.5,
+    fontSize: 10,
     color: colors.textMuted,
     textAlign: 'center',
-    lineHeight: 14,
+    lineHeight: 15,
   },
   puffsContainer: {
     flexDirection: 'row',

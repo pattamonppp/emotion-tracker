@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,7 @@ import { audioService } from '../services/audioService';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { FloatingEmotionCloud } from './FloatingEmotionCloud';
 import { GlassEmotionJar } from './GlassEmotionJar';
-import { MoocaMascot } from './MoocaMascot';
-import { MapPin, Activity, Sparkles, ArrowRight, ArrowDown } from 'lucide-react-native';
+import { MapPin, Activity, Sparkles, ArrowRight, Volume2, VolumeX } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 interface Phase1EmotionJarProps {
@@ -36,6 +35,19 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   onOpenStory,
   lang,
 }) => {
+  const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(true);
+
+  useEffect(() => {
+    // Start peaceful ambient music when entering emotion sanctuary
+    audioService.startBackgroundMusic();
+    const unsub = audioService.subscribeBgm((playing) => {
+      setIsMusicPlaying(playing);
+    });
+    return () => {
+      unsub();
+    };
+  }, []);
+
   const toggleEmotion = (id: EmotionTagId) => {
     audioService.playJarDrop();
     if (selectedEmotions.includes(id)) {
@@ -59,7 +71,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   return (
     <View style={styles.root}>
       <View style={styles.viewportContent}>
-        {/* Top Status Indicators (Location & Live Pulse) */}
+        {/* Top Status Indicators (Location, Live Pulse, and Dreamscape Music Toggle) */}
         <View style={styles.statusRow}>
           <View style={styles.badgePill}>
             <MapPin size={11} color={colors.primary} />
@@ -76,34 +88,35 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             <Activity size={11} color={colors.secondary} />
             <Text style={styles.pulseText}>{heartRate} BPM</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              audioService.toggleBackgroundMusic();
+            }}
+            style={[
+              styles.musicPill,
+              isMusicPlaying && styles.musicPillActive,
+            ]}
+          >
+            {isMusicPlaying ? (
+              <Volume2 size={11} color={colors.primaryDark} />
+            ) : (
+              <VolumeX size={11} color={colors.textMuted} />
+            )}
+            <Text style={[styles.musicText, isMusicPlaying && styles.musicTextActive]}>
+              {lang === 'th'
+                ? (isMusicPlaying ? 'ดนตรี' : 'ปิดเสียง')
+                : (isMusicPlaying ? 'Music' : 'Mute')}
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Hero Mascot Greeting with Interactive Petting Mode */}
-        <View style={styles.mascotSection}>
-          <MoocaMascot
-            mood={selectedEmotions.length > 0 ? 'comforting' : 'happy'}
-            size="xs"
-            speakingBubble={
-              selectedEmotions.length > 0
-                ? lang === 'th'
-                  ? `เก็บลงโหลแล้ว ${selectedEmotions.length} ก้อน!`
-                  : `${selectedEmotions.length} in jar!`
-                : lang === 'th'
-                ? 'ลากก้อนเมฆอารมณ์ลงมาใส่โหลแก้วได้เลยนะ'
-                : 'Drag emotion clouds down into the jar!'
-            }
-            onHug={onOpenStory}
-          />
-        </View>
-
-        {/* Floating Emotion Clouds Section (Floating in the Sky at Top) */}
+        {/* Floating Emotion Clouds Section (Floating in the Sky) */}
         <View style={styles.skyCloudsSection}>
           <View style={styles.sectionHeaderRow}>
             <Sparkles size={11} color={colors.primary} />
             <Text style={styles.sectionTitle}>
-              {lang === 'th'
-                ? 'ก้อนเมฆอารมณ์ (แตะหรือลากลงโหล ↓)'
-                : 'Floating Clouds (Tap or Drag down ↓)'}
+              {lang === 'th' ? 'ก้อนเมฆอารมณ์ในใจ' : 'Emotion Clouds'}
             </Text>
           </View>
 
@@ -125,23 +138,14 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           </View>
         </View>
 
-        {/* Target Section: The Storybook Apothecary Glass Emotion Jar (Placed Below Clouds) */}
+        {/* The Sanctuary Apothecary Glass Emotion Jar with Perched Mooca */}
         <View style={styles.jarSection}>
-          <View style={styles.jarTargetHintRow}>
-            <ArrowDown size={10} color={colors.primary} strokeWidth={2.4} />
-            <Text style={styles.jarTargetHint}>
-              {lang === 'th'
-                ? 'โหลพักใจของ Mooca (ปล่อยก้อนเมฆลงตรงนี้)'
-                : "Mooca's Apothecary Jar (Drop clouds here)"}
-            </Text>
-            <ArrowDown size={10} color={colors.primary} strokeWidth={2.4} />
-          </View>
-
           <GlassEmotionJar
             selectedEmotions={selectedEmotions}
             onRemoveEmotion={(id) => toggleEmotion(id)}
             onClearAll={handleClearAll}
             lang={lang}
+            onMoocaHug={onOpenStory}
           />
         </View>
       </View>
@@ -234,14 +238,34 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.secondary,
   },
-  mascotSection: {
-    marginVertical: 1,
+  musicPill: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 8,
+    paddingVertical: 2.5,
+    borderRadius: radii.full,
+    borderWidth: 1.2,
+    borderColor: 'rgba(160, 174, 192, 0.3)',
+    gap: 4,
+    ...shadows.soft,
+  },
+  musicPillActive: {
+    borderColor: 'rgba(0, 196, 179, 0.35)',
+    backgroundColor: 'rgba(230, 249, 247, 0.6)',
+  },
+  musicText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: colors.textMuted,
+  },
+  musicTextActive: {
+    color: colors.primaryDark,
   },
   skyCloudsSection: {
     width: '100%',
     marginTop: 2,
-    marginBottom: 3,
+    marginBottom: 4,
   },
   sectionHeaderRow: {
     flexDirection: 'row',
@@ -252,7 +276,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontFamily: typography.fontPromptSemiBold,
-    fontSize: 11,
+    fontSize: 12,
     color: colors.primaryDark,
     textAlign: 'center',
   },
@@ -261,31 +285,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 5,
+    gap: 6,
     paddingHorizontal: 2,
   },
   jarSection: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 1,
+    marginTop: 2,
     marginBottom: 2,
-  },
-  jarTargetHintRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(230, 249, 247, 0.75)',
-    paddingHorizontal: 10,
-    paddingVertical: 2.5,
-    borderRadius: radii.full,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 196, 179, 0.28)',
-    marginBottom: 3,
-    ...shadows.soft,
-  },
-  jarTargetHint: {
-    fontFamily: typography.fontPromptSemiBold,
-    fontSize: 10,
-    color: colors.primaryDark,
   },
 });
