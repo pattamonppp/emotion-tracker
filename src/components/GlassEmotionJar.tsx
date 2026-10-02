@@ -54,6 +54,7 @@ interface GlassEmotionJarProps {
   onClearAll?: () => void;
   lang: 'th' | 'en';
   onMoocaHug?: () => void;
+  customEmotionText?: string;
 }
 
 export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
@@ -62,6 +63,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   onClearAll,
   lang,
   onMoocaHug,
+  customEmotionText,
 }) => {
   const jarSquishAnim = useRef(new Animated.Value(1)).current;
   const moocaOrbitX = useRef(new Animated.Value(-58)).current;
@@ -91,14 +93,21 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           ];
     }
     if (selectedEmotions.length > 0) {
+      const customMsg: SpeechMessage[] = selectedEmotions.includes('custom')
+        ? (lang === 'th'
+            ? [{ text: 'Mooca ได้รับข้อความในใจของเธอแล้วนะ จะคอยกอดไว้อย่างดีเลย!', iconType: 'heart' }]
+            : [{ text: 'Mooca received your heart note! Holding it close and safe!', iconType: 'heart' }])
+        : [];
       return lang === 'th'
         ? [
+            ...customMsg,
             { text: `Mooca ช่วยดูแลให้แล้ว ${selectedEmotions.length} ก้อนนะ สบายใจได้เลย!`, iconType: 'shield' },
             { text: 'เก่งมากเลยนะ ที่กล้าเปิดใจยอมรับความรู้สึกตัวเอง', iconType: 'smile' },
             { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ', iconType: 'cloud' },
             { text: 'ฝากไว้ในโหลแก้วใส ปลอดภัยแน่นอน', iconType: 'sparkles' },
           ]
         : [
+            ...customMsg,
             { text: `Holding ${selectedEmotions.length} feelings safely for you!`, iconType: 'shield' },
             { text: 'Proud of you for embracing your feelings', iconType: 'smile' },
             { text: 'I can look after up to 3 feelings at a time!', iconType: 'cloud' },
@@ -501,8 +510,10 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                           >
                             {getEmotionIcon(tag.id, tag.color, 11)}
                           </View>
-                          <Text style={[styles.miniPuffText, { color: colors.primaryDark }]}>
-                            {lang === 'th' ? tag.labelTh : tag.labelEn}
+                          <Text style={[styles.miniPuffText, { color: colors.primaryDark }]} numberOfLines={1}>
+                            {tag.id === 'custom' && customEmotionText
+                              ? customEmotionText
+                              : lang === 'th' ? tag.labelTh : tag.labelEn}
                           </Text>
                           <TouchableOpacity
                             hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}

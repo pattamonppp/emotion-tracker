@@ -11,6 +11,7 @@ import { audioService } from '../services/audioService';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { FloatingEmotionCloud } from './FloatingEmotionCloud';
 import { GlassEmotionJar } from './GlassEmotionJar';
+import { CustomEmotionModal } from './CustomEmotionModal';
 import { MapPin, Activity, Sparkles, ArrowRight } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
@@ -39,6 +40,23 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 }) => {
   const selectedEmotionsRef = React.useRef(selectedEmotions);
   selectedEmotionsRef.current = selectedEmotions;
+
+  const [customEmotionText, setCustomEmotionText] = React.useState<string>('');
+  const [isCustomModalOpen, setIsCustomModalOpen] = React.useState(false);
+
+  const handleSaveCustomEmotion = (text: string, putInJarImmediately: boolean) => {
+    setCustomEmotionText(text);
+    if (putInJarImmediately) {
+      handleDropIntoJar('custom');
+    }
+  };
+
+  const handleClearCustomEmotion = () => {
+    setCustomEmotionText('');
+    if (selectedEmotionsRef.current.includes('custom')) {
+      onSelectEmotions(selectedEmotionsRef.current.filter((id) => id !== 'custom'));
+    }
+  };
 
   const toggleEmotion = (id: EmotionTagId) => {
     const current = selectedEmotionsRef.current;
@@ -112,6 +130,8 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
                     onToggle={toggleEmotion}
                     onDropIntoJar={handleDropIntoJar}
                     lang={lang}
+                    customText={tag.id === 'custom' ? customEmotionText : undefined}
+                    onEditCustom={() => setIsCustomModalOpen(true)}
                   />
                 );
               })}
@@ -126,6 +146,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
               onClearAll={handleClearAll}
               lang={lang}
               onMoocaHug={onOpenStory}
+              customEmotionText={customEmotionText}
             />
           </View>
         </View>
@@ -146,6 +167,17 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           icon={<ArrowRight size={17} color="#FFFFFF" />}
         />
       </View>
+
+      {/* Sweet Custom Emotion Input Modal (Message to Mooca) */}
+      <CustomEmotionModal
+        isOpen={isCustomModalOpen}
+        initialText={customEmotionText}
+        onSave={handleSaveCustomEmotion}
+        onClear={handleClearCustomEmotion}
+        onClose={() => setIsCustomModalOpen(false)}
+        lang={lang}
+        isJarFull={isJarFull}
+      />
     </View>
   );
 };
@@ -237,8 +269,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'flex-start',
-    rowGap: 16,
-    columnGap: 8,
+    rowGap: 10,
+    columnGap: 6,
     paddingHorizontal: 2,
     minHeight: 154,
   },

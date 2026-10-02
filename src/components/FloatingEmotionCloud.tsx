@@ -25,6 +25,7 @@ import {
   Shuffle,
   Sparkles,
   ArrowDown,
+  PenLine,
 } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
@@ -48,6 +49,8 @@ export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
       return <CloudRain size={size} color={color} strokeWidth={2.4} />;
     case 'confused':
       return <Shuffle size={size} color={color} strokeWidth={2.4} />;
+    case 'custom':
+      return <PenLine size={size} color={color} strokeWidth={2.4} />;
     default:
       return <Sparkles size={size} color={color} strokeWidth={2.4} />;
   }
@@ -61,6 +64,8 @@ interface FloatingEmotionCloudProps {
   onDropIntoJar?: (id: EmotionTag['id']) => void;
   lang: 'th' | 'en';
   isJarFull?: boolean;
+  customText?: string;
+  onEditCustom?: () => void;
 }
 
 export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
@@ -71,6 +76,8 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   onDropIntoJar,
   lang,
   isJarFull = false,
+  customText,
+  onEditCustom,
 }) => {
   // Floating harmonic animations (animate-cloud-1 to 4)
   const floatAnim = useRef(new Animated.Value(0)).current;
@@ -198,11 +205,18 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   ).current;
 
   const handleTap = () => {
+    // If it's custom message cloud and user hasn't typed anything yet: open input modal!
+    if (tag.id === 'custom' && !customText && onEditCustom) {
+      audioService.triggerHaptic('selection');
+      onEditCustom();
+      return;
+    }
+
     audioService.triggerHaptic('medium');
     // Squish effect on tap
     Animated.sequence([
       Animated.timing(scaleAnim, {
-        toValue: 0.94,
+        toValue: 0.92,
         duration: 70,
         useNativeDriver: true,
       }),
@@ -272,13 +286,15 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
         colors={
           isSelected
             ? ['#FFFFFF', '#F0FDFA', '#CCFBF1']
+            : tag.id === 'custom'
+            ? ['#FFFFFF', '#FDF2F8', '#FCE7F3']
             : ['#FFFFFF', '#FFFDF9', '#F8FAFC']
         }
         style={[
           styles.cloudBody,
           {
-            borderColor: isSelected ? tag.color : 'rgba(0, 0, 0, 0.08)',
-            borderBottomColor: isSelected ? tag.color : '#CBD5E1',
+            borderColor: isSelected ? tag.color : tag.id === 'custom' ? 'rgba(236, 72, 153, 0.4)' : 'rgba(0, 0, 0, 0.08)',
+            borderBottomColor: isSelected ? tag.color : tag.id === 'custom' ? '#F472B6' : '#CBD5E1',
           },
         ]}
       >
@@ -291,7 +307,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
             },
           ]}
         >
-          {getEmotionIcon(tag.id, tag.color, 13)}
+          {getEmotionIcon(tag.id, tag.color, 11)}
         </View>
 
         {/* Short Punchy Emotion Word (No Description) */}
@@ -300,18 +316,25 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
             styles.cloudTitle,
             { color: isSelected ? colors.primaryDark : colors.textPrimary },
           ]}
+          numberOfLines={1}
         >
-          {lang === 'th' ? tag.labelTh : tag.labelEn}
+          {tag.id === 'custom' && customText
+            ? customText
+            : lang === 'th' ? tag.labelTh : tag.labelEn}
         </Text>
 
-        {/* Action Status: Checked Badge if in jar, or Down Arrow if ready to drop */}
+        {/* Action Status: Checked Badge if in jar, or Down Arrow / Pen if ready */}
         {isSelected ? (
           <View style={[styles.checkBadge, { backgroundColor: tag.color }]}>
-            <Check size={9} color="#FFFFFF" strokeWidth={3} />
+            <Check size={8} color="#FFFFFF" strokeWidth={3} />
+          </View>
+        ) : tag.id === 'custom' && !customText ? (
+          <View style={[styles.downArrowPill, { backgroundColor: tag.color + '18' }]}>
+            <PenLine size={8} color={tag.color} strokeWidth={2.4} />
           </View>
         ) : (
           <View style={styles.downArrowPill}>
-            <ArrowDown size={10} color={tag.color} strokeWidth={2.5} />
+            <ArrowDown size={8.5} color={tag.color} strokeWidth={2.4} />
           </View>
         )}
       </LinearGradient>
@@ -321,88 +344,88 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
 
 const styles = StyleSheet.create({
   cloudWrapper: {
-    marginVertical: 2,
-    marginHorizontal: 2.5,
+    marginVertical: 1.5,
+    marginHorizontal: 2,
     position: 'relative',
     shadowColor: '#00C4B3',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1.5 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
     elevation: 2,
   },
   cloudScallopsTop: {
     position: 'absolute',
-    top: -5,
-    left: 8,
-    right: 8,
-    height: 10,
+    top: -4,
+    left: 6,
+    right: 6,
+    height: 8,
     flexDirection: 'row',
     zIndex: 1,
   },
   scallopPuffLeft: {
     position: 'absolute',
-    left: 4,
+    left: 3,
     top: 1,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderBottomWidth: 0,
+  },
+  scallopPuffCenter: {
+    position: 'absolute',
+    left: 11,
+    top: -2.5,
     width: 13,
     height: 13,
     borderRadius: 6.5,
     borderWidth: 1,
     borderBottomWidth: 0,
   },
-  scallopPuffCenter: {
-    position: 'absolute',
-    left: 14,
-    top: -3,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderBottomWidth: 0,
-  },
   scallopPuffRight: {
     position: 'absolute',
-    left: 27,
-    top: 2,
-    width: 11,
-    height: 11,
-    borderRadius: 5.5,
+    left: 21,
+    top: 1.5,
+    width: 9,
+    height: 9,
+    borderRadius: 4.5,
     borderWidth: 1,
     borderBottomWidth: 0,
   },
   cloudBody: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 5,
-    paddingHorizontal: 8,
+    paddingVertical: 3.5,
+    paddingHorizontal: 6.5,
     borderRadius: radii.full,
-    borderWidth: 1.2,
-    borderBottomWidth: 2.2,
-    gap: 4,
+    borderWidth: 1.1,
+    borderBottomWidth: 2,
+    gap: 3.5,
     zIndex: 2,
     backgroundColor: '#FFFFFF',
   },
   iconBubble: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 17,
+    height: 17,
+    borderRadius: 8.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cloudTitle: {
     fontFamily: typography.fontPromptSemiBold,
-    fontSize: 11,
+    fontSize: 9.8,
   },
   checkBadge: {
-    width: 15,
-    height: 15,
-    borderRadius: 7.5,
+    width: 13,
+    height: 13,
+    borderRadius: 6.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   downArrowPill: {
-    width: 15,
-    height: 15,
-    borderRadius: 7.5,
+    width: 13,
+    height: 13,
+    borderRadius: 6.5,
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
     alignItems: 'center',
     justifyContent: 'center',
