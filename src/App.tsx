@@ -20,6 +20,7 @@ import {
 import { EMOTION_TAGS } from './data/matrixData';
 import { storageService } from './services/storageService';
 import { audioService } from './services/audioService';
+import { DEV_MODE, DEV_START } from './config';
 
 import { MindfullLogo } from './components/MindfullLogo';
 import { DynamicSkyEngine, SkyPeriodSwitcher, SkyTimePeriod } from './components/DynamicSkyEngine';
@@ -75,8 +76,12 @@ export default function App() {
   });
 
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
-  const [currentPhase, setCurrentPhase] = useState<ResetPhase>('phase2_intervention');
-  const [activeOption, setActiveOption] = useState<InterventionOption>('E');
+  const [currentPhase, setCurrentPhase] = useState<ResetPhase>(
+    DEV_MODE ? DEV_START.phase : 'phase1_jar'
+  );
+  const [activeOption, setActiveOption] = useState<InterventionOption>(
+    DEV_MODE ? DEV_START.activity : 'A'
+  );
   const [selectedEmotions, setSelectedEmotions] = useState<EmotionTagId[]>([]);
   const [heartRate, setHeartRate] = useState(105);
   const [feedback, setFeedback] = useState<ShiftFeedback | null>(null);
@@ -311,8 +316,7 @@ export default function App() {
 
             {currentPhase === 'phase2_intervention' && (
               <View style={styles.interventionContainer}>
-                {/* Intervention Option Switcher - Pure CI, No Purple */}
-                <View style={styles.interventionHeader}>
+                {DEV_MODE && <View style={styles.interventionHeader}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                     <Sparkles size={13} color={colors.primary} />
                     <Text style={styles.interventionHeaderTitle}>
@@ -345,7 +349,7 @@ export default function App() {
                       </TouchableOpacity>
                     ))}
                   </View>
-                </View>
+                </View>}
 
                 {/* Active Intervention View */}
                 <View style={{ flex: 1 }}>

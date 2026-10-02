@@ -5,6 +5,7 @@ import { MBTI_SANCTUARY_SCRIPTS, getMBTIArchetype } from '../../../data/matrixDa
 import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
+import { DevActivityControl } from '../../../components/DevActivityControl';
 import { getTranslation } from '../../../locales';
 import { Headphones, Volume2, Sparkles } from 'lucide-react';
 import {
@@ -216,6 +217,8 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
           }
         />
       </div>
+
+      <DevActivityControl onComplete={onComplete} />
     </div>
   );
 };

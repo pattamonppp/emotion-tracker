@@ -3,6 +3,8 @@ import cn from 'classnames';
 import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
+import { DevActivityControl } from '../../../components/DevActivityControl';
+import { DEV_MODE } from '../../../config';
 import {
   ZapIcon,
   CheckCircleIcon,
@@ -96,36 +98,37 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* Mode Switcher */}
-      <div className={styles.modeSwitcher}>
-        <div className={styles.modeBadge}>
-          <ZapIcon />
-          <span className={styles.modeBadgeText}>
-            {strings.badge}
-          </span>
-        </div>
+      {DEV_MODE && (
+        <div className={styles.modeSwitcher}>
+          <div className={styles.modeBadge}>
+            <ZapIcon />
+            <span className={styles.modeBadgeText}>
+              {strings.badge}
+            </span>
+          </div>
 
-        <div className={styles.modeGroup}>
-          <button
-            type="button"
-            onClick={() => setMode(KINETIC_MODE.SHAKE)}
-            className={cn(styles.modeBtn, {
-              [styles.active]: mode === KINETIC_MODE.SHAKE,
-            })}
-          >
-            {strings.modeShake}
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode(KINETIC_MODE.BOUNCE)}
-            className={cn(styles.modeBtn, {
-              [styles.active]: mode === KINETIC_MODE.BOUNCE,
-            })}
-          >
-            {strings.modeBounce}
-          </button>
+          <div className={styles.modeGroup}>
+            <button
+              type="button"
+              onClick={() => setMode(KINETIC_MODE.SHAKE)}
+              className={cn(styles.modeBtn, {
+                [styles.active]: mode === KINETIC_MODE.SHAKE,
+              })}
+            >
+              {strings.modeShake}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode(KINETIC_MODE.BOUNCE)}
+              className={cn(styles.modeBtn, {
+                [styles.active]: mode === KINETIC_MODE.BOUNCE,
+              })}
+            >
+              {strings.modeBounce}
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Mooca Companion Guidance */}
       <div className={styles.guidanceSection}>
@@ -242,6 +245,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           />
         )}
       </div>
+
+      <DevActivityControl onComplete={onComplete} />
     </div>
   );
 };

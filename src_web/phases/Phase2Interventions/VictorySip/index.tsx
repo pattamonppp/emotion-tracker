@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
+import { DevActivityControl } from '../../../components/DevActivityControl';
 import { GlassWater, Activity, Sparkles } from 'lucide-react';
 import { CheckIcon, GlassWaterIcon } from '../../../icons';
 import { SIP_CONFIG, type BreathPhase } from './constants';
 import { getTranslation } from '../../../locales';
+import { renderVictorySipFluid } from '../../../utils';
 import styles from './styles.module.scss';
 
 export interface VictorySipProps {
@@ -30,7 +32,6 @@ export const VictorySip: React.FC<VictorySipProps> = ({
   const waveOffsetRef = useRef(0);
   const animFrameRef = useRef<number | null>(null);
 
-  // Real-time Canvas Fluid dynamics
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -41,67 +42,16 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     const height = (canvas.height = SIP_CONFIG.CANVAS_HEIGHT);
 
     const render = () => {
-      ctx.clearRect(0, 0, width, height);
-      waveOffsetRef.current += 0.05;
-
-      const fillH = (height * liquidLevel) / 100;
-      const surfaceY = height - fillH;
-
-      if (fillH > 2) {
-        ctx.save();
-
-        // Clip rounded glass bottom
-        ctx.beginPath();
-        ctx.moveTo(10, 0);
-        ctx.lineTo(width - 10, 0);
-        ctx.lineTo(width - 10, height - 30);
-        ctx.quadraticCurveTo(width - 10, height - 5, width - 35, height - 5);
-        ctx.lineTo(35, height - 5);
-        ctx.quadraticCurveTo(10, height - 5, 10, height - 30);
-        ctx.closePath();
-        ctx.clip();
-
-        // Create Golden Turquoise Gradient
-        const grad = ctx.createLinearGradient(0, surfaceY, 0, height);
-        grad.addColorStop(0, '#00C4B3');
-        grad.addColorStop(0.5, '#33D0C2');
-        grad.addColorStop(1, '#1E3A8A');
-
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.moveTo(0, height);
-
-        // Wave surface with dynamic tilt
-        const tiltOffset = (tiltAngle / SIP_CONFIG.TILT_MAX_DEG) * 20;
-        ctx.lineTo(0, surfaceY - tiltOffset);
-
-        for (let x = 0; x <= width; x += 10) {
-          const wave = Math.sin(x * 0.04 + waveOffsetRef.current) * (isDrinking ? 6 : 2.5);
-          const tiltedY = surfaceY - tiltOffset + (tiltOffset * 2 * x) / width + wave;
-          ctx.lineTo(x, tiltedY);
-        }
-
-        ctx.lineTo(width, height);
-        ctx.closePath();
-        ctx.fill();
-
-        // Surface foam line
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
-
-        // Carbonation bubbles
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-        for (let b = 0; b < 6; b++) {
-          const bx = 25 + ((b * 32 + waveOffsetRef.current * 20) % (width - 50));
-          const by = height - 15 - ((b * 45 + waveOffsetRef.current * 30) % Math.max(20, fillH - 10));
-          ctx.beginPath();
-          ctx.arc(bx, by, 1.5 + (b % 2), 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        ctx.restore();
-      }
+      waveOffsetRef.current = renderVictorySipFluid({
+        ctx,
+        width,
+        height,
+        liquidLevel,
+        tiltAngle,
+        tiltMaxDeg: SIP_CONFIG.TILT_MAX_DEG,
+        isDrinking,
+        waveOffset: waveOffsetRef.current,
+      });
 
       animFrameRef.current = requestAnimationFrame(render);
     };
@@ -297,6 +247,8 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           />
         )}
       </div>
+
+      <DevActivityControl onComplete={onComplete} />
     </div>
   );
 };

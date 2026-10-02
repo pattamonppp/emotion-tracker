@@ -22,6 +22,7 @@ import { ResetCompletedView } from './phases/ResetCompletedView';
 import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
 import { audioService } from './services/audioService';
 import { HeartIcon } from './icons';
+import { DEV_MODE, DEV_START } from './config';
 import { useLanguage } from './hooks';
 import { STORAGE_KEYS, getStorageJSON, setStorageJSON } from './utils';
 
@@ -45,8 +46,14 @@ export default function App() {
     return getStorageJSON<UserProfile>(STORAGE_KEYS.PROFILE, DEFAULT_PROFILE);
   });
 
-  const [currentPhase, setCurrentPhase] = useState<ResetPhase>('phase1_jar');
-  const [activeOption, setActiveOption] = useState<InterventionOption>('A');
+  const [currentPhase, setCurrentPhase] = useState<ResetPhase>(
+    DEV_MODE ? DEV_START.phase : 'phase1_jar'
+  );
+  const [activeOption, setActiveOption] = useState<InterventionOption>(
+    DEV_MODE && ['A', 'B', 'C', 'D'].includes(DEV_START.activity)
+      ? DEV_START.activity as InterventionOption
+      : 'A'
+  );
   const [selectedEmotions, setSelectedEmotions] = useState<EmotionTagId[]>([]);
   const [heartRate, setHeartRate] = useState(105);
   const [feedback, setFeedback] = useState<ShiftFeedback | null>(null);
@@ -156,8 +163,8 @@ export default function App() {
         {/* Phase 2: Tailored Intervention Engine (65s Dedicated Focus) */}
         {currentPhase === 'phase2_intervention' && (
           <div className="flex flex-col h-full">
-            {/* Quick Intervention Switcher */}
-            <div className="px-3 pt-2 pb-1.5 bg-[#E6F9F7]/80 backdrop-blur-md border-b border-[#00C4B3]/20 flex items-center justify-between text-xs shadow-2xs">
+            {/* Developer-only intervention switcher */}
+            {DEV_MODE && <div className="px-3 pt-2 pb-1.5 bg-[#E6F9F7]/80 backdrop-blur-md border-b border-[#00C4B3]/20 flex items-center justify-between text-xs shadow-2xs">
               <span className="text-[10px] text-[#004D40] font-extrabold flex items-center gap-1.5">
                 <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
                 <span>{t.phases.phase1.resetModeTitle}</span>
@@ -186,7 +193,7 @@ export default function App() {
                   </button>
                 ))}
               </div>
-            </div>
+            </div>}
 
             {/* Active Intervention View */}
             <div className="flex-1 overflow-hidden">

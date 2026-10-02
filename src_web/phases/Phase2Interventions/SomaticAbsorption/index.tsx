@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { audioService } from '../../../services/audioService';
 import { Button } from '../../../components/Button';
 import { MoocaMascot } from '../../../components/MoocaMascot';
+import { DevActivityControl } from '../../../components/DevActivityControl';
 import { Sparkles, Flame, Volume2, Shield } from 'lucide-react';
 import { SparklesIcon, WindIcon, FlameIcon } from '../../../icons';
 import { useLanguage } from '../../../hooks';
@@ -306,6 +307,8 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           </div>
         </div>
       </div>
+
+      <DevActivityControl onComplete={onComplete} />
 
       {/* Progress & Physiology Bar */}
       <div className={styles.progressBarContainer}>
