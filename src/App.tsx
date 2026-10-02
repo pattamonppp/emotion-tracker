@@ -316,7 +316,7 @@ export default function App() {
 
             {currentPhase === 'phase2_intervention' && (
               <View style={styles.interventionContainer}>
-                {DEV_MODE && <View style={styles.interventionHeader}>
+                {/* {DEV_MODE && <View style={styles.interventionHeader}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                     <Sparkles size={13} color={colors.primary} />
                     <Text style={styles.interventionHeaderTitle}>
@@ -349,7 +349,7 @@ export default function App() {
                       </TouchableOpacity>
                     ))}
                   </View>
-                </View>}
+                </View>} */}
 
                 {/* Active Intervention View */}
                 <View style={{ flex: 1 }}>
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
   },
   dynamicIslandContainer: {
     alignItems: 'center',
-    paddingVertical: 4,
+    paddingVertical: 16,
     backgroundColor: 'transparent',
   },
   dynamicIslandRow: {
@@ -601,6 +601,7 @@ const styles = StyleSheet.create({
   },
   viewport: {
     flex: 1,
+    overflow: 'hidden',
   },
   interventionContainer: {
     flex: 1,

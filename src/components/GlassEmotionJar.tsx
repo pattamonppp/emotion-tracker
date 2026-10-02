@@ -86,13 +86,13 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
       return lang === 'th'
         ? [
           { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ', iconType: 'cloud' },
-          { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ พร้อมเริ่มรีเซ็ตใจเลย!', iconType: 'sparkles' },
+          { text: 'ให้ฉันช่วยรีเซ็ตใจให้เธอไหม?', iconType: 'sparkles' },
           { text: 'หายใจเข้าลึก ๆ แล้วกดปุ่มเริ่มด้านล่างได้เลยนะ', iconType: 'wind' },
           { text: 'Mooca จะอยู่ข้าง ๆ เธอเสมอ สู้ ๆ นะ!', iconType: 'heart' },
         ]
         : [
           { text: 'I can look after up to 3 feelings at a time!', iconType: 'cloud' },
-          { text: 'I can look after up to 3 feelings at a time! Ready to reset!', iconType: 'sparkles' },
+          { text: 'Shall I help reset your heart?', iconType: 'sparkles' },
           { text: 'Take a deep breath & tap start below', iconType: 'wind' },
           { text: 'Mooca is always right here with you!', iconType: 'heart' },
         ];
@@ -101,23 +101,21 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
       const hasCustom = selectedEmotions.some((id) => id.startsWith('custom'));
       const customMsg: SpeechMessage[] = hasCustom
         ? (lang === 'th'
-          ? [{ text: 'Mooca ได้รับข้อความในใจของเธอแล้วนะ จะคอยกอดไว้อย่างดีเลย!', iconType: 'heart' }]
-          : [{ text: 'Mooca received your heart note! Holding it close and safe!', iconType: 'heart' }])
+          ? [{ text: 'Mooca กอดเธอไว้แน่น ๆ เลยนะ!', iconType: 'heart' }]
+          : [{ text: 'Mooca is hugging you tight!', iconType: 'heart' }])
         : [];
       return lang === 'th'
         ? [
           ...customMsg,
           { text: `Mooca ช่วยดูแลให้แล้ว ${selectedEmotions.length} ก้อนนะ สบายใจได้เลย!`, iconType: 'shield' },
-          { text: 'เก่งมากเลยนะ ที่กล้าเปิดใจยอมรับความรู้สึกตัวเอง', iconType: 'smile' },
-          { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ', iconType: 'cloud' },
-          { text: 'ฝากไว้ในโหลแก้วใส ปลอดภัยแน่นอน', iconType: 'sparkles' },
+          { text: 'เก่งมาก ๆ เลยนะ ที่กล้าเผชิญหน้ากับความรู้สึกตัวเอง', iconType: 'smile' },
+          { text: 'ฝากไว้ในโหลแก้ว ปลอดภัยแน่นอน', iconType: 'sparkles' },
         ]
         : [
           ...customMsg,
           { text: `Holding ${selectedEmotions.length} feelings safely for you!`, iconType: 'shield' },
-          { text: 'Proud of you for embracing your feelings', iconType: 'smile' },
-          { text: 'I can look after up to 3 feelings at a time!', iconType: 'cloud' },
-          { text: 'Safe inside your clear glass jar', iconType: 'sparkles' },
+          { text: 'You are brave to face your feelings', iconType: 'smile' },
+          { text: 'Safe inside this glass jar', iconType: 'sparkles' },
         ];
     }
     return lang === 'th'
