@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { EmotionTagId } from '../types';
+import { EmotionTag, EmotionTagId } from '../types';
 import { EMOTION_TAGS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
@@ -14,6 +14,11 @@ import { GlassEmotionJar } from './GlassEmotionJar';
 import { CustomEmotionModal } from './CustomEmotionModal';
 import { MapPin, Activity, Sparkles, ArrowRight } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
+
+export interface CustomMessageItem {
+  id: string;
+  text: string;
+}
 
 interface Phase1EmotionJarProps {
   currentLocation: string;
@@ -41,20 +46,40 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   const selectedEmotionsRef = React.useRef(selectedEmotions);
   selectedEmotionsRef.current = selectedEmotions;
 
-  const [customEmotionText, setCustomEmotionText] = React.useState<string>('');
+  const [customMessages, setCustomMessages] = React.useState<CustomMessageItem[]>([]);
+  const [editingMessageId, setEditingMessageId] = React.useState<string | null>(null);
   const [isCustomModalOpen, setIsCustomModalOpen] = React.useState(false);
 
-  const handleSaveCustomEmotion = (text: string, putInJarImmediately: boolean) => {
-    setCustomEmotionText(text);
-    if (putInJarImmediately) {
-      handleDropIntoJar('custom');
+  const handleSaveCustomEmotion = (
+    text: string,
+    putInJarImmediately: boolean,
+    editingId?: string | null
+  ) => {
+    if (editingId) {
+      setCustomMessages((prev) =>
+        prev.map((m) => (m.id === editingId ? { ...m, text } : m))
+      );
+      if (putInJarImmediately && !selectedEmotionsRef.current.includes(editingId)) {
+        if (selectedEmotionsRef.current.length < MAX_SELECTED_EMOTIONS) {
+          audioService.playJarDrop();
+          onSelectEmotions([...selectedEmotionsRef.current, editingId]);
+        }
+      }
+    } else {
+      if (customMessages.length >= 3) return;
+      const newId = `custom_${Date.now()}`;
+      setCustomMessages((prev) => [...prev, { id: newId, text }]);
+      if (putInJarImmediately && selectedEmotionsRef.current.length < MAX_SELECTED_EMOTIONS) {
+        audioService.playJarDrop();
+        onSelectEmotions([...selectedEmotionsRef.current, newId]);
+      }
     }
   };
 
-  const handleClearCustomEmotion = () => {
-    setCustomEmotionText('');
-    if (selectedEmotionsRef.current.includes('custom')) {
-      onSelectEmotions(selectedEmotionsRef.current.filter((id) => id !== 'custom'));
+  const handleDeleteCustomEmotion = (id: string) => {
+    setCustomMessages((prev) => prev.filter((m) => m.id !== id));
+    if (selectedEmotionsRef.current.includes(id)) {
+      onSelectEmotions(selectedEmotionsRef.current.filter((item) => item !== id));
     }
   };
 
@@ -92,6 +117,69 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
   const isJarFull = selectedEmotions.length >= MAX_SELECTED_EMOTIONS;
 
+  // 1) Preset emotions not yet in jar (exclude placeholder 'custom')
+  const presetsInSky = EMOTION_TAGS.filter(
+    (tag) => tag.id !== 'custom' && !selectedEmotions.includes(tag.id)
+  );
+
+  // 2) Custom messages not yet in jar
+  const customInSky = customMessages
+    .filter((m) => !selectedEmotions.includes(m.id))
+    .map((m) => ({
+      id: m.id,
+      labelTh: m.text,
+      labelEn: m.text,
+      emoji: '',
+      color: '#EC4899',
+      weightDescription: '',
+      recommendedOption: 'A' as const,
+      isCustom: true,
+      customText: m.text,
+    }));
+
+  // 3) Add button: show if customMessages.length < 3 AND selectedEmotions.length < MAX_SELECTED_EMOTIONS
+  const showAddButton =
+    customMessages.length < 3 && selectedEmotions.length < MAX_SELECTED_EMOTIONS;
+
+  const allSkyItems: Array<{
+    id: string;
+    tag: EmotionTag;
+    isCustom?: boolean;
+    customText?: string;
+    isAddButton?: boolean;
+  }> = [
+    ...presetsInSky.map((t) => ({ id: t.id, tag: t })),
+    ...customInSky.map((c) => ({
+      id: c.id,
+      tag: c,
+      isCustom: true,
+      customText: c.customText,
+    })),
+    ...(showAddButton
+      ? [
+          {
+            id: 'btn_add_custom',
+            tag: {
+              id: 'custom',
+              labelTh: 'บอก Mooca...',
+              labelEn: 'Tell Mooca...',
+              emoji: '',
+              color: '#EC4899',
+              weightDescription: '',
+              recommendedOption: 'A' as const,
+            },
+            isAddButton: true,
+          },
+        ]
+      : []),
+  ];
+
+  // 4) STRICTLY MAXIMUM 3 CLOUDS PER ROW! ("สูงสุดแถวละ 3 ก้อนอารมณ์ที")
+  const chunkedRows: typeof allSkyItems[] = [];
+  for (let i = 0; i < allSkyItems.length; i += 3) {
+    chunkedRows.push(allSkyItems.slice(i, i + 3));
+  }
+
   return (
     <View style={styles.root}>
       <View style={styles.viewportContent}>
@@ -116,25 +204,54 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
         {/* Harmonious Main Stage: Clouds Sky + Apothecary Jar (Balanced Spacing) */}
         <View style={styles.contentBody}>
-          {/* Floating Emotion Clouds Section (Floating in the Sky - Only Remaining Clouds) */}
+          {/* Floating Emotion Clouds Section (Strictly max 3 clouds per row) */}
           <View style={styles.skyCloudsSection}>
             <View style={styles.cloudsList}>
-              {EMOTION_TAGS.filter((tag) => !selectedEmotions.includes(tag.id)).map((tag, idx) => {
-                return (
-                  <FloatingEmotionCloud
-                    key={tag.id}
-                    tag={tag}
-                    index={idx}
-                    isSelected={false}
-                    isJarFull={isJarFull}
-                    onToggle={toggleEmotion}
-                    onDropIntoJar={handleDropIntoJar}
-                    lang={lang}
-                    customText={tag.id === 'custom' ? customEmotionText : undefined}
-                    onEditCustom={() => setIsCustomModalOpen(true)}
-                  />
-                );
-              })}
+              {chunkedRows.map((row, rowIdx) => (
+                <View key={`row-${rowIdx}`} style={styles.cloudRow}>
+                  {row.map((item, colIdx) => {
+                    if (item.isAddButton) {
+                      return (
+                        <FloatingEmotionCloud
+                          key={item.id}
+                          tag={item.tag}
+                          index={rowIdx * 3 + colIdx}
+                          isSelected={false}
+                          isJarFull={isJarFull}
+                          onToggle={() => {}}
+                          lang={lang}
+                          isAddButton={true}
+                          onEditCustom={() => {
+                            setEditingMessageId(null);
+                            setIsCustomModalOpen(true);
+                          }}
+                        />
+                      );
+                    }
+                    return (
+                      <FloatingEmotionCloud
+                        key={item.id}
+                        tag={item.tag}
+                        index={rowIdx * 3 + colIdx}
+                        isSelected={false}
+                        isJarFull={isJarFull}
+                        onToggle={toggleEmotion}
+                        onDropIntoJar={handleDropIntoJar}
+                        lang={lang}
+                        customText={item.customText}
+                        onEditCustom={
+                          item.isCustom
+                            ? () => {
+                                setEditingMessageId(item.id);
+                                setIsCustomModalOpen(true);
+                              }
+                            : undefined
+                        }
+                      />
+                    );
+                  })}
+                </View>
+              ))}
             </View>
           </View>
 
@@ -146,7 +263,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
               onClearAll={handleClearAll}
               lang={lang}
               onMoocaHug={onOpenStory}
-              customEmotionText={customEmotionText}
+              customMessages={customMessages}
             />
           </View>
         </View>
@@ -171,10 +288,18 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
       {/* Sweet Custom Emotion Input Modal (Message to Mooca) */}
       <CustomEmotionModal
         isOpen={isCustomModalOpen}
-        initialText={customEmotionText}
+        editingId={editingMessageId}
+        initialText={
+          editingMessageId
+            ? customMessages.find((m) => m.id === editingMessageId)?.text || ''
+            : ''
+        }
         onSave={handleSaveCustomEmotion}
-        onClear={handleClearCustomEmotion}
-        onClose={() => setIsCustomModalOpen(false)}
+        onDelete={handleDeleteCustomEmotion}
+        onClose={() => {
+          setIsCustomModalOpen(false);
+          setEditingMessageId(null);
+        }}
         lang={lang}
         isJarFull={isJarFull}
       />
@@ -264,15 +389,18 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   cloudsList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    width: '100%',
     alignItems: 'center',
-    alignContent: 'flex-start',
-    rowGap: 10,
-    columnGap: 6,
+    gap: 8,
     paddingHorizontal: 2,
     minHeight: 154,
+  },
+  cloudRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 6,
+    width: '100%',
   },
   jarSection: {
     width: '100%',

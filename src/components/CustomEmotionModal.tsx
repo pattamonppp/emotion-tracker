@@ -17,9 +17,10 @@ import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 interface CustomEmotionModalProps {
   isOpen: boolean;
+  editingId?: string | null;
   initialText: string;
-  onSave: (text: string, putInJarImmediately: boolean) => void;
-  onClear?: () => void;
+  onSave: (text: string, putInJarImmediately: boolean, editingId?: string | null) => void;
+  onDelete?: (id: string) => void;
   onClose: () => void;
   lang: 'th' | 'en';
   isJarFull: boolean;
@@ -47,9 +48,10 @@ const QUICK_SUGGESTIONS_EN = [
 
 export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
   isOpen,
+  editingId,
   initialText,
   onSave,
-  onClear,
+  onDelete,
   onClose,
   lang,
   isJarFull,
@@ -72,7 +74,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
     if (!trimmed) return;
     audioService.triggerHaptic('success');
     audioService.playJarDrop();
-    onSave(trimmed, !isJarFull);
+    onSave(trimmed, !isJarFull, editingId);
     onClose();
   };
 
@@ -80,14 +82,15 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
     const trimmed = inputText.trim();
     if (!trimmed) return;
     audioService.triggerHaptic('light');
-    onSave(trimmed, false);
+    onSave(trimmed, false, editingId);
     onClose();
   };
 
-  const handleClear = () => {
+  const handleDelete = () => {
     audioService.triggerHaptic('medium');
-    setInputText('');
-    if (onClear) onClear();
+    if (editingId && onDelete) {
+      onDelete(editingId);
+    }
     onClose();
   };
 
@@ -119,7 +122,9 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
               </View>
               <View>
                 <Text style={styles.headerTitle}>
-                  {lang === 'th' ? 'ข้อความในใจถึง Mooca' : 'Heart Message to Mooca'}
+                  {lang === 'th'
+                    ? editingId ? 'แก้ไขข้อความถึง Mooca' : 'ข้อความในใจถึง Mooca'
+                    : editingId ? 'Edit Note to Mooca' : 'Heart Message to Mooca'}
                 </Text>
                 <Text style={styles.headerSubtitle}>
                   {lang === 'th'
@@ -205,15 +210,15 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
 
           {/* Action Buttons */}
           <View style={styles.actionsRow}>
-            {initialText ? (
+            {editingId ? (
               <TouchableOpacity
-                onPress={handleClear}
+                onPress={handleDelete}
                 style={styles.clearBtn}
                 activeOpacity={0.75}
               >
                 <RotateCcw size={12} color="#EF4444" strokeWidth={2.4} />
                 <Text style={styles.clearBtnText}>
-                  {lang === 'th' ? 'ล้าง' : 'Clear'}
+                  {lang === 'th' ? 'ลบ' : 'Delete'}
                 </Text>
               </TouchableOpacity>
             ) : null}

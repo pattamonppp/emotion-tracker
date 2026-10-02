@@ -26,6 +26,7 @@ import {
   Sparkles,
   ArrowDown,
   PenLine,
+  Plus,
 } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
@@ -66,6 +67,7 @@ interface FloatingEmotionCloudProps {
   isJarFull?: boolean;
   customText?: string;
   onEditCustom?: () => void;
+  isAddButton?: boolean;
 }
 
 export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
@@ -78,6 +80,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   isJarFull = false,
   customText,
   onEditCustom,
+  isAddButton = false,
 }) => {
   // Floating harmonic animations (animate-cloud-1 to 4)
   const floatAnim = useRef(new Animated.Value(0)).current;
@@ -119,6 +122,49 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
 
     return () => clearTimeout(timer);
   }, [floatAnim, index]);
+
+  // If this is the "+ บอก Mooca..." button: pure TouchableOpacity with NO pan interference!
+  if (isAddButton) {
+    return (
+      <Animated.View
+        style={[
+          styles.cloudWrapper,
+          { transform: [{ translateY: floatAnim }] },
+        ]}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            audioService.triggerHaptic('selection');
+            if (onEditCustom) onEditCustom();
+          }}
+          activeOpacity={0.75}
+        >
+          {/* Mini Fluffy Scalloped Cloud Bumps on Top */}
+          <View style={styles.cloudScallopsTop} pointerEvents="none">
+            <View style={[styles.scallopPuffLeft, { backgroundColor: '#FFF5F8', borderColor: '#F472B6' }]} />
+            <View style={[styles.scallopPuffCenter, { backgroundColor: '#FFF5F8', borderColor: '#F472B6' }]} />
+            <View style={[styles.scallopPuffRight, { backgroundColor: '#FFF5F8', borderColor: '#F472B6' }]} />
+          </View>
+
+          {/* Add Message Cloud Body with sweet dashed border */}
+          <LinearGradient
+            colors={['#FFFFFF', '#FDF2F8', '#FCE7F3']}
+            style={[styles.cloudBody, styles.addCloudBody]}
+          >
+            <View style={[styles.iconBubble, { backgroundColor: '#EC489920' }]}>
+              <Plus size={11} color="#EC4899" strokeWidth={2.8} />
+            </View>
+            <Text style={[styles.cloudTitle, { color: '#BE185D' }]} numberOfLines={1}>
+              {lang === 'th' ? '+ บอก Mooca' : '+ Note to Mooca'}
+            </Text>
+            <View style={[styles.downArrowPill, { backgroundColor: '#EC489914' }]}>
+              <PenLine size={8} color="#EC4899" strokeWidth={2.4} />
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  }
 
   const handleFlyIntoJar = () => {
     audioService.triggerHaptic('success');
@@ -177,41 +223,33 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
       onPanResponderRelease: (_evt, gestureState) => {
         isDragging.current = false;
         // If dragged DOWNWARD towards the apothecary jar below
-        if (gestureState.dy > 30) {
+        if (gestureState.dy > 45) {
           handleFlyIntoJar();
+        } else if (Math.abs(gestureState.dx) < 22 && Math.abs(gestureState.dy) < 22) {
+          // Generous tap threshold for reliable fingertip detection
+          handleTap();
         } else {
-          // If released without dragging far: treat as tap or spring back
-          if (Math.abs(gestureState.dx) < 8 && Math.abs(gestureState.dy) < 8) {
-            handleTap();
-          } else {
-            Animated.parallel([
-              Animated.spring(panAnim, {
-                toValue: { x: 0, y: 0 },
-                friction: 5,
-                tension: 160,
-                useNativeDriver: true,
-              }),
-              Animated.spring(scaleAnim, {
-                toValue: 1,
-                friction: 4,
-                tension: 160,
-                useNativeDriver: true,
-              }),
-            ]).start();
-          }
+          // Snap back smoothly
+          Animated.parallel([
+            Animated.spring(panAnim, {
+              toValue: { x: 0, y: 0 },
+              friction: 5,
+              tension: 160,
+              useNativeDriver: true,
+            }),
+            Animated.spring(scaleAnim, {
+              toValue: 1,
+              friction: 4,
+              tension: 160,
+              useNativeDriver: true,
+            }),
+          ]).start();
         }
       },
     })
   ).current;
 
   const handleTap = () => {
-    // If it's custom message cloud and user hasn't typed anything yet: open input modal!
-    if (tag.id === 'custom' && !customText && onEditCustom) {
-      audioService.triggerHaptic('selection');
-      onEditCustom();
-      return;
-    }
-
     audioService.triggerHaptic('medium');
     // Squish effect on tap
     Animated.sequence([
@@ -323,15 +361,22 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
             : lang === 'th' ? tag.labelTh : tag.labelEn}
         </Text>
 
-        {/* Action Status: Checked Badge if in jar, or Down Arrow / Pen if ready */}
+        {/* Action Status: Checked Badge if in jar, or Edit Pen / Down Arrow */}
         {isSelected ? (
           <View style={[styles.checkBadge, { backgroundColor: tag.color }]}>
             <Check size={8} color="#FFFFFF" strokeWidth={3} />
           </View>
-        ) : tag.id === 'custom' && !customText ? (
-          <View style={[styles.downArrowPill, { backgroundColor: tag.color + '18' }]}>
+        ) : onEditCustom ? (
+          <TouchableOpacity
+            hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
+            onPress={() => {
+              audioService.triggerHaptic('selection');
+              onEditCustom();
+            }}
+            style={[styles.downArrowPill, { backgroundColor: tag.color + '1A' }]}
+          >
             <PenLine size={8} color={tag.color} strokeWidth={2.4} />
-          </View>
+          </TouchableOpacity>
         ) : (
           <View style={styles.downArrowPill}>
             <ArrowDown size={8.5} color={tag.color} strokeWidth={2.4} />
@@ -429,5 +474,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  addCloudBody: {
+    borderStyle: 'dashed',
+    borderColor: '#F472B6',
+    borderBottomColor: '#EC4899',
+    backgroundColor: '#FFF5F8',
   },
 });

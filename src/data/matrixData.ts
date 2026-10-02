@@ -84,8 +84,8 @@ export const EMOTION_TAGS: EmotionTag[] = [
   },
   {
     id: 'custom',
-    labelTh: 'บอก Mooca...',
-    labelEn: 'Tell Mooca...',
+    labelTh: 'บอก Mooca',
+    labelEn: 'Tell Mooca',
     emoji: '',
     color: '#EC4899', // Soft Rose Heart
     weightDescription: 'Personal heart message directly to Mooca',

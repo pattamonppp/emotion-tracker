@@ -16,7 +16,8 @@ export type EmotionTagId =
   | 'overthinking'
   | 'lonely'
   | 'confused'
-  | 'custom';
+  | 'custom'
+  | (string & {});
 
 export interface EmotionTag {
   id: EmotionTagId;

@@ -55,6 +55,7 @@ interface GlassEmotionJarProps {
   lang: 'th' | 'en';
   onMoocaHug?: () => void;
   customEmotionText?: string;
+  customMessages?: Array<{ id: string; text: string }>;
 }
 
 export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
@@ -64,6 +65,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   lang,
   onMoocaHug,
   customEmotionText,
+  customMessages,
 }) => {
   const jarSquishAnim = useRef(new Animated.Value(1)).current;
   const moocaOrbitX = useRef(new Animated.Value(-58)).current;
@@ -93,7 +95,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           ];
     }
     if (selectedEmotions.length > 0) {
-      const customMsg: SpeechMessage[] = selectedEmotions.includes('custom')
+      const hasCustom = selectedEmotions.some((id) => id.startsWith('custom'));
+      const customMsg: SpeechMessage[] = hasCustom
         ? (lang === 'th'
             ? [{ text: 'Mooca ได้รับข้อความในใจของเธอแล้วนะ จะคอยกอดไว้อย่างดีเลย!', iconType: 'heart' }]
             : [{ text: 'Mooca received your heart note! Holding it close and safe!', iconType: 'heart' }])
@@ -330,8 +333,10 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
     ]).start();
   };
 
+  const firstId = selectedEmotions[0];
+  const isFirstCustom = firstId?.startsWith('custom');
   const firstTag = selectedEmotions.length > 0
-    ? EMOTION_TAGS.find((t) => t.id === selectedEmotions[0])
+    ? (isFirstCustom ? { color: '#EC4899' } : EMOTION_TAGS.find((t) => t.id === firstId))
     : null;
   const jarAmbientColor = firstTag?.color || '#00C4B3';
 
@@ -465,7 +470,19 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   ]}
                 >
                   {selectedEmotions.map((id) => {
-                    const tag = EMOTION_TAGS.find((t) => t.id === id);
+                    const isCustom = id.startsWith('custom');
+                    const customItem = customMessages?.find((m) => m.id === id);
+                    const tag = isCustom
+                      ? {
+                          id,
+                          labelTh: customItem?.text || customEmotionText || 'ข้อความถึง Mooca',
+                          labelEn: customItem?.text || customEmotionText || 'Note to Mooca',
+                          color: '#EC4899',
+                          emoji: '',
+                          weightDescription: '',
+                          recommendedOption: 'A' as const,
+                        }
+                      : EMOTION_TAGS.find((t) => t.id === id);
                     if (!tag) return null;
                     return (
                       <View key={tag.id} style={styles.miniCloudWrapper}>
@@ -508,12 +525,12 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                               { backgroundColor: tag.color + '1A' },
                             ]}
                           >
-                            {getEmotionIcon(tag.id, tag.color, 11)}
+                            {getEmotionIcon(isCustom ? 'custom' : tag.id, tag.color, 11)}
                           </View>
                           <Text style={[styles.miniPuffText, { color: colors.primaryDark }]} numberOfLines={1}>
-                            {tag.id === 'custom' && customEmotionText
-                              ? customEmotionText
-                              : lang === 'th' ? tag.labelTh : tag.labelEn}
+                            {isCustom
+                              ? (customItem?.text || customEmotionText || tag.labelTh)
+                              : (lang === 'th' ? tag.labelTh : tag.labelEn)}
                           </Text>
                           <TouchableOpacity
                             hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
