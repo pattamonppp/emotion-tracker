@@ -12,7 +12,7 @@ import { EMOTION_TAGS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
 import { Sparkles, X } from 'lucide-react-native';
 import { getEmotionIcon } from './FloatingEmotionCloud';
-import { colors, radii, shadows } from '../design-system/tokens';
+import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 interface GlassEmotionJarProps {
   selectedEmotions: EmotionTagId[];
@@ -111,15 +111,15 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
             {selectedEmotions.length === 0 ? (
               <View style={styles.emptyContainer}>
                 <View style={styles.sparkleIconWrapper}>
-                  <Sparkles size={22} color={colors.primary} />
+                  <Sparkles size={16} color={colors.primary} />
                 </View>
                 <Text style={styles.emptyTitle}>
-                  {lang === 'th' ? 'โหลแก้วเวทมนตร์ของ Mooca' : "Mooca's Magic Jar"}
+                  {lang === 'th' ? 'โหลแก้วพักใจของ Mooca' : "Mooca's Magic Jar"}
                 </Text>
                 <Text style={styles.emptySubtitle}>
                   {lang === 'th'
-                    ? 'แตะก้อนเมฆอารมณ์ด้านล่าง\nเพื่อกักเก็บความกังวลไว้ที่นี่น้า'
-                    : 'Tap emotion puffs below\nto safely store worries here'}
+                    ? 'แตะหรือลากเมฆด้านบนลงมาที่นี่น้า'
+                    : 'Tap or drag clouds above here'}
                 </Text>
               </View>
             ) : (
@@ -138,8 +138,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                         },
                       ]}
                     >
-                      <View style={{ marginRight: 6 }}>
-                        {getEmotionIcon(tag.id, tag.color, 16)}
+                      <View style={{ marginRight: 4 }}>
+                        {getEmotionIcon(tag.id, tag.color, 13)}
                       </View>
                       <Text style={[styles.puffText, { color: colors.primaryDark }]}>
                         {lang === 'th' ? tag.labelTh : tag.labelEn}
@@ -151,7 +151,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                         }}
                         style={styles.removePuffBtn}
                       >
-                        <X size={12} color={colors.textSecondary} />
+                        <X size={10} color={colors.textSecondary} />
                       </TouchableOpacity>
                     </View>
                   );
@@ -187,18 +187,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    marginVertical: 4,
+    marginVertical: 2,
   },
   glow: {
     position: 'absolute',
-    width: 250,
-    height: 180,
-    borderRadius: 90,
+    width: 220,
+    height: 120,
+    borderRadius: 70,
     shadowColor: '#00C4B3',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.35,
-    shadowRadius: 28,
-    elevation: 6,
+    shadowRadius: 22,
+    elevation: 4,
     zIndex: 0,
   },
   lidSection: {
@@ -206,11 +206,11 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   corkCap: {
-    width: 68,
-    height: 18,
+    width: 56,
+    height: 13,
     backgroundColor: '#C68347',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     borderWidth: 1.5,
     borderColor: '#8E5323',
     position: 'relative',
@@ -218,9 +218,9 @@ const styles = StyleSheet.create({
   },
   corkWoodGrain1: {
     position: 'absolute',
-    left: 12,
-    top: 3,
-    width: 20,
+    left: 10,
+    top: 2,
+    width: 16,
     height: 1.5,
     backgroundColor: '#8E5323',
     borderRadius: 1,
@@ -228,17 +228,17 @@ const styles = StyleSheet.create({
   },
   corkWoodGrain2: {
     position: 'absolute',
-    right: 14,
-    top: 9,
-    width: 16,
+    right: 10,
+    top: 7,
+    width: 14,
     height: 1.5,
     backgroundColor: '#8E5323',
     borderRadius: 1,
     opacity: 0.6,
   },
   corkBase: {
-    width: 58,
-    height: 8,
+    width: 48,
+    height: 6,
     backgroundColor: '#B57438',
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
@@ -247,10 +247,10 @@ const styles = StyleSheet.create({
     borderColor: '#8E5323',
   },
   glassRim: {
-    width: 78,
-    height: 10,
+    width: 66,
+    height: 7,
     backgroundColor: '#E0F7F5',
-    borderRadius: 5,
+    borderRadius: 4,
     borderWidth: 1.5,
     borderColor: 'rgba(0, 196, 179, 0.4)',
     marginTop: -2,
@@ -331,33 +331,34 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   jarBody: {
-    width: 250,
-    minHeight: 180,
-    borderRadius: 36,
-    borderWidth: 2,
+    width: 220,
+    minHeight: 110,
+    maxHeight: 135,
+    borderRadius: 26,
+    borderWidth: 1.8,
     borderColor: 'rgba(0, 196, 179, 0.35)',
-    marginTop: -4,
-    padding: 16,
+    marginTop: -3,
+    padding: 8,
     position: 'relative',
     overflow: 'hidden',
     ...shadows.tealGlow,
   },
   glassReflectionLeft: {
     position: 'absolute',
-    top: 14,
-    left: 12,
-    width: 8,
-    height: 120,
-    borderRadius: 4,
+    top: 10,
+    left: 10,
+    width: 6,
+    height: 75,
+    borderRadius: 3,
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     zIndex: 2,
   },
   glassReflectionRight: {
     position: 'absolute',
-    top: 20,
-    right: 14,
-    width: 4,
-    height: 80,
+    top: 14,
+    right: 10,
+    width: 3.5,
+    height: 50,
     borderRadius: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.55)',
     zIndex: 2,
@@ -370,54 +371,54 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     alignItems: 'center',
-    gap: 6,
-    paddingVertical: 12,
+    gap: 3,
+    paddingVertical: 4,
   },
   sparkleIconWrapper: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#E6F9F7',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1.5,
+    borderWidth: 1.2,
     borderColor: '#B3EDE8',
   },
   emptyTitle: {
-    fontSize: 13,
+    fontSize: 11.5,
     fontWeight: '700',
     color: colors.primaryDark,
     textAlign: 'center',
   },
   emptySubtitle: {
-    fontSize: 11,
+    fontSize: 9.5,
     color: colors.textMuted,
     textAlign: 'center',
-    lineHeight: 17,
+    lineHeight: 14,
   },
   puffsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 8,
+    gap: 5,
+    paddingVertical: 4,
   },
   marshmallowPuff: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     borderRadius: radii.full,
-    borderWidth: 1.5,
-    gap: 6,
+    borderWidth: 1.2,
+    gap: 4,
     backgroundColor: '#FFFFFF',
     ...shadows.soft,
   },
   puffEmoji: {
-    fontSize: 15,
+    fontSize: 13,
   },
   puffText: {
-    fontSize: 12,
+    fontSize: 10.5,
     fontWeight: '700',
   },
   removePuffBtn: {
@@ -429,20 +430,25 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 44,
-    borderBottomLeftRadius: 36,
-    borderBottomRightRadius: 36,
+    height: 32,
+    borderBottomLeftRadius: 26,
+    borderBottomRightRadius: 26,
     zIndex: 1,
   },
   clearBtn: {
-    marginTop: 8,
-    paddingVertical: 4,
+    marginTop: 4,
+    paddingVertical: 3,
     paddingHorizontal: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.78)',
+    borderRadius: radii.full,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 196, 179, 0.25)',
+    ...shadows.soft,
   },
   clearBtnText: {
-    fontSize: 11,
-    color: colors.textMuted,
+    fontSize: 10,
+    fontFamily: typography.fontPromptMedium,
+    color: colors.primaryDark,
     fontWeight: '600',
-    textDecorationLine: 'underline',
   },
 });

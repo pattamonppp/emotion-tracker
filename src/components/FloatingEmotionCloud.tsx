@@ -104,19 +104,19 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
 
     Animated.parallel([
       Animated.timing(panAnim.y, {
-        toValue: 240,
-        duration: 360,
+        toValue: 180,
+        duration: 280,
         easing: Easing.in(Easing.cubic),
         useNativeDriver: true,
       }),
       Animated.timing(scaleAnim, {
         toValue: 0.25,
-        duration: 360,
+        duration: 280,
         useNativeDriver: true,
       }),
       Animated.timing(opacityAnim, {
         toValue: 0,
-        duration: 360,
+        duration: 280,
         useNativeDriver: true,
       }),
     ]).start(() => {
@@ -137,7 +137,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: (_evt, gestureState) => {
-        return Math.abs(gestureState.dx) > 4 || Math.abs(gestureState.dy) > 4;
+        return Math.abs(gestureState.dx) > 3 || Math.abs(gestureState.dy) > 3;
       },
       onPanResponderGrant: () => {
         isDragging.current = true;
@@ -155,7 +155,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
       onPanResponderRelease: (_evt, gestureState) => {
         isDragging.current = false;
         // If dragged DOWNWARD towards the apothecary jar below
-        if (gestureState.dy > 45) {
+        if (gestureState.dy > 30) {
           handleFlyIntoJar();
         } else {
           // If released without dragging far: treat as tap or spring back
@@ -276,7 +276,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
             },
           ]}
         >
-          {getEmotionIcon(tag.id, tag.color, 15)}
+          {getEmotionIcon(tag.id, tag.color, 13)}
         </View>
 
         {/* Short Punchy Emotion Word (No Description) */}
@@ -292,11 +292,11 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
         {/* Action Status: Checked Badge if in jar, or Down Arrow if ready to drop */}
         {isSelected ? (
           <View style={[styles.checkBadge, { backgroundColor: tag.color }]}>
-            <Check size={10} color="#FFFFFF" strokeWidth={3} />
+            <Check size={9} color="#FFFFFF" strokeWidth={3} />
           </View>
         ) : (
           <View style={styles.downArrowPill}>
-            <ArrowDown size={11} color={tag.color} strokeWidth={2.5} />
+            <ArrowDown size={10} color={tag.color} strokeWidth={2.5} />
           </View>
         )}
       </LinearGradient>
@@ -306,88 +306,88 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
 
 const styles = StyleSheet.create({
   cloudWrapper: {
-    marginVertical: 4,
-    marginHorizontal: 3,
+    marginVertical: 2,
+    marginHorizontal: 2.5,
     position: 'relative',
     shadowColor: '#00C4B3',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.12,
-    shadowRadius: 5,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   cloudScallopsTop: {
     position: 'absolute',
-    top: -8,
-    left: 12,
-    right: 12,
-    height: 16,
+    top: -5,
+    left: 8,
+    right: 8,
+    height: 10,
     flexDirection: 'row',
     zIndex: 1,
   },
   scallopPuffLeft: {
     position: 'absolute',
-    left: 8,
-    top: 3,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 1.2,
+    left: 4,
+    top: 1,
+    width: 13,
+    height: 13,
+    borderRadius: 6.5,
+    borderWidth: 1,
     borderBottomWidth: 0,
   },
   scallopPuffCenter: {
     position: 'absolute',
-    left: 22,
+    left: 14,
     top: -3,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    borderWidth: 1.2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 1,
     borderBottomWidth: 0,
   },
   scallopPuffRight: {
     position: 'absolute',
-    left: 42,
-    top: 4,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    borderWidth: 1.2,
+    left: 27,
+    top: 2,
+    width: 11,
+    height: 11,
+    borderRadius: 5.5,
+    borderWidth: 1,
     borderBottomWidth: 0,
   },
   cloudBody: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 7,
-    paddingHorizontal: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
     borderRadius: radii.full,
-    borderWidth: 1.3,
-    borderBottomWidth: 2.8,
-    gap: 6,
+    borderWidth: 1.2,
+    borderBottomWidth: 2.2,
+    gap: 4,
     zIndex: 2,
     backgroundColor: '#FFFFFF',
   },
   iconBubble: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cloudTitle: {
     fontFamily: typography.fontPromptSemiBold,
-    fontSize: 12,
+    fontSize: 11,
   },
   checkBadge: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   downArrowPill: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
     alignItems: 'center',
     justifyContent: 'center',

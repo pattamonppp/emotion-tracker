@@ -224,7 +224,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
         activeOpacity={0.92}
         onPress={handlePetting}
         disabled={!interactive}
-        style={{ width, height, alignItems: 'center', justifyContent: 'center' }}
+        style={{ width, height, alignItems: 'center', justifyContent: 'center', position: 'relative' }}
       >
         <Animated.View
           style={{
@@ -403,40 +403,40 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
             </G>
           </Svg>
         </Animated.View>
-      </TouchableOpacity>
 
-      {/* Cheerful Mini Sunshine Companion: Sunny */}
-      {showSunny && (
-        <Animated.View
-          style={[
-            styles.sunnyContainer,
-            {
-              transform: [{ rotate: sunnySpinInterpolation }],
-            },
-          ]}
-        >
-          <Svg width={30} height={30} viewBox="0 0 36 36">
-            {/* Spinning Rays */}
-            <G stroke="#FFA726" strokeWidth="2.5" strokeLinecap="round">
-              <Line x1="18" y1="2" x2="18" y2="7" />
-              <Line x1="18" y1="29" x2="18" y2="34" />
-              <Line x1="2" y1="18" x2="7" y2="18" />
-              <Line x1="29" y1="18" x2="34" y2="18" />
-              <Line x1="6.7" y1="6.7" x2="10.2" y2="10.2" />
-              <Line x1="25.8" y1="25.8" x2="29.3" y2="29.3" />
-              <Line x1="6.7" y1="29.3" x2="10.2" y2="25.8" />
-              <Line x1="25.8" y1="10.2" x2="29.3" y2="6.7" />
-            </G>
-            {/* Sunny Smiling Face Body */}
-            <Circle cx="18" cy="18" r="9" fill="#FFCA28" stroke="#F57C00" strokeWidth="1.2" />
-            <Circle cx="15.5" cy="16.5" r="1.2" fill="#4E342E" />
-            <Circle cx="20.5" cy="16.5" r="1.2" fill="#4E342E" />
-            <Circle cx="13.5" cy="18" r="1.8" fill="#FF8A80" opacity={0.75} />
-            <Circle cx="22.5" cy="18" r="1.8" fill="#FF8A80" opacity={0.75} />
-            <Path d="M 15.5 19.5 Q 18 22 20.5 19.5" stroke="#4E342E" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-          </Svg>
-        </Animated.View>
-      )}
+        {/* Cheerful Mini Sunshine Companion: Sunny (nestled next to Mooca's ear) */}
+        {showSunny && (
+          <Animated.View
+            style={[
+              styles.sunnyContainer,
+              {
+                transform: [{ rotate: sunnySpinInterpolation }],
+              },
+            ]}
+          >
+            <Svg width={24} height={24} viewBox="0 0 36 36">
+              {/* Spinning Rays */}
+              <G stroke="#FFA726" strokeWidth="2.5" strokeLinecap="round">
+                <Line x1="18" y1="2" x2="18" y2="7" />
+                <Line x1="18" y1="29" x2="18" y2="34" />
+                <Line x1="2" y1="18" x2="7" y2="18" />
+                <Line x1="29" y1="18" x2="34" y2="18" />
+                <Line x1="6.7" y1="6.7" x2="10.2" y2="10.2" />
+                <Line x1="25.8" y1="25.8" x2="29.3" y2="29.3" />
+                <Line x1="6.7" y1="29.3" x2="10.2" y2="25.8" />
+                <Line x1="25.8" y1="10.2" x2="29.3" y2="6.7" />
+              </G>
+              {/* Sunny Smiling Face Body */}
+              <Circle cx="18" cy="18" r="9" fill="#FFCA28" stroke="#F57C00" strokeWidth="1.2" />
+              <Circle cx="15.5" cy="16.5" r="1.2" fill="#4E342E" />
+              <Circle cx="20.5" cy="16.5" r="1.2" fill="#4E342E" />
+              <Circle cx="13.5" cy="18" r="1.8" fill="#FF8A80" opacity={0.75} />
+              <Circle cx="22.5" cy="18" r="1.8" fill="#FF8A80" opacity={0.75} />
+              <Path d="M 15.5 19.5 Q 18 22 20.5 19.5" stroke="#4E342E" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            </Svg>
+          </Animated.View>
+        )}
+      </TouchableOpacity>
     </View>
   );
 };
@@ -449,35 +449,36 @@ const styles = StyleSheet.create({
   },
   bubbleContainer: {
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 20,
-    marginBottom: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 14,
+    marginBottom: 4,
     maxWidth: 240,
-    borderWidth: 1.5,
+    borderWidth: 1.2,
     borderColor: '#00C4B3',
     shadowColor: '#004D40',
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowRadius: 5,
+    elevation: 2,
     alignItems: 'center',
+    position: 'relative',
   },
   bubbleText: {
-    fontSize: 12.5,
+    fontSize: 11,
     fontWeight: '700',
     color: '#004D40',
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: 15,
   },
   bubbleTail: {
     position: 'absolute',
-    bottom: -7,
+    bottom: -5,
     width: 0,
     height: 0,
-    borderLeftWidth: 7,
-    borderRightWidth: 7,
-    borderTopWidth: 7,
+    borderLeftWidth: 5,
+    borderRightWidth: 5,
+    borderTopWidth: 5,
     borderStyle: 'solid',
     backgroundColor: 'transparent',
     borderLeftColor: 'transparent',
@@ -495,8 +496,8 @@ const styles = StyleSheet.create({
   },
   sunnyContainer: {
     position: 'absolute',
-    top: 2,
-    right: 8,
+    top: -4,
+    right: -4,
     zIndex: 10,
   },
 });
