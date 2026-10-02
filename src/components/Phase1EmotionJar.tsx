@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { EmotionTag, EmotionTagId } from '../types';
-import { EMOTION_TAGS } from '../data/matrixData';
+import { EMOTION_TAGS, matchOptionFromKeywords } from '../data/matrixData';
 import { audioService } from '../services/audioService';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { FloatingEmotionCloud } from './FloatingEmotionCloud';
@@ -139,7 +139,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
       emoji: '',
       color: '#EC4899',
       weightDescription: '',
-      recommendedOption: 'A' as const,
+      recommendedOption: matchOptionFromKeywords(m.text, 'A'),
       isCustom: true,
       customText: m.text,
     }));
@@ -290,6 +290,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           }}
           title={p1.beginCozyReset}
           icon={<ArrowRight size={17} color="#FFFFFF" />}
+          disabled={selectedEmotions.length === 0}
         />
       </View>
 

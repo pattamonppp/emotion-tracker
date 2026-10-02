@@ -1,4 +1,4 @@
-import { EmotionTag, GoalType, MBTIType } from '../types';
+import { EmotionTag, GoalType, MBTIType, InterventionOption, InterventionOptionMeta } from '../types';
 
 export const EMOTION_TAGS: EmotionTag[] = [
   {
@@ -92,6 +92,112 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: 'A',
   },
 ];
+
+export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOptionMeta> = {
+  A: {
+    option: 'A',
+    nameTh: 'Somatic Absorption',
+    nameEn: 'Somatic Absorption',
+    keywordsTh: ['สั่น', 'ตื่นเต้น', 'เคว้งคว้าง', 'ว่างเปล่า', 'หวาดกลัว', 'หวิวในใจ', 'มือเย็น', 'ต้องการการโอบกอด'],
+    keywordsEn: ['shaking', 'shake', 'trembling', 'nervous', 'scared', 'fear', 'afraid', 'empty', 'blank', 'numb', 'cold hands', 'need a hug', 'hug', 'hollow', 'uneasy', 'vulnerable'],
+    descriptionTh: 'ลูบไออุ่นบนฝ่ามือ ปลอบประโลมระบบประสาท ให้ร่างกายรู้สึกปลอดภัยและได้รับการโอบกอด',
+    descriptionEn: 'Soothing warmth and tactile touch to calm the sympathetic surge and signal safety to the nervous system.',
+  },
+  B: {
+    option: 'B',
+    nameTh: 'The Victory Sip',
+    nameEn: 'The Victory Sip',
+    keywordsTh: ['กดดัน', 'คิดมาก', 'เครียดวนลูป', 'หนักหัว', 'เกร็งคอ', 'กลัวคนอื่นผิดหวัง', 'ตึงเครียดสะสม'],
+    keywordsEn: ['pressure', 'overthinking', 'looping thoughts', 'headache', 'heavy head', 'neck tension', 'tight neck', 'disappointing others', 'fear of failing', 'accumulated tension', 'tense', 'overwhelmed'],
+    descriptionTh: 'จิบน้ำช้า ๆ กระตุ้น Vagus nerve รีเซ็ตกลืนน้ำลายคลายความตึงเครียดสะสม',
+    descriptionEn: 'A mindful sip of water activating the vagal response to release deep physical tension and slow heartbeat.',
+  },
+  C: {
+    option: 'C',
+    nameTh: 'Kinetic Shaker',
+    nameEn: 'Kinetic Shaker',
+    keywordsTh: ['สมองตื้อ', 'คิดไม่ออก', 'อึดอัดตัว', 'นั่งนาน', 'เกร็งไหล่', 'รู้สึกตึงสะสม', 'อยากสลัดทิ้ง'],
+    keywordsEn: ['brain freeze', 'freeze', 'cant think', "can't think", 'stuck', 'restless', 'sitting too long', 'tight shoulders', 'shake it off', 'stiff', 'body tension', 'sluggish', 'discharge'],
+    descriptionTh: 'สะบัดข้อมือและแขน สลัดอะดรีนาลีนส่วนเกินและอาการเกร็งค้างออกจากกล้ามเนื้อ',
+    descriptionEn: 'Vigorous wrist and arm shaking to discharge excess adrenaline and unfreeze muscle tension.',
+  },
+  D: {
+    option: 'D',
+    nameTh: 'Micro-Bounce / Vertical Grounding',
+    nameEn: 'Micro-Bounce / Vertical Grounding',
+    keywordsTh: ['สับสน', 'เบลอ', 'มึน', 'ใจลอย', 'จับต้นชนปลายไม่ถูก', 'หลุดโฟกัส', 'เลือกไม่ถูก'],
+    keywordsEn: ['confused', 'confusion', 'blur', 'blurry', 'dizzy', 'spacing out', 'spacey', 'daydreaming', 'lost focus', 'unfocused', 'indecisive', 'disoriented', 'floaty', 'brain fog'],
+    descriptionTh: 'กระโดดดึ๋งเบา ๆ ทิ้งส้นเท้าลงพื้นอย่างมั่นคง ดึงสติและโฟกัสกลับสู่ร่างกายปัจจุบัน',
+    descriptionEn: 'Gentle rhythmic bouncing and firm heel drops to ground the mind and anchor focus back into the body.',
+  },
+  E: {
+    option: 'E',
+    nameTh: 'Box Breathing (4-4-4-4)',
+    nameEn: 'Box Breathing (4-4-4-4)',
+    keywordsTh: ['กังวล', 'ฟุ้งซ่าน', 'ว้าวุ่น', 'สมาธิสั้น', 'ร้อนรน', 'อยากรีเซ็ตแป๊บๆ', 'ใจไม่อยู่กับเนื้อกับตัว'],
+    keywordsEn: ['anxious', 'anxiety', 'worried', 'worry', 'distracted', 'scatterbrained', 'restless mind', 'impatient', 'rushed', 'quick reset', 'mind wandering', 'agitated', 'fidgety'],
+    descriptionTh: 'ฝึกการหายใจแบบ 4 เหลี่ยม เข้า 4 - กลั้น 4 - ออก 4 - กลั้น 4 คืนความนิ่งสงบให้จิตใจ',
+    descriptionEn: 'Box Breathing (4-4-4-4) to steady erratic breathing, clear mental noise, and restore inner balance.',
+  },
+  F: {
+    option: 'F',
+    nameTh: '4-7-8 Deep Pacer',
+    nameEn: '4-7-8 Deep Pacer',
+    keywordsTh: ['ใจเต้นแรง', 'พานิก', 'ตื่นตระหนก', 'แน่นหน้าอก', 'หายใจไม่ทัน', 'ตระหนกตกใจ', 'เครียดนอนไม่หลับ'],
+    keywordsEn: ['rapid heart', 'racing heart', 'heart pounding', 'palpitations', 'panic', 'panicking', 'panic attack', 'chest tightness', 'short of breath', 'cant breathe', "can't breathe", 'terrified', 'insomnia', 'cant sleep'],
+    descriptionTh: 'หายใจแบบ 4-7-8 เข้า 4 - กลั้น 7 - ออก 8 ชะลออัตราการเต้นของหัวใจและลดอาการตื่นตระหนกฉับพลัน',
+    descriptionEn: '4-7-8 deep parasympathetic pacing to rapidly bring down elevated heart rate and defuse acute panic.',
+  },
+  G: {
+    option: 'G',
+    nameTh: 'Audio Sanctuary',
+    nameEn: 'Audio Sanctuary',
+    keywordsTh: ['หมดไฟ', 'เหนื่อยล้า', 'เหงา', 'โดดเดี่ยว', 'ท้อแท้', 'ต้องการกำลังใจ', 'พลังงานติดลบ', 'ไม่อยากออกแรง'],
+    keywordsEn: ['burnout', 'burnt out', 'exhausted', 'exhaustion', 'tired', 'fatigue', 'lonely', 'isolated', 'discouraged', 'hopeless', 'low energy', 'need encouragement', 'drained', 'apathy'],
+    descriptionTh: 'เสียงคลื่นความถี่ Alpha/Binaural โอบอุ้มจิตใจ เติมพลังบวกโดยไม่ต้องใช้แรงกาย',
+    descriptionEn: 'Harmonic Alpha and Binaural audio sanctuary to cradle the spirit and restore depleted energy with zero exertion.',
+  },
+};
+
+/**
+ * Fast lookup map from keyword string to InterventionOption ('A' - 'G')
+ */
+export const INTERVENTION_KEYWORD_MAP: Record<string, InterventionOption> = Object.entries(
+  INTERVENTION_DATASET
+).reduce((acc, [option, meta]) => {
+  meta.keywordsTh.forEach((kw) => {
+    acc[kw.toLowerCase()] = option as InterventionOption;
+  });
+  meta.keywordsEn.forEach((kw) => {
+    acc[kw.toLowerCase()] = option as InterventionOption;
+  });
+  return acc;
+}, {} as Record<string, InterventionOption>);
+
+/**
+ * Matches input text against keyword dataset (Thai & English, case-insensitive)
+ */
+export const matchOptionFromKeywords = (
+  text: string,
+  defaultOption: InterventionOption = 'A'
+): InterventionOption => {
+  if (!text) return defaultOption;
+  const normalized = text.trim().toLowerCase();
+
+  // 1. Exact match
+  if (INTERVENTION_KEYWORD_MAP[normalized]) {
+    return INTERVENTION_KEYWORD_MAP[normalized];
+  }
+
+  // 2. Substring containment match
+  for (const [kw, opt] of Object.entries(INTERVENTION_KEYWORD_MAP)) {
+    if (normalized.includes(kw)) {
+      return opt;
+    }
+  }
+
+  return defaultOption;
+};
 
 export const CONTEXT_LOCATIONS = [
   { id: 'exam', labelTh: 'สนามสอบ / ห้องเรียน', labelEn: 'Exam Hall / School', icon: 'GraduationCap' },

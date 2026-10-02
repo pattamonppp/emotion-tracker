@@ -31,6 +31,16 @@ export interface EmotionTag {
 
 export type InterventionOption = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
 
+export interface InterventionOptionMeta {
+  option: InterventionOption;
+  nameTh: string;
+  nameEn: string;
+  keywordsTh: readonly string[];
+  keywordsEn: readonly string[];
+  descriptionTh?: string;
+  descriptionEn?: string;
+}
+
 export interface UserProfile {
   name: string;
   ageBracket: string;

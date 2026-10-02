@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { EmotionTagId } from '../types';
-import { EMOTION_TAGS } from '../data/matrixData';
+import { EMOTION_TAGS, matchOptionFromKeywords } from '../data/matrixData';
 import { audioService } from '../services/audioService';
 import {
   Sparkles,
@@ -523,7 +523,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                         color: '#EC4899',
                         emoji: '',
                         weightDescription: '',
-                        recommendedOption: 'A' as const,
+                        recommendedOption: matchOptionFromKeywords(customItem?.text || customEmotionText || '', 'A'),
                       }
                       : EMOTION_TAGS.find((t) => t.id === id);
                     if (!tag) return null;
