@@ -122,7 +122,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         <View style={styles.mbtiBadge}>
           <Headphones size={13} color={colors.primary} />
           <Text style={styles.mbtiBadgeText}>
-            MBTI {mbti} • {archetype.toUpperCase()} ARCHETYPE
+            {lang === 'th' ? '🎧 คลื่นเสียงสมาธิ 10Hz • Alpha Wave + Brown Noise' : '🎧 Acoustic Sanctuary 10Hz • Alpha + Brown Noise'}
           </Text>
         </View>
 
@@ -179,10 +179,10 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
             speakingBubble={
               isPlaying
                 ? lang === 'th'
-                  ? 'Mooca ใส่หูฟังเปิดคลื่นอัลฟาให้... หลับตาลงสบายๆ นะ'
-                  : 'Mooca has your sanctuary waves ready... rest your eyes.'
+                  ? 'Alpha Wave 10Hz + Brown Noise กำลังทำงาน... หลับตาลงสบายๆ นะ'
+                  : 'Alpha 10Hz Binaural Beats flowing... close your eyes.'
                 : lang === 'th'
-                ? 'แตะไอคอนลำโพงเพื่อเริ่มฟังเสียงสมาธิ'
+                ? 'แตะไอคอนลำโพงเพื่อเริ่มฟังคลื่นสมาธิ'
                 : 'Tap the speaker to play sanctuary'
             }
           />

@@ -142,7 +142,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
       >
         <Volume2 size={13} color={colors.primary} />
         <Text style={styles.voiceBadgeText}>
-          {lang === 'th' ? 'แตะฟังเสียงกระซิบอวยพรจาก Mooca' : 'Listen to Mooca Blessing'}
+          {lang === 'th' ? '🌟 สัมผัสเหนี่ยวสติ • Haptic Rhythm' : '🌟 Tactile Grounding & Haptic Rhythm'}
         </Text>
       </TouchableOpacity>
 
@@ -154,40 +154,40 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'ฝ่ามืออุ่นครบ 36.8°C แล้ว! พลังใจพร้อมลุยแล้วนะ'
-                : 'Fingertips are 36.8°C warm and ready!'
+                ? 'ถูวนครบแล้ว! ประสาทสัมผัสกลับสู่ร่างกายเต็มที่แล้วนะ'
+                : 'Grounded! Your senses are back in your body.'
               : lang === 'th'
-              ? 'ใช้นิ้วถูวนที่ดวงแก้วทองคำ เพื่อเพิ่มความอบอุ่นสู่ปลายนิ้ว'
-              : 'Rub the Golden Stardust Sigil to generate warmth'
+              ? 'วางนิ้วถูวนที่ดวงแก้ว โทรศัพท์จะสั่นเป็นจังหวะดึงสติกลับมา'
+              : 'Rub the orb in circles — the haptic rhythm brings you back'
           }
         />
       </View>
 
-      {/* Fingertip Warmth Gauge Card */}
+      {/* Progress Card (Grounding %) */}
       <View style={styles.gaugeCard}>
         <View style={styles.gaugeHeaderRow}>
           <View style={styles.tempBadge}>
-            <Flame size={14} color="#EA580C" />
+            <Star size={14} color="#EA580C" />
             <Text style={styles.tempLabel}>
-              {lang === 'th' ? 'เกจวัดความอบอุ่นปลายนิ้ว:' : 'Fingertip Warmth:'}
+              {lang === 'th' ? 'ระดับการเหนี่ยวสติ:' : 'Grounding Level:'}
             </Text>
-            <Text style={styles.tempValue}>{handTemp}°C</Text>
+            <Text style={styles.tempValue}>{rubProgress}%</Text>
           </View>
 
           <View style={styles.statusBadge}>
-            <Sun size={13} color={handTemp >= 36.8 ? '#15803D' : '#D97706'} />
-            <Text style={[styles.statusText, handTemp >= 36.8 && { color: '#15803D' }]}>
-              {handTemp < 30
+            <Sparkles size={13} color={rubProgress >= 100 ? '#15803D' : '#D97706'} />
+            <Text style={[styles.statusText, rubProgress >= 100 && { color: '#15803D' }]}>
+              {rubProgress < 30
                 ? lang === 'th'
-                  ? 'มือเย็นเฉียบ'
-                  : 'Freezing Cold'
-                : handTemp < 34
+                  ? 'กำลังเริ่มต้น'
+                  : 'Starting'
+                : rubProgress < 70
                 ? lang === 'th'
-                  ? 'กำลังอุ่นขึ้น'
-                  : 'Warming Up'
+                  ? 'กำลังเหนี่ยวสติ'
+                  : 'Grounding...'
                 : lang === 'th'
-                ? 'อบอุ่นพร้อมลุย'
-                : 'Optimally Warm'}
+                ? 'สติกลับมาแล้ว'
+                : 'Grounded!'}
             </Text>
           </View>
         </View>
@@ -252,20 +252,20 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               <Text style={styles.sigilTitle}>
                 {isFinished
                   ? lang === 'th'
-                    ? 'พลังใจเต็มเปี่ยม!'
-                    : 'Sigil Absorbed!'
+                    ? 'สติกลับมาแล้ว!'
+                    : 'Grounded!'
                   : lang === 'th'
-                  ? 'ดวงแก้วละอองดาวสีทอง'
-                  : 'Golden Stardust Sigil'}
+                  ? 'วงกลมเหนี่ยวสติ'
+                  : 'Grounding Circle'}
               </Text>
               <Text style={styles.sigilSubtitle}>
                 {isFinished
                   ? lang === 'th'
-                    ? '36.8°C อบอุ่นพร้อมก้าวต่อ'
-                    : '36.8°C Warmth Secured'
+                    ? 'ประสาทสัมผัสกลับสู่ร่างกาย'
+                    : 'Senses returned to body'
                   : lang === 'th'
-                  ? 'ใช้นิ้วถูวนเพื่อรับพลังใจ'
-                  : 'Rub in circles to warm hands'}
+                  ? 'ถูวนเป็นจังหวะ — รับแรงสั่นเตือนสติ'
+                  : 'Rub in rhythm — feel haptic grounding'}
               </Text>
             </View>
           </LinearGradient>
@@ -283,17 +283,17 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             isFinished ? (
               <CheckCircle size={18} color="#004D40" />
             ) : (
-              <Flame size={18} color="#FFFFFF" />
+              <Sparkles size={18} color="#FFFFFF" />
             )
           }
           title={
             isFinished
               ? lang === 'th'
-                ? 'ดูดซับพลังใจสำเร็จแล้ว!'
-                : 'Warmth Fully Absorbed!'
+                ? 'เหนี่ยวสติสำเร็จแล้ว!'
+                : 'Tactile Grounding Complete!'
               : lang === 'th'
-              ? 'แตะดวงแก้วเพื่อเพิ่มไออุ่น (+8%)'
-              : 'Tap to Add Warmth (+8%)'
+              ? 'แตะเพื่อเพิ่มระดับสติ (+8%)'
+              : 'Tap to Deepen Grounding (+8%)'
           }
         />
       </View>

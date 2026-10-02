@@ -10,7 +10,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { Heart, Sparkles, X, ArrowDown, PenLine, RotateCcw } from 'lucide-react-native';
+import { Heart, Sparkles, X, ArrowDown, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
 import { audioService } from '../services/audioService';
 import { MoocaMascot } from './MoocaMascot';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
@@ -118,7 +118,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
           <View style={styles.headerBar}>
             <View style={styles.headerTitleRow}>
               <View style={styles.iconCircle}>
-                <PenLine size={16} color="#EC4899" strokeWidth={2.4} />
+                <MessageCircleHeart size={16} color="#EC4899" strokeWidth={2.4} />
               </View>
               <View>
                 <Text style={styles.headerTitle}>

@@ -139,7 +139,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         >
           <Zap size={14} color={mode === 'shake' ? '#FFFFFF' : colors.primaryDark} />
           <Text style={[styles.modeTabText, mode === 'shake' && styles.modeTabTextActive]}>
-            {lang === 'th' ? 'สะบัดข้อมือ (Wrist Shake)' : 'Hand Shake'}
+            {lang === 'th' ? '⚡ สะบัดข้อมือ 15 ครั้ง' : '⚡ Wrist Shake x15'}
           </Text>
         </TouchableOpacity>
 
@@ -153,7 +153,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         >
           <Activity size={14} color={mode === 'bounce' ? '#FFFFFF' : colors.primaryDark} />
           <Text style={[styles.modeTabText, mode === 'bounce' && styles.modeTabTextActive]}>
-            {lang === 'th' ? 'กระโดดดึ๋งๆ (Heel Bounce)' : 'Heel Bounce'}
+            {lang === 'th' ? 'แกว่งแขน Heel Bounce' : 'Heel Bounce'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -174,8 +174,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
                 ? 'เมฆหน้าบึ้งแตกเป็นดาวหมดแล้ว! ตัวเบาสบายเลย'
                 : 'All grumpy clouds shattered into shining stars!'
               : lang === 'th'
-              ? `สะบัดข้อมือหรือกระโดดอีก ${currentCount} ครั้ง ให้เมฆแตกกระจาย!`
-              : `Shake device or bounce ${currentCount} more times!`
+              ? `สะบัดแกว่งหรือคว้างแขน Accelerometer จับได้ — เหลือ ${currentCount} ครั้ง!`
+              : `Shake detected by Accelerometer — ${currentCount} more!`
           }
         />
       </Animated.View>

@@ -123,11 +123,11 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     <View style={styles.container}>
       {/* Vagus Nerve Badge */}
       <View style={styles.instructionBadge}>
-        <Heart size={14} color="#F43F5E" />
+        <GlassWater size={14} color="#F43F5E" />
         <Text style={styles.instructionText}>
           {lang === 'th'
-            ? 'การกลืนน้ำกระตุ้นเส้นประสาท Vagus Nerve ให้ใจสงบ'
-            : 'Swallowing activates Vagus Nerve to slow heart rate'}
+            ? '🥤 จิบน้ำชัยชนะ • กระตุ้น Vagus Nerve ลดอัตราชีพจร'
+            : '🥤 Victory Sip • Vagal Breath to slow heart rate'}
         </Text>
       </View>
 
@@ -139,11 +139,11 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'จิบครบแล้วนะ! เส้นประสาทเวกัสผ่อนคลายเต็มที่แล้ว'
+                ? 'จิบครบแล้วนะ! เส้นประสาท Vagus Nerve ผ่อนคลายเต็มที่แล้ว'
                 : 'All 3 sips complete! Your nervous system is settled.'
               : lang === 'th'
-              ? `จิบน้ำชัยชนะอึกที่ ${sipCount + 1} แล้วกลืนช้าๆ นะคะ`
-              : `Take victory sip ${sipCount + 1} of 3 and swallow slowly.`
+              ? `เอียงโทรศัพท์ทำท่าจิบน้ำช้าๆ แล้วหายใจลึกควบคู่ ${sipCount + 1}/3`
+              : `Tilt to sip slowly, exhale deeply ${sipCount + 1}/3`
           }
         />
       </View>
