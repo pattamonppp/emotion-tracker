@@ -12,7 +12,7 @@ import { Accelerometer } from 'expo-sensors';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
-import { Zap, Activity, CheckCircle2, RotateCw } from 'lucide-react-native';
+import { Zap, Activity, CheckCircle2, RotateCw, Star, Sparkles, Cloud } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface KineticShakerProps {
@@ -171,7 +171,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'เมฆหน้าบึ้งแตกเป็นดาวหมดแล้ว! ตัวเบาสบายเลย ✨'
+                ? 'เมฆหน้าบึ้งแตกเป็นดาวหมดแล้ว! ตัวเบาสบายเลย'
                 : 'All grumpy clouds shattered into shining stars!'
               : lang === 'th'
               ? `สะบัดข้อมือหรือกระโดดอีก ${currentCount} ครั้ง ให้เมฆแตกกระจาย!`
@@ -182,7 +182,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
       {/* Stress Thermometer & Shattering Clouds Container */}
       <View style={styles.thermometerSection}>
-        {/* Star Burst Particles overlay */}
+        {/* Star Burst Particles overlay (NO EMOJI - ALWAYS ICONS) */}
         <Animated.View
           style={[
             styles.starBurstOverlay,
@@ -193,10 +193,10 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           ]}
           pointerEvents="none"
         >
-          <Text style={styles.burstStar1}>⭐</Text>
-          <Text style={styles.burstStar2}>✨</Text>
-          <Text style={styles.burstStar3}>🌟</Text>
-          <Text style={styles.burstStar4}>✨</Text>
+          <View style={styles.burstStar1}><Star size={20} color="#F59E0B" fill="#FDE047" /></View>
+          <View style={styles.burstStar2}><Sparkles size={18} color="#F59E0B" fill="#FDE047" /></View>
+          <View style={styles.burstStar3}><Star size={24} color="#F59E0B" fill="#FDE047" /></View>
+          <View style={styles.burstStar4}><Sparkles size={16} color="#F59E0B" fill="#FDE047" /></View>
         </Animated.View>
 
         {/* The Cute Glass Thermometer Tube */}
@@ -242,10 +242,10 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
               style={styles.bulbGradient}
             >
               {isFinished ? (
-                <Text style={{ fontSize: 22 }}>🌟</Text>
+                <Star size={24} color="#F59E0B" fill="#FDE047" />
               ) : (
                 <View style={styles.grumpyCloud}>
-                  <Text style={styles.cloudEmoji}>☁️</Text>
+                  <Cloud size={24} color="#94A3B8" fill="#E2E8F0" />
                   <Text style={styles.grumpyFace}>&gt;_&lt;</Text>
                 </View>
               )}

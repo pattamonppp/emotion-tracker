@@ -13,8 +13,8 @@ import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { FloatingEmotionCloud } from './FloatingEmotionCloud';
 import { GlassEmotionJar } from './GlassEmotionJar';
 import { MoocaMascot } from './MoocaMascot';
-import { MapPin, Activity, Sparkles, Check, ArrowRight } from 'lucide-react-native';
-import { colors, radii, shadows } from '../design-system/tokens';
+import { MapPin, Activity, Sparkles, Check, ArrowRight, ArrowDown } from 'lucide-react-native';
+import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 interface Phase1EmotionJarProps {
   currentLocation: string;
@@ -91,32 +91,24 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           speakingBubble={
             selectedEmotions.length > 0
               ? lang === 'th'
-                ? 'Mooca จะช่วยดูแลความรู้สึกนี้เองนะ! 💕'
-                : 'Mooca will hold this safe for you! 💕'
+                ? `เก็บลงโหลแล้ว ${selectedEmotions.length} ก้อน! ลากก้อนเมฆลงมาเพิ่มได้อีกนะ`
+                : `${selectedEmotions.length} emotions in jar! Drag down more anytime`
               : lang === 'th'
-              ? 'สวัสดี! วันนี้รู้สึกหนักใจเรื่องอะไรบ้าง? (แตะลูบหัวเค้าได้นะ) ✨'
-              : 'Hello! What is weighing on your mind? (Tap to pet me!) ✨'
+              ? 'วันนี้มีเรื่องอะไรทำให้หนักใจบ้าง? ลากก้อนเมฆอารมณ์ลงมาใส่โหลด้านล่างได้เลยนะ'
+              : 'What is weighing on your mind? Drag emotion clouds down into the jar below!'
           }
           onHug={onOpenStory}
         />
       </View>
 
-      {/* The Storybook Apothecary Glass Emotion Jar */}
-      <GlassEmotionJar
-        selectedEmotions={selectedEmotions}
-        onRemoveEmotion={(id) => toggleEmotion(id)}
-        onClearAll={handleClearAll}
-        lang={lang}
-      />
-
-      {/* Floating Emotion Clouds Section */}
-      <View style={styles.selectorSection}>
+      {/* Floating Emotion Clouds Section (Floating in the Sky at Top) */}
+      <View style={styles.skyCloudsSection}>
         <View style={styles.sectionHeaderRow}>
-          <Sparkles size={14} color={colors.primary} />
+          <Sparkles size={13} color={colors.primary} />
           <Text style={styles.sectionTitle}>
             {lang === 'th'
-              ? 'ก้อนเมฆอารมณ์ลอยได้ (ลากหรือแตะหย่อนลงโหล):'
-              : 'Floating Emotion Clouds (Drag or Tap into Jar):'}
+              ? 'ก้อนเมฆอารมณ์ลอยในใจ (แตะหรือลากลงโหลแก้วด้านล่าง ↓):'
+              : 'Floating Emotion Clouds (Drag down into Jar ↓):'}
           </Text>
         </View>
 
@@ -136,6 +128,26 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             );
           })}
         </View>
+      </View>
+
+      {/* Target Section: The Storybook Apothecary Glass Emotion Jar (Placed Below Clouds) */}
+      <View style={styles.jarSection}>
+        <View style={styles.jarTargetHintRow}>
+          <ArrowDown size={11} color={colors.primary} strokeWidth={2.4} />
+          <Text style={styles.jarTargetHint}>
+            {lang === 'th'
+              ? 'โหลแก้วโอสถพักใจของ Mooca (ปล่อยก้อนเมฆลงตรงนี้)'
+              : "Mooca's Apothecary Jar (Drop clouds here)"}
+          </Text>
+          <ArrowDown size={11} color={colors.primary} strokeWidth={2.4} />
+        </View>
+
+        <GlassEmotionJar
+          selectedEmotions={selectedEmotions}
+          onRemoveEmotion={(id) => toggleEmotion(id)}
+          onClearAll={handleClearAll}
+          lang={lang}
+        />
       </View>
     </ScrollView>
 
@@ -231,25 +243,50 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     alignItems: 'center',
   },
-  selectorSection: {
+  skyCloudsSection: {
     width: '100%',
-    marginTop: 10,
+    marginTop: 6,
+    marginBottom: 12,
   },
   sectionHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    marginBottom: 10,
+    marginBottom: 8,
   },
   sectionTitle: {
-    fontSize: 13,
-    fontWeight: '700',
+    fontFamily: typography.fontPromptBold,
+    fontSize: 12.5,
     color: colors.primaryDark,
     textAlign: 'center',
   },
   cloudsList: {
     width: '100%',
+    gap: 6,
+  },
+  jarSection: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 4,
+    marginBottom: 16,
+  },
+  jarTargetHintRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
+    backgroundColor: 'rgba(230, 249, 247, 0.75)',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: radii.full,
+    borderWidth: 1.2,
+    borderColor: 'rgba(0, 196, 179, 0.28)',
+    marginBottom: 6,
+    ...shadows.soft,
+  },
+  jarTargetHint: {
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 10.5,
+    color: colors.primaryDark,
   },
 });

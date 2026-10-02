@@ -11,6 +11,7 @@ import { EmotionTagId } from '../types';
 import { EMOTION_TAGS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
 import { Sparkles, X } from 'lucide-react-native';
+import { getEmotionIcon } from './FloatingEmotionCloud';
 import { colors, radii, shadows } from '../design-system/tokens';
 
 interface GlassEmotionJarProps {
@@ -137,7 +138,9 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                         },
                       ]}
                     >
-                      <Text style={styles.puffEmoji}>{tag.emoji}</Text>
+                      <View style={{ marginRight: 6 }}>
+                        {getEmotionIcon(tag.id, tag.color, 16)}
+                      </View>
                       <Text style={[styles.puffText, { color: colors.primaryDark }]}>
                         {lang === 'th' ? tag.labelTh : tag.labelEn}
                       </Text>
@@ -191,7 +194,11 @@ const styles = StyleSheet.create({
     width: 250,
     height: 180,
     borderRadius: 90,
-    filter: 'blur(28px)',
+    shadowColor: '#00C4B3',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.35,
+    shadowRadius: 28,
+    elevation: 6,
     zIndex: 0,
   },
   lidSection: {

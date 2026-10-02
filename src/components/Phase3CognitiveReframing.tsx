@@ -12,7 +12,7 @@ import { REFRAMING_INSIGHTS } from '../data/matrixData';
 import { audioService } from '../services/audioService';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { MoocaMascot } from './MoocaMascot';
-import { Heart, Dna, ArrowRight, Sparkles } from 'lucide-react-native';
+import { Heart, Dna, ArrowRight, Sparkles, HeartHandshake, Sprout } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 interface Phase3CognitiveReframingProps {
@@ -63,7 +63,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           speakingBubble={
             isActionCommitted
               ? lang === 'th'
-                ? 'ประทับตราสัญญาใจแล้ว! Mooca อยู่เคียงข้างเสมอ สู้ไปด้วยกันนะ! 💕'
+                ? 'ประทับตราสัญญาใจแล้ว! Mooca อยู่เคียงข้างเสมอ สู้ไปด้วยกันนะ!'
                 : 'Pinky promise sealed! Mooca is right beside you!'
               : lang === 'th'
               ? 'เปิดอ่านจดหมายจากใจ Mooca แล้วทำสัญญาใจ 1 ก้าวด้วยกันนะ'
@@ -118,9 +118,12 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
       {/* Pinky-Promise Action Box */}
       <View style={styles.promiseCard}>
         <View style={styles.promiseHeaderRow}>
-          <Text style={styles.promiseTitle}>
-            🤙 {lang === 'th' ? 'กล่องสัญญาใจ 1 ก้าวถัดไป' : 'Pinky-Promise Action'}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <HeartHandshake size={16} color={colors.primary} strokeWidth={2.4} />
+            <Text style={styles.promiseTitle}>
+              {lang === 'th' ? 'กล่องสัญญาใจ 1 ก้าวถัดไป' : 'Pinky-Promise Action'}
+            </Text>
+          </View>
           <View style={styles.promiseBadge}>
             <Text style={styles.promiseBadgeText}>
               {lang === 'th' ? 'ก้าวเล็กๆ ชนะใจ' : 'Micro Step'}
@@ -137,7 +140,9 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           ]}
         >
           <View style={styles.commitContent}>
-            <Text style={styles.actionEmoji}>🌱</Text>
+            <View style={{ marginRight: 8 }}>
+              <Sprout size={20} color={colors.primary} strokeWidth={2.4} />
+            </View>
             <Text style={[styles.commitActionText, isActionCommitted && { color: colors.primaryDark }]}>
               {lang === 'th' ? insight.microActionTh : insight.microActionEn}
             </Text>
@@ -152,7 +157,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
               ]}
             >
               <View style={styles.mintSealInner}>
-                <Text style={{ fontSize: 13 }}>💚</Text>
+                <Heart size={14} color="#00C4B3" fill="#00C4B3" />
                 <Text style={styles.mintSealText}>PROMISED</Text>
               </View>
             </Animated.View>
@@ -168,11 +173,11 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
         <Text style={styles.commitHint}>
           {isActionCommitted
             ? lang === 'th'
-              ? '✨ สัญญาใจถูกประทับเรียบร้อยแล้ว มีพลังก้าวต่อไปได้เลย!'
-              : '✨ Sealed with a mint heart! You have got this!'
+              ? 'สัญญาใจถูกประทับเรียบร้อยแล้ว มีพลังก้าวต่อไปได้เลย!'
+              : 'Sealed with a mint heart! You have got this!'
             : lang === 'th'
-            ? '♥ แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca'
-            : '♥ Tap box to stamp your pinky-promise mint heart.'}
+            ? 'แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca'
+            : 'Tap box to stamp your pinky-promise mint heart.'}
         </Text>
       </View>
 

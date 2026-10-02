@@ -11,8 +11,34 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { EmotionTag } from '../types';
 import { audioService } from '../services/audioService';
-import { Check } from 'lucide-react-native';
+import {
+  Check,
+  Activity,
+  HelpCircle,
+  Anchor,
+  Snowflake,
+  BatteryLow,
+  Sparkles,
+  ArrowDown,
+} from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
+
+export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
+  switch (tagId) {
+    case 'shaking':
+      return <Activity size={size} color={color} strokeWidth={2.4} />;
+    case 'forgetting':
+      return <HelpCircle size={size} color={color} strokeWidth={2.4} />;
+    case 'pressure':
+      return <Anchor size={size} color={color} strokeWidth={2.4} />;
+    case 'freeze':
+      return <Snowflake size={size} color={color} strokeWidth={2.4} />;
+    case 'burnout':
+      return <BatteryLow size={size} color={color} strokeWidth={2.4} />;
+    default:
+      return <Sparkles size={size} color={color} strokeWidth={2.4} />;
+  }
+};
 
 interface FloatingEmotionCloudProps {
   tag: EmotionTag;
@@ -78,19 +104,19 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
 
     Animated.parallel([
       Animated.timing(panAnim.y, {
-        toValue: -180,
-        duration: 380,
+        toValue: 240,
+        duration: 360,
         easing: Easing.in(Easing.cubic),
         useNativeDriver: true,
       }),
       Animated.timing(scaleAnim, {
-        toValue: 0.3,
-        duration: 380,
+        toValue: 0.25,
+        duration: 360,
         useNativeDriver: true,
       }),
       Animated.timing(opacityAnim, {
         toValue: 0,
-        duration: 380,
+        duration: 360,
         useNativeDriver: true,
       }),
     ]).start(() => {
@@ -128,8 +154,8 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
       },
       onPanResponderRelease: (_evt, gestureState) => {
         isDragging.current = false;
-        // If dragged upward towards the apothecary jar
-        if (gestureState.dy < -65) {
+        // If dragged DOWNWARD towards the apothecary jar below
+        if (gestureState.dy > 45) {
           handleFlyIntoJar();
         } else {
           // If released without dragging far: treat as tap or spring back
@@ -235,17 +261,17 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
           },
         ]}
       >
-        {/* Left Emoji Bubble */}
+        {/* Left Icon Bubble (NO EMOJI - ALWAYS PURE ICONS) */}
         <View
           style={[
             styles.emojiBubble,
             {
-              backgroundColor: tag.color + '22',
-              borderColor: isSelected ? tag.color : 'transparent',
+              backgroundColor: tag.color + '1A',
+              borderColor: isSelected ? tag.color : 'rgba(0, 0, 0, 0.06)',
             },
           ]}
         >
-          <Text style={styles.emojiText}>{tag.emoji}</Text>
+          {getEmotionIcon(tag.id, tag.color, 20)}
         </View>
 
         {/* Emotion Details */}
@@ -269,8 +295,9 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
             </View>
           ) : (
             <View style={styles.dragIndicator}>
+              <ArrowDown size={10} color={colors.primaryDark} strokeWidth={2.4} />
               <Text style={styles.dragText}>
-                {lang === 'th' ? 'ลาก/แตะ ☁️' : 'Drag/Tap'}
+                {lang === 'th' ? 'ลากลงโหล' : 'Drag down'}
               </Text>
             </View>
           )}
@@ -379,14 +406,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dragIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#F1F5F9',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 7,
+    paddingVertical: 3.5,
     borderRadius: radii.full,
+    gap: 3,
   },
   dragText: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 9,
-    color: colors.textMuted,
+    fontSize: 8.5,
+    color: colors.primaryDark,
   },
 });

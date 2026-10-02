@@ -17,6 +17,10 @@ import {
   Share2,
   Award,
   Sparkles,
+  PartyPopper,
+  Star,
+  Heart,
+  Leaf,
 } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
@@ -45,8 +49,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
       await Share.share({
         message:
           lang === 'th'
-            ? `🌈 Mooca Best Friend Badge: ${profile.name} รีเซ็ตใจและเอาชนะความกังวลสำเร็จแล้ว! อัตราการเต้นหัวใจลดลง ${bpmDrop} BPM 💖`
-            : `🌈 Mooca Best Friend Keepsake: ${profile.name} mastered the 120s reset! BPM calmed by -${bpmDrop} BPM 💖`,
+            ? `Mooca Best Friend Badge: ${profile.name} รีเซ็ตใจและเอาชนะความกังวลสำเร็จแล้ว! อัตราการเต้นหัวใจลดลง ${bpmDrop} BPM`
+            : `Mooca Best Friend Keepsake: ${profile.name} mastered the 120s reset! BPM calmed by -${bpmDrop} BPM`,
       });
     } catch {
       // Ignore
@@ -73,8 +77,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
       <Text style={styles.headline}>
         {lang === 'th'
-          ? `ยินดีด้วยนะ ${profile.name}! 🌟`
-          : `Congratulations, ${profile.name}! 🌟`}
+          ? `ยินดีด้วยนะ ${profile.name}!`
+          : `Congratulations, ${profile.name}!`}
       </Text>
 
       {/* Polaroid Keepsake Card */}
@@ -86,15 +90,23 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           end={{ x: 1, y: 1 }}
           style={styles.photoViewport}
         >
-          {/* Confetti & Rainbow Sparkles */}
-          <Text style={[styles.sparkleItem, { top: 8, left: 12 }]}>✨</Text>
-          <Text style={[styles.sparkleItem, { top: 12, right: 14 }]}>🎉</Text>
-          <Text style={[styles.sparkleItem, { bottom: 12, left: 16 }]}>🌟</Text>
-          <Text style={[styles.sparkleItem, { bottom: 10, right: 16 }]}>💖</Text>
+          {/* Confetti & Rainbow Sparkles (NO EMOJI - ALWAYS ICONS) */}
+          <View style={[styles.sparkleItem, { top: 8, left: 12 }]}>
+            <Sparkles size={16} color="#F59E0B" fill="#FDE047" />
+          </View>
+          <View style={[styles.sparkleItem, { top: 12, right: 14 }]}>
+            <PartyPopper size={16} color="#EC4899" />
+          </View>
+          <View style={[styles.sparkleItem, { bottom: 12, left: 16 }]}>
+            <Star size={15} color="#F59E0B" fill="#FDE047" />
+          </View>
+          <View style={[styles.sparkleItem, { bottom: 10, right: 16 }]}>
+            <Heart size={16} color="#F43F5E" fill="#F43F5E" />
+          </View>
 
           {/* Rainbow Arc Badge */}
           <View style={styles.rainbowArcPill}>
-            <Text style={{ fontSize: 13 }}>🌈</Text>
+            <Sparkles size={13} color="#D97706" />
             <Text style={styles.rainbowText}>
               {lang === 'th' ? 'Mooca Rainbow Celebration' : 'Rainbow Keepsake'}
             </Text>
@@ -128,8 +140,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         <View style={styles.polaroidChin}>
           <Text style={styles.handwrittenCaption}>
             {lang === 'th'
-              ? 'เธอเก่งที่สุดในโลกเลย! พักใจแล้วก้าวไปต่อนะ 💕'
-              : 'You are so brave and wonderful! Keep shining 💕'}
+              ? 'เธอเก่งที่สุดในโลกเลย! พักใจแล้วก้าวไปต่อนะ'
+              : 'You are so brave and wonderful! Keep shining'}
           </Text>
 
           <View style={styles.chinFooterRow}>
@@ -137,7 +149,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
               {currentDate} • 120s Reset
             </Text>
             <View style={styles.chinBpmDrop}>
-              <Text style={styles.chinBpmText}>-{bpmDrop} BPM 🌿</Text>
+              <Leaf size={11} color="#00C4B3" style={{ marginRight: 2 }} />
+              <Text style={styles.chinBpmText}>-{bpmDrop} BPM</Text>
             </View>
           </View>
         </View>

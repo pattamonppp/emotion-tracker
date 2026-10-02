@@ -10,7 +10,7 @@ import { EmotionTagId, ShiftFeedback } from '../types';
 import { audioService } from '../services/audioService';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { MoocaMascot } from './MoocaMascot';
-import { Activity, Check, Plus, Minus, ArrowRight } from 'lucide-react-native';
+import { Activity, Check, Plus, Minus, ArrowRight, Zap, Leaf, Heart } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 
 export type MoodStampType = 'empowered' | 'grounded' | 'hug';
@@ -63,15 +63,15 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           speakingBubble={
             shiftResult === 'hug'
               ? lang === 'th'
-                ? 'มากอดกันแน่นๆ นะ! Mooca อยู่ตรงนี้เสมอ ไม่ต้องกลัวเลย 🧸'
-                : 'Big warm hugs! Mooca is always by your side 🧸'
+                ? 'มากอดกันแน่นๆ นะ! Mooca อยู่ตรงนี้เสมอ ไม่ต้องกลัวเลย'
+                : 'Big warm hugs! Mooca is always by your side'
               : shiftResult === 'empowered'
               ? lang === 'th'
-                ? 'เย้! พลังใจมาเต็มแล้ว ลุยได้สบายเลย! ⚡'
-                : 'Awesome! Confidence restored and ready to conquer! ⚡'
+                ? 'เย้! พลังใจมาเต็มแล้ว ลุยได้สบายเลย!'
+                : 'Awesome! Confidence restored and ready to conquer!'
               : lang === 'th'
-              ? 'ลมหายใจนิ่งขึ้น จิตใจสงบแล้วนะคนเก่ง 🌿'
-              : 'Mind is steady and peaceful now 🌿'
+              ? 'ลมหายใจนิ่งขึ้น จิตใจสงบแล้วนะคนเก่ง'
+              : 'Mind is steady and peaceful now'
           }
         />
         <Text style={styles.title}>
@@ -158,7 +158,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   { backgroundColor: '#FEF3C7', borderColor: '#F59E0B' },
                 ]}
               >
-                <Text style={{ fontSize: 18 }}>⚡</Text>
+                <Zap size={18} color="#D97706" fill="#D97706" />
               </View>
               <View style={styles.stampTextCol}>
                 <Text style={styles.stampMainLabel}>
@@ -193,7 +193,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   { backgroundColor: '#CCFBF1', borderColor: '#00C4B3' },
                 ]}
               >
-                <Text style={{ fontSize: 18 }}>🌿</Text>
+                <Leaf size={18} color="#00C4B3" fill="#00C4B3" />
               </View>
               <View style={styles.stampTextCol}>
                 <Text style={styles.stampMainLabel}>
@@ -228,7 +228,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   { backgroundColor: '#FFE4E6', borderColor: '#F43F5E' },
                 ]}
               >
-                <Text style={{ fontSize: 18 }}>🧸</Text>
+                <Heart size={18} color="#F43F5E" fill="#F43F5E" />
               </View>
               <View style={styles.stampTextCol}>
                 <Text style={styles.stampMainLabel}>

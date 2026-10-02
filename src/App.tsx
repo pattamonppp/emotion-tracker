@@ -38,7 +38,7 @@ import { LivePulseSensorModal } from './components/LivePulseSensorModal';
 import { ResetHistoryModal } from './components/ResetHistoryModal';
 import { MoocaStoryModal } from './components/MoocaStoryModal';
 
-import { Languages } from 'lucide-react-native';
+import { Languages, Sparkles } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from './design-system/tokens';
 import { 
   useFonts, 
@@ -285,9 +285,12 @@ export default function App() {
               <View style={styles.interventionContainer}>
                 {/* Intervention Option Switcher */}
                 <View style={styles.interventionHeader}>
-                  <Text style={styles.interventionHeaderTitle}>
-                    🐑 {profile.language === 'th' ? 'โหมดรีเซ็ตใจ:' : 'Reset Mode:'}
-                  </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                    <Sparkles size={13} color={colors.primary} />
+                    <Text style={styles.interventionHeaderTitle}>
+                      {profile.language === 'th' ? 'โหมดรีเซ็ตใจ:' : 'Reset Mode:'}
+                    </Text>
+                  </View>
                   <View style={styles.optionsRow}>
                     {(['A', 'B', 'C', 'D'] as InterventionOption[]).map((opt) => (
                       <TouchableOpacity

@@ -20,6 +20,7 @@ import Svg, {
   Stop,
 } from 'react-native-svg';
 import { audioService } from '../services/audioService';
+import { Heart, Sparkles } from 'lucide-react-native';
 
 export type MoocaMood =
   | 'happy'
@@ -45,12 +46,12 @@ interface MoocaMascotProps {
 }
 
 const SWEET_MESSAGES = [
-  'งื้อออ รักเธอนะ! ✨',
-  'Mooca กอดแน่นๆ! 💕',
-  'คนเก่งของ Mooca เก่งมากแล้วนะ 💖',
-  'อยู่ข้างๆ เสมอนะ ไม่ทิ้งไปไหนหรอก 🌟',
-  'สูดหายใจเข้าลึกๆ น้า มี Mooca ตรงนี้ 🍃',
-  'เก่งที่สุดเลยยย พักใจแป๊บเดียวนะคะ 🧸',
+  'งื้อออ รักเธอนะ!',
+  'Mooca กอดแน่นๆ เลย!',
+  'คนเก่งของ Mooca เก่งมากแล้วนะ',
+  'อยู่ข้างๆ เสมอนะ ไม่ทิ้งไปไหนหรอก',
+  'สูดหายใจเข้าลึกๆ น้า มี Mooca ตรงนี้',
+  'เก่งที่สุดเลยยย พักใจแป๊บเดียวนะคะ',
 ];
 
 export const MoocaMascot: React.FC<MoocaMascotProps> = ({
@@ -203,7 +204,11 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
         ]}
         pointerEvents="none"
       >
-        <Text style={styles.floatingHeartEmoji}>💕 ✨ 💖</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <Heart size={16} color="#EC4899" fill="#EC4899" />
+          <Sparkles size={18} color="#FDE047" fill="#FDE047" />
+          <Heart size={20} color="#F43F5E" fill="#F43F5E" />
+        </View>
       </Animated.View>
 
       {/* Sweet Cozy Speech Bubble */}

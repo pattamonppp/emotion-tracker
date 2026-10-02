@@ -11,7 +11,7 @@ import { Gyroscope } from 'expo-sensors';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
-import { Heart, Check, Wind, GlassWater } from 'lucide-react-native';
+import { Heart, Check, Wind, GlassWater, Sparkles } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface VictorySipProps {
@@ -139,7 +139,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'จิบครบแล้วนะ! เส้นประสาทเวกัสผ่อนคลายเต็มที่แล้ว 🧋'
+                ? 'จิบครบแล้วนะ! เส้นประสาทเวกัสผ่อนคลายเต็มที่แล้ว'
                 : 'All 3 sips complete! Your nervous system is settled.'
               : lang === 'th'
               ? `จิบน้ำชัยชนะอึกที่ ${sipCount + 1} แล้วกลืนช้าๆ นะคะ`
@@ -205,13 +205,13 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             <View style={[styles.pearl, { right: 14, bottom: 8 }]}>
               <Text style={styles.pearlFace}>^‿^</Text>
             </View>
-            {/* Floating Bubble 4 */}
+            {/* Floating Bubble 4 (NO EMOJI) */}
             <View style={[styles.floatingBubble, { left: 24, bottom: 38 }]}>
-              <Text style={{ fontSize: 9 }}>✨</Text>
+              <Sparkles size={11} color="#FDE047" fill="#FDE047" />
             </View>
-            {/* Floating Bubble 5 */}
+            {/* Floating Bubble 5 (NO EMOJI) */}
             <View style={[styles.floatingBubble, { right: 26, bottom: 44 }]}>
-              <Text style={{ fontSize: 8 }}>💖</Text>
+              <Heart size={10} color="#F472B6" fill="#F472B6" />
             </View>
           </Animated.View>
 

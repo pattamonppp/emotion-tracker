@@ -12,7 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
-import { Sparkles, Flame, CheckCircle, Volume2, Sun } from 'lucide-react-native';
+import { Sparkles, Flame, CheckCircle, Volume2, Sun, Star } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface SomaticAbsorptionProps {
@@ -154,7 +154,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'ฝ่ามืออุ่นครบ 36.8°C แล้ว! พลังใจพร้อมลุยแล้วนะ ✨'
+                ? 'ฝ่ามืออุ่นครบ 36.8°C แล้ว! พลังใจพร้อมลุยแล้วนะ'
                 : 'Fingertips are 36.8°C warm and ready!'
               : lang === 'th'
               ? 'ใช้นิ้วถูวนที่ดวงแก้วทองคำ เพื่อเพิ่มความอบอุ่นสู่ปลายนิ้ว'
@@ -179,14 +179,14 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             <Text style={[styles.statusText, handTemp >= 36.8 && { color: '#15803D' }]}>
               {handTemp < 30
                 ? lang === 'th'
-                  ? 'มือเย็นเฉียบ ❄️'
+                  ? 'มือเย็นเฉียบ'
                   : 'Freezing Cold'
                 : handTemp < 34
                 ? lang === 'th'
-                  ? 'กำลังอุ่นขึ้น 🌤️'
+                  ? 'กำลังอุ่นขึ้น'
                   : 'Warming Up'
                 : lang === 'th'
-                ? 'อบอุ่นพร้อมลุย ☀️'
+                ? 'อบอุ่นพร้อมลุย'
                 : 'Optimally Warm'}
             </Text>
           </View>
@@ -205,24 +205,24 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 
       {/* Golden Stardust Sigil Surface Pad */}
       <View {...panResponder.panHandlers} style={styles.sigilArea}>
-        {/* Animated Stardust Orbit Ring */}
+        {/* Animated Stardust Orbit Ring (NO EMOJI - ALWAYS ICONS) */}
         <Animated.View
           style={[
             styles.stardustOrbit,
             { transform: [{ rotate: rotateInterpolation }] },
           ]}
         >
-          <View style={[styles.starParticle, { top: 0, left: '50%', marginLeft: -6 }]}>
-            <Text style={{ fontSize: 13 }}>✨</Text>
+          <View style={[styles.starParticle, { top: 0, left: '50%', marginLeft: -7 }]}>
+            <Sparkles size={14} color="#FDE047" fill="#FDE047" />
           </View>
           <View style={[styles.starParticle, { bottom: 0, left: '50%', marginLeft: -6 }]}>
-            <Text style={{ fontSize: 11 }}>⭐</Text>
+            <Star size={12} color="#FDE047" fill="#FDE047" />
           </View>
           <View style={[styles.starParticle, { left: 0, top: '50%', marginTop: -6 }]}>
-            <Text style={{ fontSize: 12 }}>💫</Text>
+            <Sparkles size={12} color="#FDE047" />
           </View>
           <View style={[styles.starParticle, { right: 0, top: '50%', marginTop: -6 }]}>
-            <Text style={{ fontSize: 11 }}>✨</Text>
+            <Star size={11} color="#FDE047" fill="#FDE047" />
           </View>
         </Animated.View>
 
@@ -252,7 +252,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               <Text style={styles.sigilTitle}>
                 {isFinished
                   ? lang === 'th'
-                    ? 'พลังใจเต็มเปี่ยม! ✨'
+                    ? 'พลังใจเต็มเปี่ยม!'
                     : 'Sigil Absorbed!'
                   : lang === 'th'
                   ? 'ดวงแก้วละอองดาวสีทอง'

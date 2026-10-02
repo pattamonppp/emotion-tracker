@@ -13,7 +13,7 @@ import { MBTI_SANCTUARY_SCRIPTS, getMBTIArchetype } from '../../data/matrixData'
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
-import { Volume2, VolumeX, Sparkles, Check, Headphones, Moon } from 'lucide-react-native';
+import { Volume2, VolumeX, Sparkles, Check, Headphones, Moon, Star } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface AudioMatrixSanctuaryProps {
@@ -155,12 +155,20 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
           <View style={styles.moonHalo} />
         </Animated.View>
 
-        {/* Twinkling Stars in Night Sky */}
+        {/* Twinkling Stars in Night Sky (NO EMOJI - ALWAYS ICONS) */}
         <Animated.View style={[styles.starsLayer, { opacity: starTwinkleAnim }]}>
-          <Text style={[styles.twinkleStar, { top: 12, left: 24 }]}>✨</Text>
-          <Text style={[styles.twinkleStar, { top: 28, right: 38, fontSize: 10 }]}>⭐</Text>
-          <Text style={[styles.twinkleStar, { bottom: 45, left: 34, fontSize: 11 }]}>💫</Text>
-          <Text style={[styles.twinkleStar, { bottom: 50, right: 48 }]}>✨</Text>
+          <View style={[styles.twinkleStar, { top: 12, left: 24 }]}>
+            <Sparkles size={14} color="#FDE047" fill="#FDE047" />
+          </View>
+          <View style={[styles.twinkleStar, { top: 28, right: 38 }]}>
+            <Star size={10} color="#FDE047" fill="#FDE047" />
+          </View>
+          <View style={[styles.twinkleStar, { bottom: 45, left: 34 }]}>
+            <Star size={11} color="#FEF08A" fill="#FEF08A" />
+          </View>
+          <View style={[styles.twinkleStar, { bottom: 50, right: 48 }]}>
+            <Sparkles size={12} color="#FDE047" fill="#FDE047" />
+          </View>
         </Animated.View>
 
         {/* Cozy Mooca Wearing Turquoise Headphones Sleeping on Cloud */}
