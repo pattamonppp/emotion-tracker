@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  Modal, 
-  View, 
-  Text, 
-  StyleSheet, 
-  TextInput, 
-  TouchableOpacity, 
+import {
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
   ScrollView,
   Platform
 } from 'react-native';
@@ -13,12 +13,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserProfile, GoalType } from '../types';
 import { Button } from '../design-system/Button';
 import { MoocaMascot } from './MoocaMascot';
-import { 
-  GraduationCap, 
-  Mic, 
-  Briefcase, 
-  BatteryCharging, 
-  Check, 
+import {
+  GraduationCap,
+  Mic,
+  Briefcase,
+  BatteryCharging,
+  Check,
   X,
   User,
 } from 'lucide-react-native';
@@ -235,8 +235,13 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   mascotBox: {
+    width: '100%',
     alignItems: 'center',
+    justifyContent: 'flex-end',
+    height: 145,
+    paddingBottom: 4,
     marginVertical: 4,
+    overflow: 'visible',
   },
   fieldSection: {
     gap: 8,

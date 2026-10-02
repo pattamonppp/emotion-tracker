@@ -17,7 +17,7 @@ export const modals = {
   onboarding: {
     title: 'เพื่อนคู่ใจ Mooca ยินดีที่ได้รู้จัก!',
     subtitle: 'ปรับแต่งการดูแลใจให้เหมาะกับเธอที่สุด',
-    profileTitle: 'ข้อมูลโปรไฟล์ & การปรับแต่ง',
+    profileTitle: 'ข้อมูลโปรไฟล์และการปรับแต่ง',
     tailoredBubble: 'บอก Mooca เพิ่มเติม เพื่อให้การดูแลตรงจุดที่สุด!',
     yourName: 'ชื่อของคุณ',
     primaryContext: 'สถานการณ์หลักที่ต้องเผชิญ',
@@ -32,10 +32,10 @@ export const modals = {
     sensorLabel: 'การอนุญาตเซนเซอร์ & Bio-Data',
     nextButton: 'ถัดไป: MBTI & เซนเซอร์',
     activateButton: 'บันทึกและเริ่มรีเซ็ตกับ Mooca',
-    goalExam: 'สอบ / แข่งขันวิชาการ',
-    goalStage: 'ขึ้นเวที / พรีเซนต์',
-    goalWork: 'ทำงาน / ตื้อตัน',
-    goalBurnout: 'เหนื่อยล้า / หมดไฟ',
+    goalExam: 'สอบแข่งขัน',
+    goalStage: 'ขึ้นเวที พรีเซนต์งาน',
+    goalWork: 'ทำงาน ตื้อตัน',
+    goalBurnout: 'เหนื่อยล้า หมดไฟ',
   },
   pulseSensor: {
     title: 'วัดชีพจรและสภาวะใจสด',

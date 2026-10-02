@@ -5,13 +5,14 @@ import {
   Text, 
   StyleSheet, 
   TouchableOpacity, 
-  ScrollView 
+  ScrollView,
+  Platform
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MoocaMascot } from './MoocaMascot';
 import { audioService } from '../services/audioService';
 import { Heart, Sparkles, X, Sun } from 'lucide-react-native';
-import { colors, radii, shadows } from '../design-system/tokens';
+import { colors, radii, shadows, typography } from '../design-system/tokens';
 import { getTranslation } from '../locales';
 
 export interface MoocaStoryModalProps {
@@ -131,9 +132,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   headerTitle: {
+    fontFamily: typography.fontPromptExtraBold,
     fontSize: 16,
-    fontWeight: '800',
     color: colors.primaryDark,
+    ...(Platform.OS !== 'android' ? { fontWeight: '800' } : {}),
   },
   closeBtn: {
     padding: 6,
@@ -144,8 +146,13 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   mascotBox: {
+    width: '100%',
+    height: 235,
     alignItems: 'center',
-    marginVertical: 10,
+    justifyContent: 'flex-end',
+    paddingBottom: 4,
+    marginVertical: 6,
+    overflow: 'visible',
   },
   hugButton: {
     flexDirection: 'row',
@@ -159,8 +166,9 @@ const styles = StyleSheet.create({
   },
   hugButtonText: {
     color: '#FFFFFF',
-    fontWeight: '800',
+    fontFamily: typography.fontPromptBold,
     fontSize: 14,
+    ...(Platform.OS !== 'android' ? { fontWeight: '800' } : {}),
   },
   storyCard: {
     backgroundColor: '#FFFBEB',
@@ -176,16 +184,18 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   storyCardTitle: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 13,
-    fontWeight: '800',
     color: '#92400E',
     textTransform: 'uppercase',
+    ...(Platform.OS !== 'android' ? { fontWeight: '800' } : {}),
   },
   storyParagraph: {
+    fontFamily: typography.fontPromptRegular,
     fontSize: 13,
     lineHeight: 20,
     color: '#78350F',
-    fontWeight: '500',
+    ...(Platform.OS !== 'android' ? { fontWeight: '500' } : {}),
   },
   mantraCard: {
     backgroundColor: '#E6F9F7',
@@ -195,10 +205,11 @@ const styles = StyleSheet.create({
     borderColor: colors.borderTeal,
   },
   mantraText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 13,
     lineHeight: 20,
     color: colors.primaryDark,
     fontStyle: 'italic',
-    fontWeight: '700',
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
 });

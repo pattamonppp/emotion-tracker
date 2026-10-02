@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { UserProfile, GoalType, MBTIType } from '../../../../types';
 import { Button } from '../../../../components/Button';
 import { MoocaMascot } from '../../../../components/MoocaMascot';
-import { 
-  Sparkles, 
-  Activity, 
-  Compass, 
-  Smartphone, 
-  GraduationCap, 
-  Briefcase, 
-  Mic, 
+import {
+  Sparkles,
+  Activity,
+  Compass,
+  Smartphone,
+  GraduationCap,
+  Briefcase,
+  Mic,
   BatteryCharging,
   ShieldCheck,
   Check,
@@ -34,28 +34,28 @@ const MBTI_OPTIONS: MBTIType[] = [
 const GOALS: { id: GoalType; labelTh: string; labelEn: string; icon: React.ReactNode; descTh: string }[] = [
   {
     id: 'exam',
-    labelTh: 'สอบ / แข่งขันวิชาการ',
+    labelTh: 'สอบ แข่งขัน',
     labelEn: 'Exam & Academic Stakes',
     icon: <GraduationCap className="w-5 h-5 text-[#00C4B3]" />,
     descTh: 'แก้ตื่นเต้นจนตัวสั่น มือเย็น กลัวลืมสิ่งที่อ่านมา',
   },
   {
     id: 'stage',
-    labelTh: 'ขึ้นเวที / พรีเซนต์สำคัญ',
+    labelTh: 'ขึ้นเวที พรีเซนต์สำคัญ',
     labelEn: 'Stage & Presentation',
     icon: <Mic className="w-5 h-5 text-[#FA8C3D]" />,
     descTh: 'แก้ใจสั่น เสียงสั่น ปากแห้ง แพนิคสายตาคนดู',
   },
   {
     id: 'work',
-    labelTh: 'ทำงาน / สมองช็อตตื้อตัน',
+    labelTh: 'ทำงาน สมองช็อต',
     labelEn: 'Deep Work & Freeze State',
     icon: <Briefcase className="w-5 h-5 text-[#1F77DF]" />,
     descTh: 'แก้สภาวะสมองช็อต ตื้อตัน คิดงานไม่ออก',
   },
   {
     id: 'burnout',
-    labelTh: 'เหนื่อยล้าสะสม / รีเซ็ตสติ',
+    labelTh: 'เหนื่อยล้าสะสม',
     labelEn: 'Chronic Drain & Burnout',
     icon: <BatteryCharging className="w-5 h-5 text-[#7CC954]" />,
     descTh: 'พักระบบประสาท 2 นาที คืนพลังงานให้สมอง',
@@ -191,7 +191,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     {profile.language === 'th' ? 'ปรับระดับคำปลอบของ Mooca' : 'Calibrates Mooca Voice'}
                   </span>
                 </div>
-                
+
                 <div className={styles.mbtiGrid}>
                   {MBTI_OPTIONS.map((type) => {
                     const isSelected = profile.mbti === type;
@@ -210,7 +210,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <p className={styles.mbtiExplanation}>
                   <LightbulbIcon className="w-3.5 h-3.5 inline mr-1 text-amber-500" />
                   <span>
-                    {profile.mbti.startsWith('IN') || profile.mbti.startsWith('EN') 
+                    {profile.mbti.startsWith('IN') || profile.mbti.startsWith('EN')
                       ? 'Mooca จะปรับใช้คำพูดปลอบใจเชิงหลักการทางชีววิทยาและคุณค่าในตัวเธอ'
                       : 'Mooca จะปรับใช้คำพูดปลอบใจเชิงการลงมือทำจริงและความผ่อนคลาย'}
                   </span>
