@@ -207,6 +207,28 @@ class NativeAudioMatrixService {
     await this.triggerHaptic('light');
   }
 
+  // Rhythmic haptic grounding pulse (for Haptic Rhythm breath-sync)
+  public async playGroundingRhythm(phase: 'in' | 'hold' | 'out') {
+    try {
+      if (phase === 'in') {
+        // Quick double tap on inhale
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        await new Promise((r) => setTimeout(r, 90));
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      } else if (phase === 'hold') {
+        // Single gentle pulse on hold
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      } else {
+        // Soft trailing exhale — light then very slight
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        await new Promise((r) => setTimeout(r, 150));
+        await Haptics.selectionAsync();
+      }
+    } catch {
+      // Haptics may not be supported on simulators
+    }
+  }
+
   // Chime Shockwave (when Sigil of Confidence is fully absorbed)
   public async playChimeShockwave() {
     await this.triggerHaptic('heavy');

@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   PanResponder,
-  TouchableOpacity,
   Animated,
   Easing,
 } from 'react-native';
@@ -12,7 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
-import { Sparkles, Flame, CheckCircle, Volume2, Sun, Star } from 'lucide-react-native';
+import { Sparkles, CheckCircle, Wind, Star } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface SomaticAbsorptionProps {
@@ -20,133 +19,250 @@ interface SomaticAbsorptionProps {
   lang: 'th' | 'en';
 }
 
+// Breath cycle: 4s inhale → 2s hold → 6s exhale  (total 12s)
+const INHALE_MS = 4000;
+const HOLD_MS = 2000;
+const EXHALE_MS = 6000;
+const CYCLE_MS = INHALE_MS + HOLD_MS + EXHALE_MS;
+
+type BreathPhase = 'inhale' | 'hold' | 'exhale';
+
 export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
   onComplete,
   lang,
 }) => {
-  const [rubProgress, setRubProgress] = useState(0); // 0 to 100
-  const [handTemp, setHandTemp] = useState(28.0); // cold 28.0 to warm 36.8
+  const [rubProgress, setRubProgress] = useState(0); // 0-100
   const [isFinished, setIsFinished] = useState(false);
   const [isRubbing, setIsRubbing] = useState(false);
+  const [breathPhase, setBreathPhase] = useState<BreathPhase>('inhale');
+  const [cycleCount, setCycleCount] = useState(0); // how many full breath cycles
 
-  const lastSoundTick = useRef(0);
-  const stardustRotateAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  // ---- Animated values -----------------------------------------------
+  const breathScaleAnim = useRef(new Animated.Value(0.72)).current;   // orb scale
+  const breathOpacityAnim = useRef(new Animated.Value(0.7)).current;  // outer glow
+  const orbitRotateAnim = useRef(new Animated.Value(0)).current;      // ring rotation
+  const progressAnim = useRef(new Animated.Value(0)).current;         // 0-1 arc fill
+  const rubGlowAnim = useRef(new Animated.Value(0)).current;          // rub glow pulse
+  const completePop = useRef(new Animated.Value(1)).current;
 
-  // Stardust rotation animation loop
+  const lastHapticTick = useRef(0);
+  const breathTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const breathCycleStart = useRef(Date.now());
+
+  // ---- Breath cycle engine ------------------------------------------
+  const advanceBreathCycle = useCallback(() => {
+    const elapsed = (Date.now() - breathCycleStart.current) % CYCLE_MS;
+    let phase: BreathPhase;
+    let targetScale: number;
+    let targetOpacity: number;
+    let duration: number;
+
+    if (elapsed < INHALE_MS) {
+      phase = 'inhale';
+      targetScale = 1.0;
+      targetOpacity = 1;
+      duration = INHALE_MS - elapsed;
+    } else if (elapsed < INHALE_MS + HOLD_MS) {
+      phase = 'hold';
+      targetScale = 1.0;
+      targetOpacity = 1;
+      duration = INHALE_MS + HOLD_MS - elapsed;
+    } else {
+      phase = 'exhale';
+      targetScale = 0.72;
+      targetOpacity = 0.7;
+      duration = CYCLE_MS - elapsed;
+    }
+
+    setBreathPhase((prev) => {
+      if (prev !== phase) {
+        const hapticPhase: 'in' | 'hold' | 'out' =
+          phase === 'inhale' ? 'in' : phase === 'hold' ? 'hold' : 'out';
+        audioService.playGroundingRhythm(hapticPhase);
+      }
+      return phase;
+    });
+
+    Animated.parallel([
+      Animated.timing(breathScaleAnim, {
+        toValue: targetScale,
+        duration,
+        easing: Easing.inOut(Easing.sin),
+        useNativeDriver: true,
+      }),
+      Animated.timing(breathOpacityAnim, {
+        toValue: targetOpacity,
+        duration,
+        easing: Easing.inOut(Easing.sin),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [breathScaleAnim, breathOpacityAnim]);
+
   useEffect(() => {
-    const rotateLoop = Animated.loop(
-      Animated.timing(stardustRotateAnim, {
+    breathCycleStart.current = Date.now();
+    advanceBreathCycle();
+    breathTimerRef.current = setInterval(() => {
+      advanceBreathCycle();
+      // Count full cycle every CYCLE_MS
+      const elapsed = Date.now() - breathCycleStart.current;
+      setCycleCount(Math.floor(elapsed / CYCLE_MS));
+    }, 800); // check every 800ms for smooth transitions
+    return () => {
+      if (breathTimerRef.current) clearInterval(breathTimerRef.current);
+    };
+  }, [advanceBreathCycle]);
+
+  // ---- Orbit ring spin -----------------------------------------------
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.timing(orbitRotateAnim, {
         toValue: 1,
-        duration: 8000,
+        duration: 9000,
         easing: Easing.linear,
         useNativeDriver: true,
       })
     );
-    rotateLoop.start();
-    return () => rotateLoop.stop();
-  }, [stardustRotateAnim]);
+    loop.start();
+    return () => loop.stop();
+  }, [orbitRotateAnim]);
 
-  // Breathing pulse for the Golden Sigil
-  useEffect(() => {
-    const pulseLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.05,
-          duration: 1500,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1500,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    pulseLoop.start();
-    return () => pulseLoop.stop();
-  }, [pulseAnim]);
-
-  const playBlessingVoice = () => {
-    const text =
-      lang === 'th'
-        ? 'ความรู้และแรงพยายามทั้งหมดที่คุณสะสมมา กำลังรวมอยู่ในมือคู่นี้แล้ว... สูดไออุ่นนี้ไว้ แล้วก้าวไปทำหน้าที่ของคุณนะ'
-        : 'All the preparation and strength you have built are right here in your hands. Absorb this warmth and shine.';
-    audioService.playVoiceSanctuary(text, lang, 0.84);
+  // ---- Progress arc animation ----------------------------------------
+  const animateProgressTo = (value: number) => {
+    Animated.timing(progressAnim, {
+      toValue: value / 100,
+      duration: 400,
+      easing: Easing.out(Easing.quad),
+      useNativeDriver: false,
+    }).start();
   };
 
+  // ---- Rub glow pulse when touching ----------------------------------
+  const startRubGlow = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(rubGlowAnim, { toValue: 1, duration: 220, useNativeDriver: true }),
+        Animated.timing(rubGlowAnim, { toValue: 0.4, duration: 220, useNativeDriver: true }),
+      ])
+    ).start();
+  };
+  const stopRubGlow = () => {
+    rubGlowAnim.stopAnimation();
+    Animated.timing(rubGlowAnim, { toValue: 0, duration: 300, useNativeDriver: true }).start();
+  };
+
+  // ---- Progress update -----------------------------------------------
   const advanceProgress = (amount = 4) => {
     if (isFinished) return;
-
     setRubProgress((prev) => {
       const next = Math.min(100, prev + amount);
-      // Cold 28.0°C up to optimal 36.8°C
-      const newTemp = +(28.0 + (next / 100) * 8.8).toFixed(1);
-      setHandTemp(newTemp);
+      animateProgressTo(next);
 
       const now = Date.now();
-      if (now - lastSoundTick.current > 120) {
-        lastSoundTick.current = now;
+      if (now - lastHapticTick.current > 120) {
+        lastHapticTick.current = now;
         audioService.playFrictionTick(next / 100);
       }
 
-      if (next >= 100 && !isFinished) {
+      if (next >= 100) {
         setIsFinished(true);
+        // Completion celebration haptic
         audioService.playChimeShockwave();
-        playBlessingVoice();
-        setTimeout(() => {
-          onComplete();
-        }, 3200);
+        Animated.spring(completePop, { toValue: 1.18, friction: 3, tension: 180, useNativeDriver: true }).start(() => {
+          Animated.spring(completePop, { toValue: 1, friction: 4, tension: 160, useNativeDriver: true }).start();
+        });
+        setTimeout(() => onComplete(), 2000);
       }
       return next;
     });
   };
 
-  // Pan Responder for rubbing gesture on mobile screen
+  // ---- PanResponder: detect circular rubbing motion ------------------
+  const lastPos = useRef({ x: 0, y: 0 });
+
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
+      onPanResponderGrant: (evt) => {
         setIsRubbing(true);
+        startRubGlow();
+        const { locationX, locationY } = evt.nativeEvent;
+        lastPos.current = { x: locationX, y: locationY };
         advanceProgress(2.5);
       },
-      onPanResponderMove: (_evt, gestureState) => {
-        const movement = Math.abs(gestureState.dx) + Math.abs(gestureState.dy);
-        if (movement > 6) {
-          advanceProgress(3);
+      onPanResponderMove: (evt, gestureState) => {
+        const { locationX, locationY } = evt.nativeEvent;
+        // Measure movement distance from last point
+        const dx = locationX - lastPos.current.x;
+        const dy = locationY - lastPos.current.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > 5) {
+          lastPos.current = { x: locationX, y: locationY };
+          // Clamp contribution by speed (dist) — max 5 per event
+          const contribution = Math.min(5, dist * 0.22);
+          advanceProgress(contribution);
+        }
+
+        // Also honor gesture velocity
+        const velocity = Math.sqrt(gestureState.vx ** 2 + gestureState.vy ** 2);
+        if (velocity > 0.8) {
+          advanceProgress(1.2);
         }
       },
       onPanResponderRelease: () => {
         setIsRubbing(false);
+        stopRubGlow();
       },
       onPanResponderTerminate: () => {
         setIsRubbing(false);
+        stopRubGlow();
       },
     })
   ).current;
 
-  const rotateInterpolation = stardustRotateAnim.interpolate({
+  // ---- Interpolations ------------------------------------------------
+  const orbitRotate = orbitRotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
   });
 
+  const progressBorderColor = progressAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ['#A5B4FC', '#818CF8', '#6366F1'],
+  });
+
+  const rubGlowOpacity = rubGlowAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 0.45],
+  });
+
+  // ---- Breath phase label --------------------------------------------
+  const breathLabel = () => {
+    if (isFinished) return lang === 'th' ? 'สติกลับมาแล้ว ✨' : 'Grounded ✨';
+    switch (breathPhase) {
+      case 'inhale': return lang === 'th' ? 'สูดหายใจเข้า (4 วินาที)' : 'Inhale (4s)';
+      case 'hold':   return lang === 'th' ? 'กลั้นหายใจ (2 วินาที)' : 'Hold (2s)';
+      case 'exhale': return lang === 'th' ? 'ผ่อนออกยาวๆ (6 วินาที)' : 'Exhale slowly (6s)';
+    }
+  };
+
+  const breathIcon = breathPhase === 'inhale' ? '↑' : breathPhase === 'hold' ? '◆' : '↓';
+
+  // ---- Render --------------------------------------------------------
   return (
     <View style={styles.container}>
-      {/* Top Blessing Whisper Trigger */}
-      <TouchableOpacity
-        onPress={playBlessingVoice}
-        activeOpacity={0.8}
-        style={styles.voiceBadge}
-      >
-        <Volume2 size={13} color={colors.primary} />
-        <Text style={styles.voiceBadgeText}>
-          {lang === 'th' ? '🌟 สัมผัสเหนี่ยวสติ • Haptic Rhythm' : '🌟 Tactile Grounding & Haptic Rhythm'}
+      {/* Top badge */}
+      <View style={styles.topBadge}>
+        <Wind size={13} color={colors.primary} />
+        <Text style={styles.topBadgeText}>
+          {lang === 'th'
+            ? `🌟 สัมผัสเหนี่ยวสติ • รอบหายใจที่ ${cycleCount + 1}`
+            : `🌟 Tactile Grounding • Breath Cycle ${cycleCount + 1}`}
         </Text>
-      </TouchableOpacity>
+      </View>
 
-      {/* Mascot View */}
+      {/* Mooca Mascot */}
       <View style={styles.mascotWrapper}>
         <MoocaMascot
           mood={isFinished ? 'celebrating' : isRubbing ? 'rubbing' : 'comforting'}
@@ -154,130 +270,157 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           speakingBubble={
             isFinished
               ? lang === 'th'
-                ? 'ถูวนครบแล้ว! ประสาทสัมผัสกลับสู่ร่างกายเต็มที่แล้วนะ'
-                : 'Grounded! Your senses are back in your body.'
+                ? 'ประสาทสัมผัสกลับสู่ร่างกายแล้ว สงบดีนะ'
+                : 'Your senses are back in your body. Calm now.'
+              : isRubbing
+              ? lang === 'th'
+                ? 'ดีมาก! รู้สึกการสั่นของโทรศัพท์ไหม'
+                : 'Nice! Feel the haptic rhythm?'
+              : breathPhase === 'inhale'
+              ? lang === 'th'
+                ? 'สูดหายใจเข้าช้าๆ แล้วถูวงกลมไปด้วยนะ'
+                : 'Inhale slowly... rub the circle'
+              : breathPhase === 'hold'
+              ? lang === 'th'
+                ? 'กลั้นหายใจไว้... สัมผัสนิ้วบนจอ'
+                : 'Hold... keep fingers on screen'
               : lang === 'th'
-              ? 'วางนิ้วถูวนที่ดวงแก้ว โทรศัพท์จะสั่นเป็นจังหวะดึงสติกลับมา'
-              : 'Rub the orb in circles — the haptic rhythm brings you back'
+              ? 'ผ่อนออกยาวๆ ตามจังหวะการสั่น'
+              : 'Exhale... follow the vibration rhythm'
           }
         />
       </View>
 
-      {/* Progress Card (Grounding %) */}
-      <View style={styles.gaugeCard}>
-        <View style={styles.gaugeHeaderRow}>
-          <View style={styles.tempBadge}>
-            <Star size={14} color="#EA580C" />
-            <Text style={styles.tempLabel}>
-              {lang === 'th' ? 'ระดับการเหนี่ยวสติ:' : 'Grounding Level:'}
-            </Text>
-            <Text style={styles.tempValue}>{rubProgress}%</Text>
-          </View>
+      {/* ── Central Haptic Grounding Pad ───────────────────────────── */}
+      <View style={styles.padSection}>
 
-          <View style={styles.statusBadge}>
-            <Sparkles size={13} color={rubProgress >= 100 ? '#15803D' : '#D97706'} />
-            <Text style={[styles.statusText, rubProgress >= 100 && { color: '#15803D' }]}>
-              {rubProgress < 30
-                ? lang === 'th'
-                  ? 'กำลังเริ่มต้น'
-                  : 'Starting'
-                : rubProgress < 70
-                ? lang === 'th'
-                  ? 'กำลังเหนี่ยวสติ'
-                  : 'Grounding...'
-                : lang === 'th'
-                ? 'สติกลับมาแล้ว'
-                : 'Grounded!'}
-            </Text>
-          </View>
-        </View>
-
-        {/* Temperature Progress Track */}
-        <View style={styles.trackBg}>
-          <LinearGradient
-            colors={['#38BDF8', '#FBBF24', '#F97316']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={[styles.trackFill, { width: `${rubProgress}%` }]}
+        {/* Progress ring (Animated border simulation with nested Views) */}
+        <View style={styles.progressRingOuter}>
+          <Animated.View
+            style={[
+              styles.progressRingFill,
+              {
+                borderColor: progressBorderColor,
+                // Arc fill trick: show only the portion completed
+                opacity: progressAnim.interpolate({ inputRange: [0, 0.01, 1], outputRange: [0, 1, 1] }),
+                transform: [{
+                  scale: progressAnim.interpolate({ inputRange: [0, 1], outputRange: [0.88, 1] }),
+                }],
+              },
+            ]}
           />
         </View>
-      </View>
 
-      {/* Golden Stardust Sigil Surface Pad */}
-      <View {...panResponder.panHandlers} style={styles.sigilArea}>
-        {/* Animated Stardust Orbit Ring (NO EMOJI - ALWAYS ICONS) */}
+        {/* Orbit ring with stars */}
         <Animated.View
-          style={[
-            styles.stardustOrbit,
-            { transform: [{ rotate: rotateInterpolation }] },
-          ]}
+          style={[styles.orbitRing, { transform: [{ rotate: orbitRotate }] }]}
+          pointerEvents="none"
         >
-          <View style={[styles.starParticle, { top: 0, left: '50%', marginLeft: -7 }]}>
-            <Sparkles size={14} color="#FDE047" fill="#FDE047" />
-          </View>
-          <View style={[styles.starParticle, { bottom: 0, left: '50%', marginLeft: -6 }]}>
-            <Star size={12} color="#FDE047" fill="#FDE047" />
-          </View>
-          <View style={[styles.starParticle, { left: 0, top: '50%', marginTop: -6 }]}>
-            <Sparkles size={12} color="#FDE047" />
-          </View>
-          <View style={[styles.starParticle, { right: 0, top: '50%', marginTop: -6 }]}>
-            <Star size={11} color="#FDE047" fill="#FDE047" />
-          </View>
+          {[0, 90, 180, 270].map((deg, i) => {
+            const rad = (deg * Math.PI) / 180;
+            const r = 94; // orbit radius
+            return (
+              <View
+                key={i}
+                style={[
+                  styles.orbitStar,
+                  {
+                    left: 100 + Math.cos(rad) * r - 8,
+                    top: 100 + Math.sin(rad) * r - 8,
+                    opacity: isFinished ? 1 : 0.55 + i * 0.1,
+                  },
+                ]}
+              >
+                {i % 2 === 0 ? (
+                  <Sparkles size={13} color={isFinished ? '#FDE047' : '#A5B4FC'} />
+                ) : (
+                  <Star size={10} color={isFinished ? '#FDE047' : '#C4B5FD'} fill={isFinished ? '#FDE047' : '#C4B5FD'} />
+                )}
+              </View>
+            );
+          })}
         </Animated.View>
 
-        {/* Central Glowing Sigil Orb */}
+        {/* Breath glow halo behind orb */}
         <Animated.View
           style={[
-            styles.sigilOrbContainer,
-            { transform: [{ scale: pulseAnim }] },
+            styles.breathHalo,
+            {
+              opacity: breathOpacityAnim.interpolate({ inputRange: [0.7, 1], outputRange: [0.12, 0.28] }),
+              transform: [{ scale: breathScaleAnim }],
+            },
           ]}
+          pointerEvents="none"
+        />
+
+        {/* Rub glow pulse when touching */}
+        <Animated.View
+          style={[styles.rubGlow, { opacity: rubGlowOpacity }]}
+          pointerEvents="none"
+        />
+
+        {/* The actual touch-sensitive orb */}
+        <Animated.View
+          style={[
+            styles.orb,
+            {
+              transform: [
+                { scale: Animated.multiply(breathScaleAnim, completePop) },
+              ],
+            },
+          ]}
+          {...panResponder.panHandlers}
         >
           <LinearGradient
             colors={
               isFinished
-                ? ['#FEF08A', '#F59E0B', '#B45309']
+                ? ['#DDD6FE', '#818CF8', '#6366F1']
                 : isRubbing
-                ? ['#FFFBEB', '#FDE68A', '#F59E0B']
-                : ['#FFFDF9', '#FEF3C7', '#FCD34D']
+                ? ['#EDE9FE', '#A5B4FC', '#818CF8']
+                : ['#F5F3FF', '#DDD6FE', '#C4B5FD']
             }
-            style={styles.sigilOrb}
+            style={styles.orbGradient}
           >
-            {/* Inner Sacred Star Emblem */}
-            <View style={styles.sigilInner}>
-              <Sparkles
-                size={38}
-                color={isFinished ? '#78350F' : '#D97706'}
-              />
-              <Text style={styles.sigilTitle}>
-                {isFinished
-                  ? lang === 'th'
-                    ? 'สติกลับมาแล้ว!'
-                    : 'Grounded!'
-                  : lang === 'th'
-                  ? 'วงกลมเหนี่ยวสติ'
-                  : 'Grounding Circle'}
-              </Text>
-              <Text style={styles.sigilSubtitle}>
-                {isFinished
-                  ? lang === 'th'
-                    ? 'ประสาทสัมผัสกลับสู่ร่างกาย'
-                    : 'Senses returned to body'
-                  : lang === 'th'
-                  ? 'ถูวนเป็นจังหวะ — รับแรงสั่นเตือนสติ'
-                  : 'Rub in rhythm — feel haptic grounding'}
-              </Text>
-            </View>
+            {/* Breath phase icon */}
+            <Text style={styles.breathArrow}>{breathIcon}</Text>
+            <Text style={styles.orbProgressText}>{Math.round(rubProgress)}%</Text>
+            <Text style={styles.orbSubtext}>
+              {isFinished
+                ? lang === 'th' ? 'สติกลับมา' : 'Grounded'
+                : lang === 'th' ? 'ถูวนที่นี่' : 'Rub here'}
+            </Text>
           </LinearGradient>
         </Animated.View>
       </View>
 
-      {/* Tactile Marshmallow Tap Action */}
+      {/* Breath phase card */}
+      <View style={[styles.breathCard, isRubbing && styles.breathCardActive]}>
+        <Wind size={14} color={isRubbing ? colors.primary : colors.textMuted} />
+        <Text style={[styles.breathLabel, isRubbing && { color: colors.primaryDark }]}>
+          {breathLabel()}
+        </Text>
+        {/* Mini progress bar */}
+        <View style={styles.miniProgressBg}>
+          <Animated.View
+            style={[
+              styles.miniProgressFill,
+              {
+                width: progressAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0%', '100%'],
+                }),
+              },
+            ]}
+          />
+        </View>
+      </View>
+
+      {/* Action button */}
       <View style={styles.actionSection}>
         <MarshmallowButton
           variant={isFinished ? 'mint' : 'secondary'}
           size="lg"
-          onPress={() => advanceProgress(8)}
+          onPress={() => advanceProgress(10)}
           disabled={isFinished}
           icon={
             isFinished ? (
@@ -290,10 +433,10 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             isFinished
               ? lang === 'th'
                 ? 'เหนี่ยวสติสำเร็จแล้ว!'
-                : 'Tactile Grounding Complete!'
+                : 'Grounding Complete!'
               : lang === 'th'
-              ? 'แตะเพื่อเพิ่มระดับสติ (+8%)'
-              : 'Tap to Deepen Grounding (+8%)'
+              ? `แตะเพื่อรับจังหวะ Haptic (+10%)`
+              : `Tap for Haptic Pulse (+10%)`
           }
         />
       </View>
@@ -309,7 +452,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  voiceBadge: {
+  topBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
@@ -317,129 +460,143 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: colors.borderTeal,
+    borderColor: '#C4B5FD',
     gap: 6,
     ...shadows.card,
   },
-  voiceBadgeText: {
+  topBadgeText: {
     fontFamily: typography.fontPromptSemiBold,
     fontSize: 11,
-    color: colors.primaryDark,
+    color: '#4C1D95',
   },
   mascotWrapper: {
     alignItems: 'center',
-    marginVertical: 2,
   },
-  gaugeCard: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 12,
-    borderWidth: 1.5,
-    borderColor: '#FED7AA',
-    ...shadows.soft,
-  },
-  gaugeHeaderRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  tempBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  tempLabel: {
-    fontFamily: typography.fontPromptMedium,
-    fontSize: 11,
-    color: '#9A3412',
-  },
-  tempValue: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 14,
-    color: '#EA580C',
-  },
-  statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFBEB',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: radii.full,
-    gap: 4,
-  },
-  statusText: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 10,
-    color: '#D97706',
-  },
-  trackBg: {
-    height: 8,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  trackFill: {
-    height: '100%',
-    borderRadius: 4,
-  },
-  sigilArea: {
-    width: 200,
-    height: 190,
+
+  // ── Pad Section ──────────────────────────────────────────────────────
+  padSection: {
+    width: 214,
+    height: 214,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    marginVertical: 4,
+    marginVertical: 2,
   },
-  stardustOrbit: {
+  progressRingOuter: {
     position: 'absolute',
-    width: 190,
-    height: 190,
-    borderRadius: 95,
-    borderWidth: 1.5,
-    borderColor: 'rgba(245, 158, 11, 0.25)',
-    borderStyle: 'dashed',
+    width: 210,
+    height: 210,
+    borderRadius: 105,
+    borderWidth: 3.5,
+    borderColor: 'rgba(196, 181, 253, 0.18)',
+  },
+  progressRingFill: {
+    position: 'absolute',
+    width: 210,
+    height: 210,
+    borderRadius: 105,
+    borderWidth: 3.5,
+    borderColor: '#818CF8',
+  },
+  orbitRing: {
+    position: 'absolute',
+    width: 214,
+    height: 214,
+    borderRadius: 107,
+  },
+  orbitStar: {
+    position: 'absolute',
+    width: 16,
+    height: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  starParticle: {
+  breathHalo: {
     position: 'absolute',
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: '#818CF8',
   },
-  sigilOrbContainer: {
-    shadowColor: '#F59E0B',
+  rubGlow: {
+    position: 'absolute',
+    width: 155,
+    height: 155,
+    borderRadius: 77.5,
+    backgroundColor: '#A5B4FC',
+  },
+  orb: {
+    width: 138,
+    height: 138,
+    borderRadius: 69,
+    shadowColor: '#6366F1',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.35,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowRadius: 18,
+    elevation: 10,
   },
-  sigilOrb: {
-    width: 148,
-    height: 148,
-    borderRadius: 74,
-    borderWidth: 3,
-    borderColor: '#FFFFFF',
+  orbGradient: {
+    flex: 1,
+    borderRadius: 69,
+    borderWidth: 2.5,
+    borderColor: 'rgba(255,255,255,0.9)',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    gap: 2,
   },
-  sigilInner: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  breathArrow: {
+    fontSize: 22,
+    color: '#4C1D95',
+    fontWeight: '900',
+    lineHeight: 28,
   },
-  sigilTitle: {
+  orbProgressText: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 12,
-    color: '#78350F',
-    textAlign: 'center',
-    marginTop: 4,
+    fontSize: 22,
+    color: '#4C1D95',
+    lineHeight: 26,
   },
-  sigilSubtitle: {
-    fontFamily: typography.fontPromptRegular,
-    fontSize: 9,
-    color: '#92400E',
+  orbSubtext: {
+    fontFamily: typography.fontPromptMedium,
+    fontSize: 10,
+    color: '#6D28D9',
     textAlign: 'center',
-    marginTop: 2,
+  },
+
+  // ── Breath card ──────────────────────────────────────────────────────
+  breathCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: radii.full,
+    borderWidth: 1.5,
+    borderColor: '#C4B5FD',
+    gap: 8,
+    width: '100%',
+  },
+  breathCardActive: {
+    borderColor: colors.primary,
+    backgroundColor: '#F5F3FF',
+  },
+  breathLabel: {
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 11,
+    color: colors.textMuted,
+    flex: 1,
+  },
+  miniProgressBg: {
+    width: 48,
+    height: 5,
+    backgroundColor: '#E0E7FF',
+    borderRadius: 2.5,
+    overflow: 'hidden',
+  },
+  miniProgressFill: {
+    height: '100%',
+    backgroundColor: '#818CF8',
+    borderRadius: 2.5,
   },
   actionSection: {
     width: '100%',
