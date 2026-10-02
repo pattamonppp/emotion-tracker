@@ -209,8 +209,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
           <div className={styles.counterSubtext}>
             {isFinished ? (
-              <span className="inline-flex items-center gap-1 text-emerald-600">
-                <CheckIcon className="w-3.5 h-3.5" />
+              <span className={styles.finishedSubtext}>
+                <CheckIcon />
                 <span>{lang === 'th' ? 'ปลดปล่อยความตึงเครียดหมดแล้ว' : 'Somatic Tension Released'}</span>
               </span>
             ) : (

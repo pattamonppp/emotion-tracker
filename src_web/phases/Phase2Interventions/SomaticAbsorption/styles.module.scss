@@ -48,6 +48,41 @@
 .tempActive {
   color: $color-turquoise-text;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: #F59E0B;
+  }
+}
+
+.tempCool {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #0EA5E9;
+  font-weight: 600;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.tempWarm {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #F97316;
+  font-weight: 600;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
 }
 
 .mascotSection {

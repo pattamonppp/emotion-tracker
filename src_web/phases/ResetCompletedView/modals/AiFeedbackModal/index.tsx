@@ -10,14 +10,11 @@ import {
   CopyIcon,
   CheckIcon,
   MessageHeartIcon,
-  LeafIcon,
-  ScaleIcon,
-  RotateCcwIcon,
   PenLineIcon,
   CelebrationIcon,
   TargetIcon,
 } from '../../../../icons';
-import { FEEDBACK_ASPECTS, ACCURACY_OPTIONS } from './constants';
+import { FEEDBACK_ASPECTS, ACCURACY_OPTIONS, RATING_LEVELS } from './constants';
 import styles from './styles.module.scss';
 
 export interface AiFeedbackModalProps {
@@ -77,7 +74,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
       list.push(record);
       localStorage.setItem('mooca_feedback_dataset', JSON.stringify(list, null, 2));
     } catch {
-      // Ignore quota errors
+      // quota
     }
 
     setSavedRecord(record);
@@ -93,38 +90,8 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const renderRatingLabel = () => {
-    switch (rating) {
-      case 5:
-        return (
-          <span className={styles.ratingBadge}>
-            <SparklesIcon className="w-3.5 h-3.5 text-amber-400" />
-            <span>{lang === 'th' ? 'โล่ง สบายใจขึ้นมาก' : 'Deeply relaxed and relieved'}</span>
-          </span>
-        );
-      case 4:
-        return (
-          <span className={styles.ratingBadge}>
-            <LeafIcon className="w-3.5 h-3.5 text-emerald-400" />
-            <span>{lang === 'th' ? 'ผ่อนคลายขึ้นดีมาก' : 'Noticeably calmer and better'}</span>
-          </span>
-        );
-      case 3:
-        return (
-          <span className={styles.ratingBadge}>
-            <ScaleIcon className="w-3.5 h-3.5 text-teal-400" />
-            <span>{lang === 'th' ? 'รู้สึกดีขึ้นปานกลาง' : 'Moderately refreshed'}</span>
-          </span>
-        );
-      default:
-        return (
-          <span className={styles.ratingBadge}>
-            <RotateCcwIcon className="w-3.5 h-3.5 text-slate-400" />
-            <span>{lang === 'th' ? 'ยังตึงเครียดอยู่' : 'Still holding tension'}</span>
-          </span>
-        );
-    }
-  };
+  const currentRatingInfo = RATING_LEVELS[rating] || RATING_LEVELS[5];
+  const RatingIcon = currentRatingInfo.Icon;
 
   return (
     <div className={styles.backdrop}>
@@ -133,9 +100,9 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             <div className={styles.iconBox}>
-              <MessageHeartIcon className="w-5 h-5 text-teal-600" />
+              <MessageHeartIcon />
             </div>
-            <div>
+            <div className={styles.headerTitleGroup}>
               <h3 className={styles.headerTitle}>
                 {lang === 'th' ? 'บอกความรู้สึกถึง Mooca' : 'Feedback to Mooca'}
               </h3>
@@ -153,7 +120,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
             className={styles.closeBtn}
             aria-label="Close"
           >
-            <CloseIcon className="w-4 h-4" />
+            <CloseIcon />
           </button>
         </div>
 
@@ -161,10 +128,12 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
         <div className={styles.scrollContent}>
           {!submitted ? (
             <>
-              {/* 1. Star Rating */}
+              {/* 1. Star Rating with Distinct Contextual Icon per Star */}
               <div className={styles.section}>
                 <label className={styles.sectionLabel}>
-                  <SparklesIcon className="w-4 h-4 text-amber-500" />
+                  <span className={styles.sectionLabelIcon}>
+                    <SparklesIcon />
+                  </span>
                   <span>
                     {lang === 'th'
                       ? 'เซสชันนี้ช่วยให้เธอรู้สึกผ่อนคลายแค่ไหน?'
@@ -172,27 +141,34 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                   </span>
                 </label>
 
-                <div className={styles.starsRow}>
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => setRating(s)}
-                      className={`${styles.starBtn} ${rating >= s ? styles.filled : styles.unfilled}`}
-                    >
-                      <StarIcon className="w-6 h-6" />
-                    </button>
-                  ))}
-                </div>
-                <div className={styles.starLabel}>
-                  {renderRatingLabel()}
+                <div className={styles.starsContainer}>
+                  <div className={styles.starsRow}>
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setRating(s)}
+                        className={`${styles.starBtn} ${rating >= s ? styles.filled : styles.unfilled}`}
+                      >
+                        <StarIcon />
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Contextual description badge with unique icon per level */}
+                  <div className={`${styles.ratingBadge} ${styles[currentRatingInfo.themeClass]}`}>
+                    <RatingIcon />
+                    <span>{lang === 'th' ? currentRatingInfo.labelTh : currentRatingInfo.labelEn}</span>
+                  </div>
                 </div>
               </div>
 
-              {/* 2. Accuracy Evaluation */}
+              {/* 2. Accuracy Evaluation with Colorful Cards */}
               <div className={styles.section}>
                 <label className={styles.sectionLabel}>
-                  <TargetIcon className="w-4 h-4 text-teal-500" />
+                  <span className={styles.sectionLabelIcon}>
+                    <TargetIcon />
+                  </span>
                   <span>
                     {lang === 'th'
                       ? 'คำปลอบและกิจกรรมตรงกับความต้องการไหม?'
@@ -203,15 +179,18 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 <div className={styles.accuracyGrid}>
                   {ACCURACY_OPTIONS.map((opt) => {
                     const IconComponent = opt.Icon;
+                    const isSelected = accuracy === opt.id;
+                    const themeClass = isSelected ? styles[`accuracy_${opt.colorTheme}`] : '';
+
                     return (
                       <button
                         key={opt.id}
                         type="button"
                         onClick={() => setAccuracy(opt.id)}
-                        className={`${styles.accuracyBtn} ${accuracy === opt.id ? styles.selected : ''}`}
+                        className={`${styles.accuracyBtn} ${themeClass}`}
                       >
                         <span className={styles.accuracyIcon}>
-                          <IconComponent className="w-4 h-4" />
+                          <IconComponent />
                         </span>
                         <span className={styles.accuracyText}>
                           {lang === 'th' ? opt.labelTh : opt.labelEn}
@@ -222,10 +201,12 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 </div>
               </div>
 
-              {/* 3. Feature Tuning Aspects */}
+              {/* 3. Feature Tuning Aspects with Playful Pastel Chips */}
               <div className={styles.section}>
                 <label className={styles.sectionLabel}>
-                  <MessageHeartIcon className="w-4 h-4 text-teal-500" />
+                  <span className={styles.sectionLabelIcon}>
+                    <MessageHeartIcon />
+                  </span>
                   <span>
                     {lang === 'th'
                       ? 'จุดที่ทำได้ดีเป็นพิเศษ (เลือกได้หลายข้อ):'
@@ -237,14 +218,16 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                   {FEEDBACK_ASPECTS.map((aspect) => {
                     const isSelected = selectedAspects.includes(aspect.id);
                     const AspectIcon = aspect.Icon;
+                    const activeTheme = isSelected ? styles[`theme_${aspect.colorTheme}`] : '';
+
                     return (
                       <button
                         key={aspect.id}
                         type="button"
                         onClick={() => toggleAspect(aspect.id)}
-                        className={`${styles.chipBtn} ${isSelected ? styles.selected : ''}`}
+                        className={`${styles.chipBtn} ${activeTheme}`}
                       >
-                        <AspectIcon className="w-4 h-4 mr-1.5" />
+                        <AspectIcon />
                         <span>{lang === 'th' ? aspect.labelTh : aspect.labelEn}</span>
                       </button>
                     );
@@ -252,10 +235,12 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 </div>
               </div>
 
-              {/* 4. Qualitative Comments */}
+              {/* 4. Qualitative Comments with Applied App Font & Generous Height */}
               <div className={styles.section}>
                 <label className={styles.sectionLabel}>
-                  <PenLineIcon className="w-4 h-4 text-teal-500" />
+                  <span className={styles.sectionLabelIcon}>
+                    <PenLineIcon />
+                  </span>
                   <span>
                     {lang === 'th'
                       ? 'อยากบอกอะไรกับ Mooca เพื่อให้ดูแลใจเธอได้ดียิ่งขึ้น? (ถ้ามี)'
@@ -264,7 +249,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 </label>
 
                 <textarea
-                  rows={2}
+                  rows={4}
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   placeholder={
@@ -280,7 +265,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
             /* Success Feedback View */
             <div className={styles.successBox}>
               <div className={styles.successIconBox}>
-                <CelebrationIcon className="w-10 h-10 text-teal-500" />
+                <CelebrationIcon />
               </div>
               <h4 className={styles.successTitle}>
                 {lang === 'th' ? 'บันทึกความคิดเห็นสำเร็จ!' : 'Feedback Saved!'}
@@ -327,7 +312,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 colorTheme="turquoise"
                 size="sm"
                 onClick={handleSubmit}
-                leadingIcon={<CheckCircleIcon className="w-4 h-4" />}
+                leadingIcon={<CheckCircleIcon />}
                 label={lang === 'th' ? 'ส่งความรู้สึก' : 'Submit Feedback'}
               />
             </>
@@ -338,7 +323,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 colorTheme="blue"
                 size="sm"
                 onClick={handleCopyJson}
-                leadingIcon={copied ? <CheckIcon className="w-3.5 h-3.5 text-emerald-500" /> : <CopyIcon className="w-3.5 h-3.5" />}
+                leadingIcon={copied ? <CheckIcon /> : <CopyIcon />}
                 label={copied ? (lang === 'th' ? 'คัดลอกแล้ว!' : 'Copied!') : (lang === 'th' ? 'คัดลอก JSON' : 'Copy JSON')}
               />
 

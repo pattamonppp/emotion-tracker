@@ -1,0 +1,34 @@
+export const modals = {
+  history: {
+    title: 'บันทึกการรีเซ็ตใจกับ Mooca',
+    subtitle: 'บันทึกการฟื้นฟูระบบประสาท',
+    sanctuaryCardTitle: 'MOOCA SANCTUARY CARD',
+    verifiedText: '120s Verified',
+    previousSessions: 'เซสชันที่ผ่านมา',
+    shareSanctuary: 'แชร์การฟื้นฟู',
+  },
+  onboarding: {
+    title: 'เพื่อนคู่ใจ Mooca ยินดีที่ได้รู้จัก!',
+    subtitle: 'ปรับแต่งการดูแลใจให้เหมาะกับเธอที่สุด',
+    nameLabel: 'ให้ Mooca เรียกเธอว่าอะไรดีจ้ะ?',
+    ageLabel: 'ช่วงอายุ / สถานะ',
+    goalLabel: 'เป้าหมายหลักที่อยากให้ Mooca ช่วยดูแล',
+    mbtiLabel: 'ประเภทบุคลิกภาพ',
+    mbtiHint: 'ปรับระดับคำปลอบของ Mooca',
+    sensorLabel: 'การอนุญาตเซนเซอร์ & Bio-Data',
+    nextButton: 'ถัดไป: MBTI & เซนเซอร์',
+    activateButton: 'บันทึกและเริ่มรีเซ็ตกับ Mooca',
+  },
+  pulseSensor: {
+    title: 'วัดชีพจรและสภาวะใจสด',
+    subtitle: 'Optical Photoplethysmography (PPG)',
+    bpmUnit: 'BPM',
+    applyButton: 'นำค่านี้ไปใช้งาน',
+  },
+  story: {
+    title: 'เรื่องราวของเพื่อน Mooca',
+    subtitle: 'เจ้าก้อนเมฆเพื่อนแท้ในวันที่ใจอ่อนล้า',
+    tabStory: 'เรื่องราว',
+    tabVibe: 'จิตวิทยาใจ',
+  },
+};

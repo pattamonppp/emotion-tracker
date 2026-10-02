@@ -254,6 +254,18 @@
   animation: pulseCard 1s infinite alternate;
 }
 
+.swallowPrompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #0284C7;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 @keyframes pulseCard {
   from {
     opacity: 0.85;

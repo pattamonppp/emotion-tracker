@@ -207,13 +207,13 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             <span className={styles.metricBoxLabel}>Autonomic State</span>
             <div className={styles.stateBoxValue}>
               {measuredBpm < 85 ? (
-                <span className="inline-flex items-center gap-1 text-emerald-600">
-                  <LeafIcon className="w-3.5 h-3.5" />
+                <span className={styles.stateTagParasympathetic}>
+                  <LeafIcon />
                   <span>Parasympathetic</span>
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-amber-600">
-                  <ZapIcon className="w-3.5 h-3.5" />
+                <span className={styles.stateTagSympathetic}>
+                  <ZapIcon />
                   <span>High Sympathetic</span>
                 </span>
               )}

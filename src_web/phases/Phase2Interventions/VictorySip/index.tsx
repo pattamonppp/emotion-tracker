@@ -240,8 +240,8 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               <div className={styles.drinkingCard}>
                 {breathPhase === 'inhale' && (lang === 'th' ? 'สูดหายใจเข้าลึก...' : 'Deep Inhale...')}
                 {breathPhase === 'swallow' && (
-                  <span className="inline-flex items-center gap-1">
-                    <GlassWaterIcon className="w-4 h-4 text-sky-500" />
+                  <span className={styles.swallowPrompt}>
+                    <GlassWaterIcon />
                     <span>{lang === 'th' ? 'กลืนน้ำช้า ๆ 1 อึก' : 'Swallow Slow Sip'}</span>
                   </span>
                 )}

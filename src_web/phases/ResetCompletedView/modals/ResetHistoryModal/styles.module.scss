@@ -242,7 +242,32 @@
 }
 
 .historyEmoji {
-  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &.historyEmpowered {
+    color: #D97706;
+    background-color: #FEF3C7;
+  }
+
+  &.historyGrounded {
+    color: #059669;
+    background-color: #D1FAE5;
+  }
+
+  &.historySame {
+    color: #00A896;
+    background-color: #E6F9F7;
+  }
 }
 
 .historyStateTitle {

@@ -73,7 +73,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
           <div className={styles.sanctuaryCard}>
             <div className={styles.sanctuaryCardHeader}>
               <span className={styles.sanctuaryTitle}>
-                <HeartIcon className="w-4 h-4 text-teal-600 inline mr-1" />
+                <HeartIcon />
                 <span>MOOCA SANCTUARY CARD</span>
               </span>
               <span className={styles.mbtiTag}>
@@ -103,16 +103,22 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
 
             {displayHistory.map((item, idx) => {
               const delta = item.preHeartRate - item.postHeartRate;
+              const resultClass = item.shiftResult === 'empowered'
+                ? styles.historyEmpowered
+                : item.shiftResult === 'grounded'
+                ? styles.historyGrounded
+                : styles.historySame;
+
               return (
                 <div key={idx} className={styles.historyItem}>
                   <div className={styles.historyLeft}>
-                    <span className={styles.historyEmoji}>
+                    <span className={`${styles.historyEmoji} ${resultClass}`}>
                       {item.shiftResult === 'empowered' ? (
-                        <ZapIcon className="w-4 h-4 text-amber-500" />
+                        <ZapIcon />
                       ) : item.shiftResult === 'grounded' ? (
-                        <LeafIcon className="w-4 h-4 text-emerald-500" />
+                        <LeafIcon />
                       ) : (
-                        <ScaleIcon className="w-4 h-4 text-teal-600" />
+                        <ScaleIcon />
                       )}
                     </span>
                     <div>

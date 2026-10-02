@@ -15,7 +15,7 @@ import {
   ZapIcon,
   LeafIcon,
   ScaleIcon,
-  ArrowRightIcon,
+  ChevronRightIcon,
 } from '../../icons';
 import styles from './styles.module.scss';
 
@@ -61,22 +61,22 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
     switch (feedback.shiftResult) {
       case 'empowered':
         return (
-          <span className="inline-flex items-center gap-1 text-amber-600 font-semibold">
-            <ZapIcon className="w-3.5 h-3.5" />
+          <span className={styles.stateValueEmpowered}>
+            <ZapIcon />
             <span>{lang === 'th' ? 'มั่นใจ / พร้อมลุย' : 'Empowered'}</span>
           </span>
         );
       case 'grounded':
         return (
-          <span className="inline-flex items-center gap-1 text-emerald-600 font-semibold">
-            <LeafIcon className="w-3.5 h-3.5" />
+          <span className={styles.stateValueGrounded}>
+            <LeafIcon />
             <span>{lang === 'th' ? 'นิ่ง มีสติ' : 'Grounded'}</span>
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 text-teal-600 font-semibold">
-            <ScaleIcon className="w-3.5 h-3.5" />
+          <span className={styles.stateValueSame}>
+            <ScaleIcon />
             <span>{lang === 'th' ? 'คืนสมดุล' : 'Stabilized'}</span>
           </span>
         );
@@ -87,7 +87,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
     <div className={styles.container}>
       {/* Top Badge */}
       <div className={styles.topBadge}>
-        <CheckCircleIcon className="w-4 h-4 text-teal-600" />
+        <CheckCircleIcon />
         <span>
           {lang === 'th' ? 'รีเซ็ตใจ 120 วินาที กับ Mooca สำเร็จ' : '120s Reset Completed with Mooca'}
         </span>
@@ -124,7 +124,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           <div className={styles.deltaCard}>
             <div className={styles.deltaHeader}>
               <span className={styles.deltaTitle}>
-                <SparklesIcon className="w-4 h-4 text-teal-500" />
+                <SparklesIcon />
                 {lang === 'th' ? 'ผลลัพธ์การลดความตึงเครียด' : 'Bio-Shift Result'}
               </span>
               <span className={styles.deltaBpmPill}>
@@ -150,7 +150,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         <div onClick={onOpenStory} className={styles.badgeCard}>
           <div className={styles.badgeLeft}>
             <span className={styles.medalIcon}>
-              <MedalIcon className="w-5 h-5 text-amber-500" />
+              <MedalIcon />
             </span>
             <div>
               <div className={styles.badgeTitle}>
@@ -163,7 +163,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           </div>
           <span className={styles.badgeChevron}>
             <span>{lang === 'th' ? 'แตะดู' : 'View'}</span>
-            <ArrowRightIcon className="w-3.5 h-3.5 inline ml-1" />
+            <ChevronRightIcon />
           </span>
         </div>
       </div>
@@ -177,7 +177,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           size="md"
           fullWidth
           onClick={() => setIsAiFeedbackOpen(true)}
-          leadingIcon={<MessageHeartIcon className="w-4 h-4" />}
+          leadingIcon={<MessageHeartIcon />}
           label={lang === 'th' ? 'บอกความรู้สึกถึง Mooca' : 'Feedback to Mooca'}
         />
 
@@ -188,7 +188,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           size="md"
           fullWidth
           onClick={handleShareKeepsake}
-          leadingIcon={<ShareIcon className="w-4 h-4" />}
+          leadingIcon={<ShareIcon />}
           label={lang === 'th' ? 'แชร์การ์ดความกล้าหาญ' : 'Share Polaroid Keepsake'}
         />
 
@@ -199,7 +199,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           size="lg"
           fullWidth
           onClick={onRestart}
-          leadingIcon={<RotateCcwIcon className="w-4 h-4" />}
+          leadingIcon={<RotateCcwIcon />}
           label={lang === 'th' ? 'เริ่มรีเซ็ตครั้งใหม่' : 'Start New Session'}
         />
 
@@ -211,7 +211,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
               colorTheme="turquoise"
               size="sm"
               onClick={onOpenHistory}
-              leadingIcon={<HistoryIcon className="w-3.5 h-3.5" />}
+              leadingIcon={<HistoryIcon />}
               label={lang === 'th' ? 'ประวัติรีเซ็ต' : 'Reset History'}
             />
           )}
@@ -221,7 +221,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             colorTheme="blue"
             size="sm"
             onClick={onOpenDesignSystem}
-            leadingIcon={<LayersIcon className="w-3.5 h-3.5" />}
+            leadingIcon={<LayersIcon />}
             label={lang === 'th' ? 'Design Tokens' : 'Tokens & UI'}
           />
         </div>

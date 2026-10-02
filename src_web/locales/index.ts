@@ -1,7 +1,8 @@
-import { th, LocaleTranslations } from './th';
+import { th } from './th';
 import { en } from './en';
 
 export type Language = 'th' | 'en';
+export type LocaleTranslations = typeof th;
 
 export const locales = {
   th,
@@ -9,7 +10,6 @@ export const locales = {
 } as const;
 
 export { th, en };
-export type { LocaleTranslations };
 
 export const getTranslation = (lang: Language): LocaleTranslations => {
   return (locales[lang] || locales.th) as LocaleTranslations;

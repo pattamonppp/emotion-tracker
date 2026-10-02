@@ -142,6 +142,45 @@
   text-transform: capitalize;
 }
 
+.stateValueEmpowered {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #D97706;
+  font-weight: 700;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.stateValueGrounded {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #059669;
+  font-weight: 700;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.stateValueSame {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #00A896;
+  font-weight: 700;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
 .timestampRow {
   display: flex;
   align-items: center;
@@ -160,7 +199,7 @@
 // Friendship Badge Card
 // -----------------------------------------------------------------------------
 .badgeCard {
-  padding: 10px;
+  padding: 10px 12px;
   border-radius: 18px;
   background: linear-gradient(90deg, #FFF8E7 0%, #FFFFFF 50%, #E6F9F7 100%);
   border: 1px solid rgba(250, 140, 61, 0.3);
@@ -187,7 +226,14 @@
 }
 
 .medalIcon {
-  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FEF3C7;
+  color: #F59E0B;
 }
 
 .badgeTitle {
@@ -203,9 +249,17 @@
 }
 
 .badgeChevron {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.75rem;
   color: $color-turquoise-1;
   font-weight: 700;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
 }
 
 // -----------------------------------------------------------------------------

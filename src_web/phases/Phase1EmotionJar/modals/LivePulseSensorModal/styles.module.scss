@@ -288,6 +288,30 @@
   text-overflow: ellipsis;
 }
 
+.stateTagParasympathetic {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #10B981;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.stateTagSympathetic {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #F59E0B;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Footer
 // -----------------------------------------------------------------------------
