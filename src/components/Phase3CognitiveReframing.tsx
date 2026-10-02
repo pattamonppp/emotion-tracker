@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Animated,
+  Platform,
 } from 'react-native';
 import { GoalType } from '../types';
 import { REFRAMING_INSIGHTS } from '../data/matrixData';
@@ -51,138 +52,147 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
   });
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header & Mascot */}
-      <View style={styles.header}>
-        <MoocaMascot
-          mood={isActionCommitted ? 'celebrating' : 'comforting'}
-          size="sm"
-          speakingBubble={
-            isActionCommitted
-              ? lang === 'th'
-                ? 'ประทับตราสัญญาใจแล้ว! Mooca อยู่เคียงข้างเสมอ สู้ไปด้วยกันนะ!'
-                : 'Pinky promise sealed! Mooca is right beside you!'
-              : lang === 'th'
-                ? 'เปิดอ่านจดหมายจากใจ Mooca แล้วทำสัญญาใจ 1 ก้าวด้วยกันนะ'
-                : 'Read Mooca’s heartfelt letter and make a pinky promise!'
-          }
-        />
+    <View style={styles.screenWrapper}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header & Mascot */}
+        <View style={styles.header}>
+          <MoocaMascot
+            mood={isActionCommitted ? 'celebrating' : 'comforting'}
+            size="sm"
+            speakingBubble={
+              isActionCommitted
+                ? lang === 'th'
+                  ? 'ประทับตราสัญญาใจแล้ว! Mooca อยู่เคียงข้างเสมอ สู้ไปด้วยกันนะ!'
+                  : 'Pinky promise sealed! Mooca is right beside you!'
+                : lang === 'th'
+                  ? 'เปิดอ่านจดหมายจากใจ Mooca แล้วทำสัญญาใจ 1 ก้าวด้วยกันนะ'
+                  : 'Read Mooca’s heartfelt letter and make a pinky promise!'
+            }
+          />
 
-        <View style={styles.phaseBadge}>
-          <Sparkles size={12} color={colors.primary} />
-          <Text style={styles.phaseBadgeText}>
-            {lang === 'th' ? 'จดหมายอบอุ่นจากใจ Mooca' : 'Heartfelt Letter from Mooca'}
-          </Text>
-        </View>
-      </View>
-
-      {/* Washi-Tape Letter Card */}
-      <View style={styles.letterWrapper}>
-        {/* Pastel Washi Tape - Top Left */}
-        <View style={styles.washiTapeLeft}>
-          <View style={styles.washiTapePattern} />
-        </View>
-
-        {/* Pastel Washi Tape - Top Right */}
-        <View style={styles.washiTapeRight}>
-          <View style={styles.washiTapePattern} />
-        </View>
-
-        {/* Cozy Cream Letter Paper */}
-        <View style={styles.letterPaper}>
-          <View style={styles.letterHeader}>
-            <Heart size={14} color="#F43F5E" />
-            <Text style={styles.letterGreeting}>
-              {lang === 'th' ? 'ถึงเธอ... คนเก่งที่กำลังพยายามอยู่' : 'Dearest Brave Friend,'}
-            </Text>
-          </View>
-
-          {/* Emotional Reframing Message */}
-          <Text style={styles.letterBody}>
-            {lang === 'th' ? insight.reflectionTh : insight.reflectionEn}
-          </Text>
-
-          {/* Biological Reassurance Note */}
-          <View style={styles.biologyNote}>
-            <Dna size={15} color={colors.primaryDark} style={{ marginTop: 2 }} />
-            <Text style={styles.biologyText}>
-              {lang === 'th' ? insight.biologyFactTh : insight.biologyFactEn}
-            </Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Pinky-Promise Action Box */}
-      <View style={styles.promiseCard}>
-        <View style={styles.promiseHeaderRow}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <HeartHandshake size={16} color={colors.primary} strokeWidth={2.4} />
-            <Text style={styles.promiseTitle}>
-              {lang === 'th' ? 'กล่องสัญญาใจ 1 ก้าวถัดไป' : 'Pinky-Promise Action'}
-            </Text>
-          </View>
-          <View style={styles.promiseBadge}>
-            <Text style={styles.promiseBadgeText}>
-              {lang === 'th' ? 'ก้าวเล็ก ๆ ชนะใจ' : 'Micro Step'}
+          <View style={styles.phaseBadge}>
+            <Sparkles size={12} color={colors.primary} />
+            <Text style={styles.phaseBadgeText}>
+              {lang === 'th' ? 'จดหมายอบอุ่นจากใจ Mooca' : 'Heartfelt Letter from Mooca'}
             </Text>
           </View>
         </View>
 
-        <TouchableOpacity
-          activeOpacity={0.85}
-          onPress={handleCommitAction}
-          style={[
-            styles.commitBox,
-            isActionCommitted && styles.commitBoxActive,
-          ]}
-        >
-          <View style={styles.commitContent}>
-            <View style={{ marginRight: 8 }}>
-              <Sprout size={20} color={colors.primary} strokeWidth={2.4} />
+        {/* Washi-Tape Letter Card */}
+        <View style={styles.letterWrapper}>
+          {/* Pastel Washi Tape - Top Left */}
+          <View style={styles.washiTapeLeft}>
+            <View style={styles.washiTapePattern} />
+          </View>
+
+          {/* Pastel Washi Tape - Top Right */}
+          <View style={styles.washiTapeRight}>
+            <View style={styles.washiTapePattern} />
+          </View>
+
+          {/* Cozy Cream Letter Paper */}
+          <View style={styles.letterPaper}>
+            {/* Cute Decorative Stamp in Corner */}
+            <View style={styles.letterStamp}>
+              <Heart size={11} color="#EC4899" fill="#FCE7F3" />
+              <Text style={styles.letterStampText}>MOOCA</Text>
             </View>
-            <Text style={[styles.commitActionText, isActionCommitted && { color: colors.primaryDark }]}>
-              {lang === 'th' ? insight.microActionTh : insight.microActionEn}
-            </Text>
-          </View>
 
-          {/* Mint Wax Seal Heart Stamp */}
-          {isActionCommitted ? (
-            <Animated.View
-              style={[
-                styles.mintSealStamp,
-                { transform: [{ scale: stampScale }, { rotate: '-8deg' }] },
-              ]}
-            >
-              <View style={styles.mintSealInner}>
-                <Heart size={14} color="#00C4B3" fill="#00C4B3" />
-                <Text style={styles.mintSealText}>PROMISED</Text>
-              </View>
-            </Animated.View>
-          ) : (
-            <View style={styles.stampPlaceholder}>
-              <Text style={styles.stampPrompt}>
-                {lang === 'th' ? 'แตะเพื่อ\nประทับตรา' : 'Tap to\nSeal'}
+            <View style={styles.letterHeader}>
+              <Heart size={14} color="#F43F5E" />
+              <Text style={styles.letterGreeting}>
+                {lang === 'th' ? 'ถึงเธอ... คนเก่งที่กำลังพยายามอยู่' : 'Dearest Brave Friend,'}
               </Text>
             </View>
-          )}
-        </TouchableOpacity>
 
-        <Text style={styles.commitHint}>
-          {isActionCommitted
-            ? lang === 'th'
-              ? 'สัญญาใจถูกประทับเรียบร้อยแล้ว มีพลังก้าวต่อไปได้เลย!'
-              : 'Sealed with a mint heart! You have got this!'
-            : lang === 'th'
-              ? 'แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca'
-              : 'Tap box to stamp your pinky-promise mint heart.'}
-        </Text>
-      </View>
+            {/* Emotional Reframing Message */}
+            <Text style={styles.letterBody}>
+              {lang === 'th' ? insight.reflectionTh : insight.reflectionEn}
+            </Text>
 
-      {/* Proceed Button */}
-      <View style={styles.actionSection}>
+            {/* Biological Reassurance Note */}
+            <View style={styles.biologyNote}>
+              <Dna size={15} color={colors.primaryDark} style={{ marginTop: 2 }} />
+              <Text style={styles.biologyText}>
+                {lang === 'th' ? insight.biologyFactTh : insight.biologyFactEn}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Pinky-Promise Action Box */}
+        <View style={styles.promiseCard}>
+          <View style={styles.promiseHeaderRow}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <HeartHandshake size={16} color={colors.primary} strokeWidth={2.4} />
+              <Text style={styles.promiseTitle}>
+                {lang === 'th' ? 'กล่องสัญญาใจ 1 ก้าวถัดไป' : 'Pinky-Promise Action'}
+              </Text>
+            </View>
+            <View style={styles.promiseBadge}>
+              <Text style={styles.promiseBadgeText}>
+                {lang === 'th' ? 'ก้าวเล็ก ๆ ชนะใจ' : 'Micro Step'}
+              </Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={handleCommitAction}
+            style={[
+              styles.commitBox,
+              isActionCommitted && styles.commitBoxActive,
+            ]}
+          >
+            <View style={styles.commitContent}>
+              <View style={{ marginRight: 8 }}>
+                <Sprout size={20} color={colors.primary} strokeWidth={2.4} />
+              </View>
+              <Text style={[styles.commitActionText, isActionCommitted && { color: colors.primaryDark }]}>
+                {lang === 'th' ? insight.microActionTh : insight.microActionEn}
+              </Text>
+            </View>
+
+            {/* Mint Wax Seal Heart Stamp */}
+            {isActionCommitted ? (
+              <Animated.View
+                style={[
+                  styles.mintSealStamp,
+                  { transform: [{ scale: stampScale }, { rotate: '-8deg' }] },
+                ]}
+              >
+                <View style={styles.mintSealInner}>
+                  <Heart size={14} color="#00C4B3" fill="#00C4B3" />
+                  <Text style={styles.mintSealText}>PROMISED</Text>
+                </View>
+              </Animated.View>
+            ) : (
+              <View style={styles.stampPlaceholder}>
+                <Text style={styles.stampPrompt}>
+                  {lang === 'th' ? 'แตะเพื่อ\nประทับตรา' : 'Tap to\nSeal'}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+
+          <Text style={styles.commitHint}>
+            {isActionCommitted
+              ? lang === 'th'
+                ? 'สัญญาใจถูกประทับเรียบร้อยแล้ว มีพลังก้าวต่อไปได้เลย!'
+                : 'Sealed with a mint heart! You have got this!'
+              : lang === 'th'
+                ? 'แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca'
+                : 'Tap box to stamp your pinky-promise mint heart.'}
+          </Text>
+        </View>
+      </ScrollView>
+
+      {/* Bottom Pinned Proceed Button */}
+      <View style={styles.bottomBar}>
         <MarshmallowButton
           variant="primary"
           size="lg"
@@ -195,19 +205,26 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           }
         />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  screenWrapper: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
   container: {
     paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 28,
+    paddingTop: 14,
+    paddingBottom: 20,
     alignItems: 'center',
   },
   header: {
     alignItems: 'center',
+    marginTop: 8,
     marginBottom: 8,
   },
   phaseBadge: {
@@ -274,7 +291,29 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     borderWidth: 1.5,
     borderColor: '#FED7AA',
+    position: 'relative',
     ...shadows.soft,
+  },
+  letterStamp: {
+    position: 'absolute',
+    top: 12,
+    right: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#FFF1F2',
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#FECDD3',
+    borderStyle: 'dashed',
+  },
+  letterStampText: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 8,
+    color: '#E11D48',
+    letterSpacing: 0.5,
   },
   letterHeader: {
     flexDirection: 'row',
@@ -422,8 +461,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 8,
   },
-  actionSection: {
+  bottomBar: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 16,
     width: '100%',
-    marginTop: 10,
   },
 });

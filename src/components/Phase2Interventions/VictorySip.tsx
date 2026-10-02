@@ -14,7 +14,7 @@ import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../MoocaMascot';
 import { useSky } from '../DynamicSkyEngine';
-import { Heart, Check, GlassWater, Sparkles, ArrowRight, X } from 'lucide-react-native';
+import { Heart, Check, GlassWater, Sparkles, ArrowRight, X, HelpCircle } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 
 interface VictorySipProps {
@@ -197,6 +197,10 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           hintColor: '#5f0019ff',
           progressTrack: 'rgba(255, 255, 255, 0.45)',
           progressFill: ['#ffa8bbff', '#fff6b4ff'] as const,
+          badgeBg: 'rgba(255, 255, 255, 0.90)',
+          badgeBorder: 'rgba(244, 114, 182, 0.45)',
+          badgeTextColor: '#831843',
+          badgeIconColor: '#F472B6',
         };
       case 'night':
         return {
@@ -205,6 +209,10 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           hintColor: '#94A3B8',
           progressTrack: 'rgba(255, 255, 255, 0.25)',
           progressFill: ['#38BDF8', '#818CF8'] as const,
+          badgeBg: 'rgba(15, 23, 42, 0.85)',
+          badgeBorder: 'rgba(56, 189, 248, 0.35)',
+          badgeTextColor: '#E2E8F0',
+          badgeIconColor: '#38BDF8',
         };
       case 'dawn':
         return {
@@ -213,6 +221,10 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           hintColor: '#B45309',
           progressTrack: 'rgba(255, 255, 255, 0.65)',
           progressFill: ['#F59E0B', '#FBBF24'] as const,
+          badgeBg: 'rgba(255, 255, 255, 0.90)',
+          badgeBorder: 'rgba(245, 158, 11, 0.40)',
+          badgeTextColor: '#92400E',
+          badgeIconColor: '#F59E0B',
         };
       default:
         return {
@@ -221,6 +233,10 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           hintColor: '#64748B',
           progressTrack: 'rgba(0, 196, 179, 0.20)',
           progressFill: ['#00C4B3', '#62A0E9'] as const,
+          badgeBg: 'rgba(255, 255, 255, 0.90)',
+          badgeBorder: 'rgba(0, 196, 179, 0.35)',
+          badgeTextColor: '#065F46',
+          badgeIconColor: '#00C4B3',
         };
     }
   };
@@ -250,7 +266,45 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         />
       </View>
 
-      {/* 2. Hero Centerpiece: Fantasy Crystal Potion Tumbler */}
+      {/* 2. Instruction Badge & Sip Indicator with Info Tip */}
+      <TouchableOpacity
+        onPress={() => {
+          audioService.triggerHaptic('selection');
+          setIsGuideOpen(true);
+        }}
+        activeOpacity={0.8}
+        style={[
+          styles.instructionPill,
+          {
+            backgroundColor: skyTheme.badgeBg,
+            borderColor: skyTheme.badgeBorder,
+          },
+        ]}
+      >
+        {isFinished ? (
+          <Sparkles size={14} color="#10B981" strokeWidth={2.4} />
+        ) : isTiltingToDrink ? (
+          <Sparkles size={14} color="#3B82F6" strokeWidth={2.4} />
+        ) : (
+          <GlassWater size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
+        )}
+        <Text style={[styles.instructionPillText, { color: skyTheme.badgeTextColor }]}>
+          {isFinished
+            ? lang === 'th'
+              ? 'จิบครบ 3 อึกแล้ว • ชื่นใจ!'
+              : 'All 3 sips complete • Refreshing!'
+            : isTiltingToDrink
+              ? lang === 'th'
+                ? 'เอียงแก้วแล้ว • ค่อย ๆ กลืนช้า ๆ นะ'
+                : 'Cup tilted • Sip gently'
+              : lang === 'th'
+                ? 'ยกมือถือเอียงเหมือนจิบน้ำ (แตะดูวิธี)'
+                : 'Tilt phone to sip (Tap guide)'}
+        </Text>
+        <HelpCircle size={13} color={skyTheme.badgeIconColor} strokeWidth={2} />
+      </TouchableOpacity>
+
+      {/* 3. Hero Centerpiece: Fantasy Crystal Potion Tumbler */}
       <View style={styles.cupContainer}>
         {/* Soft Ambient Radiating Halo behind the tumbler */}
         <View style={styles.cupAuraHalo} pointerEvents="none" />
@@ -506,6 +560,22 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  instructionPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: radii.full,
+    borderWidth: 1.5,
+    gap: 6,
+    marginBottom: 4,
+    ...shadows.soft,
+  },
+  instructionPillText: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 11,
+    letterSpacing: 0.1,
   },
   cupContainer: {
     alignItems: 'center',

@@ -215,11 +215,15 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
       {/* Mooca + Bubble — bubble grows upward, Mooca stays at same Y always */}
       <View style={styles.mascotAnchor}>
 
-        {/* Bubble outer positioner: absolute, full-width, centers inner bubble box */}
-        <View style={[
-          styles.bubblePositioner,
-          !displayMessage && styles.bubblePositionerHidden,
-        ]}>
+        {/* Bubble outer positioner: absolute, centered directly above Mooca */}
+        <View
+          style={[
+            styles.bubblePositioner,
+            { left: (width - 320) / 2 },
+            !displayMessage && styles.bubblePositionerHidden,
+          ]}
+          pointerEvents="none"
+        >
           {displayMessage ? (
             <View style={styles.bubbleContainer}>
               <Text style={styles.bubbleText}>{displayMessage}</Text>
@@ -456,21 +460,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    width: '100%',
   },
   mascotAnchor: {
     alignItems: 'center',
+    justifyContent: 'center',
     position: 'relative',
-    width: '100%',
   },
-  // Outer: absolute, spans full mascotAnchor width, centers inner bubble horizontally
+  // Outer: absolute 320px wide positioner, horizontally centered over Mooca
   bubblePositioner: {
     position: 'absolute',
     bottom: '100%',
-    left: 0,
-    right: 0,
+    width: 320,
     alignItems: 'center',
     marginBottom: 6,
+    zIndex: 20,
   },
   bubblePositionerHidden: {
     // No content → collapses to 0 height naturally (no children rendered)

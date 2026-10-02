@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { UserProfile, ShiftFeedback } from '../types';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { MoocaMascot } from './MoocaMascot';
+import { useSky } from './DynamicSkyEngine';
 import { audioService } from '../services/audioService';
 import {
   RotateCcw,
@@ -40,6 +41,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
   onRestart,
   onOpenHistory,
 }) => {
+  const { activePeriod } = useSky();
+  const isNight = activePeriod === 'night';
   const lang = profile.language;
   const bpmDrop = feedback ? feedback.preHeartRate - feedback.postHeartRate : 18;
 
@@ -75,7 +78,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         </Text>
       </View>
 
-      <Text style={styles.headline}>
+      <Text style={[styles.headline, isNight && { color: '#FFFFFF' }]}>
         {lang === 'th'
           ? `ยินดีด้วยนะ ${profile.name}!`
           : `Congratulations, ${profile.name}!`}

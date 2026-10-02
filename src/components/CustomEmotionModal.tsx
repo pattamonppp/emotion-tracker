@@ -144,7 +144,9 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
 
           {/* Mooca Mascot Speaking */}
           <View style={styles.mascotSpeechRow}>
-            <MoocaMascot size="xs" mood="comforting" />
+            <View style={{ width: 54, height: 54, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <MoocaMascot size="xs" mood="comforting" />
+            </View>
             <View style={styles.mascotBubble}>
               <Text style={styles.mascotBubbleText}>
                 {lang === 'th'
