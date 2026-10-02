@@ -221,32 +221,38 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
       ]}
       {...panResponder.panHandlers}
     >
-      {/* Fluffy Cloud Silhouette Scalloped Bumps */}
+      {/* Mini Fluffy Scalloped Cloud Bumps on Top */}
       <View style={styles.cloudScallopsTop} pointerEvents="none">
-        {/* Left Scalloped Puff */}
         <View
           style={[
             styles.scallopPuffLeft,
-            { backgroundColor: isSelected ? '#FFFFFF' : '#FFFDF9' },
+            {
+              backgroundColor: isSelected ? '#F0FDFA' : '#FFFFFF',
+              borderColor: isSelected ? tag.color : '#E2E8F0',
+            },
           ]}
         />
-        {/* Center High Scalloped Puff */}
         <View
           style={[
             styles.scallopPuffCenter,
-            { backgroundColor: isSelected ? '#FFFFFF' : '#FFFDF9' },
+            {
+              backgroundColor: isSelected ? '#F0FDFA' : '#FFFFFF',
+              borderColor: isSelected ? tag.color : '#E2E8F0',
+            },
           ]}
         />
-        {/* Right Scalloped Puff */}
         <View
           style={[
             styles.scallopPuffRight,
-            { backgroundColor: isSelected ? '#FFFFFF' : '#FFFDF9' },
+            {
+              backgroundColor: isSelected ? '#F0FDFA' : '#FFFFFF',
+              borderColor: isSelected ? tag.color : '#E2E8F0',
+            },
           ]}
         />
       </View>
 
-      {/* Main Fluffy Cloud Body */}
+      {/* Compact Fluffy Cloud Body */}
       <LinearGradient
         colors={
           isSelected
@@ -256,52 +262,43 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
         style={[
           styles.cloudBody,
           {
-            borderColor: isSelected ? tag.color : '#E2E8F0',
+            borderColor: isSelected ? tag.color : 'rgba(0, 0, 0, 0.08)',
             borderBottomColor: isSelected ? tag.color : '#CBD5E1',
           },
         ]}
       >
-        {/* Left Icon Bubble (NO EMOJI - ALWAYS PURE ICONS) */}
+        {/* Left Icon Bubble */}
         <View
           style={[
-            styles.emojiBubble,
+            styles.iconBubble,
             {
               backgroundColor: tag.color + '1A',
-              borderColor: isSelected ? tag.color : 'rgba(0, 0, 0, 0.06)',
             },
           ]}
         >
-          {getEmotionIcon(tag.id, tag.color, 20)}
+          {getEmotionIcon(tag.id, tag.color, 15)}
         </View>
 
-        {/* Emotion Details */}
-        <View style={styles.textColumn}>
-          <Text
-            style={[
-              styles.cloudTitle,
-              { color: isSelected ? colors.primaryDark : colors.textPrimary },
-            ]}
-          >
-            {lang === 'th' ? tag.labelTh : tag.labelEn}
-          </Text>
-          <Text style={styles.cloudSub}>{tag.weightDescription}</Text>
-        </View>
+        {/* Short Punchy Emotion Word (No Description) */}
+        <Text
+          style={[
+            styles.cloudTitle,
+            { color: isSelected ? colors.primaryDark : colors.textPrimary },
+          ]}
+        >
+          {lang === 'th' ? tag.labelTh : tag.labelEn}
+        </Text>
 
-        {/* Drag Hint & Check Indicator */}
-        <View style={styles.actionCol}>
-          {isSelected ? (
-            <View style={[styles.checkBadge, { backgroundColor: tag.color }]}>
-              <Check size={12} color="#FFFFFF" strokeWidth={3} />
-            </View>
-          ) : (
-            <View style={styles.dragIndicator}>
-              <ArrowDown size={10} color={colors.primaryDark} strokeWidth={2.4} />
-              <Text style={styles.dragText}>
-                {lang === 'th' ? 'ลากลงโหล' : 'Drag down'}
-              </Text>
-            </View>
-          )}
-        </View>
+        {/* Action Status: Checked Badge if in jar, or Down Arrow if ready to drop */}
+        {isSelected ? (
+          <View style={[styles.checkBadge, { backgroundColor: tag.color }]}>
+            <Check size={10} color="#FFFFFF" strokeWidth={3} />
+          </View>
+        ) : (
+          <View style={styles.downArrowPill}>
+            <ArrowDown size={11} color={tag.color} strokeWidth={2.5} />
+          </View>
+        )}
       </LinearGradient>
     </Animated.View>
   );
@@ -309,114 +306,90 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
 
 const styles = StyleSheet.create({
   cloudWrapper: {
-    width: '100%',
-    marginVertical: 5,
+    marginVertical: 4,
+    marginHorizontal: 3,
     position: 'relative',
     shadowColor: '#00C4B3',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 5,
+    elevation: 3,
   },
   cloudScallopsTop: {
     position: 'absolute',
-    top: -10,
-    left: 24,
-    right: 24,
-    height: 24,
+    top: -8,
+    left: 12,
+    right: 12,
+    height: 16,
     flexDirection: 'row',
     zIndex: 1,
   },
   scallopPuffLeft: {
     position: 'absolute',
-    left: 20,
-    top: 4,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 1.5,
+    left: 8,
+    top: 3,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1.2,
     borderBottomWidth: 0,
-    borderColor: '#E2E8F0',
   },
   scallopPuffCenter: {
     position: 'absolute',
-    left: 44,
-    top: -2,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    borderWidth: 1.5,
+    left: 22,
+    top: -3,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    borderWidth: 1.2,
     borderBottomWidth: 0,
-    borderColor: '#E2E8F0',
   },
   scallopPuffRight: {
     position: 'absolute',
-    left: 80,
-    top: 6,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    borderWidth: 1.5,
+    left: 42,
+    top: 4,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 1.2,
     borderBottomWidth: 0,
-    borderColor: '#E2E8F0',
   },
   cloudBody: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: 26,
-    borderWidth: 1.5,
-    borderBottomWidth: 3.5,
-    gap: 12,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    borderRadius: radii.full,
+    borderWidth: 1.3,
+    borderBottomWidth: 2.8,
+    gap: 6,
     zIndex: 2,
+    backgroundColor: '#FFFFFF',
   },
-  emojiBubble: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+  iconBubble: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1.5,
-  },
-  emojiText: {
-    fontSize: 22,
-  },
-  textColumn: {
-    flex: 1,
   },
   cloudTitle: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 13,
-    marginBottom: 2,
-  },
-  cloudSub: {
-    fontFamily: typography.fontPromptRegular,
-    fontSize: 10,
-    color: colors.textMuted,
-  },
-  actionCol: {
-    alignItems: 'flex-end',
+    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 12,
   },
   checkBadge: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  dragIndicator: {
-    flexDirection: 'row',
+  downArrowPill: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
     alignItems: 'center',
-    backgroundColor: '#F1F5F9',
-    paddingHorizontal: 7,
-    paddingVertical: 3.5,
-    borderRadius: radii.full,
-    gap: 3,
-  },
-  dragText: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 8.5,
-    color: colors.primaryDark,
+    justifyContent: 'center',
   },
 });

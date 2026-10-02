@@ -107,8 +107,8 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           <Sparkles size={13} color={colors.primary} />
           <Text style={styles.sectionTitle}>
             {lang === 'th'
-              ? 'ก้อนเมฆอารมณ์ลอยในใจ (แตะหรือลากลงโหลแก้วด้านล่าง ↓):'
-              : 'Floating Emotion Clouds (Drag down into Jar ↓):'}
+              ? 'ก้อนเมฆอารมณ์ในใจ (แตะหรือลากลงโหล ↓)'
+              : 'Floating Clouds (Tap or Drag down ↓)'}
           </Text>
         </View>
 
@@ -262,8 +262,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   cloudsList: {
-    width: '100%',
-    gap: 6,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 4,
   },
   jarSection: {
     width: '100%',

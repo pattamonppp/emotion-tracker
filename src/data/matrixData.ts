@@ -3,47 +3,47 @@ import { EmotionTag, GoalType, MBTIType } from '../types';
 export const EMOTION_TAGS: EmotionTag[] = [
   {
     id: 'shaking',
-    labelTh: 'ตื่นเต้นจนตัวสั่น',
-    labelEn: 'Trembling with Nerves',
-    emoji: '🥶',
+    labelTh: 'ตื่นเต้น',
+    labelEn: 'Nervous',
+    emoji: '',
     color: '#FA8C3D', // Sunshade warm accent
-    weightDescription: 'Adrenaline surge in extremities',
+    weightDescription: '',
     recommendedOption: 'A', // The Somatic Absorption (rubbing warms cold shaking hands)
   },
   {
     id: 'forgetting',
-    labelTh: 'กลัวลืมสิ่งที่อ่านมา',
-    labelEn: 'Fear of Blanking Out',
-    emoji: '💭',
+    labelTh: 'กลัวลืม',
+    labelEn: 'Blanking',
+    emoji: '',
     color: '#F26E6E', // Flamingo
-    weightDescription: 'Prefrontal amygdala hijack',
+    weightDescription: '',
     recommendedOption: 'A', // Somatic Absorption / Blessing Sigil
   },
   {
     id: 'pressure',
-    labelTh: 'กดดันจนหายใจไม่ทั่วท้อง',
-    labelEn: 'Crushed by Pressure',
-    emoji: '🪨',
+    labelTh: 'กดดัน',
+    labelEn: 'Pressure',
+    emoji: '',
     color: '#3B82F6', // Accent Blue
-    weightDescription: 'Sympathetic tension & rapid pulse',
+    weightDescription: '',
     recommendedOption: 'B', // The Victory Sip (Vagal Maneuver)
   },
   {
     id: 'freeze',
-    labelTh: 'สมองช็อต ตื้อตัน คิดไม่ออก',
-    labelEn: 'Cognitive Freeze',
-    emoji: '🧊',
+    labelTh: 'สมองตื้อ',
+    labelEn: 'Freeze',
+    emoji: '',
     color: '#60A5FA',
-    weightDescription: 'Mental deadlock & physical freeze',
+    weightDescription: '',
     recommendedOption: 'C', // Kinetic Tension Shaker (discharge)
   },
   {
     id: 'burnout',
-    labelTh: 'ล้าสะสม หมดไฟชั่วขณะ',
-    labelEn: 'Chronic Drain & Burnout',
-    emoji: '🕯️',
+    labelTh: 'หมดไฟ',
+    labelEn: 'Burnout',
+    emoji: '',
     color: '#00C4B3', // Brand turquoise
-    weightDescription: 'Neural depletion & sensory overload',
+    weightDescription: '',
     recommendedOption: 'D', // Pre-Generated Studio Audio Matrix
   },
 ];
