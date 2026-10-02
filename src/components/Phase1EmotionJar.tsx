@@ -98,15 +98,6 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
         {/* Floating Emotion Clouds Section (Floating in the Sky) */}
         <View style={styles.skyCloudsSection}>
-          <View style={styles.sectionHeaderRow}>
-            <Sparkles size={11} color={colors.primary} />
-            <Text style={styles.sectionTitle}>
-              {lang === 'th'
-                ? `ก้อนเมฆอารมณ์ในใจ (${selectedEmotions.length}/${MAX_SELECTED_EMOTIONS})`
-                : `Emotion Clouds (${selectedEmotions.length}/${MAX_SELECTED_EMOTIONS})`}
-            </Text>
-          </View>
-
           <View style={styles.cloudsList}>
             {EMOTION_TAGS.map((tag, idx) => {
               const isSelected = selectedEmotions.includes(tag.id);
@@ -167,9 +158,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     paddingHorizontal: 12,
-    paddingTop: 4,
+    paddingTop: 2,
     paddingBottom: 2,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   stickyBottomBar: {
@@ -189,7 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 2,
+    marginBottom: 4,
     paddingHorizontal: 2,
   },
   badgePill: {
@@ -228,34 +219,22 @@ const styles = StyleSheet.create({
   },
   skyCloudsSection: {
     width: '100%',
-    marginTop: 2,
-    marginBottom: 4,
-  },
-  sectionHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-    marginBottom: 8,
-  },
-  sectionTitle: {
-    fontFamily: typography.fontPromptSemiBold,
-    fontSize: 12,
-    color: colors.primaryDark,
-    textAlign: 'center',
+    marginTop: 0,
+    marginBottom: 6,
   },
   cloudsList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 6,
+    rowGap: 12,
+    columnGap: 6,
     paddingHorizontal: 2,
   },
   jarSection: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 2,
-    marginBottom: 2,
+    marginTop: 10,
+    marginBottom: 'auto',
   },
 });
