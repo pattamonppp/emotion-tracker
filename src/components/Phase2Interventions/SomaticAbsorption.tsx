@@ -17,6 +17,7 @@ import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCircle } from 'react-native-svg';
 import { Star, Sun, Hand, Sparkles, HelpCircle, Check, X, ArrowRight } from 'lucide-react-native';
 import { typography, radii, shadows, colors } from '../../design-system/tokens';
+import { getTranslation } from '../../locales';
 
 interface SomaticAbsorptionProps {
   onComplete: () => void;
@@ -32,8 +33,12 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
   lang,
   skyPeriod: propSkyPeriod,
 }) => {
+  const t = getTranslation(lang);
+  const strings = t.phases.phase2.somaticAbsorption;
   const { activePeriod } = useSky();
   const skyPeriod = propSkyPeriod || activePeriod || 'day';
+
+
 
   const [rubProgress, setRubProgress] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
@@ -279,16 +284,10 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           size="sm"
           speakingBubble={
             isFinished
-              ? lang === 'th'
-                ? 'เก่งมากๆ เลยนะ! สัมผัสเป็นจังหวะช่วยให้ใจสงบลงแล้วใช่ไหม'
-                : 'Wonderful job! Your mind and body are peaceful and safe now.'
+              ? strings.mascotDone
               : isRubbing
-                ? lang === 'th'
-                  ? 'รู้สึกอุ่นขึ้นไหม... ค่อยๆ ดึงความรู้สึกกลับมาที่ปลายนิ้วนะคนเก่ง'
-                  : 'Feeling the warmth? Gently anchoring your calm right here.'
-                : lang === 'th'
-                  ? 'วางสองนิ้วแล้วค่อยๆ ถูวนไปด้วยกันนะ Mooca อยู่ตรงนี้เสมอ'
-                  : 'Place two fingers & gently swirl with me. I’m right here.'
+                ? strings.mascotRubbing
+                : strings.mascotIdle
           }
         />
       </View>
@@ -315,16 +314,10 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
         )}
         <Text style={[styles.instructionPillText, { color: theme.badgeText }]}>
           {touchCount >= 2
-            ? lang === 'th'
-              ? 'ตรวจพบ 2 นิ้วแล้ว • ถูวนเป็นจังหวะ'
-              : '2-Finger Rhythm Active'
+            ? strings.fingerActive2
             : touchCount === 1
-              ? lang === 'th'
-                ? 'ตรวจพบ 1 นิ้ว (กรุณาวาง 2 นิ้ว)'
-                : '1 finger detected (Place 2 fingers)'
-              : lang === 'th'
-                ? 'วางสองนิ้วแล้วถูวน (แตะดูวิธี)'
-                : 'Place 2 fingers & swirl (Tap guide)'}
+              ? strings.fingerWarning1
+              : strings.fingerPrompt}
         </Text>
         <HelpCircle size={13} color={theme.badgeIconColor} strokeWidth={2} />
       </TouchableOpacity>
@@ -465,11 +458,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             size="lg"
             onPress={onComplete}
             icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
-            title={
-              lang === 'th'
-                ? 'เข้าสู่หน้าสะท้อนความคิด'
-                : 'Proceed to Cognitive Reframing'
-            }
+            title={strings.proceedBtn}
           />
         </View>
       ) : (
@@ -487,9 +476,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           </View>
 
           <Text style={[styles.bottomCaption, { color: theme.captionColor }]}>
-            {lang === 'th'
-              ? 'การสัมผัสเป็นจังหวะส่งสัญญาณ Haptics กลับสู่ระบบประสาท หยุดภาวะตื่นตระหนก'
-              : 'Rhythmic tactile touch sends haptics to the nervous system, halting acute panic'}
+            {strings.caption}
           </Text>
         </View>
       )}
@@ -515,7 +502,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             </View>
 
             <Text style={styles.guideTitle}>
-              {lang === 'th' ? 'วิธีใช้นิ้วสัมผัสเหนี่ยวสติ' : 'Tactile Grounding Finger Guide'}
+              {strings.guideTitle}
             </Text>
 
             <View style={styles.guideStepsBox}>
@@ -524,9 +511,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                   <Text style={styles.stepNumText}>1</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {lang === 'th'
-                    ? 'ใช้นิ้วหัวแม่มือทั้งสองข้าง หรือนิ้วชี้และนิ้วกลาง'
-                    : 'Use both thumbs or your index & middle fingers'}
+                  {strings.guideStep1Desc}
                 </Text>
               </View>
 
@@ -535,9 +520,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                   <Text style={styles.stepNumText}>2</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {lang === 'th'
-                    ? 'วางลงบนวงกลมแล้วถูวนเป็นจังหวะช้าๆ ต่อเนื่อง'
-                    : 'Place them on the circle & swirl in steady circles'}
+                  {strings.guideStep2Desc}
                 </Text>
               </View>
 
@@ -546,9 +529,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                   <Text style={styles.stepNumText}>3</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {lang === 'th'
-                    ? 'หน้าจอจะส่งแรงสั่น Haptics ดึงสติสู่ร่างกายทันที'
-                    : 'The screen emits rhythmic haptics to restore body grounding'}
+                  {strings.guideStep3Desc}
                 </Text>
               </View>
             </View>
@@ -563,7 +544,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             >
               <Check size={16} color="#FFFFFF" strokeWidth={2.6} />
               <Text style={styles.guideConfirmText}>
-                {lang === 'th' ? 'เข้าใจแล้ว เริ่มถูวนเลย' : 'Got it, Let’s Swirl!'}
+                {strings.guideConfirm}
               </Text>
             </TouchableOpacity>
           </View>
@@ -578,15 +559,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingTop: 12,
+    paddingBottom: 8,
     paddingHorizontal: 16,
   },
   mascotSection: {
     overflow: 'visible',
-    height: 140,
+    height: 145,
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 4,
   },
   instructionPill: {
     flexDirection: 'row',

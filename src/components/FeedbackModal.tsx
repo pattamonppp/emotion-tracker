@@ -27,28 +27,15 @@ import {
 import { colors } from '../design-system/tokens';
 import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { audioService } from '../services/audioService';
+import { getTranslation } from '../locales';
 
-interface FeedbackModalProps {
+export interface FeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
   profile?: UserProfile;
   feedback?: ShiftFeedback | null;
   lang: 'th' | 'en';
 }
-
-const ASPECTS = [
-  { id: 'audio', labelTh: 'คลื่นเสียงบำบัดตรงจุด', labelEn: 'Binaural Audio', icon: Headphones },
-  { id: 'reframe', labelTh: 'คำพูดรีเฟรมความคิดโดนใจ', labelEn: 'Cognitive Reframing', icon: MessageSquareHeart },
-  { id: 'haptics', labelTh: 'แรงสั่นและสลัดมือ', labelEn: 'Haptics & Movement', icon: Activity },
-  { id: 'sip', labelTh: 'จังหวะจิบน้ำผ่อนคลาย', labelEn: 'Sip Breathing Rhythm', icon: GlassWater },
-  { id: 'mbti', labelTh: 'เข้าใจลักษณะนิสัย', labelEn: 'Personality Resonance', icon: Heart },
-];
-
-const ACCURACY = [
-  { id: 'spot_on', labelTh: 'ตรงใจมาก', labelEn: 'Spot On', icon: Target },
-  { id: 'helpful', labelTh: 'ช่วยได้ดี', labelEn: 'Helpful', icon: Lightbulb },
-  { id: 'needs_work', labelTh: 'ยังไม่ตรงจุด', labelEn: 'Needs Work', icon: RotateCcw },
-] as const;
 
 export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   isOpen,
@@ -60,6 +47,23 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [selectedAspects, setSelectedAspects] = useState<string[]>(['audio', 'reframe']);
   const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  const t = getTranslation(lang);
+  const fb = t.feedback;
+
+  const ASPECTS = [
+    { id: 'audio', label: fb.aspectAudio, icon: Headphones },
+    { id: 'reframe', label: fb.aspectReframe, icon: MessageSquareHeart },
+    { id: 'haptics', label: fb.aspectHaptics, icon: Activity },
+    { id: 'sip', label: fb.aspectSip, icon: GlassWater },
+    { id: 'mbti', label: fb.aspectMbti, icon: Heart },
+  ];
+
+  const ACCURACY = [
+    { id: 'spot_on', label: fb.accuracySpotOn, icon: Target },
+    { id: 'helpful', label: fb.accuracyHelpful, icon: Lightbulb },
+    { id: 'needs_work', label: fb.accuracyNeedsWork, icon: RotateCcw },
+  ] as const;
 
   const toggleAspect = (id: string) => {
     setSelectedAspects((prev) =>
@@ -79,10 +83,10 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   };
 
   const getRatingText = () => {
-    if (rating === 5) return lang === 'th' ? 'โล่ง สบายใจขึ้นมาก' : 'Deeply relaxed and relieved';
-    if (rating === 4) return lang === 'th' ? 'ผ่อนคลายขึ้นดีมาก' : 'Noticeably calmer and better';
-    if (rating === 3) return lang === 'th' ? 'รู้สึกดีขึ้นปานกลาง' : 'Moderately refreshed';
-    return lang === 'th' ? 'ยังตึงเครียดอยู่' : 'Still holding tension';
+    if (rating === 5) return fb.rating5;
+    if (rating === 4) return fb.rating4;
+    if (rating === 3) return fb.rating3;
+    return fb.rating1;
   };
 
   return (
@@ -98,7 +102,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
           <View style={styles.headerTitleRow}>
             <MessageSquareHeart size={20} color={colors.primary} />
             <Text style={styles.headerTitle}>
-              {lang === 'th' ? 'บอกความรู้สึกถึง Mooca' : 'Feedback to Mooca'}
+              {fb.modalTitle}
             </Text>
           </View>
           <TouchableOpacity 
@@ -116,9 +120,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               {/* Star Rating Section */}
               <View style={styles.section}>
                 <Text style={styles.sectionLabel}>
-                  {lang === 'th' 
-                    ? 'เซสชันนี้ช่วยให้เธอรู้สึกผ่อนคลายแค่ไหน?' 
-                    : 'How much did this session help relieve tension?'}
+                  {fb.ratingQuestion}
                 </Text>
                 <View style={styles.starsRow}>
                   {[1, 2, 3, 4, 5].map((s) => (
@@ -147,9 +149,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               {/* Accuracy Grid */}
               <View style={styles.section}>
                 <Text style={styles.sectionLabel}>
-                  {lang === 'th' 
-                    ? 'คำปลอบและกิจกรรมตรงกับความต้องการไหม?' 
-                    : 'Did the comforting advice and exercises fit your state?'}
+                  {fb.accuracyQuestion}
                 </Text>
                 <View style={styles.accuracyRow}>
                   {ACCURACY.map((opt) => {
@@ -170,7 +170,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                           style={{ marginBottom: 4 }} 
                         />
                         <Text style={[styles.accuracyText, isSelected && styles.accuracyTextActive]}>
-                          {lang === 'th' ? opt.labelTh : opt.labelEn}
+                          {opt.label}
                         </Text>
                       </TouchableOpacity>
                     );
@@ -181,9 +181,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               {/* Aspect Chips */}
               <View style={styles.section}>
                 <Text style={styles.sectionLabel}>
-                  {lang === 'th' 
-                    ? 'จุดที่ทำได้ดีเป็นพิเศษ (เลือกได้หลายข้อ):' 
-                    : 'Key highlights that felt especially good:'}
+                  {fb.aspectsQuestion}
                 </Text>
                 <View style={styles.chipsWrap}>
                   {ASPECTS.map((aspect) => {
@@ -204,7 +202,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                           style={{ marginRight: 6 }} 
                         />
                         <Text style={[styles.chipText, isSelected && styles.chipTextActive]}>
-                          {lang === 'th' ? aspect.labelTh : aspect.labelEn}
+                          {aspect.label}
                         </Text>
                       </TouchableOpacity>
                     );
@@ -215,9 +213,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               {/* Qualitative Comment */}
               <View style={styles.section}>
                 <Text style={styles.sectionLabel}>
-                  {lang === 'th' 
-                    ? 'อยากบอกอะไรกับ Mooca เพื่อให้ดูแลใจเธอได้ดียิ่งขึ้น? (ถ้ามี)' 
-                    : 'Anything you want to tell Mooca to support you better? (Optional)'}
+                  {fb.commentQuestion}
                 </Text>
                 <TextInput
                   style={styles.textInput}
@@ -225,11 +221,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   numberOfLines={3}
                   value={comment}
                   onChangeText={setComment}
-                  placeholder={
-                    lang === 'th' 
-                      ? 'เช่น ชอบดนตรีมาก, อยากให้จังหวะหายใจช้าลง...' 
-                      : 'e.g. Loved the soundscape, breath pace was great...'
-                  }
+                  placeholder={fb.commentPlaceholder}
                   placeholderTextColor="#94A3B8"
                 />
               </View>
@@ -241,7 +233,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   size="md"
                   onPress={handleSubmit}
                   icon={<CheckCircle2 size={16} color="#FFFFFF" />}
-                  title={lang === 'th' ? 'ส่งความรู้สึก' : 'Submit Feedback'}
+                  title={fb.submitButton}
                 />
               </View>
             </>
@@ -252,19 +244,17 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 <CheckCircle2 size={40} color={colors.primary} />
               </View>
               <Text style={styles.successTitle}>
-                {lang === 'th' ? 'บันทึกความคิดเห็นสำเร็จ!' : 'Feedback Saved!'}
+                {fb.successTitle}
               </Text>
               <Text style={styles.successDesc}>
-                {lang === 'th'
-                  ? 'ขอบคุณมากนะ! ความคิดเห็นของเธอช่วยให้ Mooca เข้าใจและปลอบประโลมใจทุกคนได้ดียิ่งขึ้น'
-                  : 'Thank you so much! Your thoughts help make Mooca gentler, warmer, and more supportive for everyone.'}
+                {fb.successDesc}
               </Text>
               <View style={{ marginTop: 24, width: '100%' }}>
                 <MarshmallowButton
                   variant="primary"
                   size="md"
                   onPress={handleClose}
-                  title={lang === 'th' ? 'เสร็จสิ้น' : 'Done'}
+                  title={fb.doneButton}
                 />
               </View>
             </View>
@@ -278,7 +268,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFDF9',
+    backgroundColor: '#FFFFFF',
   },
   headerBar: {
     flexDirection: 'row',
@@ -300,16 +290,12 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F1F5F9',
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 4,
   },
   scrollContent: {
-    padding: 20,
-    gap: 18,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    gap: 20,
   },
   section: {
     gap: 8,
@@ -317,14 +303,13 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#334155',
+    color: colors.textPrimary,
   },
   starsRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
-    paddingVertical: 8,
+    marginVertical: 4,
   },
   starTouch: {
     padding: 4,
@@ -333,16 +318,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FFFBEB',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 20,
+    borderRadius: 12,
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
   },
   starDescText: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#475569',
+    fontWeight: '700',
+    color: '#B45309',
   },
   accuracyRow: {
     flexDirection: 'row',
@@ -350,27 +337,28 @@ const styles = StyleSheet.create({
   },
   accuracyCard: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 6,
     borderRadius: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F8FAFC',
     borderWidth: 1.5,
     borderColor: '#E2E8F0',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   accuracyCardActive: {
-    backgroundColor: '#E6F9F7',
+    backgroundColor: '#E6FAF8',
     borderColor: colors.primary,
   },
   accuracyText: {
     fontSize: 11,
-    fontWeight: '700',
-    color: '#475569',
+    fontWeight: '600',
+    color: '#64748B',
     textAlign: 'center',
   },
   accuracyTextActive: {
     color: colors.primaryDark,
+    fontWeight: '800',
   },
   chipsWrap: {
     flexDirection: 'row',
@@ -380,72 +368,66 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 20,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
+    paddingVertical: 8,
+    borderRadius: 12,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
     borderColor: '#E2E8F0',
   },
   chipActive: {
-    backgroundColor: '#DBF0EE',
+    backgroundColor: '#E6FAF8',
     borderColor: colors.primary,
   },
   chipText: {
     fontSize: 12,
-    fontWeight: '600',
     color: '#475569',
+    fontWeight: '600',
   },
   chipTextActive: {
     color: colors.primaryDark,
     fontWeight: '700',
   },
   textInput: {
-    borderWidth: 1,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 14,
+    borderWidth: 1.5,
     borderColor: '#E2E8F0',
-    borderRadius: 12,
     padding: 12,
     fontSize: 13,
-    backgroundColor: '#FFFFFF',
-    color: '#1E293B',
+    color: colors.textPrimary,
     minHeight: 70,
     textAlignVertical: 'top',
   },
   submitWrap: {
-    marginTop: 6,
-    marginBottom: 20,
+    marginTop: 8,
+    paddingBottom: 24,
   },
   successCard: {
-    padding: 24,
-    borderRadius: 20,
-    backgroundColor: '#E6F9F7',
-    alignItems: 'center',
-    marginVertical: 20,
-    borderWidth: 1.5,
-    borderColor: 'rgba(0, 196, 179, 0.4)',
-  },
-  successIconCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: '#DBF0EE',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+  },
+  successIconCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: '#E6FAF8',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
   },
   successTitle: {
     fontSize: 18,
     fontWeight: '800',
     color: colors.primaryDark,
     marginBottom: 8,
-    textAlign: 'center',
   },
   successDesc: {
     fontSize: 13,
-    color: '#475569',
+    color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: 20,
   },
 });
-
-export default FeedbackModal;

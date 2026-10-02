@@ -16,18 +16,17 @@ import { MoocaMascot } from '../MoocaMascot';
 import { useSky } from '../DynamicSkyEngine';
 import { Sparkles, Headphones, Play, Pause, ArrowRight, RotateCcw } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
-
-interface AudioMatrixSanctuaryProps {
-  mbti: MBTIType;
-  onComplete: () => void;
-  lang: 'th' | 'en';
-}
+import { getTranslation } from '../../locales';
+import { AudioMatrixSanctuaryProps } from './types';
+import { AUDIO_SANCTUARY_CONFIG } from './constants';
 
 export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
-  mbti,
+  mbti = 'INFP',
   onComplete,
   lang,
 }) => {
+  const t = getTranslation(lang);
+  const strings = t.phases.phase2.audioMatrix;
   const { activePeriod } = useSky();
   const [isPlaying, setIsPlaying] = useState(true);
   const [countdown, setCountdown] = useState(25);
@@ -101,7 +100,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
     audioService.stopAllVoice();
     audioService.triggerHaptic('medium');
     audioService.startNeuralEntrainment('both');
-    const text = lang === 'th' ? script.th : script.en;
+    const text = script[lang];
     audioService.playVoiceSanctuary(text, lang, 0.86);
     setCountdown(25);
     setIsPlaying(true);
@@ -109,7 +108,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
 
   useEffect(() => {
     audioService.startNeuralEntrainment('both');
-    const text = lang === 'th' ? script.th : script.en;
+    const text = script[lang];
     audioService.playVoiceSanctuary(text, lang, 0.86);
     setIsPlaying(true);
 
@@ -201,12 +200,8 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
           size="sm"
           speakingBubble={
             countdown === 0
-              ? lang === 'th'
-                ? 'คลื่นสมองเข้าสู่สภาวะสมดุลแล้วนะคนเก่ง! จิตใจนิ่งพร้อมก้าวต่อแล้ว'
-                : 'Neural equilibrium restored! Your mind is calm, centered & ready.'
-              : lang === 'th'
-                ? 'Alpha Wave 10Hz กำลังทำงาน\nหลับตาลงสบาย ๆ ดึงสมาธิกลับมานะ'
-                : 'Alpha 10Hz beats are flowing\nClose your eyes and breathe gently'
+              ? strings.bubbleDone
+              : strings.bubblePlaying
           }
         />
       </View>
@@ -215,9 +210,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
       <View style={[styles.mbtiBadge, { backgroundColor: skyTheme.badgeBg, borderColor: skyTheme.badgeBorder }]}>
         <Headphones size={13} color={skyTheme.badgeText} />
         <Text style={[styles.mbtiBadgeText, { color: skyTheme.badgeText }]}>
-          {lang === 'th'
-            ? 'คลื่นเสียงสมาธิ 10Hz • Alpha Wave + Brown Noise'
-            : 'Acoustic Sanctuary 10Hz • Alpha + Brown Noise'}
+          {strings.binauralAlpha}
         </Text>
       </View>
 
@@ -274,8 +267,8 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         {/* Audio State Label */}
         <Text style={[styles.audioStatusHint, { color: skyTheme.hintText }]}>
           {isPlaying
-            ? (lang === 'th' ? 'กำลังเล่นคลื่นเสียงและเสียงนำทาง' : 'Playing Sanctuary Audio')
-            : (lang === 'th' ? 'แตะเพื่อเล่นเสียงต่อ' : 'Tap to resume audio')}
+            ? strings.playingHint
+            : strings.tapResumeHint}
         </Text>
       </View>
 
@@ -284,7 +277,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         <View style={styles.scriptHeader}>
           <Sparkles size={14} color={skyTheme.scriptTitle} />
           <Text style={[styles.scriptCategory, { color: skyTheme.scriptTitle }]}>
-            {lang === 'th' ? 'ถ้อยคำปลอบประโลมสำหรับคุณ' : 'Personalized Sanctuary Voice'}
+            {strings.voiceLabel}
           </Text>
         </View>
 
@@ -300,9 +293,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
       <View style={styles.actionSection}>
         {countdown > 0 ? (
           <Text style={[styles.organicSensorHint, { color: skyTheme.hintText }]}>
-            {lang === 'th'
-              ? `กำลังบำบัดด้วยคลื่นสมอง Alpha Wave • ${countdown}s`
-              : `Alpha Wave Therapy Active • ${countdown}s`}
+            {strings.alphaTherapy.replace('{countdown}', String(countdown))}
           </Text>
         ) : (
           <MarshmallowButton
@@ -313,11 +304,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
               onComplete();
             }}
             icon={<ArrowRight size={16} color="#FFFFFF" />}
-            title={
-              lang === 'th'
-                ? 'เข้าสู่หน้าสะท้อนความคิด'
-                : 'Proceed to Cognitive Reframing'
-            }
+            title={strings.proceed}
           />
         )}
       </View>
@@ -329,15 +316,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingTop: 12,
+    paddingBottom: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   mascotWrapper: {
-    height: 140,
+    overflow: 'visible',
+    height: 145,
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 4,
   },
   mbtiBadge: {
     flexDirection: 'row',

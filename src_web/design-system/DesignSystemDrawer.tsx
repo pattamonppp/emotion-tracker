@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Check, Copy, Sparkles, Sliders, Info, Heart, Layers } from 'lucide-react';
 import { Button, ButtonVariant, ButtonColorTheme, ButtonRadius } from './Button';
 import { DESIGN_TOKENS } from './tokens';
+import { getTranslation } from '../locales';
 
 interface DesignSystemDrawerProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ export const DesignSystemDrawer: React.FC<DesignSystemDrawerProps> = ({
   onClose,
   lang,
 }) => {
+  const t = getTranslation(lang);
   const [selectedVariant, setSelectedVariant] = useState<ButtonVariant>('primary');
   const [selectedTheme, setSelectedTheme] = useState<ButtonColorTheme>('turquoise');
   const [selectedRadius, setSelectedRadius] = useState<ButtonRadius>('24px');
@@ -365,7 +367,7 @@ export const DesignSystemDrawer: React.FC<DesignSystemDrawerProps> = ({
                 lang={lang}
                 leadingIcon={<Sparkles className="w-4 h-4" />}
                 trailingIcon={<Heart className="w-4 h-4" />}
-                label={lang === 'th' ? 'ทดสอบปุ่ม mindfull' : 'Test mindfull Button'}
+                label={t.modals.drawer.testMindfull}
               />
 
               <div className="text-[11px] text-slate-400 font-mono">
@@ -383,7 +385,7 @@ export const DesignSystemDrawer: React.FC<DesignSystemDrawerProps> = ({
             colorTheme="turquoise"
             size="sm"
             onClick={onClose}
-            label={lang === 'th' ? 'ปิดหน้าระบบ' : 'Close Inspector'}
+            label={t.modals.drawer.closeInspector}
           />
         </div>
       </div>

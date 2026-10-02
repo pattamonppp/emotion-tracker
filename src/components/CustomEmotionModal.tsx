@@ -10,12 +10,14 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { Heart, Sparkles, X, ArrowDown, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
+import { Sparkles, X, ArrowDown, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
 import { audioService } from '../services/audioService';
 import { MoocaMascot } from './MoocaMascot';
-import { colors, radii, shadows, typography } from '../design-system/tokens';
+import { colors, shadows } from '../design-system/tokens';
+import { getTranslation } from '../locales';
+import { MODAL_CONFIG } from '../constants';
 
-interface CustomEmotionModalProps {
+export interface CustomEmotionModalProps {
   isOpen: boolean;
   editingId?: string | null;
   initialText: string;
@@ -25,26 +27,6 @@ interface CustomEmotionModalProps {
   lang: 'th' | 'en';
   isJarFull: boolean;
 }
-
-const QUICK_SUGGESTIONS_TH = [
-  'เหนื่อยกับการอ่านหนังสือ',
-  'อยากพักสักแป๊บ',
-  'ใจเต้นแรงมาก',
-  'กลัวทำได้ไม่ดี',
-  'ต้องการกำลังใจจัง',
-  'กดดันจากความคาดหวัง',
-  'รู้สึกเหงาแปลก ๆ',
-];
-
-const QUICK_SUGGESTIONS_EN = [
-  'Exhausted from studying',
-  'Need a gentle break',
-  'Heart racing so fast',
-  'Afraid of falling short',
-  'Could use some warmth',
-  'Feeling high pressure',
-  'Feeling quietly lonely',
-];
 
 export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
   isOpen,
@@ -57,6 +39,8 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
   isJarFull,
 }) => {
   const [inputText, setInputText] = useState(initialText);
+  const t = getTranslation(lang);
+  const ce = t.modals.customEmotion;
 
   useEffect(() => {
     if (isOpen) {
@@ -94,7 +78,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
     onClose();
   };
 
-  const suggestions = lang === 'th' ? QUICK_SUGGESTIONS_TH : QUICK_SUGGESTIONS_EN;
+  const suggestions = ce.quickSuggestions || [];
 
   return (
     <Modal
@@ -122,14 +106,10 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
               </View>
               <View>
                 <Text style={styles.headerTitle}>
-                  {lang === 'th'
-                    ? editingId ? 'แก้ไขข้อความถึง Mooca' : 'ข้อความในใจถึง Mooca'
-                    : editingId ? 'Edit Note to Mooca' : 'Heart Message to Mooca'}
+                  {editingId ? ce.editTitle : ce.newTitle}
                 </Text>
                 <Text style={styles.headerSubtitle}>
-                  {lang === 'th'
-                    ? 'รู้สึกอะไรอยู่ เขียนฝาก Mooca ดูแลได้นะ'
-                    : 'Tell Mooca what is weighing on you'}
+                  {ce.tellMoocaSub}
                 </Text>
               </View>
             </View>
@@ -149,9 +129,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
             </View>
             <View style={styles.mascotBubble}>
               <Text style={styles.mascotBubbleText}>
-                {lang === 'th'
-                  ? 'เล่าให้ฉันฟังได้ทุกเรื่องเลยนะ ฉันจะคอยโอบกอดไว้ให้เอง!'
-                  : 'Tell me anything at all. I will hold it gently for you!'}
+                {ce.mascotBubble}
               </Text>
             </View>
           </View>
@@ -162,25 +140,21 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
               style={styles.textInput}
               value={inputText}
               onChangeText={setInputText}
-              placeholder={
-                lang === 'th'
-                  ? 'พิมพ์ความรู้สึกในใจตอนนี้...'
-                  : 'Type how you are feeling right now...'
-              }
+              placeholder={ce.inputPlaceholder}
               placeholderTextColor="#94A3B8"
-              maxLength={35}
+              maxLength={MODAL_CONFIG.customEmotion.maxLength}
               autoFocus
               returnKeyType="done"
             />
             <Text style={styles.charCount}>
-              {inputText.length}/35
+              {inputText.length}/{MODAL_CONFIG.customEmotion.maxLength}
             </Text>
           </View>
 
           {/* Quick Suggestions Chips */}
           <View style={styles.suggestionsContainer}>
             <Text style={styles.suggestionsLabel}>
-              {lang === 'th' ? 'หรือเลือกคำที่ตรงใจ:' : 'Or tap a quick feeling:'}
+              {ce.quickTapLabel}
             </Text>
             <ScrollView
               horizontal
@@ -220,7 +194,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
               >
                 <RotateCcw size={12} color="#EF4444" strokeWidth={2.4} />
                 <Text style={styles.clearBtnText}>
-                  {lang === 'th' ? 'ลบ' : 'Delete'}
+                  {ce.deleteBtn}
                 </Text>
               </TouchableOpacity>
             ) : null}
@@ -236,7 +210,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
             >
               <Sparkles size={13} color={colors.primaryDark} strokeWidth={2.4} />
               <Text style={styles.saveSkyText}>
-                {lang === 'th' ? 'ไว้บนฟ้า' : 'Keep on Sky'}
+                {ce.keepOnSky}
               </Text>
             </TouchableOpacity>
 
@@ -251,9 +225,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
             >
               <ArrowDown size={14} color="#FFFFFF" strokeWidth={2.6} />
               <Text style={styles.saveJarText}>
-                {isJarFull
-                  ? lang === 'th' ? 'บันทึกเมฆ' : 'Save Cloud'
-                  : lang === 'th' ? 'ฝากลงโหลเลย' : 'Drop into Jar'}
+                {isJarFull ? ce.saveCloud : ce.dropIntoJar}
               </Text>
             </TouchableOpacity>
           </View>
@@ -298,97 +270,96 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: 'rgba(236, 72, 153, 0.12)',
+    backgroundColor: '#FCE7F3',
     alignItems: 'center',
     justifyContent: 'center',
   },
   headerTitle: {
-    fontFamily: typography.fontPromptSemiBold,
     fontSize: 14,
+    fontWeight: '800',
     color: colors.primaryDark,
   },
   headerSubtitle: {
-    fontSize: 10.5,
+    fontSize: 11,
     color: colors.textMuted,
-    marginTop: 1,
+    fontWeight: '500',
   },
   closeBtn: {
     padding: 4,
-    borderRadius: radii.full,
-    backgroundColor: 'rgba(0, 0, 0, 0.04)',
   },
   mascotSpeechRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    backgroundColor: '#FFF0F5',
+    padding: 10,
+    borderRadius: 16,
     marginBottom: 12,
-    backgroundColor: '#FDF2F8',
-    padding: 8,
-    borderRadius: 14,
     borderWidth: 1,
-    borderColor: 'rgba(236, 72, 153, 0.2)',
+    borderColor: '#FCE7F3',
   },
   mascotBubble: {
     flex: 1,
   },
   mascotBubbleText: {
-    fontSize: 10.5,
-    fontFamily: typography.fontPromptMedium,
+    fontSize: 11,
     color: '#9D174D',
-    lineHeight: 14,
+    fontWeight: '600',
+    lineHeight: 16,
   },
   inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: 'rgba(236, 72, 153, 0.35)',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    position: 'relative',
     marginBottom: 12,
   },
   textInput: {
-    flex: 1,
-    fontSize: 12.5,
-    fontFamily: typography.fontPromptMedium,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingTop: 12,
+    paddingBottom: 26,
+    fontSize: 13,
     color: colors.textPrimary,
-    padding: 0,
+    fontWeight: '600',
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
   },
   charCount: {
+    position: 'absolute',
+    bottom: 8,
+    right: 12,
     fontSize: 10,
     color: colors.textMuted,
-    marginLeft: 6,
+    fontWeight: '600',
   },
   suggestionsContainer: {
-    marginBottom: 14,
+    marginBottom: 16,
   },
   suggestionsLabel: {
-    fontSize: 10,
-    fontFamily: typography.fontPromptMedium,
-    color: colors.textMuted,
-    marginBottom: 6,
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.textSecondary,
+    marginBottom: 8,
   },
   suggestionsList: {
     gap: 6,
-    paddingBottom: 2,
+    paddingVertical: 2,
   },
   suggestionChip: {
-    paddingHorizontal: 10,
-    paddingVertical: 4.5,
-    borderRadius: radii.full,
     backgroundColor: '#F1F5F9',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    borderColor: '#E2E8F0',
   },
   suggestionChipActive: {
     backgroundColor: '#FCE7F3',
-    borderColor: '#EC4899',
+    borderColor: '#F472B6',
   },
   suggestionText: {
-    fontSize: 10.5,
-    fontFamily: typography.fontPromptMedium,
+    fontSize: 11,
     color: colors.textSecondary,
+    fontWeight: '600',
   },
   suggestionTextActive: {
     color: '#BE185D',
@@ -396,57 +367,53 @@ const styles = StyleSheet.create({
   },
   actionsRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     gap: 8,
-    marginTop: 2,
+    alignItems: 'center',
   },
   clearBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-    paddingVertical: 7,
+    gap: 4,
     paddingHorizontal: 10,
-    borderRadius: radii.full,
+    paddingVertical: 10,
+    borderRadius: 14,
     backgroundColor: '#FEE2E2',
-    borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.25)',
   },
   clearBtnText: {
     fontSize: 11,
-    fontFamily: typography.fontPromptSemiBold,
-    color: '#DC2626',
+    fontWeight: '700',
+    color: '#EF4444',
   },
   saveSkyBtn: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
-    paddingVertical: 8,
-    borderRadius: radii.full,
+    gap: 6,
+    paddingVertical: 11,
+    borderRadius: 14,
     backgroundColor: '#F0FDFA',
-    borderWidth: 1.2,
-    borderColor: 'rgba(0, 196, 179, 0.3)',
+    borderWidth: 1.5,
+    borderColor: colors.borderTeal,
   },
   saveSkyText: {
-    fontSize: 11.5,
-    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 12,
+    fontWeight: '700',
     color: colors.primaryDark,
   },
   saveJarBtn: {
-    flex: 1.2,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
-    paddingVertical: 8,
-    borderRadius: radii.full,
-    backgroundColor: '#EC4899',
-    ...shadows.soft,
+    gap: 6,
+    paddingVertical: 11,
+    borderRadius: 14,
+    backgroundColor: colors.primary,
   },
   saveJarText: {
-    fontSize: 11.5,
-    fontFamily: typography.fontPromptSemiBold,
+    fontSize: 12,
+    fontWeight: '700',
     color: '#FFFFFF',
   },
   btnDisabled: {

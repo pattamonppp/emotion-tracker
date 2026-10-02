@@ -9,7 +9,7 @@ import {
   ScrollView
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { UserProfile, GoalType, MBTIType } from '../types';
+import { UserProfile, GoalType } from '../types';
 import { Button } from '../design-system/Button';
 import { MoocaMascot } from './MoocaMascot';
 import { 
@@ -20,25 +20,18 @@ import {
   Check, 
   X,
   User,
-  Sparkles,
-  Heart
 } from 'lucide-react-native';
-import { colors, radii, shadows } from '../design-system/tokens';
+import { colors, radii } from '../design-system/tokens';
 import { audioService } from '../services/audioService';
+import { getTranslation } from '../locales';
+import { MODAL_CONFIG } from '../constants';
 
-interface OnboardingModalProps {
+export interface OnboardingModalProps {
   initialProfile: UserProfile;
   onSave: (profile: UserProfile) => void;
   isOpen: boolean;
   onClose?: () => void;
 }
-
-const MBTI_OPTIONS: MBTIType[] = [
-  'INTJ', 'INTP', 'ENTJ', 'ENTP',
-  'INFJ', 'INFP', 'ENFJ', 'ENFP',
-  'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
-  'ISTP', 'ISFP', 'ESTP', 'ESFP',
-];
 
 export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   initialProfile,
@@ -48,33 +41,31 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 }) => {
   const [profile, setProfile] = useState<UserProfile>(initialProfile);
   const lang = profile.language;
+  const t = getTranslation(lang);
+  const o = t.modals.onboarding;
 
-  const GOALS: { id: GoalType; labelTh: string; labelEn: string; icon: any; color: string }[] = [
+  const GOALS: { id: GoalType; label: string; icon: any; color: string }[] = [
     {
       id: 'exam',
-      labelTh: 'สอบ / แข่งขันวิชาการ',
-      labelEn: 'Exam & Academic',
+      label: o.goalExam,
       icon: GraduationCap,
       color: colors.primary,
     },
     {
       id: 'stage',
-      labelTh: 'ขึ้นเวที / พรีเซนต์',
-      labelEn: 'Stage & Presentation',
+      label: o.goalStage,
       icon: Mic,
       color: colors.secondary,
     },
     {
       id: 'work',
-      labelTh: 'ทำงาน / ตื้อตัน',
-      labelEn: 'Deep Work & Freeze',
+      label: o.goalWork,
       icon: Briefcase,
       color: colors.accentBlue,
     },
     {
       id: 'burnout',
-      labelTh: 'เหนื่อยล้า / หมดไฟ',
-      labelEn: 'Chronic Burnout',
+      label: o.goalBurnout,
       icon: BatteryCharging,
       color: '#10B981',
     },
@@ -95,7 +86,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerBar}>
           <Text style={styles.headerTitle}>
-            {lang === 'th' ? 'ข้อมูลโปรไฟล์ & การปรับแต่ง' : 'Profile & Calibration'}
+            {o.profileTitle}
           </Text>
           {onClose && (
             <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
@@ -110,25 +101,21 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             <MoocaMascot
               mood="happy"
               size="sm"
-              speakingBubble={
-                lang === 'th'
-                  ? 'บอก Mooca เพิ่มเติม เพื่อให้การดูแลตรงจุดที่สุด!'
-                  : 'Tell Mooca about yourself for tailored care!'
-              }
+              speakingBubble={o.tailoredBubble}
             />
           </View>
 
           {/* Name Field */}
           <View style={styles.fieldSection}>
             <Text style={styles.fieldLabel}>
-              {lang === 'th' ? 'ชื่อของคุณ' : 'Your Name'}
+              {o.yourName}
             </Text>
             <View style={styles.inputRow}>
               <User size={16} color={colors.primary} style={{ marginLeft: 12 }} />
               <TextInput
                 value={profile.name}
                 onChangeText={(text) => setProfile({ ...profile, name: text })}
-                placeholder="Name"
+                placeholder={o.namePlaceholder}
                 style={styles.textInput}
               />
             </View>
@@ -137,7 +124,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {/* Goal Selector */}
           <View style={styles.fieldSection}>
             <Text style={styles.fieldLabel}>
-              {lang === 'th' ? 'สถานการณ์หลักที่ต้องเผชิญ' : 'Primary Context'}
+              {o.primaryContext}
             </Text>
             <View style={styles.goalsGrid}>
               {GOALS.map((g) => {
@@ -157,7 +144,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   >
                     <IconComponent size={20} color={g.color} />
                     <Text style={[styles.goalLabel, isSelected && { color: colors.primaryDark, fontWeight: '800' }]}>
-                      {lang === 'th' ? g.labelTh : g.labelEn}
+                      {g.label}
                     </Text>
                     {isSelected && <Check size={14} color={g.color} strokeWidth={3} />}
                   </TouchableOpacity>
@@ -169,10 +156,10 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {/* MBTI Selector */}
           <View style={styles.fieldSection}>
             <Text style={styles.fieldLabel}>
-              {lang === 'th' ? 'บุคลิกภาพ MBTI (สำหรับเสียงบำบัดเฉพาะ)' : 'MBTI Personality'}
+              {o.mbtiSpecific}
             </Text>
             <View style={styles.mbtiGrid}>
-              {MBTI_OPTIONS.map((m) => {
+              {MODAL_CONFIG.mbtiOptions.map((m) => {
                 const isSelected = profile.mbti === m;
                 return (
                   <TouchableOpacity
@@ -209,7 +196,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               onPress={handleSave}
               icon={<Check size={18} color="#FFFFFF" />}
             >
-              {lang === 'th' ? 'บันทึกการตั้งค่า' : 'Save Profile Settings'}
+              {o.saveSettings}
             </Button>
           </View>
         </ScrollView>
@@ -243,32 +230,27 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 20,
     paddingVertical: 16,
-    paddingBottom: 40,
+    gap: 16,
   },
   mascotBox: {
-    height: 155,
-    width: '100%',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    overflow: 'visible',
-    marginBottom: 16,
+    marginVertical: 4,
   },
   fieldSection: {
-    marginBottom: 18,
+    gap: 8,
   },
   fieldLabel: {
     fontSize: 12,
-    fontWeight: '800',
-    color: colors.primaryDark,
-    marginBottom: 8,
-    textTransform: 'uppercase',
+    fontWeight: '700',
+    color: colors.textSecondary,
+    marginLeft: 2,
   },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8FAFC',
-    borderRadius: radii.md,
-    borderWidth: 1.5,
+    borderRadius: radii.lg,
+    borderWidth: 1,
     borderColor: colors.borderSubtle,
   },
   textInput: {
@@ -280,52 +262,58 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   goalsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
   },
   goalCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    width: '48%',
+    backgroundColor: '#F8FAFC',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     borderRadius: radii.lg,
     borderWidth: 1.5,
     borderColor: colors.borderSubtle,
-    backgroundColor: '#FFFFFF',
-    gap: 10,
+    gap: 8,
   },
   goalLabel: {
-    fontSize: 13,
+    flex: 1,
+    fontSize: 12,
     fontWeight: '600',
     color: colors.textPrimary,
-    flex: 1,
   },
   mbtiGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-    justifyContent: 'space-between',
+    gap: 6,
   },
   mbtiChip: {
-    width: '22%',
+    width: '23%',
     paddingVertical: 8,
     borderRadius: radii.md,
-    borderWidth: 1.5,
-    borderColor: colors.borderSubtle,
     backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: colors.borderSubtle,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   mbtiChipActive: {
+    backgroundColor: '#E6F9F7',
     borderColor: colors.primary,
-    backgroundColor: colors.primary,
   },
   mbtiChipText: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: colors.primaryDark,
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.textSecondary,
   },
   mbtiChipTextActive: {
-    color: '#FFFFFF',
+    color: colors.primaryDark,
+    fontWeight: '800',
   },
   saveSection: {
-    marginTop: 12,
+    marginTop: 8,
+    paddingBottom: 24,
   },
 });

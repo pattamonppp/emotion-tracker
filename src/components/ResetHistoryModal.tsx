@@ -11,8 +11,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ShiftFeedback, UserProfile } from '../types';
 import { Award, X, Activity, Sparkles } from 'lucide-react-native';
 import { colors, radii, shadows } from '../design-system/tokens';
+import { getTranslation } from '../locales';
 
-interface ResetHistoryModalProps {
+export interface ResetHistoryModalProps {
   isOpen: boolean;
   onClose: () => void;
   profile: UserProfile;
@@ -26,6 +27,9 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
   history,
   lang,
 }) => {
+  const t = getTranslation(lang);
+  const h = t.modals.history;
+
   const mockDefaultHistory: ShiftFeedback[] = [
     {
       shiftResult: 'empowered',
@@ -37,7 +41,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
       shiftResult: 'grounded',
       preHeartRate: 102,
       postHeartRate: 80,
-      timestamp: 'Yesterday',
+      timestamp: h.today,
     },
   ];
 
@@ -55,7 +59,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
           <View style={styles.headerTitleRow}>
             <Award size={18} color={colors.secondary} />
             <Text style={styles.headerTitle}>
-              {lang === 'th' ? 'บันทึกการรีเซ็ตใจ' : 'Reset History'}
+              {h.resetHistoryTitle}
             </Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
@@ -76,13 +80,13 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
                     </Text>
                   </View>
                   <Text style={styles.timestampText}>
-                    {item.timestamp ? item.timestamp.split('T')[0] : 'Today'}
+                    {item.timestamp ? item.timestamp.split('T')[0] : h.today}
                   </Text>
                 </View>
 
                 <View style={styles.metricRow}>
                   <View style={styles.metricItem}>
-                    <Text style={styles.metricLabel}>{lang === 'th' ? 'ก่อนเริ่ม' : 'Pre'}</Text>
+                    <Text style={styles.metricLabel}>{h.preLabel}</Text>
                     <Text style={styles.metricVal}>{item.preHeartRate} BPM</Text>
                   </View>
 
@@ -92,7 +96,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
                   </View>
 
                   <View style={styles.metricItem}>
-                    <Text style={styles.metricLabel}>{lang === 'th' ? 'หลังรีเซ็ต' : 'Post'}</Text>
+                    <Text style={styles.metricLabel}>{h.postLabel}</Text>
                     <Text style={[styles.metricVal, { color: colors.primary }]}>
                       {item.postHeartRate} BPM
                     </Text>

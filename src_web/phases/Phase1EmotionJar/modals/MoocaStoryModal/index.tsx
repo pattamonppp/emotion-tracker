@@ -11,6 +11,7 @@ import {
   Wind,
   BookOpen,
 } from 'lucide-react';
+import { getTranslation } from '../../../../locales';
 import styles from './styles.module.scss';
 
 export interface MoocaStoryModalProps {
@@ -26,6 +27,8 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
   lang,
   userName,
 }) => {
+  const t = getTranslation(lang);
+  const strings = t.modals.story;
   const [activeTab, setActiveTab] = useState<'story' | 'breath' | 'comfort'>('story');
   const [breathPhase, setBreathPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [isBreathing, setIsBreathing] = useState(false);
@@ -66,10 +69,10 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             </span>
             <div>
               <h2 className={styles.headerTitle}>
-                {lang === 'th' ? 'เรื่องราวของ Mooca' : 'The Story of Mooca'}
+                {strings.headerTitle}
               </h2>
               <p className={styles.headerSubtitle}>
-                {lang === 'th' ? 'เพื่อนแท้ที่จะอยู่เคียงข้างเธอเสมอ' : 'Your best friend who is always by your side'}
+                {strings.headerSubtitle}
               </p>
             </div>
           </div>
@@ -93,7 +96,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             })}
           >
             <BookOpen />
-            <span>{lang === 'th' ? 'นิทาน Mooca' : 'Story'}</span>
+            <span>{strings.tabStory}</span>
           </button>
           <button
             type="button"
@@ -103,7 +106,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             })}
           >
             <Wind />
-            <span>{lang === 'th' ? 'หายใจกับ Mooca' : 'Breathe'}</span>
+            <span>{strings.tabBreath}</span>
           </button>
           <button
             type="button"
@@ -113,7 +116,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             })}
           >
             <Heart />
-            <span>{lang === 'th' ? 'อ้อมกอด' : 'Warm Hug'}</span>
+            <span>{strings.tabComfort}</span>
           </button>
         </div>
 
@@ -126,29 +129,19 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
                 mood="hugging"
                 size="md"
                 showSunny={true}
-                speakingBubble={
-                  lang === 'th'
-                    ? `ไม่ต้องกลัวนะ ${userName}... Mooca อยู่นี่แล้ว!`
-                    : `Don’t be afraid, ${userName}... Mooca is here!`
-                }
+                speakingBubble={strings.storyBubble.replace('{name}', userName || 'Friend')}
               />
 
               <div className={styles.storyCard}>
                 <p className={styles.storyLead}>
-                  {lang === 'th'
-                    ? 'Mooca คือเพื่อนตัวนุ่มที่ถักทอขึ้นมาจากความเข้าใจและความอบอุ่น...'
-                    : 'Mooca was born from boundless empathy and cozy warmth...'}
+                  {strings.storyLead}
                 </p>
                 <p className={styles.storyParagraph}>
-                  {lang === 'th'
-                    ? 'ในวันที่โลกภายนอกหมุนเร็วเกินไป วันที่เธอต้องเข้าห้องสอบด้วยมือที่เย็นเฉียบ วันที่ต้องขึ้นเวทีด้วยหัวใจที่เต้นรัว หรือวันที่สมองล้าจนก้าวต่อไปไม่ไหว...'
-                    : 'On days when the world spins too fast, when your hands tremble before a big test, when your heart races before going on stage, or when your mind feels completely frozen...'}
+                  {strings.storyParagraph}
                 </p>
                 <p className={styles.storyHighlight}>
                   <Sparkles />
-                  {lang === 'th'
-                    ? 'Mooca จะไม่บอกให้เธอหยุดกลัว แต่จะนั่งลงข้าง ๆ จับมือเธอไว้ ถือความกังวลใส่ขวดโหลแก้ว และพาเธอหายใจจนกว่าแสงอาทิตย์ในใจจะกลับมาส่องสว่างอีกครั้ง!'
-                    : 'Mooca won’t tell you to "just relax". Mooca will sit right by your side, hold your hands, put your heavy thoughts in a safe jar, and breathe with you until your inner sunshine glows!'}
+                  {strings.storyHighlight}
                 </p>
               </div>
 
@@ -156,9 +149,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
               <div className={styles.sunnyCard}>
                 <Sun />
                 <span>
-                  {lang === 'th'
-                    ? 'เจ้าก้อน Sunny พระอาทิตย์ดวงจิ๋วข้าง ๆ Mooca คือตัวแทนของรอยยิ้มที่กำลังจะกลับมาหาเธอนะ!'
-                    : 'Sunny, the tiny sun beside Mooca, represents the warm smile that is returning to you!'}
+                  {strings.sunnyCard}
                 </span>
               </div>
             </div>
@@ -179,17 +170,15 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
                 >
                   <Wind />
                   <span className={styles.breathPhaseText}>
-                    {breathPhase === 'inhale' && (lang === 'th' ? 'สูดลมหายใจ...' : 'Breathe In...')}
-                    {breathPhase === 'hold' && (lang === 'th' ? 'กลั้นไว้เบา ๆ...' : 'Hold Softly...')}
-                    {breathPhase === 'exhale' && (lang === 'th' ? 'ผ่อนลมออกช้า ๆ...' : 'Exhale Slowly...')}
+                    {breathPhase === 'inhale' && strings.breatheIn}
+                    {breathPhase === 'hold' && strings.breatheHold}
+                    {breathPhase === 'exhale' && strings.breatheExhale}
                   </span>
-                  <span className={styles.breathSeconds}>4 วินาที</span>
+                  <span className={styles.breathSeconds}>{strings.secondsUnit.replace('{sec}', '4')}</span>
                 </div>
 
                 <p className={styles.breathHint}>
-                  {lang === 'th'
-                    ? 'มอง Mooca ขยับตามจังหวะ หายใจลึก ๆ 4-4-4 จังหวะ'
-                    : 'Follow Mooca’s breathing tempo (Box 4-4-4 method)'}
+                  {strings.breatheHint}
                 </p>
 
                 <div className={styles.breathActionRow}>
@@ -201,8 +190,8 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
                     onClick={handleStartBreathing}
                     label={
                       isBreathing
-                        ? lang === 'th' ? 'กำลังหายใจร่วมกับ Mooca...' : 'Breathing Together...'
-                        : lang === 'th' ? 'เริ่มฝึกหายใจกับ Mooca (24s)' : 'Start 24s Breathing'
+                        ? strings.breathingTogether
+                        : strings.breatheBtn
                     }
                   />
                 </div>
@@ -219,12 +208,8 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
                 showSunny={true}
                 speakingBubble={
                   hugCount > 0
-                    ? lang === 'th'
-                      ? `Mooca ส่งกอดให้แล้ว ${hugCount} ครั้ง! อุ่นขึ้นไหมจ๊ะ?`
-                      : `Mooca gave you ${hugCount} hugs! Feel warmer?`
-                    : lang === 'th'
-                      ? 'แตะปุ่มด้านล่างเพื่อรับกอดนุ่ม ๆ นะ'
-                      : 'Tap below for a warm Mooca hug!'
+                    ? strings.hugCount.replace('{count}', String(hugCount))
+                    : strings.hugSubtitle
                 }
               />
 
@@ -232,18 +217,16 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
                 <div className={styles.affirmationBox}>
                   <div className={styles.affirmationHeader}>
                     <Heart />
-                    <span>{lang === 'th' ? 'ข้อความปลอบใจประจำวัน' : 'Mooca’s Daily Reassurance'}</span>
+                    <span>{strings.dailyReassurance}</span>
                   </div>
                   <p className={styles.affirmationBody}>
-                    {lang === 'th'
-                      ? '“ไม่ต้องสมบูรณ์แบบก็ได้นะ แค่เธอพยายามอย่างเต็มที่ในแบบของเธอ นั่นคือสิ่งที่ยอดเยี่ยมที่สุดแล้ว Mooca อยู่ข้างเธอเสมอ!”'
-                      : '“You don’t have to be perfect. Trying your best in your own unique way is already wonderful. Mooca is forever by your side!”'}
+                    {strings.dailyReassuranceBody}
                   </p>
                 </div>
 
                 <div className={styles.hugWarmthCard}>
                   <span className={styles.hugWarmthTitle}>
-                    {lang === 'th' ? 'สะสมไออุ่นจาก Mooca' : 'Accumulated Hug Warmth'}
+                    {strings.hugLead}
                   </span>
                   <div className={styles.hugCounterRow}>
                     <span>{hugCount}</span>
@@ -258,7 +241,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
                   fullWidth
                   onClick={handleGiveHug}
                   leadingIcon={<Heart className="w-4 h-4 text-white fill-white" />}
-                  label={lang === 'th' ? 'ขอกอด Mooca แน่น ๆ อีกครั้ง!' : 'Send a Big Hug to Mooca!'}
+                  label={strings.hugBtn}
                 />
               </div>
             </div>
@@ -272,7 +255,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             colorTheme="blue"
             size="sm"
             onClick={onClose}
-            label={lang === 'th' ? 'เข้าใจแล้ว ขอบคุณนะ Mooca' : 'Thank you, Mooca!'}
+            label={strings.thankYouMooca}
           />
         </div>
       </div>

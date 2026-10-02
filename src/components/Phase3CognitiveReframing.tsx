@@ -15,8 +15,10 @@ import { MarshmallowButton } from '../design-system/MarshmallowButton';
 import { MoocaMascot } from './MoocaMascot';
 import { Heart, Dna, ArrowRight, Sparkles, HeartHandshake, Sprout } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
+import { getTranslation } from '../locales';
+import { PHASE3_CONFIG } from '../constants';
 
-interface Phase3CognitiveReframingProps {
+export interface Phase3CognitiveReframingProps {
   goal: GoalType;
   onProceed: () => void;
   lang: 'th' | 'en';
@@ -29,6 +31,8 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 }) => {
   const [isActionCommitted, setIsActionCommitted] = useState(false);
   const insight = REFRAMING_INSIGHTS[goal];
+  const t = getTranslation(lang);
+  const p3 = t.phases.phase3;
 
   const stampAnim = useRef(new Animated.Value(0)).current;
 
@@ -40,15 +44,15 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
     stampAnim.setValue(0);
     Animated.spring(stampAnim, {
       toValue: 1,
-      friction: 4,
-      tension: 180,
+      friction: PHASE3_CONFIG.springAnimation.friction,
+      tension: PHASE3_CONFIG.springAnimation.tension,
       useNativeDriver: true,
     }).start();
   };
 
   const stampScale = stampAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [2.2, 1],
+    outputRange: PHASE3_CONFIG.stampScaleRange,
   });
 
   return (
@@ -58,19 +62,15 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        {/* 1. Mascot View with Dedicated Bubble Clearance */}
+        {/* 1. Mascot View with Dedicated Bubble Clearance (Height: 145) */}
         <View style={styles.mascotWrapper}>
           <MoocaMascot
             mood={isActionCommitted ? 'celebrating' : 'comforting'}
             size="sm"
             speakingBubble={
               isActionCommitted
-                ? lang === 'th'
-                  ? 'ประทับตราสัญญาใจแล้ว! Mooca อยู่เคียงข้างเสมอ สู้ไปด้วยกันนะ!'
-                  : 'Pinky promise sealed! Mooca is right beside you!'
-                : lang === 'th'
-                  ? 'เปิดอ่านจดหมายจากใจ Mooca แล้วทำสัญญาใจ 1 ก้าวด้วยกันนะ'
-                  : 'Read Mooca’s heartfelt letter and make a pinky promise!'
+                ? p3.bubbleSealed
+                : p3.bubbleRead
             }
           />
         </View>
@@ -78,7 +78,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
         <View style={styles.phaseBadge}>
           <Sparkles size={12} color={colors.primary} />
           <Text style={styles.phaseBadgeText}>
-            {lang === 'th' ? 'จดหมายอบอุ่นจากใจ Mooca' : 'Heartfelt Letter from Mooca'}
+            {p3.letterBadge}
           </Text>
         </View>
 
@@ -105,7 +105,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             <View style={styles.letterHeader}>
               <Heart size={14} color="#F43F5E" />
               <Text style={styles.letterGreeting}>
-                {lang === 'th' ? 'ถึงเธอ... คนเก่งที่กำลังพยายามอยู่' : 'Dearest Brave Friend,'}
+                {p3.letterBadge}
               </Text>
             </View>
 
@@ -130,12 +130,12 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <HeartHandshake size={16} color={colors.primary} strokeWidth={2.4} />
               <Text style={styles.promiseTitle}>
-                {lang === 'th' ? 'กล่องสัญญาใจ 1 ก้าวถัดไป' : 'Pinky-Promise Action'}
+                {p3.promiseBox}
               </Text>
             </View>
             <View style={styles.promiseBadge}>
               <Text style={styles.promiseBadgeText}>
-                {lang === 'th' ? 'ก้าวเล็ก ๆ ชนะใจ' : 'Micro Step'}
+                {p3.microStepBadge}
               </Text>
             </View>
           </View>
@@ -165,31 +165,25 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
               <Animated.View
                 style={[
                   styles.mintSealStamp,
-                  { transform: [{ scale: stampScale }, { rotate: '-8deg' }] },
+                  { transform: [{ scale: stampScale }, { rotate: PHASE3_CONFIG.stampRotation }] },
                 ]}
               >
                 <View style={styles.mintSealInner}>
                   <Heart size={16} color="#FFFFFF" fill="#FFFFFF" />
-                  <Text style={styles.mintSealText}>PROMISED</Text>
+                  <Text style={styles.mintSealText}>{p3.promisedStamp}</Text>
                 </View>
               </Animated.View>
             ) : (
               <View style={styles.stampPlaceholder}>
                 <Text style={styles.stampPrompt}>
-                  {lang === 'th' ? 'แตะเพื่อ\nประทับตรา' : 'Tap to\nSeal'}
+                  {p3.stampPrompt}
                 </Text>
               </View>
             )}
           </TouchableOpacity>
 
           <Text style={styles.commitHint}>
-            {isActionCommitted
-              ? lang === 'th'
-                ? 'สัญญาใจถูกประทับเรียบร้อยแล้ว มีพลังก้าวต่อไปได้เลย!'
-                : 'Sealed with a mint heart! You have got this!'
-              : lang === 'th'
-                ? 'แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca'
-                : 'Tap box to stamp your pinky-promise mint heart.'}
+            {isActionCommitted ? p3.sealedHint : p3.unsealedHint}
           </Text>
         </View>
       </ScrollView>
@@ -202,11 +196,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             size="lg"
             onPress={onProceed}
             icon={<ArrowRight size={18} color="#FFFFFF" />}
-            title={
-              lang === 'th'
-                ? 'วัดผลลัพธ์การฟื้นตัวของใจ'
-                : 'Measure Emotional Shift'
-            }
+            title={p3.measureBtn}
           />
         </View>
       )}
@@ -223,16 +213,17 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 20,
-    paddingTop: 14,
+    paddingTop: 12,
     paddingBottom: 20,
     alignItems: 'center',
   },
   mascotWrapper: {
-    height: 155,
+    height: PHASE3_CONFIG.mascotHeight,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
     overflow: 'visible',
+    paddingBottom: 4,
     marginBottom: 6,
   },
   phaseBadge: {
@@ -410,9 +401,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-  },
-  actionEmoji: {
-    fontSize: 20,
   },
   commitActionText: {
     flex: 1,

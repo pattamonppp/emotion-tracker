@@ -5,7 +5,7 @@ import { EMOTION_TAGS } from '../../data/matrixData';
 import { audioService } from '../../services/audioService';
 import { Button } from '../../components/Button';
 import { MoocaMascot } from '../../components/MoocaMascot';
-import { getTranslation } from '../../locales';
+import { getTranslation, getTagLabel } from '../../locales';
 import {
   Activity,
   TrendingDown,
@@ -196,7 +196,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 {preHeartRate} <span>bpm</span>
               </div>
               <div className={styles.deltaEmotionTag}>
-                {primaryEmotion ? (lang === 'th' ? primaryEmotion.labelTh : primaryEmotion.labelEn) : strings.alertHigh}
+                {primaryEmotion ? getTagLabel(primaryEmotion, lang) : strings.alertHigh}
               </div>
             </div>
 

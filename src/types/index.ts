@@ -58,3 +58,15 @@ export interface ShiftFeedback {
   postHeartRate: number;
   timestamp: string;
 }
+
+export type MoodStampType = 'empowered' | 'grounded' | 'hug';
+
+export interface CustomMessageItem {
+  id: string;
+  text: string;
+}
+
+export interface SpeechMessage {
+  text: string;
+  iconType: 'sparkles' | 'wind' | 'heart' | 'shield' | 'smile' | 'cloud';
+}

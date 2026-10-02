@@ -27,12 +27,14 @@ import {
   ArrowDown,
   PenLine,
   Plus,
+  Heart,
 } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
+import { getTranslation, getTagLabel } from '../locales';
 
 export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
   if (tagId.startsWith('custom')) {
-    return <PenLine size={size} color={color} strokeWidth={2.4} />;
+    return <Heart size={size} color={color} strokeWidth={2.4} />;
   }
   switch (tagId) {
     case 'shaking':
@@ -54,7 +56,7 @@ export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
     case 'confused':
       return <Shuffle size={size} color={color} strokeWidth={2.4} />;
     case 'custom':
-      return <PenLine size={size} color={color} strokeWidth={2.4} />;
+      return <Heart size={size} color={color} strokeWidth={2.4} />;
     default:
       return <Sparkles size={size} color={color} strokeWidth={2.4} />;
   }
@@ -86,6 +88,8 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   isAddButton = false,
 }) => {
   const isCustom = tag.id.startsWith('custom') || Boolean(customText);
+  const t = getTranslation(lang);
+  const p1 = t.phases.phase1;
 
   // Floating harmonic animations (animate-cloud-1 to 4)
   const floatAnim = useRef(new Animated.Value(0)).current;
@@ -160,7 +164,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
               <Plus size={11} color="#EC4899" strokeWidth={2.8} />
             </View>
             <Text style={[styles.cloudTitle, { color: '#BE185D' }]} numberOfLines={1}>
-              {lang === 'th' ? 'บอก Mooca' : '+ Note to Mooca'}
+              {p1.tellMoocaBtn}
             </Text>
             <View style={[styles.downArrowPill, { backgroundColor: '#EC489914' }]}>
               <PenLine size={8} color="#EC4899" strokeWidth={2.4} />
@@ -366,7 +370,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
         >
           {isCustom && customText
             ? customText
-            : lang === 'th' ? tag.labelTh : tag.labelEn}
+            : getTagLabel(tag, lang)}
         </Text>
 
         {/* Action Status: Checked Badge if in jar, or Edit Pen / Down Arrow */}

@@ -15,6 +15,7 @@ import { useSky } from '../DynamicSkyEngine';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { Wind, Heart, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
+import { getTranslation } from '../../locales';
 
 interface SomaticBreathingPacerProps {
   onComplete: () => void;
@@ -35,6 +36,8 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
   lang,
   pattern = 'box',
 }) => {
+  const t = getTranslation(lang);
+  const strings = t.phases.phase2.breathingPacer;
   const { activePeriod } = useSky();
   const [isStarted, setIsStarted] = useState(false);
   const [phase, setPhase] = useState<PhaseType>('inhale');
@@ -204,24 +207,13 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
 
   const getPhaseInstruction = () => {
     if (!isStarted) {
-      return lang === 'th'
-        ? 'แตะที่วงกลมเพื่อเริ่มฝึกกำหนดลมหายใจ'
-        : 'Tap the circle to begin guided breathwork';
+      return strings.startPrompt;
     }
-    if (lang === 'th') {
-      switch (phase) {
-        case 'inhale': return 'สูดลมหายใจเข้าช้าๆ ทางจมูก (ขยายปอด)';
-        case 'hold1': return 'กลั้นนิ่งไว้อย่างผ่อนคลาย (นิ่ง)';
-        case 'exhale': return 'ผ่อนลมหายใจออกยาวๆ สบายๆ (คลายตึง)';
-        case 'hold2': return 'พักผ่อนคลายกล้ามเนื้อไหล่ (นิ่ง)';
-      }
-    } else {
-      switch (phase) {
-        case 'inhale': return 'Inhale deep & slow through nose';
-        case 'hold1': return 'Hold gently & comfortably';
-        case 'exhale': return 'Exhale long & smooth through mouth';
-        case 'hold2': return 'Rest & relax your shoulders';
-      }
+    switch (phase) {
+      case 'inhale': return strings.phaseInhale;
+      case 'hold1': return strings.phaseHold;
+      case 'exhale': return strings.phaseExhale;
+      case 'hold2': return strings.phaseHoldEmpty;
     }
   };
 
@@ -229,27 +221,19 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* 1. Header & Mooca Mascot - Standardized 140px height matching screens A-D */}
+      {/* 1. Header & Mooca Mascot - Standardized height matching screens A-D */}
       <View style={styles.mascotWrapper}>
         <MoocaMascot
           mood={isFinished ? 'celebrating' : !isStarted ? 'happy' : phase === 'inhale' ? 'happy' : 'comforting'}
           size="sm"
           speakingBubble={
             isFinished
-              ? lang === 'th'
-                ? 'หัวใจเต้นนิ่งลงแล้วนะ! ร่างกายผ่อนคลายเต็มเปี่ยมเลยคนเก่ง'
-                : 'Heart rate is steady and calm! Your nervous system is grounded.'
+              ? strings.bubbleDone
               : !isStarted
-                ? lang === 'th'
-                  ? pattern === 'box'
-                    ? 'แตะวงกลมเพื่อเริ่มฝึกหายใจสมดุล 4-4-4-4 นะ'
-                    : 'แตะวงกลมเพื่อเริ่มฝึกหายใจคลายใจ 4-7-8 นะ'
-                  : pattern === 'box'
-                    ? 'Tap orb to start Box Breathing 4-4-4-4'
-                    : 'Tap orb to start Relaxing 4-7-8'
-                : lang === 'th'
-                  ? 'หายใจตามวงกลมไปพร้อม Mooca ช้าๆ สบายๆ นะ'
-                  : 'Breathe in rhythm with Mooca, smooth and easy.'
+                ? pattern === 'box'
+                  ? strings.bubbleBox
+                  : strings.bubble478
+                : strings.caption
           }
         />
       </View>
@@ -338,19 +322,17 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                 <View style={styles.startOrbContainer}>
                   <Wind size={36} color={skyColors.orbBorder} strokeWidth={2.4} />
                   <Text style={[styles.startOrbTitle, { color: skyColors.secondsColor }]}>
-                    {pattern === 'box'
-                      ? (lang === 'th' ? 'หายใจ 4-4-4-4' : 'Box Breathing')
-                      : (lang === 'th' ? 'หายใจ 4-7-8' : 'Relaxing 4-7-8')}
+                    {pattern === 'box' ? strings.badgeBox : strings.badge478}
                   </Text>
                   <Text style={[styles.startOrbSub, { color: skyColors.cycleCounterColor }]}>
-                    {lang === 'th' ? 'แตะวงกลมเพื่อเริ่ม' : 'Tap to Start'}
+                    {strings.startPrompt}
                   </Text>
                 </View>
               ) : isFinished ? (
                 <View style={styles.finishedContent}>
                   <CheckCircle2 size={40} color="#10B981" strokeWidth={2.4} />
                   <Text style={styles.finishedTitle}>
-                    {lang === 'th' ? 'ใจนิ่งสงบแล้ว' : 'Centered & Ready'}
+                    {strings.bubbleDone}
                   </Text>
                 </View>
               ) : (
@@ -358,13 +340,13 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                   <Text style={[styles.secondsText, { color: skyColors.secondsColor }]}>{phaseSecondsLeft}s</Text>
                   <Text style={[styles.phaseLabelText, { color: skyColors.phaseLabelColor }]}>
                     {phase === 'inhale'
-                      ? lang === 'th' ? 'สูดเข้า' : 'INHALE'
+                      ? strings.inhalePrompt
                       : phase === 'hold1' || phase === 'hold2'
-                        ? lang === 'th' ? 'กลั้นนิ่ง' : 'HOLD'
-                        : lang === 'th' ? 'ผ่อนออก' : 'EXHALE'}
+                        ? strings.holdPrompt
+                        : strings.exhalePrompt}
                   </Text>
                   <Text style={[styles.cycleCounterText, { color: skyColors.cycleCounterColor }]}>
-                    {lang === 'th' ? `รอบที่ ${cycleCount + 1}/3` : `Cycle ${cycleCount + 1}/3`}
+                    {strings.cycleCount.replace('{current}', String(cycleCount + 1)).replace('{total}', '3')}
                   </Text>
                 </>
               )}
@@ -377,17 +359,14 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
       <View style={styles.bottomSection}>
         <Text style={[styles.organicInstructionText, { color: skyColors.instructionColor }]}>
           {isFinished
-            ? lang === 'th'
-              ? 'ชีพจรลดลงสู่สภาวะสมดุล ร่างกายพร้อมก้าวต่อไปแล้ว'
-              : 'Equilibrium restored, ready to step forward'
+            ? strings.caption
             : getPhaseInstruction()}
         </Text>
 
         <View style={styles.pulseIndicatorRow}>
           <Heart size={13} color={skyColors.heartColor} fill={skyColors.heartColor} />
           <Text style={[styles.pulseIndicatorText, { color: skyColors.pulseColor }]}>
-            {lang === 'th' ? `ชีพจร ~${bpmEstimate} BPM` : `~${bpmEstimate} BPM`}
-            {isFinished ? ' (สมดุลแล้ว)' : ''}
+            {strings.bpmEstimate.replace('{bpm}', String(bpmEstimate))}
           </Text>
         </View>
 
@@ -398,11 +377,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
               size="md"
               onPress={onComplete}
               icon={<ArrowRight size={16} color="#FFFFFF" />}
-              title={
-                lang === 'th'
-                  ? 'เข้าสู่หน้าสะท้อนความคิด'
-                  : 'Proceed to Cognitive Reframing'
-              }
+              title={strings.proceedBtn}
             />
           </View>
         ) : (
@@ -418,15 +393,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingTop: 12,
+    paddingBottom: 8,
     paddingHorizontal: 20,
   },
   mascotWrapper: {
     overflow: 'visible',
-    height: 140,
+    height: 145,
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 4,
   },
   startOrbContainer: {
     alignItems: 'center',

@@ -15,24 +15,23 @@ import { MoocaMascot } from '../MoocaMascot';
 import { useSky } from '../DynamicSkyEngine';
 import { Zap, Activity, CheckCircle2, RotateCw, Star, Sparkles, Cloud } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
-
-interface KineticShakerProps {
-  onComplete: () => void;
-  lang: 'th' | 'en';
-  activityType?: 'shake' | 'jump';
-}
+import { getTranslation } from '../../locales';
+import { KineticShakerProps } from './types';
+import { KINETIC_SHAKER_CONFIG } from './constants';
 
 export const KineticShaker: React.FC<KineticShakerProps> = ({
   onComplete,
   lang,
   activityType = 'shake',
 }) => {
+  const t = getTranslation(lang);
+  const strings = t.phases.phase2.kineticShaker;
   const { activePeriod } = useSky();
   const [mode, setMode] = useState<'shake' | 'bounce'>(activityType === 'jump' ? 'bounce' : 'shake');
-  const [shakesLeft, setShakesLeft] = useState(15);
-  const [bouncesLeft, setBouncesLeft] = useState(10);
-  const [isFinished, setIsFinished] = useState(false);
-  const [starBurstCount, setStarBurstCount] = useState(0);
+  const [shakesLeft, setShakesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_SHAKES);
+  const [bouncesLeft, setBouncesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_JUMPS);
+  const [isFinished, setIsFinished] = useState<boolean>(false);
+  const [starBurstCount, setStarBurstCount] = useState<number>(0);
 
   const lastShakeTime = useRef(0);
   const shakeAnim = useRef(new Animated.Value(0)).current;
@@ -217,18 +216,12 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           size="sm"
           speakingBubble={
             isFinished
-              ? lang === 'th'
-                ? mode === 'shake'
-                  ? 'สะบัดสลัดความกังวลหมดแล้ว ตัวเบาสบายเลยคนเก่ง!'
-                  : 'ทิ้งส้นเท้าลงพื้นมั่นคง จิตใจกลับมาสงบแล้วนะคนเก่ง!'
-                : 'All tension discharged! Feeling grounded, peaceful & light.'
-              : lang === 'th'
-                ? mode === 'shake'
-                  ? 'สะบัดข้อมือเบา ๆ ให้สบายตัว คลายความตึงเครียดนะ'
-                  : 'ทิ้งส้นเท้าลงพื้นเบา ๆ ดึงสติและความมั่นคงกลับสู่ร่างกายนะ'
-                : mode === 'shake'
-                  ? 'Gently shake your wrists to release stored tension'
-                  : 'Firmly drop your heels to ground your body and mind'
+              ? mode === 'shake'
+                ? strings.bubbleDone
+                : strings.bubbleDoneBounce
+              : mode === 'shake'
+                ? strings.bubbleShake
+                : strings.bubbleBounce
           }
         />
       </Animated.View>
@@ -316,12 +309,10 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           </Text>
           <Text style={[styles.organicCountLabel, { color: skyTheme.labelColor }]}>
             {isFinished
-              ? (lang === 'th' ? 'ระบายความตึงเครียดหมดแล้ว' : 'All tension fully released')
-              : (lang === 'th'
-                ? mode === 'shake'
-                  ? `สะบัดข้อมืออีก ${currentCount} ครั้ง`
-                  : `ทิ้งส้นเท้าอีก ${currentCount} ครั้ง`
-                : `${currentCount} ${mode === 'shake' ? 'shakes' : 'drops'} left`)}
+              ? strings.released
+              : mode === 'shake'
+                ? `${currentCount} ${strings.shakesLeft}`
+                : `${currentCount} ${strings.bouncesLeft}`}
           </Text>
 
           {/* Slim glowing 4px progress line */}
@@ -344,17 +335,11 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             size="md"
             onPress={onComplete}
             icon={<CheckCircle2 size={16} color="#FFFFFF" />}
-            title={
-              lang === 'th'
-                ? 'เข้าสู่หน้าสะท้อนความคิด'
-                : 'Proceed to Cognitive Reframing'
-            }
+            title={strings.proceedBtn}
           />
         ) : (
           <Text style={[styles.organicSensorHint, { color: skyTheme.hintColor }]}>
-            {mode === 'shake'
-              ? (lang === 'th' ? 'เซนเซอร์ตรวจจับแรงสะบัด' : 'Physical shake sensor active')
-              : (lang === 'th' ? 'เซนเซอร์ตรวจจับแรงกระแทกส้นเท้า' : 'Physical heel drop sensor active')}
+            {mode === 'shake' ? strings.captionShake : strings.captionBounce}
           </Text>
         )}
       </View>
@@ -366,16 +351,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingTop: 12,
+    paddingBottom: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   mascotWrapper: {
     overflow: 'visible',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: 140,
+    justifyContent: 'flex-end',
+    height: 145,
     width: '100%',
+    paddingBottom: 4,
   },
   centerStage: {
     alignItems: 'center',

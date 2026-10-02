@@ -16,16 +16,16 @@ import { MoocaMascot } from '../MoocaMascot';
 import { useSky } from '../DynamicSkyEngine';
 import { Heart, Check, GlassWater, Sparkles, ArrowRight, X, HelpCircle } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
-
-interface VictorySipProps {
-  onComplete: () => void;
-  lang: 'th' | 'en';
-}
+import { getTranslation } from '../../locales';
+import { VictorySipProps } from './types';
+import { VICTORY_SIP_CONFIG } from './constants';
 
 export const VictorySip: React.FC<VictorySipProps> = ({
   onComplete,
   lang,
 }) => {
+  const t = getTranslation(lang);
+  const strings = t.phases.phase2.victorySip;
   const { activePeriod } = useSky();
   const [sipCount, setSipCount] = useState(0); // 0 to 3
   const [isFinished, setIsFinished] = useState(false);
@@ -249,19 +249,15 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* 1. Mascot View - Standardized 140px Height across all screens */}
+      {/* 1. Mascot View - Standardized Height across all screens */}
       <View style={styles.mascotWrapper}>
         <MoocaMascot
           mood={isFinished ? 'celebrating' : 'drinking'}
           size="sm"
           speakingBubble={
             isFinished
-              ? lang === 'th'
-                ? 'จิบน้ำครบ 3 อึกแล้วนะ! ร่างกายได้รับความสดชื่นเต็มเปี่ยม หัวใจเต้นช้าลงแล้ว'
-                : 'All 3 sips complete! Your body is refreshed and heart rate is calm.'
-              : lang === 'th'
-                ? 'ยกมือถือเอียง 50°–60° เหมือนจิบน้ำ\nกลืนช้า ๆ แล้วคืนแก้วลงนะคนเก่ง'
-                : 'Tilt phone 50°–60° like drinking\nSwallow slowly, then lower phone'
+              ? strings.bubbleDone
+              : strings.bubbleDrinking
           }
         />
       </View>
@@ -290,16 +286,10 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         )}
         <Text style={[styles.instructionPillText, { color: skyTheme.badgeTextColor }]}>
           {isFinished
-            ? lang === 'th'
-              ? 'จิบครบ 3 อึกแล้ว • ชื่นใจ!'
-              : 'All 3 sips complete • Refreshing!'
+            ? strings.sipProgressDone
             : isTiltingToDrink
-              ? lang === 'th'
-                ? 'เอียงแก้วแล้ว • ค่อย ๆ กลืนช้า ๆ นะ'
-                : 'Cup tilted • Sip gently'
-              : lang === 'th'
-                ? 'ยกมือถือเอียงเหมือนจิบน้ำ (แตะดูวิธี)'
-                : 'Tilt phone to sip (Tap guide)'}
+              ? strings.tiltActive
+              : strings.tiltReady}
         </Text>
         <HelpCircle size={13} color={skyTheme.badgeIconColor} strokeWidth={2} />
       </TouchableOpacity>
@@ -418,10 +408,10 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           </Text>
           <Text style={[styles.organicCountLabel, { color: skyTheme.labelColor }]}>
             {isFinished
-              ? (lang === 'th' ? 'จิบน้ำครบ 3 อึกแล้ว' : 'All 3 sips complete')
+              ? strings.sipProgressDone
               : isTiltingToDrink
-                ? (lang === 'th' ? 'กำลังจิบน้ำ... ค่อย ๆ กลืนนะ' : 'Sipping gently... swallow slowly')
-                : (lang === 'th' ? 'จิบน้ำดึงสติสู่ร่างกาย' : 'Mindful hydration')}
+                ? strings.sipProgressSipping
+                : strings.sipProgressIdle}
           </Text>
 
           {/* Slim glowing 4px progress line */}
@@ -444,25 +434,15 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             size="md"
             onPress={onComplete}
             icon={<ArrowRight size={16} color="#FFFFFF" />}
-            title={
-              lang === 'th'
-                ? 'เข้าสู่หน้าสะท้อนความคิด'
-                : 'Proceed to Cognitive Reframing'
-            }
+            title={strings.proceedBtn}
           />
         ) : (
           <Text style={[styles.organicSensorHint, { color: skyTheme.hintColor }]}>
-            {lang === 'th'
-              ? isTiltingToDrink
-                ? 'กำลังจิบน้ำ... ค้างไว้นิ่ง ๆ (1.2s)'
-                : readyForNextSip.current
-                  ? 'ยกมือถือเอียง 50°-60° (เอียงซ้ายหรือขวาก็ได้)'
-                  : 'วางมือถือลงระนาบเดิมเพื่อเริ่มอึกถัดไป'
-              : isTiltingToDrink
-                ? 'Sipping... hold steady (1.2s)'
-                : readyForNextSip.current
-                  ? 'Tilt phone 50°-60° (left or right)'
-                  : 'Lower phone back to unlock next sip'}
+            {isTiltingToDrink
+              ? strings.sippingHold
+              : readyForNextSip.current
+                ? strings.tiltPhoneHint
+                : strings.lowerPhoneHint}
           </Text>
         )}
       </View>
@@ -488,7 +468,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             </View>
 
             <Text style={styles.guideTitle}>
-              {lang === 'th' ? 'วิธีจิบน้ำด้วยการเอียงมือถือ' : 'How to Sip with Phone Tilt'}
+              {strings.guideTitle}
             </Text>
 
             <View style={styles.guideStepsBox}>
@@ -497,9 +477,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
                   <Text style={styles.stepNumText}>1</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {lang === 'th'
-                    ? 'ถือมือถือในแนวตั้ง แล้วเอียงซ้ายหรือขวา 50°–60° เหมือนยกแก้วขึ้นดื่ม'
-                    : 'Hold phone upright, then tilt left or right 50°–60° like raising a cup to drink'}
+                  {strings.guideStep1Desc}
                 </Text>
               </View>
 
@@ -508,9 +486,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
                   <Text style={styles.stepNumText}>2</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {lang === 'th'
-                    ? 'ค้างไว้ 1.2 วินาที แล้วกลืนช้า ๆ เหมือนดื่มจริง'
-                    : 'Hold the tilt for 1.2 seconds and swallow slowly, as if actually drinking'}
+                  {strings.guideStep2Desc}
                 </Text>
               </View>
 
@@ -519,9 +495,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
                   <Text style={styles.stepNumText}>3</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {lang === 'th'
-                    ? 'คืนมือถือให้ตั้งตรงก่อน เพื่อปลดล็อกอึกถัดไป ทำซ้ำ 3 ครั้ง'
-                    : 'Return phone upright to unlock the next sip. Repeat 3 times'}
+                  {strings.guideStep3Desc}
                 </Text>
               </View>
             </View>
@@ -536,7 +510,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             >
               <Check size={16} color="#FFFFFF" strokeWidth={2.6} />
               <Text style={styles.guideConfirmText}>
-                {lang === 'th' ? 'เข้าใจแล้ว เริ่มจิบน้ำเลย!' : "Got it, Let's Sip!"}
+                {strings.guideConfirm}
               </Text>
             </TouchableOpacity>
           </View>
@@ -550,16 +524,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingTop: 12,
+    paddingBottom: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   mascotWrapper: {
     overflow: 'visible',
-    height: 140,
+    height: 145,
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 4,
   },
   instructionPill: {
     flexDirection: 'row',

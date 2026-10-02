@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UserProfile, ShiftFeedback, Feedback } from '../../../../types';
 import { Button } from '../../../../components/Button';
 import { audioService } from '../../../../services/audioService';
-import { getTranslation } from '../../../../locales';
+import { getTranslation, getTagLabel } from '../../../../locales';
 import {
   CloseIcon,
   SparklesIcon,
@@ -156,7 +156,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                   {/* Contextual description badge with unique icon per level */}
                   <div className={`${styles.ratingBadge} ${styles[currentRatingInfo.themeClass]}`}>
                     <RatingIcon />
-                    <span>{lang === 'th' ? currentRatingInfo.labelTh : currentRatingInfo.labelEn}</span>
+                    <span>{getTagLabel(currentRatingInfo, lang)}</span>
                   </div>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                           <IconComponent />
                         </span>
                         <span className={styles.accuracyText}>
-                          {lang === 'th' ? opt.labelTh : opt.labelEn}
+                          {getTagLabel(opt, lang)}
                         </span>
                       </button>
                     );
@@ -222,7 +222,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                         className={`${styles.chipBtn} ${activeTheme}`}
                       >
                         <AspectIcon />
-                        <span>{lang === 'th' ? aspect.labelTh : aspect.labelEn}</span>
+                        <span>{getTagLabel(aspect, lang)}</span>
                       </button>
                     );
                   })}

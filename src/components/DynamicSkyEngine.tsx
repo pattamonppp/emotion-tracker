@@ -20,6 +20,7 @@ import Svg, {
 import { audioService } from '../services/audioService';
 import { Sun, Moon, Sunrise, Sunset, Clock, ChevronDown } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
+import { getTranslation } from '../locales';
 
 /**
  * Dreamy Celestial Aura - Pure SVG Radial Gradient for an ethereal, soft-diffused glow
@@ -945,17 +946,19 @@ export const SkyPeriodSwitcher: React.FC = () => {
   const { activePeriod, skyMode, setSkyMode, lang } = useSky();
   const [isOpen, setIsOpen] = useState(false);
   const pillScaleAnim = useRef(new Animated.Value(1)).current;
+  const t = getTranslation(lang);
+  const skyLabels = t.common.sky;
 
   const getPeriodLabel = () => {
     switch (activePeriod) {
       case 'dawn':
-        return lang === 'th' ? 'เช้าตรู่' : 'Dawn';
+        return skyLabels.dawn;
       case 'day':
-        return lang === 'th' ? 'กลางวัน' : 'Day';
+        return skyLabels.day;
       case 'sunset':
-        return lang === 'th' ? 'ยามเย็น' : 'Sunset';
+        return skyLabels.sunset;
       case 'night':
-        return lang === 'th' ? 'ราตรี' : 'Night';
+        return skyLabels.night;
     }
   };
 
@@ -1066,7 +1069,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             <Clock size={12} color={skyMode === 'auto' ? '#FFFFFF' : colors.primaryDark} strokeWidth={2.2} />
             <Text style={[styles.optionText, skyMode === 'auto' && styles.optionTextActive]}>
-              {lang === 'th' ? 'เวลาจริง' : 'Auto'}
+              {skyLabels.auto}
             </Text>
           </TouchableOpacity>
 
@@ -1080,7 +1083,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             {getPeriodIcon('dawn', 12, skyMode === 'dawn')}
             <Text style={[styles.optionText, skyMode === 'dawn' && styles.optionTextActive]}>
-              {lang === 'th' ? 'เช้า' : 'Dawn'}
+              {skyLabels.dawnShort}
             </Text>
           </TouchableOpacity>
 
@@ -1094,7 +1097,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             {getPeriodIcon('day', 12, skyMode === 'day')}
             <Text style={[styles.optionText, skyMode === 'day' && styles.optionTextActive]}>
-              {lang === 'th' ? 'กลางวัน' : 'Day'}
+              {skyLabels.day}
             </Text>
           </TouchableOpacity>
 
@@ -1108,7 +1111,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             {getPeriodIcon('sunset', 12, skyMode === 'sunset')}
             <Text style={[styles.optionText, skyMode === 'sunset' && styles.optionTextActive]}>
-              {lang === 'th' ? 'เย็น' : 'Sunset'}
+              {skyLabels.sunsetShort}
             </Text>
           </TouchableOpacity>
 
@@ -1122,7 +1125,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             {getPeriodIcon('night', 12, skyMode === 'night')}
             <Text style={[styles.optionText, skyMode === 'night' && styles.optionTextActive]}>
-              {lang === 'th' ? 'ราตรี' : 'Night'}
+              {skyLabels.night}
             </Text>
           </TouchableOpacity>
         </View>

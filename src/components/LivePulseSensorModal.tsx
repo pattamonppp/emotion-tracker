@@ -9,10 +9,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { audioService } from '../services/audioService';
 import { Button } from '../design-system/Button';
-import { Activity, X, Heart, ShieldCheck } from 'lucide-react-native';
-import { colors, radii, shadows } from '../design-system/tokens';
+import { X, Heart, ShieldCheck } from 'lucide-react-native';
+import { colors } from '../design-system/tokens';
+import { getTranslation } from '../locales';
+import { MODAL_CONFIG } from '../constants';
 
-interface LivePulseSensorModalProps {
+export interface LivePulseSensorModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentBpm: number;
@@ -30,31 +32,35 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [measuredBpm, setMeasuredBpm] = useState(currentBpm);
-  const [hrvMs, setHrvMs] = useState(48);
+  const [hrvMs, setHrvMs] = useState<number>(MODAL_CONFIG.pulseSensor.defaultHrvMs);
   const [isScanComplete, setIsScanComplete] = useState(false);
+
+  const t = getTranslation(lang);
+  const ps = t.modals.pulseSensor;
+  const cfg = MODAL_CONFIG.pulseSensor;
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
     if (isScanning && scanProgress < 100) {
       interval = setInterval(() => {
         setScanProgress((prev) => {
-          const next = prev + 10;
+          const next = prev + cfg.scanProgressStep;
           audioService.triggerHaptic('light');
           if (next >= 100) {
             setIsScanning(false);
             setIsScanComplete(true);
-            const randomBpm = 95 + Math.floor(Math.random() * 18);
+            const randomBpm = cfg.simulatedBpmBase + Math.floor(Math.random() * cfg.simulatedBpmRange);
             setMeasuredBpm(randomBpm);
-            setHrvMs(42 + Math.floor(Math.random() * 15));
+            setHrvMs(cfg.simulatedHrvBase + Math.floor(Math.random() * cfg.simulatedHrvRange));
             audioService.triggerHaptic('success');
             return 100;
           }
           return next;
         });
-      }, 250);
+      }, cfg.scanIntervalMs);
     }
     return () => clearInterval(interval);
-  }, [isScanning, scanProgress]);
+  }, [isScanning, scanProgress, cfg]);
 
   const handleStartScan = () => {
     setIsScanComplete(false);
@@ -77,7 +83,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerBar}>
           <Text style={styles.headerTitle}>
-            {lang === 'th' ? 'เซนเซอร์วัดชีพจร & HRV สด' : 'Live Pulse & HRV Calibration'}
+            {ps.liveCalibrationTitle}
           </Text>
           <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
             <X size={18} color={colors.textSecondary} />
@@ -102,8 +108,8 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
                 {isScanning
                   ? `${scanProgress}%`
                   : isScanComplete
-                  ? lang === 'th' ? 'วัดเสร็จสิ้น' : 'Calibrated'
-                  : lang === 'th' ? 'แตะเพื่อเริ่มสแกน' : 'Tap to Measure'}
+                  ? ps.calibrated
+                  : ps.tapToMeasure}
               </Text>
             </TouchableOpacity>
           </View>
@@ -111,15 +117,15 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
           {/* Results Card */}
           <View style={styles.resultsCard}>
             <View style={styles.metricCol}>
-              <Text style={styles.metricLabel}>{lang === 'th' ? 'อัตราการเต้นหัวใจ' : 'Pulse BPM'}</Text>
+              <Text style={styles.metricLabel}>{ps.pulseBpm}</Text>
               <Text style={styles.metricValue}>{measuredBpm}</Text>
-              <Text style={styles.metricSub}>BPM</Text>
+              <Text style={styles.metricSub}>{ps.bpmUnit}</Text>
             </View>
 
             <View style={styles.metricDivider} />
 
             <View style={styles.metricCol}>
-              <Text style={styles.metricLabel}>{lang === 'th' ? 'ความแปรปรวน HRV' : 'HRV (RMSSD)'}</Text>
+              <Text style={styles.metricLabel}>{ps.hrvLabel}</Text>
               <Text style={[styles.metricValue, { color: colors.secondary }]}>{hrvMs}</Text>
               <Text style={styles.metricSub}>ms</Text>
             </View>
@@ -128,9 +134,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
           <View style={styles.explanationBox}>
             <ShieldCheck size={16} color={colors.primary} />
             <Text style={styles.explanationText}>
-              {lang === 'th'
-                ? 'วัดค่าเพื่อวิเคราะห์ระดับอะดรีนาลีนและปรับสูตรการรีเซ็ต 120 วินาทีให้แม่นยำ'
-                : 'Measures nervous system tension to personalize your 120s intervention.'}
+              {ps.explanation}
             </Text>
           </View>
 
@@ -142,7 +146,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
               fullWidth
               onPress={handleApplyBpm}
             >
-              {lang === 'th' ? `บันทึกค่า ${measuredBpm} BPM และนำไปใช้` : `Apply ${measuredBpm} BPM`}
+              {ps.applyBpm.replace('{bpm}', String(measuredBpm))}
             </Button>
           </View>
         </View>
@@ -199,74 +203,81 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(242, 110, 110, 0.08)',
   },
   sensorPad: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    backgroundColor: '#F8FAFC',
-    borderWidth: 3,
-    borderColor: colors.borderTeal,
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    ...shadows.soft,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
+    borderWidth: 1.5,
+    borderColor: colors.borderSubtle,
   },
   sensorPrompt: {
+    marginTop: 8,
     fontSize: 11,
-    fontWeight: '800',
-    color: colors.primaryDark,
+    fontWeight: '700',
+    color: colors.textSecondary,
   },
   resultsCard: {
     flexDirection: 'row',
     width: '100%',
     backgroundColor: '#F8FAFC',
-    borderRadius: radii.xl,
+    borderRadius: 16,
     paddingVertical: 18,
-    borderWidth: 1.5,
-    borderColor: colors.borderSubtle,
+    paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'space-around',
+    borderWidth: 1,
+    borderColor: colors.borderSubtle,
   },
   metricCol: {
     alignItems: 'center',
-    flex: 1,
+  },
+  metricLabel: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  metricValue: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: colors.primaryDark,
+  },
+  metricSub: {
+    fontSize: 11,
+    color: colors.textMuted,
+    fontWeight: '600',
   },
   metricDivider: {
     width: 1,
     height: 36,
     backgroundColor: colors.borderSubtle,
   },
-  metricLabel: {
-    fontSize: 11,
-    color: colors.textMuted,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  metricValue: {
-    fontSize: 32,
-    fontWeight: '900',
-    color: colors.textPrimary,
-  },
-  metricSub: {
-    fontSize: 10,
-    color: colors.textMuted,
-    fontWeight: '600',
-  },
   explanationBox: {
     flexDirection: 'row',
-    backgroundColor: '#E6F9F7',
-    padding: 12,
-    borderRadius: radii.lg,
-    gap: 8,
     alignItems: 'center',
+    backgroundColor: '#F0FDFA',
+    padding: 12,
+    borderRadius: 12,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: '#CCFBF1',
   },
   explanationText: {
+    flex: 1,
     fontSize: 11,
     color: colors.primaryDark,
     lineHeight: 16,
-    flex: 1,
     fontWeight: '500',
   },
   actionContainer: {
     width: '100%',
+    paddingBottom: 16,
   },
 });

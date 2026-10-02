@@ -4,6 +4,7 @@ import { audioService } from '../../../../services/audioService';
 import { Button } from '../../../../components/Button';
 import { Activity, X, Heart } from 'lucide-react';
 import { LeafIcon, ZapIcon } from '../../../../icons';
+import { getTranslation } from '../../../../locales';
 import styles from './styles.module.scss';
 
 export interface LivePulseSensorModalProps {
@@ -21,6 +22,8 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
   onUpdateBpm,
   lang,
 }) => {
+  const t = getTranslation(lang);
+  const strings = t.modals.pulseSensor;
   const [isFingerOnSensor, setIsFingerOnSensor] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [measuredBpm, setMeasuredBpm] = useState(currentBpm);
@@ -136,10 +139,10 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             </div>
             <div className={styles.headerTextCol}>
               <h3 className={styles.headerTitle}>
-                {lang === 'th' ? 'เซนเซอร์วัดชีพจรชีววิทยา' : 'Bio-Pulse Optical Sensor'}
+                {strings.headerTitle}
               </h3>
               <p className={styles.headerSubtitle}>
-                {lang === 'th' ? 'จำลอง Apple Health & PPG Sensor' : 'Simulating Live PPG & Apple Health'}
+                {strings.headerSubtitle}
               </p>
             </div>
           </div>
@@ -163,7 +166,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
                   [styles.active]: isFingerOnSensor,
                 })}
               />
-              {isFingerOnSensor ? 'PPG OPTICAL ACTIVE' : 'TOUCH TO SENSE'}
+              {isFingerOnSensor ? strings.ppgActive : strings.touchToSense}
             </span>
             <span>HRV: {hrvMs} ms (SDNN)</span>
           </div>
@@ -183,38 +186,34 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             <span className={styles.touchpadProgress}>
               {isFingerOnSensor
                 ? `${scanProgress}%`
-                : lang === 'th'
-                  ? 'แตะค้างที่นี่'
-                  : 'Hold Finger'}
+                : strings.holdFinger}
             </span>
           </div>
           <span className={styles.touchpadInstruction}>
-            {lang === 'th'
-              ? 'วางนิ้วชี้แนบจุดเซนเซอร์ค้างไว้ 3 วินาที เพื่อจำลองการวัดชีพจรจริง'
-              : 'Hold index finger over the pulse sensor pad for 3s to capture baseline.'}
+            {strings.touchInstruction}
           </span>
         </div>
 
         {/* Measured Metrics */}
         <div className={styles.metricsGrid}>
           <div className={styles.metricBox}>
-            <span className={styles.metricBoxLabel}>Heart Rate</span>
+            <span className={styles.metricBoxLabel}>{strings.heartRate}</span>
             <div className={styles.metricBoxValue}>
               {measuredBpm} <span>bpm</span>
             </div>
           </div>
           <div className={styles.metricBox}>
-            <span className={styles.metricBoxLabel}>Autonomic State</span>
+            <span className={styles.metricBoxLabel}>{strings.autonomicState}</span>
             <div className={styles.stateBoxValue}>
               {measuredBpm < 85 ? (
                 <span className={styles.stateTagParasympathetic}>
                   <LeafIcon />
-                  <span>Parasympathetic</span>
+                  <span>{strings.parasympathetic}</span>
                 </span>
               ) : (
                 <span className={styles.stateTagSympathetic}>
                   <ZapIcon />
-                  <span>High Sympathetic</span>
+                  <span>{strings.sympathetic}</span>
                 </span>
               )}
             </div>
@@ -229,7 +228,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             size="md"
             fullWidth
             onClick={onClose}
-            label={lang === 'th' ? 'ยืนยันค่าชีพจร & กลับสู่ระบบ' : 'Confirm Pulse & Return'}
+            label={strings.confirmBtn}
           />
         </div>
       </div>

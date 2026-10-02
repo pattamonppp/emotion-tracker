@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Layers, X, Sparkles, Check } from 'lucide-react-native';
 import { colors, radii, shadows } from './tokens';
+import { getTranslation } from '../locales';
 
 interface DesignSystemDrawerProps {
   isOpen: boolean;
@@ -38,69 +39,76 @@ export const DesignSystemDrawer: React.FC<DesignSystemDrawerProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerBar}>
-          <View style={styles.headerTitleRow}>
-            <Layers size={18} color={colors.primary} />
-            <Text style={styles.headerTitle}>
-              {lang === 'th' ? 'ระบบดีไซน์ Mindfull CI & Tokens' : 'Mindfull Design System'}
-            </Text>
-          </View>
-          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-            <X size={18} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
+      {(() => {
+        const t = getTranslation(lang);
+        const dr = t.modals.drawer;
+        const ph = t.phases;
+        return (
+          <SafeAreaView style={styles.safeArea}>
+            <View style={styles.headerBar}>
+              <View style={styles.headerTitleRow}>
+                <Layers size={18} color={colors.primary} />
+                <Text style={styles.headerTitle}>
+                  {dr.title}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+                <X size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
 
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <Text style={styles.sectionHeading}>
-            {lang === 'th' ? 'จานสีหลัก' : 'Color Palette'}
-          </Text>
+            <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+              <Text style={styles.sectionHeading}>
+                {dr.colorPalette}
+              </Text>
 
-          <View style={styles.paletteGrid}>
-            {PALETTE.map((item, idx) => (
-              <View key={idx} style={styles.colorCard}>
-                <View style={[styles.colorSwatch, { backgroundColor: item.hex }]} />
-                <View style={styles.colorMeta}>
-                  <Text style={styles.colorName}>{item.name}</Text>
-                  <Text style={styles.colorHex}>{item.hex}</Text>
-                  <Text style={styles.colorRole}>{item.role}</Text>
+              <View style={styles.paletteGrid}>
+                {PALETTE.map((item, idx) => (
+                  <View key={idx} style={styles.colorCard}>
+                    <View style={[styles.colorSwatch, { backgroundColor: item.hex }]} />
+                    <View style={styles.colorMeta}>
+                      <Text style={styles.colorName}>{item.name}</Text>
+                      <Text style={styles.colorHex}>{item.hex}</Text>
+                      <Text style={styles.colorRole}>{item.role}</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+
+              <Text style={[styles.sectionHeading, { marginTop: 16 }]}>
+                {dr.architecture}
+              </Text>
+
+              <View style={styles.phaseTimeline}>
+                <View style={styles.timelineItem}>
+                  <Text style={styles.phaseTime}>0:00 - 0:15</Text>
+                  <Text style={styles.phaseLabel}>
+                    {ph.phase1.title}
+                  </Text>
+                </View>
+                <View style={styles.timelineItem}>
+                  <Text style={styles.phaseTime}>0:15 - 1:20</Text>
+                  <Text style={styles.phaseLabel}>
+                    {ph.phase2.title}
+                  </Text>
+                </View>
+                <View style={styles.timelineItem}>
+                  <Text style={styles.phaseTime}>1:20 - 1:45</Text>
+                  <Text style={styles.phaseLabel}>
+                    {ph.phase3.title}
+                  </Text>
+                </View>
+                <View style={styles.timelineItem}>
+                  <Text style={styles.phaseTime}>1:45 - 2:00</Text>
+                  <Text style={styles.phaseLabel}>
+                    {ph.phase4.title}
+                  </Text>
                 </View>
               </View>
-            ))}
-          </View>
-
-          <Text style={[styles.sectionHeading, { marginTop: 16 }]}>
-            {lang === 'th' ? 'สถาปัตยกรรมเวลา 120 วินาที' : '120-Second Architecture'}
-          </Text>
-
-          <View style={styles.phaseTimeline}>
-            <View style={styles.timelineItem}>
-              <Text style={styles.phaseTime}>0:00 - 0:15</Text>
-              <Text style={styles.phaseLabel}>
-                {lang === 'th' ? 'Phase 1: โหลเก็บความกังวล' : 'Phase 1: Emotion Jar Capture'}
-              </Text>
-            </View>
-            <View style={styles.timelineItem}>
-              <Text style={styles.phaseTime}>0:15 - 1:20</Text>
-              <Text style={styles.phaseLabel}>
-                {lang === 'th' ? 'Phase 2: กายกรรมรีเซ็ต' : 'Phase 2: Somatic Intervention'}
-              </Text>
-            </View>
-            <View style={styles.timelineItem}>
-              <Text style={styles.phaseTime}>1:20 - 1:45</Text>
-              <Text style={styles.phaseLabel}>
-                {lang === 'th' ? 'Phase 3: ปลดล็อกความคิด' : 'Phase 3: Cognitive Reframing'}
-              </Text>
-            </View>
-            <View style={styles.timelineItem}>
-              <Text style={styles.phaseTime}>1:45 - 2:00</Text>
-              <Text style={styles.phaseLabel}>
-                {lang === 'th' ? 'Phase 4: วัดผลลัพธ์ใจ' : 'Phase 4: Bio-Delta Check'}
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+            </ScrollView>
+          </SafeAreaView>
+        );
+      })()}
     </Modal>
   );
 };

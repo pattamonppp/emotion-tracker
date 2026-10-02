@@ -8,4 +8,13 @@ export const common = {
   copied: 'คัดลอกแล้ว!',
   tokens: 'Design Tokens',
   history: 'ประวัติรีเซ็ต',
+  sky: {
+    dawn: 'เช้าตรู่',
+    day: 'กลางวัน',
+    sunset: 'ยามเย็น',
+    night: 'ราตรี',
+    auto: 'เวลาจริง',
+    dawnShort: 'เช้า',
+    sunsetShort: 'เย็น',
+  },
 };

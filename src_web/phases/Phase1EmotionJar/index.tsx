@@ -14,6 +14,7 @@ import {
   HeartIcon,
 } from '../../icons';
 import { useLanguage } from '../../hooks';
+import { getTagLabel } from '../../locales';
 import { MAX_EMOTIONS } from './constants';
 import styles from './styles.module.scss';
 
@@ -242,7 +243,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
                 />
 
                 <span className={styles.chipLabel}>
-                  {lang === 'th' ? tag.labelTh : tag.labelEn}
+                  {getTagLabel(tag, lang)}
                 </span>
 
                 {isSelected ? (
@@ -280,7 +281,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
               }}
             />
             <span className={styles.dragGhostText}>
-              {lang === 'th' ? activeDraggingTag.labelTh : activeDraggingTag.labelEn}
+              {getTagLabel(activeDraggingTag, lang)}
             </span>
             {isOverJar && (
               <span className={styles.dropHint}>

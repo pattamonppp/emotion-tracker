@@ -14,6 +14,8 @@ import { GlassEmotionJar } from './GlassEmotionJar';
 import { CustomEmotionModal } from './CustomEmotionModal';
 import { MapPin, Activity, Sparkles, ArrowRight } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
+import { getTranslation } from '../locales';
+import { PHASE1_CONFIG } from '../constants';
 
 export interface CustomMessageItem {
   id: string;
@@ -32,7 +34,7 @@ interface Phase1EmotionJarProps {
   skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
 }
 
-const MAX_SELECTED_EMOTIONS = 3;
+const MAX_SELECTED_EMOTIONS = PHASE1_CONFIG.maxSelectedEmotions;
 
 export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   currentLocation,
@@ -119,6 +121,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
   const isJarFull = selectedEmotions.length >= MAX_SELECTED_EMOTIONS;
 
+  const t = getTranslation(lang);
+  const p1 = t.phases.phase1;
+
   // 1) Preset emotions not yet in jar (exclude placeholder 'custom')
   const presetsInSky = EMOTION_TAGS.filter(
     (tag) => tag.id !== 'custom' && !selectedEmotions.includes(tag.id)
@@ -141,7 +146,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
   // 3) Add button: show if customMessages.length < 3 AND selectedEmotions.length < MAX_SELECTED_EMOTIONS
   const showAddButton =
-    customMessages.length < 3 && selectedEmotions.length < MAX_SELECTED_EMOTIONS;
+    customMessages.length < PHASE1_CONFIG.maxCustomMessages && selectedEmotions.length < MAX_SELECTED_EMOTIONS;
 
   const allSkyItems: Array<{
     id: string;
@@ -163,8 +168,8 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             id: 'btn_add_custom',
             tag: {
               id: 'custom',
-              labelTh: 'บอก Mooca...',
-              labelEn: 'Tell Mooca...',
+              labelTh: p1.tellMoocaPlaceholder,
+              labelEn: p1.tellMoocaPlaceholder,
               emoji: '',
               color: '#EC4899',
               weightDescription: '',
@@ -283,7 +288,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             }
             onProceed();
           }}
-          title={lang === 'th' ? 'เริ่มกระบวนการรีเซ็ตใจกับ Mooca' : 'Begin Cozy Reset Engine'}
+          title={p1.beginCozyReset}
           icon={<ArrowRight size={17} color="#FFFFFF" />}
         />
       </View>

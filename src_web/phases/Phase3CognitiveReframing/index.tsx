@@ -5,7 +5,7 @@ import { REFRAMING_INSIGHTS } from '../../data/matrixData';
 import { audioService } from '../../services/audioService';
 import { Button } from '../../components/Button';
 import { MoocaMascot } from '../../components/MoocaMascot';
-import { getTranslation } from '../../locales';
+import { getTranslation, getReframingText } from '../../locales';
 import {
   ArrowRight,
   Dna,
@@ -73,12 +73,12 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           </div>
 
           <p className={styles.reflectionText}>
-            {lang === 'th' ? insight.reflectionTh : insight.reflectionEn}
+            {getReframingText(insight, 'reflection', lang)}
           </p>
 
           <div className={styles.biologyFactRow}>
             <Dna />
-            <span>{lang === 'th' ? insight.biologyFactTh : insight.biologyFactEn}</span>
+            <span>{getReframingText(insight, 'biologyFact', lang)}</span>
           </div>
         </div>
 
@@ -103,7 +103,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             <div className={styles.commitContentRow}>
               <ArrowRight />
               <span className={styles.commitActionText}>
-                {lang === 'th' ? insight.microActionTh : insight.microActionEn}
+                {getReframingText(insight, 'microAction', lang)}
               </span>
             </div>
 

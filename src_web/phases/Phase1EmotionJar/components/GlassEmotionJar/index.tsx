@@ -4,6 +4,7 @@ import { EMOTION_TAGS } from '../../../../data/matrixData';
 import { audioService } from '../../../../services/audioService';
 import { SparklesIcon, CloseIcon, CheckIcon } from '../../../../icons';
 import { useLanguage } from '../../../../hooks/useLanguage';
+import { getTagLabel } from '../../../../locales';
 import { MAX_EMOTIONS } from '../../constants';
 import styles from './styles.module.scss';
 
@@ -339,7 +340,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                         }}
                       />
                       <span className={styles.emotionLabel}>
-                        {lang === 'th' ? tag.labelTh : tag.labelEn}
+                        {getTagLabel(tag, lang)}
                       </span>
                     </div>
 

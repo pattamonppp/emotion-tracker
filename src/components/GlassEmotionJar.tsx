@@ -25,11 +25,9 @@ import { getEmotionIcon } from './FloatingEmotionCloud';
 import { MoocaMascot } from './MoocaMascot';
 import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCircle } from 'react-native-svg';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
-
-interface SpeechMessage {
-  text: string;
-  iconType: 'sparkles' | 'wind' | 'heart' | 'shield' | 'smile' | 'cloud';
-}
+import { getTranslation, getTagLabel } from '../locales';
+import { PHASE1_CONFIG } from '../constants';
+import { SpeechMessage } from '../types';
 
 const renderSpeechIcon = (iconType: SpeechMessage['iconType']) => {
   switch (iconType) {
@@ -80,57 +78,38 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   const bubbleScaleAnim = useRef(new Animated.Value(1)).current;
   const [speechIndex, setSpeechIndex] = useState(0);
 
+  const t = getTranslation(lang);
+  const p1 = t.phases.phase1;
+  const js = p1.jarSpeeches;
+
   // Pool of comforting messages that cycle dynamically (Zero emojis - Pure Lucide icons)
   const getSpeechPool = (): SpeechMessage[] => {
-    if (selectedEmotions.length >= 3) {
-      return lang === 'th'
-        ? [
-          { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ', iconType: 'cloud' },
-          { text: 'ให้ฉันช่วยรีเซ็ตใจให้เธอไหม?', iconType: 'sparkles' },
-          { text: 'หายใจเข้าลึก ๆ แล้วกดปุ่มเริ่มด้านล่างได้เลยนะ', iconType: 'wind' },
-          { text: 'Mooca จะอยู่ข้าง ๆ เธอเสมอ สู้ ๆ นะ!', iconType: 'heart' },
-        ]
-        : [
-          { text: 'I can look after up to 3 feelings at a time!', iconType: 'cloud' },
-          { text: 'Shall I help reset your heart?', iconType: 'sparkles' },
-          { text: 'Take a deep breath & tap start below', iconType: 'wind' },
-          { text: 'Mooca is always right here with you!', iconType: 'heart' },
-        ];
+    if (selectedEmotions.length >= PHASE1_CONFIG.maxSelectedEmotions) {
+      return [
+        { text: js.full1, iconType: 'cloud' },
+        { text: js.full2, iconType: 'sparkles' },
+        { text: js.full3, iconType: 'wind' },
+        { text: js.full4, iconType: 'heart' },
+      ];
     }
     if (selectedEmotions.length > 0) {
       const hasCustom = selectedEmotions.some((id) => id.startsWith('custom'));
       const customMsg: SpeechMessage[] = hasCustom
-        ? (lang === 'th'
-          ? [{ text: 'Mooca กอดเธอไว้แน่น ๆ เลยนะ!', iconType: 'heart' }]
-          : [{ text: 'Mooca is hugging you tight!', iconType: 'heart' }])
+        ? [{ text: js.customHug, iconType: 'heart' }]
         : [];
-      return lang === 'th'
-        ? [
-          ...customMsg,
-          { text: `Mooca ช่วยดูแลให้แล้ว ${selectedEmotions.length} ก้อนนะ สบายใจได้เลย!`, iconType: 'shield' },
-          { text: 'เก่งมาก ๆ เลยนะ ที่กล้าเผชิญหน้ากับความรู้สึกตัวเอง', iconType: 'smile' },
-          { text: 'ฝากไว้ในโหลแก้ว ปลอดภัยแน่นอน', iconType: 'sparkles' },
-        ]
-        : [
-          ...customMsg,
-          { text: `Holding ${selectedEmotions.length} feelings safely for you!`, iconType: 'shield' },
-          { text: 'You are brave to face your feelings', iconType: 'smile' },
-          { text: 'Safe inside this glass jar', iconType: 'sparkles' },
-        ];
-    }
-    return lang === 'th'
-      ? [
-        { text: 'พาความกังวลมาฝากไว้กับ Mooca นะ', iconType: 'cloud' },
-        { text: 'ฉันดูแลอารมณ์ได้มากที่สุดครั้งละ 3 ก้อนเลยนะ', iconType: 'cloud' },
-        { text: 'แตะหรือลากก้อนเมฆอารมณ์ลงโหลได้เลยนะ', iconType: 'sparkles' },
-        { text: 'วันนี้ใจเธอเป็นยังไงบ้าง เล่าให้ฟังได้นะ', iconType: 'heart' },
-      ]
-      : [
-        { text: 'Rest your worries here with Mooca', iconType: 'cloud' },
-        { text: 'I can look after up to 3 feelings at a time!', iconType: 'cloud' },
-        { text: 'Tap or drag emotion clouds into the jar', iconType: 'sparkles' },
-        { text: 'How is your heart feeling today?', iconType: 'heart' },
+      return [
+        ...customMsg,
+        { text: js.holdingCount.replace('{count}', String(selectedEmotions.length)), iconType: 'shield' },
+        { text: js.braveToFace, iconType: 'smile' },
+        { text: js.safeInJar, iconType: 'sparkles' },
       ];
+    }
+    return [
+      { text: js.restWorries, iconType: 'cloud' },
+      { text: js.full1, iconType: 'cloud' },
+      { text: js.tapOrDrag, iconType: 'sparkles' },
+      { text: js.howIsHeart, iconType: 'heart' },
+    ];
   };
 
   const speechPool = getSpeechPool();
@@ -513,7 +492,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                       skyPeriod === 'dawn' && { color: '#78350F' },
                     ]}
                   >
-                    {lang === 'th' ? 'โหลแก้วว่างพร้อมรับฝาก' : 'Sanctuary Jar Ready'}
+                    {p1.emptyTitle}
                   </Text>
                   <Text
                     style={[
@@ -522,9 +501,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                       skyPeriod === 'dawn' && { color: '#92400E' },
                     ]}
                   >
-                    {lang === 'th'
-                      ? 'ลากหรือแตะอารมณ์จากด้านบน'
-                      : 'Drag or tap feelings from above'}
+                    {p1.emptySubtitleFromAbove}
                   </Text>
                 </View>
               ) : (
@@ -541,8 +518,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                     const tag = isCustom
                       ? {
                         id,
-                        labelTh: customItem?.text || customEmotionText || 'ข้อความถึง Mooca',
-                        labelEn: customItem?.text || customEmotionText || 'Note to Mooca',
+                        labelTh: customItem?.text || customEmotionText || p1.noteToMoocaDefault,
+                        labelEn: customItem?.text || customEmotionText || p1.noteToMoocaDefault,
                         color: '#EC4899',
                         emoji: '',
                         weightDescription: '',
@@ -609,7 +586,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                           >
                             {isCustom
                               ? (customItem?.text || customEmotionText || tag.labelTh)
-                              : (lang === 'th' ? tag.labelTh : tag.labelEn)}
+                              : getTagLabel(tag, lang)}
                           </Text>
                           <TouchableOpacity
                             hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
@@ -649,7 +626,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
             >
               <RotateCcw size={10} color={colors.primaryDark} strokeWidth={2.4} />
               <Text style={styles.clearBtnText}>
-                {lang === 'th' ? 'เทโหลทิ้งทั้งหมด' : 'Clear Jar'}
+                {p1.clearJar}
               </Text>
             </TouchableOpacity>
           ) : (

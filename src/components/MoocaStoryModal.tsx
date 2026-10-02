@@ -9,12 +9,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MoocaMascot } from './MoocaMascot';
-import { Button } from '../design-system/Button';
 import { audioService } from '../services/audioService';
-import { Heart, Sparkles, X, Sun, Wind } from 'lucide-react-native';
+import { Heart, Sparkles, X, Sun } from 'lucide-react-native';
 import { colors, radii, shadows } from '../design-system/tokens';
+import { getTranslation } from '../locales';
 
-interface MoocaStoryModalProps {
+export interface MoocaStoryModalProps {
   isOpen: boolean;
   onClose: () => void;
   lang: 'th' | 'en';
@@ -28,6 +28,8 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
   userName,
 }) => {
   const [hugCount, setHugCount] = useState(0);
+  const t = getTranslation(lang);
+  const s = t.modals.story;
 
   const handleGiveHug = () => {
     setHugCount((prev) => prev + 1);
@@ -47,7 +49,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
           <View style={styles.headerTitleRow}>
             <Heart size={18} color={colors.accentPink} />
             <Text style={styles.headerTitle}>
-              {lang === 'th' ? 'เรื่องราวของ Mooca & เพื่อนใจ' : 'Mooca & Companion Lore'}
+              {s.companionLore}
             </Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
@@ -61,11 +63,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             <MoocaMascot
               mood="hugging"
               size="lg"
-              speakingBubble={
-                lang === 'th'
-                  ? `ยินดีที่ได้รู้จักนะ ${userName}! Mooca คือก้อนเมฆที่คอยกอดใจเธอเสมอ!`
-                  : `Nice to meet you, ${userName}! Mooca is your cloud companion!`
-              }
+              speakingBubble={s.greetingBubble.replace('{name}', userName)}
               onHug={handleGiveHug}
             />
           </View>
@@ -78,7 +76,7 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
           >
             <Heart size={16} color="#FFFFFF" />
             <Text style={styles.hugButtonText}>
-              {lang === 'th' ? `ส่งกอดให้ Mooca (${hugCount})` : `Give Mooca a Hug (${hugCount})`}
+              {s.giveHugBtn.replace('{count}', String(hugCount))}
             </Text>
           </TouchableOpacity>
 
@@ -87,13 +85,11 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             <View style={styles.storyCardHeader}>
               <Sun size={16} color="#F59E0B" />
               <Text style={styles.storyCardTitle}>
-                {lang === 'th' ? 'กำเนิดของ Mooca' : 'The Origin of Mooca'}
+                {s.originTitle}
               </Text>
             </View>
             <Text style={styles.storyParagraph}>
-              {lang === 'th'
-                ? 'Mooca เกิดจากละอองเมฆในวันที่ท้องฟ้าแจ่มใส มีหน้าที่ช่วยรับฝากความรู้สึกหนักอึ้ง ความกังวลก่อนสอบ และความตื่นเต้นบนเวที เพื่อให้คุณมีพื้นที่หายใจและกลับมามั่นใจในตัวเองได้อีกครั้ง'
-                : 'Mooca was born from a gentle sunlit cloud, dedicated to holding your heavy worries and pre-stage trembling so you can breathe freely and reclaim your inner strength.'}
+              {s.originParagraph}
             </Text>
           </View>
 
@@ -102,13 +98,11 @@ export const MoocaStoryModal: React.FC<MoocaStoryModalProps> = ({
             <View style={styles.storyCardHeader}>
               <Sparkles size={16} color={colors.primary} />
               <Text style={[styles.storyCardTitle, { color: colors.primaryDark }]}>
-                {lang === 'th' ? 'คาถาสงบใจประจำวัน' : 'Daily Pocket Mantra'}
+                {s.dailyMantraTitle}
               </Text>
             </View>
             <Text style={styles.mantraText}>
-              {lang === 'th'
-                ? '“ความรู้และแรงพยายามทั้งหมดที่คุณสั่งสมมา ไม่เคยหายไปไหน มันพร้อมทำงานให้คุณเสมอ”'
-                : '"All the knowledge and preparation you built are right inside you, primed and ready."'}
+              {s.dailyMantraQuote}
             </Text>
           </View>
         </ScrollView>

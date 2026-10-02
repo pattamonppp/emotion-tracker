@@ -25,16 +25,17 @@ import {
   Leaf,
   MessageSquareHeart,
 } from 'lucide-react-native';
-import { colors, radii, shadows, typography } from '../design-system/tokens';
+import { colors, radii, typography } from '../design-system/tokens';
+import { getTranslation } from '../locales';
 
-interface ResetCompletedViewProps {
+export interface ResetCompletedViewProps {
   profile: UserProfile;
   feedback: ShiftFeedback | null;
   onRestart: () => void;
-  onOpenDesignSystem: () => void;
-  onOpenProfile: () => void;
+  onOpenDesignSystem?: () => void;
+  onOpenProfile?: () => void;
   onOpenHistory: () => void;
-  onOpenStory: () => void;
+  onOpenStory?: () => void;
 }
 
 export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
@@ -46,18 +47,19 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
   const { activePeriod } = useSky();
   const isNight = activePeriod === 'night';
   const lang = profile.language;
+  const t = getTranslation(lang);
+  const c = t.phases.completed;
+
   const bpmDrop = feedback ? feedback.preHeartRate - feedback.postHeartRate : 18;
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   const handleShareKeepsake = async () => {
     audioService.triggerHaptic('medium');
     try {
-      await Share.share({
-        message:
-          lang === 'th'
-            ? `Mooca Best Friend Badge: ${profile.name} รีเซ็ตใจและเอาชนะความกังวลสำเร็จแล้ว! อัตราการเต้นหัวใจลดลง ${bpmDrop} BPM`
-            : `Mooca Best Friend Keepsake: ${profile.name} mastered the 120s reset! BPM calmed by -${bpmDrop} BPM`,
-      });
+      const shareMessage = c.shareKeepsakeTemplate
+        .replace('{name}', profile.name)
+        .replace('{bpm}', String(bpmDrop));
+      await Share.share({ message: shareMessage });
     } catch {
       // Ignore
     }
@@ -77,14 +79,12 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
       <View style={styles.topBadge}>
         <Award size={15} color="#D97706" />
         <Text style={styles.topBadgeText}>
-          {lang === 'th' ? 'กอดใจและรีเซ็ตสำเร็จ' : 'Somatic Reset Complete'}
+          {c.somaticResetComplete}
         </Text>
       </View>
 
       <Text style={[styles.headline, isNight && { color: '#FFFFFF' }]}>
-        {lang === 'th'
-          ? `ยินดีด้วยนะ ${profile.name}!`
-          : `Congratulations, ${profile.name}!`}
+        {c.congratsTitle.replace('{name}', profile.name)}
       </Text>
 
       {/* Polaroid Keepsake Card */}
@@ -96,7 +96,6 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           end={{ x: 1, y: 1 }}
           style={styles.photoViewport}
         >
-          {/* Confetti & Rainbow Sparkles (NO EMOJI - ALWAYS ICONS) */}
           <View style={[styles.sparkleItem, { top: 8, left: 12 }]}>
             <Sparkles size={16} color="#F59E0B" fill="#FDE047" />
           </View>
@@ -114,7 +113,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           <View style={styles.rainbowArcPill}>
             <Sparkles size={13} color="#D97706" />
             <Text style={styles.rainbowText}>
-              {lang === 'th' ? 'Mooca Rainbow Celebration' : 'Rainbow Keepsake'}
+              {c.rainbowCelebration}
             </Text>
           </View>
 
@@ -128,15 +127,14 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             />
           </View>
 
-          {/* Golden Badge: "เหรียญตรา Mooca Best Friend" */}
+          {/* Golden Badge */}
           <View style={styles.goldMedalContainer}>
             <View style={styles.goldMedal}>
               <Award size={16} color="#78350F" />
               <Text style={styles.goldMedalText}>
-                {lang === 'th' ? 'เหรียญตรา Mooca Best Friend' : 'Mooca Best Friend'}
+                {c.goldMedalTitle}
               </Text>
             </View>
-            {/* Satin Ribbons under medal */}
             <View style={styles.ribbonTailLeft} />
             <View style={styles.ribbonTailRight} />
           </View>
@@ -145,14 +143,12 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         {/* Polaroid Wide Bottom Chin */}
         <View style={styles.polaroidChin}>
           <Text style={styles.handwrittenCaption}>
-            {lang === 'th'
-              ? 'เธอเก่งที่สุดในโลกเลย! พักใจแล้วก้าวไปต่อนะ'
-              : 'You are so brave and wonderful! Keep shining'}
+            {c.caption}
           </Text>
 
           <View style={styles.chinFooterRow}>
             <Text style={styles.chinDateText}>
-              {currentDate} • 120s Reset
+              {currentDate} • {c.resetDurationLabel}
             </Text>
             <View style={styles.chinBpmDrop}>
               <Leaf size={11} color="#00C4B3" style={{ marginRight: 2 }} />
@@ -167,21 +163,21 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
       {/* Metrics Mini Summary */}
       <View style={styles.metricsSummary}>
         <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>{lang === 'th' ? 'ก่อนเริ่ม' : 'Initial'}</Text>
+          <Text style={styles.metricLabel}>{c.preLabel}</Text>
           <Text style={styles.metricVal} numberOfLines={1}>
             {`${feedback?.preHeartRate || 105}\u00A0BPM`}
           </Text>
         </View>
         <View style={styles.metricDivider} />
         <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>{lang === 'th' ? 'ตอนนี้' : 'Current'}</Text>
+          <Text style={styles.metricLabel}>{c.nowLabel}</Text>
           <Text style={[styles.metricVal, { color: colors.primary }]} numberOfLines={1}>
             {`${feedback?.postHeartRate || 87}\u00A0BPM`}
           </Text>
         </View>
         <View style={styles.metricDivider} />
         <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>{lang === 'th' ? 'ความผ่อนคลาย' : 'Calm Shift'}</Text>
+          <Text style={styles.metricLabel}>{c.calmShift}</Text>
           <Text style={[styles.metricVal, { color: colors.secondary }]} numberOfLines={1}>
             {`-${bpmDrop}\u00A0BPM`}
           </Text>
@@ -190,17 +186,13 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
       {/* Action Buttons */}
       <View style={styles.actionsContainer}>
-        {/* Feedback Button - ปุ่มแรกเหนือแชร์ */}
+        {/* Feedback Button */}
         <MarshmallowButton
           variant="mint"
           size="md"
           onPress={() => setIsFeedbackModalOpen(true)}
           icon={<MessageSquareHeart size={18} color={colors.primaryDark} />}
-          title={
-            lang === 'th'
-              ? 'บอกความรู้สึกถึง Mooca'
-              : 'Feedback to Mooca'
-          }
+          title={c.feedbackBtn}
         />
 
         {/* Share Keepsake Button */}
@@ -209,11 +201,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           size="md"
           onPress={handleShareKeepsake}
           icon={<Share2 size={16} color="#FFFFFF" />}
-          title={
-            lang === 'th'
-              ? 'แชร์การ์ดโพลารอยด์แห่งความกล้าหาญ'
-              : 'Share Polaroid Keepsake'
-          }
+          title={c.sharePolaroidBtn}
         />
 
         {/* Start New Session */}
@@ -222,11 +210,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           size="md"
           onPress={onRestart}
           icon={<RotateCcw size={18} color="#FFFFFF" />}
-          title={
-            lang === 'th'
-              ? 'เริ่มรีเซ็ตครั้งใหม่'
-              : 'Start New Session'
-          }
+          title={c.restartSessionBtn}
         />
 
         {/* View History Button */}
@@ -235,9 +219,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           size="md"
           onPress={onOpenHistory}
           icon={<History size={16} color={colors.primaryDark} />}
-          title={
-            lang === 'th' ? 'ดูประวัติการฟื้นตัวของใจ' : 'View Reset History'
-          }
+          title={c.viewHistoryBtn}
         />
       </View>
 
@@ -286,7 +268,7 @@ const styles = StyleSheet.create({
   },
   polaroidFrame: {
     width: '100%',
-    backgroundColor: '#ffffffff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 12,
     paddingBottom: 10,
@@ -301,107 +283,101 @@ const styles = StyleSheet.create({
   },
   photoViewport: {
     width: '100%',
-    height: 220,
+    height: 180,
     borderRadius: 12,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
+    justifyContent: 'center',
     position: 'relative',
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
   },
   sparkleItem: {
     position: 'absolute',
-    fontSize: 15,
   },
   rainbowArcPill: {
+    position: 'absolute',
+    top: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.88)',
+    gap: 5,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: radii.full,
-    gap: 5,
-    ...shadows.card,
+    borderWidth: 1,
+    borderColor: '#FDE68A',
   },
   rainbowText: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 9,
-    color: colors.primaryDark,
+    fontSize: 10,
+    color: '#B45309',
   },
   mascotHolder: {
     alignItems: 'center',
-    marginVertical: -6,
+    justifyContent: 'center',
+    marginTop: 8,
   },
   goldMedalContainer: {
+    position: 'absolute',
+    bottom: 8,
     alignItems: 'center',
-    position: 'relative',
-    zIndex: 5,
   },
   goldMedal: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FBBF24',
-    paddingHorizontal: 12,
-    paddingVertical: 5,
+    gap: 4,
+    backgroundColor: '#FEF3C7',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: radii.full,
-    borderWidth: 2,
-    borderColor: '#FEF3C7',
-    gap: 6,
-    shadowColor: '#F59E0B',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 4,
+    borderWidth: 1.5,
+    borderColor: '#F59E0B',
+    zIndex: 2,
   },
   goldMedalText: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 11,
+    fontSize: 9,
     color: '#78350F',
+    letterSpacing: 0.3,
   },
   ribbonTailLeft: {
     position: 'absolute',
-    bottom: -8,
-    left: 20,
-    width: 10,
-    height: 12,
+    bottom: -6,
+    left: 8,
+    width: 8,
+    height: 10,
     backgroundColor: '#F59E0B',
-    transform: [{ rotate: '-18deg' }],
-    zIndex: -1,
+    transform: [{ rotate: '15deg' }],
   },
   ribbonTailRight: {
     position: 'absolute',
-    bottom: -8,
-    right: 20,
-    width: 10,
-    height: 12,
+    bottom: -6,
+    right: 8,
+    width: 8,
+    height: 10,
     backgroundColor: '#F59E0B',
-    transform: [{ rotate: '18deg' }],
-    zIndex: -1,
+    transform: [{ rotate: '-15deg' }],
   },
   polaroidChin: {
-    paddingTop: 12,
-    paddingHorizontal: 6,
+    paddingTop: 10,
+    paddingHorizontal: 4,
   },
   handwrittenCaption: {
-    fontFamily: typography.fontPromptSemiBold,
+    fontFamily: typography.fontPromptBold,
     fontSize: 13,
-    color: '#1E293B',
+    color: colors.textPrimary,
     textAlign: 'center',
-    lineHeight: 20,
+    marginBottom: 6,
   },
   chinFooterRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 8,
-    paddingTop: 6,
     borderTopWidth: 1,
     borderTopColor: '#F1F5F9',
+    paddingTop: 6,
   },
   chinDateText: {
-    fontFamily: typography.fontPromptRegular,
+    fontFamily: typography.fontPromptMedium,
     fontSize: 10,
     color: colors.textMuted,
   },
@@ -409,51 +385,52 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F0FDFA',
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: radii.full,
+    borderWidth: 1,
+    borderColor: colors.borderTeal,
   },
   chinBpmText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 10,
-    color: colors.primary,
+    color: colors.primaryDark,
   },
   metricsSummary: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
+    justifyContent: 'space-around',
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: radii.xl,
     paddingVertical: 12,
     paddingHorizontal: 8,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: colors.borderTeal,
-    marginBottom: 14,
-    ...shadows.soft,
+    marginBottom: 16,
   },
   metricItem: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  metricLabel: {
-    fontFamily: typography.fontPromptRegular,
-    fontSize: 10,
-    color: colors.textMuted,
-  },
-  metricVal: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 14,
-    color: colors.primaryDark,
-    marginTop: 2,
+    flex: 1,
   },
   metricDivider: {
     width: 1,
     height: 24,
     backgroundColor: '#E2E8F0',
   },
+  metricLabel: {
+    fontFamily: typography.fontPromptMedium,
+    fontSize: 10,
+    color: colors.textMuted,
+    marginBottom: 2,
+  },
+  metricVal: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 13,
+    color: colors.textPrimary,
+  },
   actionsContainer: {
     width: '100%',
-    gap: 8,
+    gap: 10,
   },
 });
