@@ -1084,7 +1084,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             {getPeriodIcon('dawn', 12, skyMode === 'dawn')}
             <Text style={[styles.optionText, skyMode === 'dawn' && styles.optionTextActive]}>
-              {skyLabels.dawnShort}
+              {skyLabels.dawn}
             </Text>
           </TouchableOpacity>
 
@@ -1112,7 +1112,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             {getPeriodIcon('sunset', 12, skyMode === 'sunset')}
             <Text style={[styles.optionText, skyMode === 'sunset' && styles.optionTextActive]}>
-              {skyLabels.sunsetShort}
+              {skyLabels.sunset}
             </Text>
           </TouchableOpacity>
 

@@ -14,7 +14,5 @@ export const common = {
     sunset: 'Sunset',
     night: 'Night',
     auto: 'Auto',
-    dawnShort: 'Dawn',
-    sunsetShort: 'Sunset',
   },
 };
