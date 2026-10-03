@@ -139,7 +139,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             </div>
             <div className={styles.headerTextCol}>
               <h3 className={styles.headerTitle}>
-                {strings.headerTitle}
+                {strings.liveCalibrationTitle}
               </h3>
               <p className={styles.headerSubtitle}>
                 {strings.headerSubtitle}
@@ -154,22 +154,6 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
           >
             <X />
           </button>
-        </div>
-
-        {/* Live PPG Graph */}
-        <div className={styles.graphCard}>
-          <canvas ref={canvasRef} className={styles.canvas} />
-          <div className={styles.graphMetaRow}>
-            <span className={styles.ppgStatus}>
-              <span
-                className={cn(styles.statusDot, {
-                  [styles.active]: isFingerOnSensor,
-                })}
-              />
-              {isFingerOnSensor ? strings.ppgActive : strings.touchToSense}
-            </span>
-            <span>HRV: {hrvMs} ms (SDNN)</span>
-          </div>
         </div>
 
         {/* Tactile Finger Touchpad Sensor */}

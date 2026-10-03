@@ -78,7 +78,11 @@
 .mascotBox {
   display: flex;
   justify-content: center;
-  margin-bottom: 4px;
+  margin-top: 32px;
+  min-height: 135px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .fieldSection {

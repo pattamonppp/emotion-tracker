@@ -88,7 +88,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               mood="happy"
               size="sm"
               speakingBubble={o.tailoredBubble}
-              interactive={false}
+              interactive={true}
             />
           </div>
 

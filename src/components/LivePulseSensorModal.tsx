@@ -1,18 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Modal, 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity 
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
+  Animated,
+  Easing,
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  Activity,
+  X,
+  Heart,
+  Leaf,
+  Zap,
+} from 'lucide-react-native';
+
 import { audioService } from '../services/audioService';
 import { Button } from '../design-system/Button';
-import { X, Heart, ShieldCheck } from 'lucide-react-native';
-import { colors } from '../design-system/tokens';
 import { getTranslation } from '../locales';
-import { MODAL_CONFIG } from '../constants';
+import { typography } from '../design-system/tokens';
 
 export interface LivePulseSensorModalProps {
   isOpen: boolean;
@@ -22,262 +34,948 @@ export interface LivePulseSensorModalProps {
   lang: 'th' | 'en';
 }
 
-export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
+export const LivePulseSensorModal: React.FC<
+  LivePulseSensorModalProps
+> = ({
   isOpen,
   onClose,
   currentBpm,
   onUpdateBpm,
   lang,
 }) => {
-  const [isScanning, setIsScanning] = useState(false);
-  const [scanProgress, setScanProgress] = useState(0);
-  const [measuredBpm, setMeasuredBpm] = useState(currentBpm);
-  const [hrvMs, setHrvMs] = useState<number>(MODAL_CONFIG.pulseSensor.defaultHrvMs);
-  const [isScanComplete, setIsScanComplete] = useState(false);
+    const strings =
+      getTranslation(lang).modals.pulseSensor;
 
-  const t = getTranslation(lang);
-  const ps = t.modals.pulseSensor;
-  const cfg = MODAL_CONFIG.pulseSensor;
+    const [isFingerOnSensor, setIsFingerOnSensor] =
+      useState(false);
 
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (isScanning && scanProgress < 100) {
-      interval = setInterval(() => {
-        setScanProgress((prev) => {
-          const next = prev + cfg.scanProgressStep;
-          audioService.triggerHaptic('light');
-          if (next >= 100) {
-            setIsScanning(false);
-            setIsScanComplete(true);
-            const randomBpm = cfg.simulatedBpmBase + Math.floor(Math.random() * cfg.simulatedBpmRange);
-            setMeasuredBpm(randomBpm);
-            setHrvMs(cfg.simulatedHrvBase + Math.floor(Math.random() * cfg.simulatedHrvRange));
-            audioService.triggerHaptic('success');
-            return 100;
+    const [scanProgress, setScanProgress] =
+      useState(0);
+
+    const [measuredBpm, setMeasuredBpm] =
+      useState(currentBpm);
+
+    const [hrvMs, setHrvMs] = useState(48);
+
+    const [isScanComplete, setIsScanComplete] =
+      useState(false);
+
+    const scanProgressRef =
+      useRef(0);
+
+    const pressScale = useRef(
+      new Animated.Value(1),
+    ).current;
+
+    const pulseScale = useRef(
+      new Animated.Value(1),
+    ).current;
+
+    const pulseAnimationRef =
+      useRef<Animated.CompositeAnimation | null>(
+        null,
+      );
+
+    useEffect(() => {
+      scanProgressRef.current =
+        scanProgress;
+    }, [scanProgress]);
+
+    /* Reset */
+
+    useEffect(() => {
+      if (!isOpen) {
+        setIsFingerOnSensor(false);
+        setScanProgress(0);
+        setIsScanComplete(false);
+
+        scanProgressRef.current = 0;
+
+        pressScale.stopAnimation();
+        pressScale.setValue(1);
+
+        pulseScale.stopAnimation();
+        pulseScale.setValue(1);
+
+        pulseAnimationRef.current?.stop();
+      }
+    }, [
+      isOpen,
+      pressScale,
+      pulseScale,
+    ]);
+
+    /* Active ring animation */
+
+    useEffect(() => {
+      pulseAnimationRef.current?.stop();
+
+      if (!isFingerOnSensor) {
+        Animated.spring(pulseScale, {
+          toValue: 1,
+          useNativeDriver: true,
+          friction: 8,
+          tension: 80,
+        }).start();
+
+        return;
+      }
+
+      const animation = Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseScale, {
+            toValue: 1.03,
+            duration: 700,
+            easing: Easing.inOut(
+              Easing.ease,
+            ),
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseScale, {
+            toValue: 1,
+            duration: 700,
+            easing: Easing.inOut(
+              Easing.ease,
+            ),
+            useNativeDriver: true,
+          }),
+        ]),
+      );
+
+      pulseAnimationRef.current =
+        animation;
+
+      animation.start();
+
+      return () => {
+        animation.stop();
+      };
+    }, [
+      isFingerOnSensor,
+      pulseScale,
+    ]);
+
+    /* Scan */
+
+    useEffect(() => {
+      if (
+        !isFingerOnSensor ||
+        isScanComplete
+      ) {
+        return;
+      }
+
+      const interval =
+        setInterval(() => {
+          const current =
+            scanProgressRef.current;
+
+          if (current >= 100) {
+            return;
           }
-          return next;
-        });
-      }, cfg.scanIntervalMs);
+
+          const next = Math.min(
+            current + 5,
+            100,
+          );
+
+          scanProgressRef.current =
+            next;
+
+          setScanProgress(next);
+        }, 120);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }, [
+      isFingerOnSensor,
+      isScanComplete,
+    ]);
+
+    /* Haptic */
+
+    useEffect(() => {
+      if (
+        isFingerOnSensor &&
+        scanProgress > 0 &&
+        scanProgress < 100 &&
+        scanProgress % 20 === 0
+      ) {
+        audioService.triggerHaptic(
+          'light',
+        );
+      }
+    }, [
+      isFingerOnSensor,
+      scanProgress,
+    ]);
+
+    /* Complete */
+
+    useEffect(() => {
+      if (
+        scanProgress !== 100 ||
+        isScanComplete
+      ) {
+        return;
+      }
+
+      const bpm =
+        Math.floor(
+          76 + Math.random() * 8,
+        );
+
+      const hrv =
+        62 +
+        Math.floor(
+          Math.random() * 12,
+        );
+
+      setMeasuredBpm(bpm);
+      setHrvMs(hrv);
+      setIsScanComplete(true);
+
+      audioService.triggerHaptic(
+        'success',
+      );
+
+      audioService.playJarDrop();
+
+      setTimeout(() => {
+        onUpdateBpm(bpm);
+      }, 0);
+    }, [
+      scanProgress,
+      isScanComplete,
+      onUpdateBpm,
+    ]);
+
+    /* Press */
+
+    const handlePressIn = () => {
+      Animated.timing(pressScale, {
+        toValue: 0.98,
+        duration: 80,
+        easing: Easing.out(
+          Easing.ease,
+        ),
+        useNativeDriver: true,
+      }).start();
+
+      if (isScanComplete) {
+        scanProgressRef.current = 0;
+        setScanProgress(0);
+        setIsScanComplete(false);
+      }
+
+      setIsFingerOnSensor(true);
+
+      audioService.triggerHaptic(
+        'medium',
+      );
+    };
+
+    const handlePressOut = () => {
+      Animated.spring(pressScale, {
+        toValue: 1,
+        friction: 7,
+        tension: 90,
+        useNativeDriver: true,
+      }).start();
+
+      setIsFingerOnSensor(false);
+    };
+
+    const handleClose = () => {
+      setIsFingerOnSensor(false);
+
+      scanProgressRef.current = 0;
+
+      setScanProgress(0);
+      setIsScanComplete(false);
+
+      pressScale.stopAnimation();
+      pressScale.setValue(1);
+
+      pulseScale.stopAnimation();
+      pulseScale.setValue(1);
+
+      pulseAnimationRef.current?.stop();
+
+      onClose();
+    };
+
+    if (!isOpen) {
+      return null;
     }
-    return () => clearInterval(interval);
-  }, [isScanning, scanProgress, cfg]);
 
-  const handleStartScan = () => {
-    setIsScanComplete(false);
-    setScanProgress(0);
-    setIsScanning(true);
-  };
+    return (
+      <Modal
+        visible={isOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={handleClose}
+      >
+        <View style={styles.backdrop}>
+          <SafeAreaView style={styles.modalCard}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerLeft}>
+                <View
+                  style={
+                    styles.activityIconBox
+                  }
+                >
+                  <Activity
+                    size={17}
+                    color="#00C4B3"
+                  />
+                </View>
 
-  const handleApplyBpm = () => {
-    onUpdateBpm(measuredBpm);
-    onClose();
-  };
+                <View
+                  style={
+                    styles.headerTextCol
+                  }
+                >
+                  <Text
+                    style={
+                      styles.headerTitle
+                    }
+                  >
+                    {
+                      strings.liveCalibrationTitle
+                    }
+                  </Text>
 
-  return (
-    <Modal
-      visible={isOpen}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={onClose}
-    >
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerBar}>
-          <Text style={styles.headerTitle}>
-            {ps.liveCalibrationTitle}
-          </Text>
-          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-            <X size={18} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
+                  <Text
+                    style={
+                      styles.headerSubtitle
+                    }
+                  >
+                    {strings.headerSubtitle}
+                  </Text>
+                </View>
+              </View>
 
-        <View style={styles.content}>
-          {/* Heart Pulse Icon */}
-          <View style={styles.heartPulseContainer}>
-            <View style={[styles.pulseRing, isScanning && styles.pulseRingActive]} />
-            <TouchableOpacity
-              activeOpacity={0.85}
-              onPress={handleStartScan}
-              style={styles.sensorPad}
-            >
-              <Heart
-                size={44}
-                color={isScanning ? colors.accentPink : colors.primary}
-                fill={isScanning ? colors.accentPink : 'transparent'}
-              />
-              <Text style={styles.sensorPrompt}>
-                {isScanning
-                  ? `${scanProgress}%`
-                  : isScanComplete
-                  ? ps.calibrated
-                  : ps.tapToMeasure}
+              <Pressable
+                onPress={handleClose}
+                style={styles.closeBtn}
+                hitSlop={8}
+              >
+                <X
+                  size={18}
+                  color="#64748B"
+                />
+              </Pressable>
+            </View>
+
+            {/* Sensor */}
+            <View style={styles.touchpadZone}>
+              <Animated.View
+                style={[
+                  styles.touchpadPad,
+                  isFingerOnSensor &&
+                  styles.touchpadPadSensing,
+                  {
+                    transform: [
+                      {
+                        scale: pressScale,
+                      },
+                    ],
+                  },
+                ]}
+                onStartShouldSetResponder={() =>
+                  true
+                }
+                onResponderGrant={
+                  handlePressIn
+                }
+                onResponderRelease={
+                  handlePressOut
+                }
+                onResponderTerminate={
+                  handlePressOut
+                }
+                onResponderTerminationRequest={() =>
+                  false
+                }
+              >
+                {/* Web ::before equivalent */}
+                <Animated.View
+                  pointerEvents="none"
+                  style={[
+                    styles.touchpadRing,
+                    isFingerOnSensor &&
+                    styles.touchpadRingSensing,
+                    {
+                      transform: [
+                        {
+                          scale: pulseScale,
+                        },
+                      ],
+                    },
+                  ]}
+                />
+
+                <Heart
+                  size={44}
+                  color={
+                    isFingerOnSensor
+                      ? '#F26E6E'
+                      : '#00C4B3'
+                  }
+                  fill={
+                    isFingerOnSensor
+                      ? '#F26E6E'
+                      : 'transparent'
+                  }
+                />
+
+                <Text
+                  style={
+                    styles.touchpadProgress
+                  }
+                >
+                  {isFingerOnSensor
+                    ? `${scanProgress}%`
+                    : isScanComplete
+                      ? strings.calibrated
+                      : strings.holdFinger}
+                </Text>
+              </Animated.View>
+
+              <Text
+                style={
+                  styles.touchpadInstruction
+                }
+              >
+                {strings.touchInstruction}
               </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Results Card */}
-          <View style={styles.resultsCard}>
-            <View style={styles.metricCol}>
-              <Text style={styles.metricLabel}>{ps.pulseBpm}</Text>
-              <Text style={styles.metricValue}>{measuredBpm}</Text>
-              <Text style={styles.metricSub}>{ps.bpmUnit}</Text>
             </View>
 
-            <View style={styles.metricDivider} />
-
-            <View style={styles.metricCol}>
-              <Text style={styles.metricLabel}>{ps.hrvLabel}</Text>
-              <Text style={[styles.metricValue, { color: colors.secondary }]}>{hrvMs}</Text>
-              <Text style={styles.metricSub}>ms</Text>
-            </View>
-          </View>
-
-          <View style={styles.explanationBox}>
-            <ShieldCheck size={16} color={colors.primary} />
-            <Text style={styles.explanationText}>
-              {ps.explanation}
-            </Text>
-          </View>
-
-          {/* Apply Button */}
-          <View style={styles.actionContainer}>
-            <Button
-              variant="primary"
-              size="lg"
-              fullWidth
-              onPress={handleApplyBpm}
+            {/* Metrics */}
+            <View
+              style={
+                styles.metricsGrid
+              }
             >
-              {ps.applyBpm.replace('{bpm}', String(measuredBpm))}
-            </Button>
-          </View>
+              <View
+                style={styles.metricBox}
+              >
+                <Text
+                  style={
+                    styles.metricBoxLabel
+                  }
+                >
+                  {strings.heartRate}
+                </Text>
+
+                <Text
+                  style={
+                    styles.metricBoxValue
+                  }
+                >
+                  {measuredBpm}
+
+                  <Text
+                    style={
+                      styles.metricBoxUnit
+                    }
+                  >
+                    {' '}
+                    bpm
+                  </Text>
+                </Text>
+              </View>
+
+              <View
+                style={
+                  styles.metricDivider
+                }
+              />
+
+              <View
+                style={styles.metricBox}
+              >
+                <Text
+                  style={
+                    styles.metricBoxLabel
+                  }
+                >
+                  {strings.autonomicState}
+                </Text>
+
+                <View
+                  style={
+                    styles.stateBoxValue
+                  }
+                >
+                  {measuredBpm < 85 ? (
+                    <View
+                      style={
+                        styles.stateTagParasympathetic
+                      }
+                    >
+                      <Leaf
+                        size={13}
+                        color="#047857"
+                      />
+
+                      <Text
+                        style={
+                          styles.stateTagParasympatheticText
+                        }
+                      >
+                        {
+                          strings.parasympathetic
+                        }
+                      </Text>
+                    </View>
+                  ) : (
+                    <View
+                      style={
+                        styles.stateTagSympathetic
+                      }
+                    >
+                      <Zap
+                        size={13}
+                        color="#BE123C"
+                      />
+
+                      <Text
+                        style={
+                          styles.stateTagSympatheticText
+                        }
+                      >
+                        {
+                          strings.sympathetic
+                        }
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+            </View>
+
+            {/* Footer */}
+            <View
+              style={
+                styles.footerArea
+              }
+            >
+              <Button
+                variant="primary"
+                size="md"
+                fullWidth
+                onPress={handleClose}
+              >
+                {strings.confirmBtn}
+              </Button>
+            </View>
+          </SafeAreaView>
         </View>
-      </SafeAreaView>
-    </Modal>
-  );
-};
+      </Modal>
+    );
+  };
 
 const styles = StyleSheet.create({
-  safeArea: {
+  backdrop: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    padding: 20,
+
+    backgroundColor:
+      'rgba(15, 23, 42, 0.38)',
   },
-  headerBar: {
+
+  modalCard: {
+    width: '100%',
+    maxWidth: 520,
+    maxHeight: '100%',
+
+    display: 'flex',
+    flexDirection: 'column',
+
+    backgroundColor: '#FFFFFF',
+
+    borderRadius: 20,
+
+    overflow: 'hidden',
+
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.14,
+    shadowRadius: 20,
+
+    elevation: 10,
+  },
+
+  /* Header */
+
+  header: {
+    minHeight: 56,
+
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+
     paddingHorizontal: 20,
     paddingVertical: 14,
+
     borderBottomWidth: 1,
-    borderBottomColor: colors.borderSubtle,
+    borderBottomColor: '#E2E8F0',
   },
+
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    flex: 1,
+
+    gap: 10,
+  },
+
+  activityIconBox: {
+    width: 32,
+    height: 32,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    borderRadius: 9,
+
+    backgroundColor: '#ECFEFF',
+  },
+
+  headerTextCol: {
+    flex: 1,
+
+    flexDirection: 'column',
+
+    gap: 1,
+  },
+
   headerTitle: {
+    margin: 0,
+
+    fontFamily:
+      typography.fontPromptBold,
+
     fontSize: 15,
     fontWeight: '800',
-    color: colors.primaryDark,
+
+    lineHeight: 20,
+
+    color: '#00695C',
   },
+
+  headerSubtitle: {
+    margin: 0,
+
+    fontFamily:
+      typography.fontPromptMedium,
+
+    fontSize: 10,
+    fontWeight: '500',
+
+    lineHeight: 14,
+
+    color: '#64748B',
+  },
+
   closeBtn: {
+    width: 32,
+    height: 32,
+
     padding: 6,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  heartPulseContainer: {
+
     alignItems: 'center',
     justifyContent: 'center',
+
+    borderRadius: 16,
+  },
+
+  /* Sensor */
+
+  touchpadZone: {
+    flexDirection: 'column',
+
+    alignItems: 'center',
+
     marginVertical: 24,
+  },
+
+  /*
+   * Main 215px circle.
+   * The web pseudo-element is represented by
+   * touchpadRing inside this view.
+   */
+  touchpadPad: {
     position: 'relative',
-  },
-  pulseRing: {
-    position: 'absolute',
-    width: 170,
-    height: 170,
-    borderRadius: 85,
-    borderWidth: 2,
-    borderColor: colors.borderTeal,
-  },
-  pulseRingActive: {
-    borderColor: colors.accentPink,
-    backgroundColor: 'rgba(242, 110, 110, 0.08)',
-  },
-  sensorPad: {
-    width: 130,
-    height: 130,
-    borderRadius: 65,
-    backgroundColor: colors.white,
+
+    width: 215,
+    height: 215,
+
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+
+    borderRadius: 107.5,
+
+    backgroundColor: '#FFFFFF',
+
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
     shadowOpacity: 0.08,
     shadowRadius: 10,
+
     elevation: 4,
-    borderWidth: 1.5,
-    borderColor: colors.borderSubtle,
+
+    overflow: 'hidden',
   },
-  sensorPrompt: {
+
+  touchpadPadSensing: {
+    borderColor: '#F26E6E',
+
+    backgroundColor:
+      'rgba(242, 110, 110, 0.08)',
+
+    shadowColor: '#F26E6E',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+
+    elevation: 4,
+  },
+
+  /*
+   * Exact web ::before equivalent:
+   *
+   * width: 170px
+   * height: 170px
+   * border: 2px solid #99f6e4
+   */
+  touchpadRing: {
+    position: 'absolute',
+
+    width: 170,
+    height: 170,
+
+    borderRadius: 85,
+
+    borderWidth: 2,
+
+    borderColor: '#99F6E4',
+
+    pointerEvents: 'none',
+  },
+
+  touchpadRingSensing: {
+    borderColor: '#F26E6E',
+  },
+
+  touchpadProgress: {
     marginTop: 8,
+
+    fontFamily:
+      typography.fontPromptMedium,
+
     fontSize: 11,
     fontWeight: '700',
-    color: colors.textSecondary,
+
+    lineHeight: 14,
+
+    color: '#64748B',
+
+    textAlign: 'center',
+
+    zIndex: 1,
   },
-  resultsCard: {
+
+  /*
+   * Same normal-flow spacing as:
+   *
+   * margin-top: 14px
+   */
+  touchpadInstruction: {
+    marginTop: 14,
+
+    fontFamily:
+      typography.fontPromptMedium,
+
+    fontSize: 10,
+    fontWeight: '500',
+
+    lineHeight: 15,
+
+    textAlign: 'center',
+
+    color: '#64748B',
+  },
+
+  /* Metrics */
+
+  metricsGrid: {
+    marginHorizontal: 24,
+
     flexDirection: 'row',
-    width: '100%',
+
     backgroundColor: '#F8FAFC',
+
     borderRadius: 16,
-    paddingVertical: 18,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+
     borderWidth: 1,
-    borderColor: colors.borderSubtle,
+    borderColor: '#E2E8F0',
+
+    overflow: 'hidden',
   },
-  metricCol: {
+
+  metricBox: {
+    flex: 1,
+
+    minHeight: 96,
+
+    flexDirection: 'column',
+
     alignItems: 'center',
+    justifyContent: 'center',
+
+    paddingHorizontal: 16,
+    paddingVertical: 18,
   },
-  metricLabel: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  metricValue: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: colors.primaryDark,
-  },
-  metricSub: {
-    fontSize: 11,
-    color: colors.textMuted,
-    fontWeight: '600',
-  },
+
   metricDivider: {
     width: 1,
     height: 36,
-    backgroundColor: colors.borderSubtle,
+
+    alignSelf: 'center',
+
+    backgroundColor: '#E2E8F0',
   },
-  explanationBox: {
+
+  metricBoxLabel: {
+    marginBottom: 4,
+
+    fontFamily:
+      typography.fontPromptMedium,
+
+    fontSize: 12,
+    fontWeight: '600',
+
+    lineHeight: 16,
+
+    textAlign: 'center',
+
+    color: '#64748B',
+  },
+
+  metricBoxValue: {
+    fontFamily:
+      typography.fontPromptBold,
+
+    fontSize: 28,
+    fontWeight: '800',
+
+    lineHeight: 34,
+
+    color: '#00695C',
+
+    textAlign: 'center',
+  },
+
+  metricBoxUnit: {
+    fontFamily:
+      typography.fontPromptMedium,
+
+    fontSize: 11,
+    fontWeight: '600',
+
+    color: '#64748B',
+  },
+
+  stateBoxValue: {
+    minHeight: 34,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  stateTagParasympathetic: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F0FDFA',
-    padding: 12,
-    borderRadius: 12,
-    gap: 8,
-    borderWidth: 1,
-    borderColor: '#CCFBF1',
+
+    gap: 5,
+
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+
+    borderRadius: 999,
+
+    backgroundColor: '#ECFDF5',
   },
-  explanationText: {
-    flex: 1,
-    fontSize: 11,
-    color: colors.primaryDark,
-    lineHeight: 16,
-    fontWeight: '500',
+
+  stateTagParasympatheticText: {
+    fontFamily:
+      typography.fontPromptBold,
+
+    fontSize: 9,
+    fontWeight: '700',
+
+    color: '#047857',
+
+    whiteSpace: 'nowrap',
   },
-  actionContainer: {
+
+  stateTagSympathetic: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    gap: 5,
+
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+
+    borderRadius: 999,
+
+    backgroundColor: '#FFF1F2',
+  },
+
+  stateTagSympatheticText: {
+    fontFamily:
+      typography.fontPromptBold,
+
+    fontSize: 9,
+    fontWeight: '700',
+
+    color: '#BE123C',
+
+    whiteSpace: 'nowrap',
+  },
+
+  /* Footer */
+
+  footerArea: {
     width: '100%',
+
+    paddingHorizontal: 24,
+    paddingTop: 20,
     paddingBottom: 16,
   },
 });
+
+export default LivePulseSensorModal;
