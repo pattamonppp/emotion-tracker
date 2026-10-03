@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { audioService } from '../../../services/audioService';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../../components/MoocaMascot';
-import { useSky } from '../../../components/DynamicSkyEngine';
 import { Check, GlassWater, ArrowRight, X, Sparkles, Heart, HelpCircle } from 'lucide-react';
 import { getTranslation } from '../../../locales';
 import type { VictorySipProps } from './types';
@@ -16,13 +15,11 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.victorySip;
-  const { activePeriod } = useSky();
   const [sipCount, setSipCount] = useState(0); // 0 to 3
   const [isFinished, setIsFinished] = useState(false);
   const [isTiltingToDrink, setIsTiltingToDrink] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(true);
 
-  const readyForNextSip = useRef(true);
   const tiltTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const skyTheme = useSkyTheme();
@@ -200,7 +197,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               className={styles.organicProgressFill}
               style={{
                 width: `${(sipCount / 3) * 100}%`,
-                background: skyTheme.progressFill,
+                background: skyTheme.progressFillBar,
               }}
             />
           </div>

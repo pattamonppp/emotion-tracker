@@ -164,7 +164,6 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
   const cloudBob3 = useRef(new Animated.Value(0)).current;
 
   const cloudDrift4 = useRef(new Animated.Value(0)).current;
-  const cloudBob4 = useRef(new Animated.Value(0)).current;
 
   // Real-time hour watcher for Auto mode
   useEffect(() => {

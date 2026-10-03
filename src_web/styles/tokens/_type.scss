@@ -1,26 +1,327 @@
 // =============================================================================
 // mindfull / OOCA Official Typography CI (Typography / TH & EN)
+// Gotham Rounded & Prompt pairing scale
 // =============================================================================
 
-// Primary Brand Font Stack across all languages (Thai & English): Prompt
-$font-th: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+// Primary Brand Font Stacks
+$font-en: 'Gotham Rounded', 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-th: 'Prompt', 'Gotham Rounded', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 $font-thai: $font-th;
 $font-prompt: $font-th;
-
-// English & Numerals: Prompt (Exact 1-to-1 match with mobile expo-font Prompt)
-$font-en: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 $font-rounded: $font-en;
-
-// Universal Default Font Stack:
-$font-sans: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-$font-display: 'Prompt', sans-serif;
+$font-sans: $font-th;
+$font-display: $font-en;
 $font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-// Font Weights from Typography / TH & Mobile design-system/tokens.ts
-$font-weight-light: 300;     // Light (300)
-$font-weight-regular: 400;   // Regular (400)
-$font-weight-medium: 500;    // Medium (500)
-$font-weight-semibold: 600;  // SemiBold (600)
-$font-weight-bold: 700;      // Bold (700)
-$font-weight-extrabold: 800;  // ExtraBold (800)
-$font-weight-black: 900;      // Black (900)
+// Standard Font Weights
+$font-weight-light: 300; // Light (300 / Book 325)
+$font-weight-book: 325; // Book (Gotham Rounded 325)
+$font-weight-regular: 400; // Regular (400)
+$font-weight-medium: 500; // Medium (500 / 350)
+$font-weight-semibold: 600; // SemiBold (600)
+$font-weight-bold: 700; // Bold (700)
+$font-weight-extrabold: 800; // ExtraBold (800)
+$font-weight-black: 900; // Black (900)
+
+// -----------------------------------------------------------------------------
+// Typography Mixins matching exact specifications:
+// (Size / Weight / letter-spacing: 0 / line-height)
+// -----------------------------------------------------------------------------
+
+// H1: 36px / Line-height: 40px / Bold (700) / SemiBold (600) / 0 letter-spacing
+@mixin typo-h1($weight: 700) {
+  font-family: $font-en;
+  font-size: 36px;
+  line-height: 40px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// H2: 36px / Line-height: 36px / Book (325 / 300) / Regular (400) / 0 letter-spacing
+@mixin typo-h2($weight: 400) {
+  font-family: $font-en;
+  font-size: 36px;
+  line-height: 36px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// H3: 24px / Line-height: 30px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-h3($weight: 500) {
+  font-family: $font-en;
+  font-size: 24px;
+  line-height: 30px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// H4: 20px / Line-height: 24px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-h4($weight: 500) {
+  font-family: $font-en;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Subheader 1: 14px / Line-height: 20px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-subheader-1($weight: 500) {
+  font-family: $font-en;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Subheader 2: 14px / Line-height: 20px / Book (325) / Light (300) / 0 letter-spacing
+@mixin typo-subheader-2($weight: 300) {
+  font-family: $font-en;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Title 1: 20px / Line-height: 24px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-title-1($weight: 500) {
+  font-family: $font-en;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Title 2: 18px / Line-height: 22px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-title-2($weight: 500) {
+  font-family: $font-en;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Title 3: 16px / Line-height: 20px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-title-3($weight: 500) {
+  font-family: $font-en;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Body 1: 16px / Line-height: 20px / Book (325) / Light (300) / 0 letter-spacing
+@mixin typo-body-1($weight: 300) {
+  font-family: $font-en;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Body 2: 14px / Line-height: 24px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-body-2($weight: 500) {
+  font-family: $font-en;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Body 3: 14px / Line-height: 24px / Book (325) / Regular (400) / Light (300) / 0 letter-spacing
+@mixin typo-body-3($weight: 300) {
+  font-family: $font-en;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Body 4: 12px / Line-height: 16px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-body-4($weight: 500) {
+  font-family: $font-en;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Body 5: 12px / Line-height: 16px / Book (325) / Light (300) / 0 letter-spacing
+@mixin typo-body-5($weight: 300) {
+  font-family: $font-en;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Button Large: 20px / Line-height: 24px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-btn-large($weight: 500) {
+  font-family: $font-en;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Button Small: 16px / Line-height: 16px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-btn-small($weight: 500) {
+  font-family: $font-en;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Button Underline 1: 16px / Line-height: 16px / Book (325) / Light (300) / 0 letter-spacing
+@mixin typo-btn-underline($weight: 300) {
+  font-family: $font-en;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: $weight;
+  text-decoration: underline;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Button Underline 2: 14px / Line-height: 14px / Book (325) / Light (300) / 0 letter-spacing
+@mixin typo-btn-underline-2($weight: 300) {
+  font-family: $font-en;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: 0;
+  font-weight: $weight;
+  text-decoration: underline;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Button Underline Small: 12px / Line-height: 12px / Book (325) / Light (300) / 0 letter-spacing
+@mixin typo-btn-underline-sm($weight: 300) {
+  font-family: $font-en;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 0;
+  font-weight: $weight;
+  text-decoration: underline;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Button Underline Mini: 8px / Line-height: 10px / Medium (500) / 0 letter-spacing
+@mixin typo-btn-underline-mini($weight: 500) {
+  font-family: $font-en;
+  font-size: 8px;
+  line-height: 10px;
+  letter-spacing: 0;
+  font-weight: $weight;
+  text-decoration: underline;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}
+
+// Small: 9px / Line-height: 10px / Medium (350 / 500) / 0 letter-spacing
+@mixin typo-small($weight: 500) {
+  font-family: $font-en;
+  font-size: 9px;
+  line-height: 10px;
+  letter-spacing: 0;
+  font-weight: $weight;
+
+  [lang="th"] &,
+  [data-lang="th"] & {
+    font-family: $font-th;
+  }
+}

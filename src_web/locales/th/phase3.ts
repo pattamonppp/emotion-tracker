@@ -18,7 +18,7 @@ export const phase3 = {
   stampPrompt: 'แตะเพื่อ\nประทับตรา',
   stampDone: 'ประทับตราสัญญาใจแล้ว',
   stampAction: 'ประทับตราสัญญาใจ',
-  promisedStamp: 'PROMISED',
+  promisedStamp: 'สัญญาแล้ว',
   sealedHint: 'สัญญาใจถูกประทับเรียบร้อยแล้ว มีพลังก้าวต่อไปได้เลย!',
   unsealedHint: 'แตะที่กล่องเพื่อประทับตราสัญญาใจสีมิ้นต์กับ Mooca',
   measureBtn: 'วัดผลลัพธ์การฟื้นตัวของใจ',

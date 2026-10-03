@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -25,21 +25,21 @@ import { DEV_MODE, DEV_START } from './config';
 
 import { MindfullLogo } from './components/MindfullLogo';
 import { DynamicSkyEngine, SkyPeriodSwitcher } from './components/DynamicSkyEngine';
-import { Phase1EmotionJar } from './components/Phase1EmotionJar';
-import { SomaticAbsorption } from './components/Phase2Interventions/SomaticAbsorption';
-import { VictorySip } from './components/Phase2Interventions/VictorySip';
-import { KineticShaker } from './components/Phase2Interventions/KineticShaker';
-import { SomaticBreathingPacer } from './components/Phase2Interventions/SomaticBreathingPacer';
-import { AudioMatrixSanctuary } from './components/Phase2Interventions/AudioMatrixSanctuary';
-import { Phase3CognitiveReframing } from './components/Phase3CognitiveReframing';
-import { Phase4Feedback } from './components/Phase4Feedback';
-import { ResetCompletedView } from './components/ResetCompletedView';
+import { Phase1EmotionJar } from './phases/Phase1EmotionJar';
+import { SomaticAbsorption } from './phases/Phase2Interventions/SomaticAbsorption';
+import { VictorySip } from './phases/Phase2Interventions/VictorySip';
+import { KineticShaker } from './phases/Phase2Interventions/KineticShaker';
+import { SomaticBreathingPacer } from './phases/Phase2Interventions/SomaticBreathingPacer';
+import { AudioMatrixSanctuary } from './phases/Phase2Interventions/AudioMatrixSanctuary';
+import { Phase3CognitiveReframing } from './phases/Phase3CognitiveReframing';
+import { Phase4Feedback } from './phases/Phase4Feedback';
+import { ResetCompletedView } from './phases/ResetCompletedView';
 
-import { OnboardingModal } from './components/OnboardingModal';
-import { LivePulseSensorModal } from './components/LivePulseSensorModal';
-import { ResetHistoryModal } from './components/ResetHistoryModal';
+import { OnboardingModal } from './phases/Phase1EmotionJar/modals/OnboardingModal';
+import { LivePulseSensorModal } from './phases/Phase1EmotionJar/modals/LivePulseSensorModal';
+import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
 
-import { Languages, Sparkles, Volume2, VolumeX } from 'lucide-react-native';
+import { Languages, Volume2, VolumeX } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from './design-system/tokens';
 import {
   useFonts,
@@ -51,20 +51,11 @@ import {
   Prompt_800ExtraBold
 } from '@expo-google-fonts/prompt';
 
-const DEFAULT_PROFILE: UserProfile = {
-  name: 'Alex',
-  ageBracket: '19-24 (มหาวิทยาลัย)',
-  goal: 'exam',
-  mbti: 'INTJ',
-  language: 'th',
-  permissions: {
-    motion: true,
-    haptics: true,
-    heartRate: true,
-  },
-};
+import { useUserProfile, LanguageProvider } from './hooks';
 
 export default function App() {
+  const { profile, setProfile } = useUserProfile();
+
   const [fontsLoaded, fontError] = useFonts({
     Prompt_300Light,
     Prompt_400Regular,
@@ -73,8 +64,6 @@ export default function App() {
     Prompt_700Bold,
     Prompt_800ExtraBold,
   });
-
-  const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
   const [currentPhase, setCurrentPhase] = useState<ResetPhase>(
     DEV_MODE ? DEV_START.phase : 'phase1_jar'
   );
@@ -97,9 +86,8 @@ export default function App() {
   const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>('day');
   const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(true);
 
-  // Load saved profile & history on mount + start soothing cute ambient music
+  // Load saved history on mount + start soothing cute ambient music
   useEffect(() => {
-    storageService.getProfile(DEFAULT_PROFILE).then(setProfile);
     storageService.getHistory().then(setHistory);
     audioService.startBackgroundMusic();
     const unsub = audioService.subscribeBgm(setIsMusicPlaying);
@@ -119,15 +107,12 @@ export default function App() {
 
   const handleSaveProfile = (newProfile: UserProfile) => {
     setProfile(newProfile);
-    storageService.saveProfile(newProfile);
     setIsOnboardingOpen(false);
   };
 
   const toggleLanguage = () => {
     const newLang: 'en' | 'th' = profile.language === 'th' ? 'en' : 'th';
-    const updated: UserProfile = { ...profile, language: newLang };
-    setProfile(updated);
-    storageService.saveProfile(updated);
+    setProfile({ ...profile, language: newLang });
     audioService.triggerHaptic('selection');
   };
 
@@ -201,12 +186,10 @@ export default function App() {
     );
   }
 
-  // Sky-period night-mode flag (sunset + night need light text on dark bg)
-  const isDark = skyPeriod === 'night' || skyPeriod === 'sunset';
-  const isNight = skyPeriod === 'night';
 
   return (
-    <SafeAreaProvider>
+    <LanguageProvider initialLang={profile.language}>
+      <SafeAreaProvider>
       <StatusBar style={skyPeriod === 'night' ? 'light' : 'dark'} />
       <DynamicSkyEngine
         onTimePeriodChange={setSkyPeriod}
@@ -312,40 +295,6 @@ export default function App() {
 
             {currentPhase === 'phase2_intervention' && (
               <View style={styles.interventionContainer}>
-                {/* {DEV_MODE && <View style={styles.interventionHeader}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                    <Sparkles size={13} color={colors.primary} />
-                    <Text style={styles.interventionHeaderTitle}>
-                      {profile.language === 'th' ? 'โหมดรีเซ็ตใจ:' : 'Reset Mode:'}
-                    </Text>
-                  </View>
-                  <View style={styles.optionsRow}>
-                    {(['A', 'B', 'C', 'D', 'E', 'F', 'G'] as InterventionOption[]).map((opt) => (
-                      <TouchableOpacity
-                        key={opt}
-                        hitSlop={{ top: 16, bottom: 16, left: 8, right: 8 }}
-                        onPress={() => {
-                          audioService.stopAllVoice();
-                          audioService.triggerHaptic('selection');
-                          setActiveOption(opt);
-                        }}
-                        style={[
-                          styles.optionBtn,
-                          activeOption === opt && styles.optionBtnActive,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.optionBtnText,
-                            activeOption === opt && styles.optionBtnTextActive,
-                          ]}
-                        >
-                          {opt}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>} */}
 
                 {/* Active Intervention View */}
                 <View style={{ flex: 1 }}>
@@ -456,7 +405,8 @@ export default function App() {
         </SafeAreaView>
       </DynamicSkyEngine>
     </SafeAreaProvider>
-  );
+  </LanguageProvider>
+);
 }
 
 const styles = StyleSheet.create({

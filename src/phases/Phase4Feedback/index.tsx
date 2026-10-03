@@ -6,15 +6,15 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { EmotionTagId, ShiftFeedback, MoodStampType } from '../types';
-import { audioService } from '../services/audioService';
-import { MarshmallowButton } from '../design-system/MarshmallowButton';
-import { MoocaMascot } from './MoocaMascot';
-import { useSky } from './DynamicSkyEngine';
+import { EmotionTagId, ShiftFeedback, MoodStampType } from '../../types';
+import { audioService } from '../../services/audioService';
+import { MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MoocaMascot } from '../../components/MoocaMascot';
+import { useSky } from '../../components/DynamicSkyEngine';
 import { Activity, Check, Plus, Minus, ArrowRight, Zap, Leaf, Heart } from 'lucide-react-native';
-import { colors, radii, shadows, typography } from '../design-system/tokens';
-import { getTranslation } from '../locales';
-import { PHASE4_CONFIG } from '../constants';
+import { colors, radii, shadows, typography } from '../../design-system/tokens';
+import { getTranslation } from '../../locales';
+import { PHASE4_CONFIG } from '../../constants';
 
 export interface Phase4FeedbackProps {
   preHeartRate: number;

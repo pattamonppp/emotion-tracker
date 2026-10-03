@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { UserProfile, LANG, GOAL, MBTI } from '../types';
-import { STORAGE_KEYS, getStorageJSON, setStorageJSON } from '../utils/storage';
+import { storageService } from '../services/storageService';
 
 export const DEFAULT_PROFILE: UserProfile = {
   name: 'Alex',
@@ -16,19 +16,25 @@ export const DEFAULT_PROFILE: UserProfile = {
 };
 
 export const useUserProfile = (initialProfile: UserProfile = DEFAULT_PROFILE) => {
-  const [profile, setProfileState] = useState<UserProfile>(() => {
-    return getStorageJSON<UserProfile>(STORAGE_KEYS.PROFILE, initialProfile);
-  });
+  const [profile, setProfileState] = useState<UserProfile>(initialProfile);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    storageService.getProfile(initialProfile).then((saved) => {
+      setProfileState(saved);
+      setIsLoaded(true);
+    });
+  }, [initialProfile]);
 
   const setProfile = useCallback((newProfile: UserProfile) => {
     setProfileState(newProfile);
-    setStorageJSON(STORAGE_KEYS.PROFILE, newProfile);
+    storageService.saveProfile(newProfile);
   }, []);
 
   const updateProfile = useCallback((updates: Partial<UserProfile>) => {
     setProfileState((prev) => {
       const next = { ...prev, ...updates };
-      setStorageJSON(STORAGE_KEYS.PROFILE, next);
+      storageService.saveProfile(next);
       return next;
     });
   }, []);
@@ -37,6 +43,7 @@ export const useUserProfile = (initialProfile: UserProfile = DEFAULT_PROFILE) =>
     profile,
     setProfile,
     updateProfile,
+    isLoaded,
   };
 };
 

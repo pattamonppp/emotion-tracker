@@ -5,6 +5,8 @@
  * Layer 3: MBTI Voice Sanctuary (Curated pre-generated vocal soothing & affirmations in Thai/English)
  */
 
+import { LANG, Language } from "@/types";
+
 class AudioMatrixService {
   private ctx: AudioContext | null = null;
   private binauralLeft: OscillatorNode | null = null;
@@ -309,12 +311,12 @@ class AudioMatrixService {
   }
 
   // Pre-Generated Studio MBTI Voice Sanctuary
-  public playVoiceSanctuary(text: string, lang: 'th' | 'en' = 'th', rate = 0.88) {
+  public playVoiceSanctuary(text: string, lang: Language = LANG.TH, rate = 0.88) {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     try {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang === 'th' ? 'th-TH' : 'en-US';
+      utterance.lang = lang === LANG.TH ? 'th-TH' : 'en-US';
       utterance.rate = rate; // slow, grounded pacing
       utterance.pitch = 0.95; // warm, resonant pitch
       window.speechSynthesis.speak(utterance);

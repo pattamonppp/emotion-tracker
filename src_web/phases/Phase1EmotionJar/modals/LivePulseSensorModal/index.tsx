@@ -27,7 +27,6 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
   const [isFingerOnSensor, setIsFingerOnSensor] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [measuredBpm, setMeasuredBpm] = useState(currentBpm);
-  const [hrvMs, setHrvMs] = useState(48);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
@@ -115,7 +114,6 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
           if (next >= 100) {
             const calculatedBpm = Math.floor(76 + Math.random() * 8);
             setMeasuredBpm(calculatedBpm);
-            setHrvMs(62 + Math.floor(Math.random() * 12));
             onUpdateBpm(calculatedBpm);
             audioService.playJarDrop();
           }

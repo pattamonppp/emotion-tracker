@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 
 import { audioService } from '../../../services/audioService';
-import { useSky } from '../../../components/DynamicSkyEngine';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { DESIGN_TOKENS } from '../../../design-system/tokens';
@@ -34,9 +33,8 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.somaticAbsorption;
-
-  const { activePeriod } = useSky();
-  const skyPeriod = propSkyPeriod || activePeriod || 'day';
+  const theme = useSkyTheme();
+  const skyPeriod = propSkyPeriod || theme.period;
 
   const [circleSize, setCircleSize] = useState(getCircleSize);
   const [rubProgress, setRubProgress] = useState(0);
@@ -69,7 +67,6 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
     };
   }, []);
 
-  const theme = useSkyTheme();
 
   const advanceProgress = (amount: number) => {
     if (isFinished) {

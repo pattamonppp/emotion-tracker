@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   UserProfile,
   ResetPhase,
@@ -23,26 +23,12 @@ import { AiFeedbackModal, ResetCompletedView } from './phases/ResetCompletedView
 import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
 import { audioService } from './services/audioService';
 import { DEV_MODE, DEV_START } from './config';
-import { getTranslation } from './locales';
 import { STORAGE_KEYS, getStorageJSON, setStorageJSON } from './utils';
-
-const DEFAULT_PROFILE: UserProfile = {
-  name: 'Alex',
-  ageBracket: '19-24 (มหาวิทยาลัย)',
-  goal: 'exam',
-  mbti: 'INTJ',
-  language: 'th',
-  permissions: {
-    motion: true,
-    haptics: true,
-    heartRate: true,
-  },
-};
+import { useUserProfile } from './hooks/useUserProfile';
+import { LanguageProvider } from './hooks/useLanguage';
 
 export default function App() {
-  const [profile, setProfile] = useState<UserProfile>(() => {
-    return getStorageJSON<UserProfile>(STORAGE_KEYS.PROFILE, DEFAULT_PROFILE);
-  });
+  const { profile, setProfile } = useUserProfile();
 
   const [currentPhase, setCurrentPhase] = useState<ResetPhase>(
     DEV_MODE ? DEV_START.phase : 'phase1_jar'
@@ -69,11 +55,9 @@ export default function App() {
   const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(
     DEV_MODE && (DEV_START.phase as any) === 'onboarding'
   );
-  const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
   const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
   const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>('day');
 
   // Start background ambient music on mount
@@ -84,15 +68,12 @@ export default function App() {
   // Save profile changes
   const handleSaveProfile = (newProfile: UserProfile) => {
     setProfile(newProfile);
-    setStorageJSON(STORAGE_KEYS.PROFILE, newProfile);
     setIsOnboardingOpen(false);
   };
 
   const toggleLanguage = () => {
     const nextLang: 'en' | 'th' = profile.language === 'th' ? 'en' : 'th';
-    const updated: UserProfile = { ...profile, language: nextLang };
-    setProfile(updated);
-    setStorageJSON(STORAGE_KEYS.PROFILE, updated);
+    setProfile({ ...profile, language: nextLang });
     audioService.triggerHaptic('selection');
   };
 
@@ -154,7 +135,7 @@ export default function App() {
         : (profile.language === 'th' ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation');
 
   return (
-    <>
+    <LanguageProvider initialLang={profile.language}>
       <MobileFrame
         profile={profile}
         currentPhase={currentPhase}
@@ -298,6 +279,6 @@ export default function App() {
         feedback={feedback}
         lang={profile.language}
       />
-    </>
+    </LanguageProvider>
   );
 }

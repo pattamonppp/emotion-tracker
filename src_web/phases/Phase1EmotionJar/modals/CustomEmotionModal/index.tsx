@@ -153,7 +153,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
             <MoocaMascot
               size="xs"
               mood="comforting"
-              interactive={true}
+              interactive={false}
             />
           </div>
 

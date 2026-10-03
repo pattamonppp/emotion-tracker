@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Animated,
   Easing,
 } from 'react-native';
@@ -11,27 +10,29 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Accelerometer } from 'expo-sensors';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../MoocaMascot';
-import { useSky } from '../DynamicSkyEngine';
-import { Zap, Activity, CheckCircle2, RotateCw, Star, Sparkles, Cloud } from 'lucide-react-native';
-import { colors, radii, shadows, typography } from '../../design-system/tokens';
+import { MoocaMascot } from '../../components/MoocaMascot';
+import { useSkyTheme } from '../../hooks/useSkyTheme';
+import { CheckCircle2, Star, Sparkles } from 'lucide-react-native';
+import { colors, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
+import { ACTIVITY_TYPE } from '../../types';
 import { KineticShakerProps } from './types';
 import { KINETIC_SHAKER_CONFIG } from './constants';
 
 export const KineticShaker: React.FC<KineticShakerProps> = ({
   onComplete,
   lang,
-  activityType = 'shake',
+  activityType = ACTIVITY_TYPE.SHAKE,
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.kineticShaker;
-  const { activePeriod } = useSky();
-  const [mode, setMode] = useState<'shake' | 'bounce'>(activityType === 'jump' ? 'bounce' : 'shake');
+  const skyTheme = useSkyTheme();
+  const [mode, setMode] = useState<typeof ACTIVITY_TYPE.SHAKE | typeof ACTIVITY_TYPE.BOUNCE>(
+    activityType === ACTIVITY_TYPE.JUMP ? ACTIVITY_TYPE.BOUNCE : ACTIVITY_TYPE.SHAKE
+  );
   const [shakesLeft, setShakesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_SHAKES);
   const [bouncesLeft, setBouncesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_JUMPS);
   const [isFinished, setIsFinished] = useState<boolean>(false);
-  const [starBurstCount, setStarBurstCount] = useState<number>(0);
 
   const lastShakeTime = useRef(0);
   const shakeAnim = useRef(new Animated.Value(0)).current;
@@ -40,11 +41,11 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
   // Sync mode if activityType changes
   useEffect(() => {
-    setMode(activityType === 'jump' ? 'bounce' : 'shake');
+    setMode(activityType === ACTIVITY_TYPE.JUMP ? ACTIVITY_TYPE.BOUNCE : ACTIVITY_TYPE.SHAKE);
   }, [activityType]);
 
   const triggerShakeVisual = () => {
-    if (mode === 'shake') {
+    if (mode === ACTIVITY_TYPE.SHAKE) {
       // Lateral Shake wiggle
       Animated.sequence([
         Animated.timing(shakeAnim, { toValue: 10, duration: 35, useNativeDriver: true }),
@@ -62,7 +63,6 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
     }
 
     // Burst stars from shattered grumpy cloud
-    setStarBurstCount((prev) => prev + 1);
     starBurstAnim.setValue(0);
     Animated.timing(starBurstAnim, {
       toValue: 1,
@@ -79,7 +79,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       Accelerometer.setUpdateInterval(80);
       subscription = Accelerometer.addListener(({ x, y, z }) => {
         const now = Date.now();
-        if (mode === 'shake') {
+        if (mode === ACTIVITY_TYPE.SHAKE) {
           // Detect rapid lateral vibration / shake (horizontal plane)
           const lateral = Math.sqrt(x * x + z * z);
           const total = Math.sqrt(x * x + y * y + z * z);
@@ -111,7 +111,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
     triggerShakeVisual();
 
-    if (mode === 'shake') {
+    if (mode === ACTIVITY_TYPE.SHAKE) {
       const remaining = Math.max(0, shakesLeft - 1);
       setShakesLeft(remaining);
       audioService.playShakerClick(remaining);
@@ -137,59 +137,17 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
     // No auto-advance: require user to tap proceed button
   };
 
-  const currentCount = mode === 'shake' ? shakesLeft : bouncesLeft;
-  const maxCount = mode === 'shake' ? 15 : 10;
+  const currentCount = mode === ACTIVITY_TYPE.SHAKE ? shakesLeft : bouncesLeft;
+  const maxCount = mode === ACTIVITY_TYPE.SHAKE ? 15 : 10;
   const progressPercent = Math.round(((maxCount - currentCount) / maxCount) * 100);
   const fluidHeightPercent = isFinished ? 0 : Math.round((currentCount / maxCount) * 100);
 
-  const getSkyColors = () => {
-    switch (activePeriod) {
-      case 'sunset':
-        return {
-          countColor: '#ffffffff',
-          labelColor: '#fffafbff',
-          hintColor: '#5f0019ff',
-          progressTrack: 'rgba(255, 255, 255, 0.45)',
-          progressFill: ['#ffa8bbff', '#fff6b4ff'] as const,
-        };
-      case 'night':
-        return {
-          countColor: '#F8FAFC',
-          labelColor: '#E2E8F0',
-          hintColor: '#94A3B8',
-          progressTrack: 'rgba(255, 255, 255, 0.25)',
-          progressFill: ['#38BDF8', '#818CF8'] as const,
-        };
-      case 'dawn':
-        return {
-          countColor: '#78350F',
-          labelColor: '#92400E',
-          hintColor: '#B45309',
-          progressTrack: 'rgba(255, 255, 255, 0.65)',
-          progressFill: ['#F59E0B', '#FBBF24'] as const,
-        };
-      case 'day':
-      default:
-        return {
-          countColor: colors.primaryDark,
-          labelColor: colors.primaryDark,
-          hintColor: colors.textMuted,
-          progressTrack: colors.ringTrack,
-          progressFill: [colors.primary, colors.accentBlue] as const,
-        };
-    }
-  };
-  const skyTheme = getSkyColors();
-
-  // Dynamic fluid gradient: Sunset & Night strictly use Ooca turquoise base as requested
+  // Dynamic fluid gradient: uses skyTheme or success on finish
   const getFluidColors = (): readonly [string, string, ...string[]] => {
     if (isFinished) {
       return [colors.success, colors.primary];
     }
-    if (activePeriod === 'sunset' || activePeriod === 'night') {
-      return [colors.primaryLight, colors.primary, colors.primaryDark]; // Vibrant Ooca Turquoise base
-    }
-    return [colors.primaryLight, colors.primary, colors.primaryDark]; // Crisp daylight turquoise
+    return skyTheme.fluidColors;
   };
 
   const starBurstScale = starBurstAnim.interpolate({
@@ -216,10 +174,10 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           size="sm"
           speakingBubble={
             isFinished
-              ? mode === 'shake'
+              ? mode === ACTIVITY_TYPE.SHAKE
                 ? strings.bubbleDone
                 : strings.bubbleDoneBounce
-              : mode === 'shake'
+              : mode === ACTIVITY_TYPE.SHAKE
                 ? strings.bubbleShake
                 : strings.bubbleBounce
           }
@@ -310,7 +268,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           <Text style={[styles.organicCountLabel, { color: skyTheme.labelColor }]}>
             {isFinished
               ? strings.released
-              : mode === 'shake'
+              : mode === ACTIVITY_TYPE.SHAKE
                 ? `${currentCount} ${strings.shakesLeft}`
                 : `${currentCount} ${strings.bouncesLeft}`}
           </Text>
@@ -339,7 +297,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           />
         ) : (
           <Text style={[styles.organicSensorHint, { color: skyTheme.hintColor }]}>
-            {mode === 'shake' ? strings.captionShake : strings.captionBounce}
+            {mode === ACTIVITY_TYPE.SHAKE ? strings.captionShake : strings.captionBounce}
           </Text>
         )}
       </View>

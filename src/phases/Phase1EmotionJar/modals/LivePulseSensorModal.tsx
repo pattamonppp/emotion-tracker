@@ -21,10 +21,10 @@ import {
   Zap,
 } from 'lucide-react-native';
 
-import { audioService } from '../services/audioService';
-import { Button } from '../design-system/Button';
-import { getTranslation } from '../locales';
-import { typography } from '../design-system/tokens';
+import { audioService } from '../../../services/audioService';
+import { Button } from '../../../design-system/Button';
+import { getTranslation } from '../../../locales';
+import { typography } from '../../../design-system/tokens';
 
 export interface LivePulseSensorModalProps {
   isOpen: boolean;
@@ -54,8 +54,6 @@ export const LivePulseSensorModal: React.FC<
 
     const [measuredBpm, setMeasuredBpm] =
       useState(currentBpm);
-
-    const [hrvMs, setHrvMs] = useState(48);
 
     const [isScanComplete, setIsScanComplete] =
       useState(false);
@@ -226,14 +224,7 @@ export const LivePulseSensorModal: React.FC<
           76 + Math.random() * 8,
         );
 
-      const hrv =
-        62 +
-        Math.floor(
-          Math.random() * 12,
-        );
-
       setMeasuredBpm(bpm);
-      setHrvMs(hrv);
       setIsScanComplete(true);
 
       audioService.triggerHaptic(

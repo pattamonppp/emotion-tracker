@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShiftFeedback, UserProfile } from '../../../../types';
+import { Language, ShiftFeedback, UserProfile } from '../../../../types';
 import { getTranslation } from '../../../../locales';
 import {
   X,
@@ -14,7 +14,7 @@ export interface ResetHistoryModalProps {
   onClose: () => void;
   profile: UserProfile;
   history: ShiftFeedback[];
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({

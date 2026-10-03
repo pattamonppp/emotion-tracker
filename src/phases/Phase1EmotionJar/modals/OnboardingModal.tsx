@@ -10,9 +10,9 @@ import {
   Platform
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { UserProfile, GoalType } from '../types';
-import { Button } from '../design-system/Button';
-import { MoocaMascot } from './MoocaMascot';
+import { UserProfile, GoalType } from '../../../types';
+import { Button } from '../../../design-system/Button';
+import { MoocaMascot } from '../../../components/MoocaMascot';
 import {
   GraduationCap,
   Mic,
@@ -22,10 +22,10 @@ import {
   X,
   User,
 } from 'lucide-react-native';
-import { colors, radii, typography } from '../design-system/tokens';
-import { audioService } from '../services/audioService';
-import { getTranslation } from '../locales';
-import { MODAL_CONFIG } from '../constants';
+import { colors, radii, typography } from '../../../design-system/tokens';
+import { audioService } from '../../../services/audioService';
+import { getTranslation } from '../../../locales';
+import { MODAL_CONFIG } from '../../../constants';
 
 export interface OnboardingModalProps {
   initialProfile: UserProfile;

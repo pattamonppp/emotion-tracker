@@ -7,18 +7,16 @@ import {
   Easing,
   TouchableOpacity,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { MBTIType } from '../../types';
+
 import { MBTI_SANCTUARY_SCRIPTS, getMBTIArchetype } from '../../data/matrixData';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../MoocaMascot';
-import { useSky } from '../DynamicSkyEngine';
+import { MoocaMascot } from '../../components/MoocaMascot';
+import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { Sparkles, Headphones, Play, Pause, ArrowRight, RotateCcw } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 import { AudioMatrixSanctuaryProps } from './types';
-import { AUDIO_SANCTUARY_CONFIG } from './constants';
 
 export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
   mbti = 'INFP',
@@ -27,7 +25,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.audioMatrix;
-  const { activePeriod } = useSky();
+  const skyTheme = useSkyTheme();
   const [isPlaying, setIsPlaying] = useState(true);
   const [countdown, setCountdown] = useState(25);
   const archetype = getMBTIArchetype(mbti);
@@ -128,68 +126,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
     };
   }, [mbti, lang]);
 
-  // Sky period theme mapping for optimal contrast & aesthetic harmony
-  const getSkyColors = () => {
-    switch (activePeriod) {
-      case 'sunset':
-        return {
-          cardBg: 'rgba(255, 255, 255, 0.90)',
-          cardBorder: '#FAD6D5',
-          badgeBg: '#FDEFEE',
-          badgeBorder: '#FAD6D5',
-          badgeText: '#E44743',
-          scriptTitle: '#E85A56',
-          scriptText: '#EB6460',
-          waveColor: '#EF7773',
-          hintText: '#ffffffff',
-          progressTrack: 'rgba(255, 255, 255, 0.85)',
-          progressFill: ['#EF7773', '#F4A09D'] as const,
-        };
-      case 'night':
-        return {
-          cardBg: 'rgba(38, 49, 60, 0.92)',
-          cardBorder: 'rgba(143, 187, 239, 0.4)',
-          badgeBg: 'rgba(0, 0, 0, 0.85)',
-          badgeBorder: 'rgba(143, 187, 239, 0.4)',
-          badgeText: '#8FBBEF',
-          scriptTitle: '#62A0E9',
-          scriptText: '#FFFFFF',
-          waveColor: '#1F77DF',
-          hintText: '#79ADA9',
-          progressTrack: 'rgba(255, 255, 255, 0.25)',
-          progressFill: ['#1F77DF', '#62A0E9'] as const,
-        };
-      case 'dawn':
-        return {
-          cardBg: 'rgba(255, 255, 255, 0.92)',
-          cardBorder: '#F8E4B3',
-          badgeBg: '#FCF4E0',
-          badgeBorder: '#F8E4B3',
-          badgeText: '#D97800',
-          scriptTitle: '#DF8900',
-          scriptText: '#E39200',
-          waveColor: '#F9A000',
-          hintText: '#D97800',
-          progressTrack: 'rgba(255, 255, 255, 0.65)',
-          progressFill: ['#F9A000', '#F0BF4D'] as const,
-        };
-      default:
-        return {
-          cardBg: 'rgba(255, 255, 255, 0.92)',
-          cardBorder: colors.borderTeal,
-          badgeBg: colors.primaryLight,
-          badgeBorder: colors.borderTeal,
-          badgeText: colors.primaryDark,
-          scriptTitle: colors.secondary,
-          scriptText: colors.textPrimary,
-          waveColor: colors.primary,
-          hintText: colors.textMuted,
-          progressTrack: colors.ringTrack,
-          progressFill: [colors.primary, colors.accentBlue] as const,
-        };
-    }
-  };
-  const skyTheme = getSkyColors();
+
 
   return (
     <View style={styles.container}>

@@ -21,7 +21,7 @@ export const modals = {
     tailoredBubble: 'บอก Mooca เพิ่มเติม เพื่อให้การดูแลตรงจุดที่สุด!',
     yourName: 'ชื่อของคุณ',
     primaryContext: 'สถานการณ์หลักที่ต้องเผชิญ',
-    mbtiSpecific: 'บุคลิกภาพ MBTI (สำหรับเสียงบำบัดเฉพาะ)',
+    mbtiSpecific: 'บุคลิกภาพ MBTI',
     saveSettings: 'บันทึกการตั้งค่า',
     nameLabel: 'ให้ Mooca เรียกเธอว่าอะไรดีจ้ะ?',
     namePlaceholder: 'พิมพ์ชื่อเล่นของเธอ...',

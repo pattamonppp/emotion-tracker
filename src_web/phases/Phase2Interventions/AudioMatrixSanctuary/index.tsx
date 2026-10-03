@@ -16,7 +16,7 @@ import {
 import { audioService } from '../../../services/audioService';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../../components/MoocaMascot';
-import { useSky } from '../../../components/DynamicSkyEngine';
+import { useSkyTheme } from '@/hooks/useSkyTheme';
 import { getTranslation } from '../../../locales';
 
 import styles from './styles.module.scss';
@@ -76,9 +76,7 @@ export const AudioMatrixSanctuary: React.FC<
 > = ({ mbti = 'INFP', onComplete, lang }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.audioMatrix;
-
-  const { activePeriod } = useSky();
-
+  const skyTheme = useSkyTheme();
   const [isPlaying, setIsPlaying] = useState(true);
   const [countdown, setCountdown] = useState(25);
 
@@ -186,63 +184,7 @@ export const AudioMatrixSanctuary: React.FC<
     setIsPlaying(true);
   };
 
-  const getSkyColors = () => {
-    switch (activePeriod) {
-      case 'sunset':
-        return {
-          cardBg: 'rgba(255, 255, 255, 0.90)',
-          cardBorder: '#FAD6D5',
-          badgeBg: '#FDEFEE',
-          badgeBorder: '#FAD6D5',
-          badgeText: '#E44743',
-          scriptTitle: '#E85A56',
-          scriptText: '#EB6460',
-          waveColor: '#EF7773',
-          hintText: '#FFFFFF',
-        };
 
-      case 'night':
-        return {
-          cardBg: 'rgba(38, 49, 60, 0.92)',
-          cardBorder: 'rgba(143, 187, 239, 0.4)',
-          badgeBg: 'rgba(0, 0, 0, 0.85)',
-          badgeBorder: 'rgba(143, 187, 239, 0.4)',
-          badgeText: '#8FBBEF',
-          scriptTitle: '#62A0E9',
-          scriptText: '#FFFFFF',
-          waveColor: '#1F77DF',
-          hintText: '#79ADA9',
-        };
-
-      case 'dawn':
-        return {
-          cardBg: 'rgba(255, 255, 255, 0.92)',
-          cardBorder: '#F8E4B3',
-          badgeBg: '#FCF4E0',
-          badgeBorder: '#F8E4B3',
-          badgeText: '#D97800',
-          scriptTitle: '#DF8900',
-          scriptText: '#E39200',
-          waveColor: '#F9A000',
-          hintText: '#D97800',
-        };
-
-      default:
-        return {
-          cardBg: 'rgba(255, 255, 255, 0.92)',
-          cardBorder: '#B3EDE8',
-          badgeBg: '#E0F8F6',
-          badgeBorder: '#B3EDE8',
-          badgeText: '#009688',
-          scriptTitle: '#009688',
-          scriptText: '#355956',
-          waveColor: '#00C4B3',
-          hintText: '#79ADA9',
-        };
-    }
-  };
-
-  const skyTheme = getSkyColors();
 
   return (
     <div className={styles.container}>

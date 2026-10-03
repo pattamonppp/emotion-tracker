@@ -11,11 +11,11 @@ import {
   ScrollView,
 } from 'react-native';
 import { Sparkles, X, ArrowDown, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
-import { audioService } from '../services/audioService';
-import { MoocaMascot } from './MoocaMascot';
-import { colors, shadows, typography, radii } from '../design-system/tokens';
-import { getTranslation } from '../locales';
-import { MODAL_CONFIG } from '../constants';
+import { audioService } from '../../../services/audioService';
+import { MoocaMascot } from '../../../components/MoocaMascot';
+import { colors, shadows, typography } from '../../../design-system/tokens';
+import { getTranslation } from '../../../locales';
+import { MODAL_CONFIG } from '../../../constants';
 
 export interface CustomEmotionModalProps {
   isOpen: boolean;

@@ -8,15 +8,15 @@ import {
   Animated,
   Platform,
 } from 'react-native';
-import { GoalType } from '../types';
-import { REFRAMING_INSIGHTS } from '../data/matrixData';
-import { audioService } from '../services/audioService';
-import { MarshmallowButton } from '../design-system/MarshmallowButton';
-import { MoocaMascot } from './MoocaMascot';
+import { GoalType } from '../../types';
+import { REFRAMING_INSIGHTS } from '../../data/matrixData';
+import { audioService } from '../../services/audioService';
+import { MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MoocaMascot } from '../../components/MoocaMascot';
 import { Heart, Dna, ArrowRight, Sparkles, HeartHandshake, Sprout } from 'lucide-react-native';
-import { colors, radii, shadows, typography } from '../design-system/tokens';
-import { getTranslation } from '../locales';
-import { PHASE3_CONFIG } from '../constants';
+import { colors, radii, shadows, typography } from '../../design-system/tokens';
+import { getTranslation } from '../../locales';
+import { PHASE3_CONFIG } from '../../constants';
 
 export interface Phase3CognitiveReframingProps {
   goal: GoalType;

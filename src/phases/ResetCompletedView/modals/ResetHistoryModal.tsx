@@ -8,10 +8,10 @@ import {
   ScrollView 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ShiftFeedback, UserProfile } from '../types';
+import { ShiftFeedback, UserProfile } from '../../../types';
 import { Award, X, Activity, Sparkles } from 'lucide-react-native';
-import { colors, radii, shadows } from '../design-system/tokens';
-import { getTranslation } from '../locales';
+import { colors, radii, shadows } from '../../../design-system/tokens';
+import { getTranslation } from '../../../locales';
 
 export interface ResetHistoryModalProps {
   isOpen: boolean;

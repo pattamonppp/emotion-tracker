@@ -5,17 +5,17 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { EmotionTag, EmotionTagId } from '../types';
-import { EMOTION_TAGS, matchOptionFromKeywords } from '../data/matrixData';
-import { audioService } from '../services/audioService';
-import { MarshmallowButton } from '../design-system/MarshmallowButton';
-import { FloatingEmotionCloud } from './FloatingEmotionCloud';
-import { GlassEmotionJar } from './GlassEmotionJar';
-import { CustomEmotionModal } from './CustomEmotionModal';
-import { MapPin, Activity, Sparkles, ArrowRight } from 'lucide-react-native';
-import { colors, radii, shadows, typography } from '../design-system/tokens';
-import { getTranslation } from '../locales';
-import { PHASE1_CONFIG } from '../constants';
+import { EmotionTag, EmotionTagId } from '../../types';
+import { EMOTION_TAGS, matchOptionFromKeywords } from '../../data/matrixData';
+import { audioService } from '../../services/audioService';
+import { MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { FloatingEmotionCloud } from './components/FloatingEmotionCloud';
+import { GlassEmotionJar } from './components/GlassEmotionJar';
+import { CustomEmotionModal } from './modals/CustomEmotionModal';
+import { MapPin, Activity, ArrowRight } from 'lucide-react-native';
+import { colors, radii, shadows } from '../../design-system/tokens';
+import { getTranslation } from '../../locales';
+import { PHASE1_CONFIG } from '../../constants';
 
 export interface CustomMessageItem {
   id: string;
@@ -411,3 +411,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export * from './modals/CustomEmotionModal';
+export * from './modals/LivePulseSensorModal';
+export * from './modals/OnboardingModal';
+

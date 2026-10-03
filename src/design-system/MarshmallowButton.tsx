@@ -11,12 +11,32 @@ import {
 import { audioService } from '../services/audioService';
 import { colors, radii, shadows } from './tokens';
 
+export const MARSHMALLOW_VARIANT = {
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
+  SOFT_CREAM: 'softCream',
+  OUTLINE: 'outline',
+  GHOST: 'ghost',
+  MINT: 'mint',
+  PINK: 'pink',
+} as const;
+
+export type MarshmallowVariant = typeof MARSHMALLOW_VARIANT[keyof typeof MARSHMALLOW_VARIANT];
+
+export const MARSHMALLOW_SIZE = {
+  SM: 'sm',
+  MD: 'md',
+  LG: 'lg',
+} as const;
+
+export type MarshmallowSize = typeof MARSHMALLOW_SIZE[keyof typeof MARSHMALLOW_SIZE];
+
 export interface MarshmallowButtonProps {
   onPress: () => void;
   title?: string;
   children?: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'softCream' | 'outline' | 'ghost' | 'mint' | 'pink';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: MarshmallowVariant;
+  size?: MarshmallowSize;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   disabled?: boolean;

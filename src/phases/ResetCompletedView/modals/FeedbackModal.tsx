@@ -14,7 +14,6 @@ import {
   X,
   Star,
   CheckCircle2,
-  Sparkles,
   Headphones,
   Activity,
   Heart,
@@ -31,12 +30,12 @@ import {
 import {
   colors,
   typography,
-} from '../design-system/tokens';
+} from '../../../design-system/tokens';
 import {
   MarshmallowButton,
-} from '../design-system/MarshmallowButton';
-import { audioService } from '../services/audioService';
-import { getTranslation } from '../locales';
+} from '../../../design-system/MarshmallowButton';
+import { audioService } from '../../../services/audioService';
+import { getTranslation } from '../../../locales';
 
 export interface FeedbackModalProps {
   isOpen: boolean;

@@ -8,9 +8,9 @@ import {
   Easing,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { EmotionTagId } from '../types';
-import { EMOTION_TAGS, matchOptionFromKeywords } from '../data/matrixData';
-import { audioService } from '../services/audioService';
+import { EmotionTagId } from '../../../types';
+import { EMOTION_TAGS, matchOptionFromKeywords } from '../../../data/matrixData';
+import { audioService } from '../../../services/audioService';
 import {
   Sparkles,
   X,
@@ -22,12 +22,12 @@ import {
   RotateCcw,
 } from 'lucide-react-native';
 import { getEmotionIcon } from './FloatingEmotionCloud';
-import { MoocaMascot } from './MoocaMascot';
+import { MoocaMascot } from '../../../components/MoocaMascot';
 import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCircle } from 'react-native-svg';
-import { colors, radii, shadows, typography } from '../design-system/tokens';
-import { getTranslation, getTagLabel } from '../locales';
-import { PHASE1_CONFIG } from '../constants';
-import { SpeechMessage } from '../types';
+import { colors, radii, shadows, typography } from '../../../design-system/tokens';
+import { getTranslation, getTagLabel } from '../../../locales';
+import { PHASE1_CONFIG } from '../../../constants';
+import { SpeechMessage } from '../../../types';
 
 const renderSpeechIcon = (iconType: SpeechMessage['iconType']) => {
   switch (iconType) {

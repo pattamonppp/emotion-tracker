@@ -14,7 +14,6 @@ import {
   Sprout,
 } from 'lucide-react';
 import { getTranslation } from '../../locales';
-import { PHASE3_CONFIG } from '../../constants';
 
 import styles from './styles.module.scss';
 

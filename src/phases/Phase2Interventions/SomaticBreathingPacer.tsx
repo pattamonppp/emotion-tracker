@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { audioService } from '../../services/audioService';
-import { MoocaMascot } from '../MoocaMascot';
-import { useSky } from '../DynamicSkyEngine';
+import { MoocaMascot } from '../../components/MoocaMascot';
+import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { Wind, Heart, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react-native';
-import { colors, radii, shadows, typography } from '../../design-system/tokens';
+import { Wind, Heart, CheckCircle2, ArrowRight } from 'lucide-react-native';
+import { colors, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 
 import { BREATHING_CONFIG } from './constants';
@@ -40,7 +40,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.breathingPacer;
-  const { activePeriod } = useSky();
+  const skyColors = useSkyTheme();
   const [isStarted, setIsStarted] = useState(false);
   const [phase, setPhase] = useState<PhaseType>('inhale');
   const [phaseProgress, setPhaseProgress] = useState(0); // 0 to 100
@@ -52,49 +52,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
   const orbScaleAnim = useRef(new Animated.Value(1)).current;
   const auraGlowAnim = useRef(new Animated.Value(0.4)).current;
 
-  const getSkyColors = () => {
-    // Center orb & pacing circle ALWAYS strictly use Ooca CI Turquoise / Teal
-    const oocaCIOrb = {
-      ringTrack: colors.ringTrack,
-      ringProgress: colors.primary,
-      orbBorder: colors.primary,
-      secondsColor: colors.primaryDark,
-      phaseLabelColor: colors.primaryDark,
-      cycleCounterColor: colors.primary,
-    };
 
-    switch (activePeriod) {
-      case 'sunset':
-        return {
-          instructionColor: colors.white,
-          pulseColor: colors.white,
-          heartColor: colors.white,
-          ...oocaCIOrb,
-        };
-      case 'night':
-        return {
-          instructionColor: '#E4EFFB',
-          pulseColor: colors.textMuted,
-          heartColor: '#1F77DF',
-          ...oocaCIOrb,
-        };
-      case 'dawn':
-        return {
-          instructionColor: colors.secondary,
-          pulseColor: colors.secondary,
-          heartColor: colors.secondary,
-          ...oocaCIOrb,
-        };
-      default:
-        return {
-          instructionColor: colors.primaryDark,
-          pulseColor: colors.textMuted,
-          heartColor: colors.primary,
-          ...oocaCIOrb,
-        };
-    }
-  };
-  const skyColors = getSkyColors();
 
   // Pattern durations in seconds
   const getPhaseDuration = (pat: BreathPattern, ph: PhaseType): number => {

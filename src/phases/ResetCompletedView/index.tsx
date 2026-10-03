@@ -7,12 +7,12 @@ import {
   Share,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { UserProfile, ShiftFeedback } from '../types';
-import { MarshmallowButton } from '../design-system/MarshmallowButton';
-import { MoocaMascot } from './MoocaMascot';
-import { FeedbackModal } from './FeedbackModal';
-import { useSky } from './DynamicSkyEngine';
-import { audioService } from '../services/audioService';
+import { UserProfile, ShiftFeedback } from '../../types';
+import { MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MoocaMascot } from '../../components/MoocaMascot';
+import { FeedbackModal } from './modals/FeedbackModal';
+import { useSky } from '../../components/DynamicSkyEngine';
+import { audioService } from '../../services/audioService';
 import {
   RotateCcw,
   History,
@@ -25,8 +25,8 @@ import {
   Leaf,
   MessageSquareHeart,
 } from 'lucide-react-native';
-import { colors, radii, typography } from '../design-system/tokens';
-import { getTranslation } from '../locales';
+import { colors, radii, typography } from '../../design-system/tokens';
+import { getTranslation } from '../../locales';
 
 export interface ResetCompletedViewProps {
   profile: UserProfile;
@@ -430,3 +430,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
 });
+
+export * from './modals/ResetHistoryModal';
+export * from './modals/FeedbackModal';
+

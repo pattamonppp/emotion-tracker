@@ -1,7 +1,7 @@
 export * from './SomaticAbsorption';
 export * from './VictorySip';
 export * from './KineticShaker';
-export * from './AudioMatrixSanctuary';
-export * from './SomaticBreathingPacer';
+export { AudioMatrixSanctuary } from './AudioMatrixSanctuary';
+export { SomaticBreathingPacer } from './SomaticBreathingPacer';
 export * from './types';
 export * from './constants';

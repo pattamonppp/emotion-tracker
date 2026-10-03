@@ -1,23 +1,59 @@
-export type GoalType = 'exam' | 'work' | 'stage' | 'burnout';
+export const GOAL = {
+  EXAM: 'exam',
+  WORK: 'work',
+  STAGE: 'stage',
+  BURNOUT: 'burnout',
+} as const;
+export type GoalType = typeof GOAL[keyof typeof GOAL];
 
-export type MBTIType = 
-  | 'INTJ' | 'INTP' | 'ENTJ' | 'ENTP'
-  | 'INFJ' | 'INFP' | 'ENFJ' | 'ENFP'
-  | 'ISTJ' | 'ISFJ' | 'ESTJ' | 'ESFJ'
-  | 'ISTP' | 'ISFP' | 'ESTP' | 'ESFP';
+export const MBTI = {
+  INTJ: 'INTJ', INTP: 'INTP', ENTJ: 'ENTJ', ENTP: 'ENTP',
+  INFJ: 'INFJ', INFP: 'INFP', ENFJ: 'ENFJ', ENFP: 'ENFP',
+  ISTJ: 'ISTJ', ISFJ: 'ISFJ', ESTJ: 'ESTJ', ESFJ: 'ESFJ',
+  ISTP: 'ISTP', ISFP: 'ISFP', ESTP: 'ESTP', ESFP: 'ESFP',
+} as const;
+export type MBTIType = typeof MBTI[keyof typeof MBTI];
 
-export type EmotionTagId = 
-  | 'shaking' 
-  | 'forgetting' 
-  | 'pressure' 
-  | 'freeze' 
-  | 'burnout'
-  | 'anxious'
-  | 'overthinking'
-  | 'lonely'
-  | 'confused'
-  | 'custom'
+export const LANG = {
+  TH: 'th',
+  EN: 'en',
+} as const;
+export type Language = typeof LANG[keyof typeof LANG];
+
+export const EMOTION_TAG_ID = {
+  SHAKING: 'shaking',
+  FORGETTING: 'forgetting',
+  PRESSURE: 'pressure',
+  FREEZE: 'freeze',
+  BURNOUT: 'burnout',
+  ANXIOUS: 'anxious',
+  OVERTHINKING: 'overthinking',
+  LONELY: 'lonely',
+  CONFUSED: 'confused',
+  CUSTOM: 'custom',
+} as const;
+
+export type EmotionTagId =
+  | typeof EMOTION_TAG_ID[keyof typeof EMOTION_TAG_ID]
   | (string & {});
+
+export const INTERVENTION = {
+  A: 'A',
+  B: 'B',
+  C: 'C',
+  D: 'D',
+  E: 'E',
+  F: 'F',
+  G: 'G',
+} as const;
+export type InterventionOption = typeof INTERVENTION[keyof typeof INTERVENTION];
+
+export const ACTIVITY_TYPE = {
+  SHAKE: 'shake',
+  JUMP: 'jump',
+  BOUNCE: 'bounce',
+} as const;
+export type ActivityType = typeof ACTIVITY_TYPE[keyof typeof ACTIVITY_TYPE];
 
 export interface EmotionTag {
   id: EmotionTagId;
@@ -26,10 +62,8 @@ export interface EmotionTag {
   emoji: string;
   color: string;
   weightDescription: string;
-  recommendedOption: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+  recommendedOption: InterventionOption;
 }
-
-export type InterventionOption = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
 
 export interface InterventionOptionMeta {
   option: InterventionOption;
@@ -46,7 +80,7 @@ export interface UserProfile {
   ageBracket: string;
   goal: GoalType;
   mbti: MBTIType;
-  language: 'th' | 'en';
+  language: Language;
   permissions: {
     motion: boolean;
     haptics: boolean;
@@ -54,39 +88,63 @@ export interface UserProfile {
   };
 }
 
-export type ResetPhase = 
-  | 'onboarding'
-  | 'phase1_jar'         // 0:00 - 0:15
-  | 'phase2_intervention'// 0:15 - 1:20
-  | 'phase3_reframing'   // 1:20 - 1:45
-  | 'phase4_feedback'    // 1:45 - 2:00
-  | 'completed';
+export const PHASE = {
+  ONBOARDING: 'onboarding',
+  PHASE1_JAR: 'phase1_jar',          // 0:00 - 0:15
+  PHASE2_INTERVENTION: 'phase2_intervention', // 0:15 - 1:20
+  PHASE3_REFRAMING: 'phase3_reframing',    // 1:20 - 1:45
+  PHASE4_FEEDBACK: 'phase4_feedback',     // 1:45 - 2:00
+  COMPLETED: 'completed',
+} as const;
+export type ResetPhase = typeof PHASE[keyof typeof PHASE];
+
+export const SHIFT_RESULT = {
+  EMPOWERED: 'empowered',
+  GROUNDED: 'grounded',
+  SAME: 'same',
+} as const;
+export type ShiftResultType = typeof SHIFT_RESULT[keyof typeof SHIFT_RESULT];
 
 export interface ShiftFeedback {
-  shiftResult: 'empowered' | 'grounded' | 'same';
+  shiftResult: ShiftResultType;
   preHeartRate: number;
   postHeartRate: number;
   timestamp: string;
 }
 
-export type MoodStampType = 'empowered' | 'grounded' | 'hug';
+export const MOOD_STAMP = {
+  EMPOWERED: 'empowered',
+  GROUNDED: 'grounded',
+  HUG: 'hug',
+} as const;
+export type MoodStampType = typeof MOOD_STAMP[keyof typeof MOOD_STAMP];
 
 export interface CustomMessageItem {
   id: string;
   text: string;
 }
 
+export const SPEECH_ICON = {
+  SPARKLES: 'sparkles',
+  WIND: 'wind',
+  HEART: 'heart',
+  SHIELD: 'shield',
+  SMILE: 'smile',
+  CLOUD: 'cloud',
+} as const;
+export type SpeechIconType = typeof SPEECH_ICON[keyof typeof SPEECH_ICON];
+
 export interface SpeechMessage {
   text: string;
-  iconType: 'sparkles' | 'wind' | 'heart' | 'shield' | 'smile' | 'cloud';
+  iconType: SpeechIconType;
 }
 
-export type SkyTimePeriod = 'dawn' | 'day' | 'sunset' | 'night';
-export type SkyMode = 'auto' | SkyTimePeriod;
-
-export const SKY_PERIOD = {
+export const SKY = {
   DAWN: 'dawn',
   DAY: 'day',
   SUNSET: 'sunset',
   NIGHT: 'night',
 } as const;
+export const SKY_PERIOD = SKY; // backward compatibility
+export type SkyTimePeriod = typeof SKY[keyof typeof SKY];
+export type SkyMode = 'auto' | SkyTimePeriod;

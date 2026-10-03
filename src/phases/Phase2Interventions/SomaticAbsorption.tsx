@@ -11,11 +11,11 @@ import {
   Modal,
 } from 'react-native';
 import { audioService } from '../../services/audioService';
-import { useSky } from '../DynamicSkyEngine';
-import { MoocaMascot } from '../MoocaMascot';
+import { useSkyTheme } from '../../hooks/useSkyTheme';
+import { MoocaMascot } from '../../components/MoocaMascot';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCircle } from 'react-native-svg';
-import { Star, Sun, Hand, Sparkles, HelpCircle, Check, X, ArrowRight } from 'lucide-react-native';
+import { Star, Sun, Hand, Sparkles, HelpCircle, Check, X } from 'lucide-react-native';
 import { typography, radii, shadows, colors } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 
@@ -35,8 +35,8 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.somaticAbsorption;
-  const { activePeriod } = useSky();
-  const skyPeriod = propSkyPeriod || activePeriod || 'day';
+  const theme = useSkyTheme();
+  const skyPeriod = propSkyPeriod || theme.period;
 
 
 
@@ -55,94 +55,6 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
   const lastHapticTick = useRef(0);
   const lastPos = useRef({ x: 0, y: 0 });
 
-  // Premium, luminous palettes tailored to each sky period (Sun-like feathered radial auras)
-  const getTheme = () => {
-    switch (skyPeriod) {
-      case 'dawn':
-        return {
-          glowCore: '#FCF4E0',
-          glowMid: '#F8E4B3',
-          glowOuter: '#F4D280',
-          outerBorder: 'rgba(249, 160, 0, 0.45)',
-          middleBorder: 'rgba(240, 191, 77, 0.58)',
-          innerBorder: 'rgba(248, 228, 179, 0.5)',
-          circleBg: 'rgba(255, 255, 255, 0.78)',
-          starColor: 'rgba(249, 160, 0, 0.32)',
-          textColor: '#DF8900',
-          badgeBg: '#FCF4E0',
-          badgeBorder: '#F8E4B3',
-          badgeText: '#DF8900',
-          badgeIconColor: '#F9A000',
-          progressFill: '#F9A000',
-          progressTrack: 'rgba(249, 160, 0, 0.18)',
-          captionColor: '#DF8900',
-          dots: ['#F9A000', '#F0BF4D', '#8AD866', '#FF8F4B'],
-        };
-      case 'sunset':
-        return {
-          glowCore: '#FDEFEE',
-          glowMid: '#FAD6D5',
-          glowOuter: '#F7BBB9',
-          outerBorder: 'rgba(239, 119, 115, 0.45)',
-          middleBorder: 'rgba(241, 139, 136, 0.65)',
-          innerBorder: 'rgba(250, 214, 213, 0.85)',
-          circleBg: 'rgba(255, 255, 255, 0.8)',
-          starColor: 'rgba(239, 119, 115, 0.25)',
-          textColor: '#E44743',
-          badgeBg: '#FDEFEE',
-          badgeBorder: '#FAD6D5',
-          badgeText: '#E44743',
-          badgeIconColor: '#EF7773',
-          progressFill: '#EF7773',
-          progressTrack: 'rgba(250, 214, 213, 0.45)',
-          captionColor: '#FFFFFF',
-          dots: ['#EF7773', '#FF8F4B', '#E44743', '#00C4B3'],
-        };
-      case 'night':
-        return {
-          glowCore: '#E4EFFB',
-          glowMid: '#C7DDF7',
-          glowOuter: '#8FBBEF',
-          outerBorder: 'rgba(143, 187, 239, 0.45)',
-          middleBorder: 'rgba(98, 160, 233, 0.62)',
-          innerBorder: 'rgba(199, 221, 247, 0.45)',
-          circleBg: 'rgba(38, 49, 60, 0.55)',
-          starColor: 'rgba(143, 187, 239, 0.38)',
-          textColor: '#FFFFFF',
-          badgeBg: 'rgba(38, 49, 60, 0.95)',
-          badgeBorder: 'rgba(143, 187, 239, 0.48)',
-          badgeText: '#E4EFFB',
-          badgeIconColor: '#62A0E9',
-          progressFill: '#1F77DF',
-          progressTrack: 'rgba(143, 187, 239, 0.22)',
-          captionColor: '#79ADA9',
-          dots: ['#1F77DF', '#62A0E9', '#00C4B3', '#8FBBEF'],
-        };
-      case 'day':
-      default:
-        return {
-          glowCore: '#E0F8F6',
-          glowMid: '#B3EDE8',
-          glowOuter: '#DBF0EE',
-          outerBorder: 'rgba(0, 196, 179, 0.45)',
-          middleBorder: 'rgba(0, 190, 172, 0.58)',
-          innerBorder: 'rgba(179, 237, 232, 0.45)',
-          circleBg: 'rgba(255, 255, 255, 0.82)',
-          starColor: colors.borderTeal,
-          textColor: colors.primaryDark,
-          badgeBg: colors.primaryLight,
-          badgeBorder: colors.borderTeal,
-          badgeText: colors.primaryDark,
-          badgeIconColor: colors.primary,
-          progressFill: colors.primary,
-          progressTrack: colors.ringTrack,
-          captionColor: colors.primaryDark,
-          dots: ['#00C4B3', '#1F77DF', '#F9A000', '#8AD866'],
-        };
-    }
-  };
-
-  const theme = getTheme();
 
   // Gentle star spin
   useEffect(() => {
@@ -468,7 +380,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                 styles.progressBarFill,
                 {
                   width: progressWidth,
-                  backgroundColor: theme.progressFill,
+                  backgroundColor: theme.progressFillColor || theme.progressFill[0],
                 },
               ]}
             />

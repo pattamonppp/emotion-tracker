@@ -12,13 +12,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Accelerometer } from 'expo-sensors';
 import { audioService } from '../../services/audioService';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../MoocaMascot';
-import { useSky } from '../DynamicSkyEngine';
+import { MoocaMascot } from '../../components/MoocaMascot';
+import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { Heart, Check, GlassWater, Sparkles, ArrowRight, X, HelpCircle } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 import { VictorySipProps } from './types';
-import { VICTORY_SIP_CONFIG } from './constants';
 
 export const VictorySip: React.FC<VictorySipProps> = ({
   onComplete,
@@ -26,10 +25,9 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.victorySip;
-  const { activePeriod } = useSky();
+  const skyTheme = useSkyTheme();
   const [sipCount, setSipCount] = useState(0); // 0 to 3
   const [isFinished, setIsFinished] = useState(false);
-  const [tiltAngle, setTiltAngle] = useState(0);
   const [isTiltingToDrink, setIsTiltingToDrink] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(true); // Auto-show on mount
 
@@ -102,7 +100,6 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
         // Exponential moving average for smooth sensory response
         smoothedTilt.current = Math.round(smoothedTilt.current * 0.7 + rawDeg * 0.3);
-        setTiltAngle(smoothedTilt.current);
 
         // Detect tilt direction: tilting left (x < -0.06) or right (x > 0.06)
         if (x < -0.06) {
@@ -187,60 +184,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     }
   };
 
-  // Harmonious sky-adaptive theme
-  const getSkyColors = () => {
-    switch (activePeriod) {
-      case 'sunset':
-        return {
-          countColor: '#ffffffff',
-          labelColor: '#fffafbff',
-          hintColor: '#5f0019ff',
-          progressTrack: 'rgba(255, 255, 255, 0.45)',
-          progressFill: ['#ffa8bbff', '#fff6b4ff'] as const,
-          badgeBg: 'rgba(255, 255, 255, 0.90)',
-          badgeBorder: 'rgba(244, 114, 182, 0.45)',
-          badgeTextColor: '#831843',
-          badgeIconColor: '#F472B6',
-        };
-      case 'night':
-        return {
-          countColor: '#F8FAFC',
-          labelColor: '#E2E8F0',
-          hintColor: '#94A3B8',
-          progressTrack: 'rgba(255, 255, 255, 0.25)',
-          progressFill: ['#38BDF8', '#818CF8'] as const,
-          badgeBg: 'rgba(15, 23, 42, 0.85)',
-          badgeBorder: 'rgba(56, 189, 248, 0.35)',
-          badgeTextColor: '#E2E8F0',
-          badgeIconColor: '#38BDF8',
-        };
-      case 'dawn':
-        return {
-          countColor: '#78350F',
-          labelColor: '#92400E',
-          hintColor: '#B45309',
-          progressTrack: 'rgba(255, 255, 255, 0.65)',
-          progressFill: ['#F59E0B', '#FBBF24'] as const,
-          badgeBg: 'rgba(255, 255, 255, 0.90)',
-          badgeBorder: 'rgba(245, 158, 11, 0.40)',
-          badgeTextColor: '#92400E',
-          badgeIconColor: '#F59E0B',
-        };
-      default:
-        return {
-          countColor: colors.primaryDark,
-          labelColor: colors.primaryDark,
-          hintColor: colors.textMuted,
-          progressTrack: colors.ringTrack,
-          progressFill: [colors.primary, colors.accentBlue] as const,
-          badgeBg: 'rgba(255, 255, 255, 0.90)',
-          badgeBorder: colors.borderTeal,
-          badgeTextColor: colors.primaryDark,
-          badgeIconColor: colors.primary,
-        };
-    }
-  };
-  const skyTheme = getSkyColors();
+
 
   const liquidHeightInterpolated = liquidAnim.interpolate({
     inputRange: [0, 100],

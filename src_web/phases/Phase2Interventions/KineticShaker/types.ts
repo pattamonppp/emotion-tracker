@@ -1,6 +1,8 @@
+import { ACTIVITY_TYPE, SkyTimePeriod } from '../../../types';
+
 export interface KineticShakerProps {
   onComplete: () => void;
   lang: 'th' | 'en';
-  activityType?: 'shake' | 'jump';
-  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
+  activityType?: typeof ACTIVITY_TYPE.SHAKE | typeof ACTIVITY_TYPE.JUMP;
+  skyPeriod?: SkyTimePeriod;
 }

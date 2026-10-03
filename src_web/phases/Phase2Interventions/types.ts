@@ -1,4 +1,4 @@
-import { MBTIType, SkyTimePeriod } from '../../types';
+import { MBTIType, SkyTimePeriod, ACTIVITY_TYPE } from '../../types';
 import { Language } from '../../locales';
 
 export interface BaseInterventionProps {
@@ -13,7 +13,7 @@ export interface SomaticAbsorptionProps extends BaseInterventionProps {
 export interface VictorySipProps extends BaseInterventionProps { }
 
 export interface KineticShakerProps extends BaseInterventionProps {
-  activityType?: 'shake' | 'jump';
+  activityType?: typeof ACTIVITY_TYPE.SHAKE | typeof ACTIVITY_TYPE.JUMP;
 }
 
 export interface AudioMatrixSanctuaryProps extends BaseInterventionProps {

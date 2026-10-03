@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { useSky } from '../components/DynamicSkyEngine';
-import { DESIGN_TOKENS } from '../design-system/tokens';
+import { colors } from '../design-system/tokens';
 import type { SkyTimePeriod } from '../types';
 
 export interface SkyThemeTokens {
   period: SkyTimePeriod;
 
-  // Somatic Breathing & Orb
+  // Somatic Breathing & Center Orb
   ringTrack: string;
   ringProgress: string;
   orbBorder: string;
@@ -24,7 +24,6 @@ export interface SkyThemeTokens {
   progressTrack: string;
   progressFill: readonly [string, string];
   progressFillColor: string;
-  progressFillBar: string;
   fluidColors: readonly [string, string, ...string[]];
 
   // Badges & Actions
@@ -61,12 +60,12 @@ export const useSkyTheme = (): SkyThemeTokens => {
 
   return useMemo(() => {
     const oocaCIOrb = {
-      ringTrack: 'rgba(0, 196, 179, 0.16)',
-      ringProgress: DESIGN_TOKENS.color.brand.turquoise.primary,
-      orbBorder: DESIGN_TOKENS.color.brand.turquoise.primary,
-      secondsColor: DESIGN_TOKENS.color.brand.turquoise.text,
-      phaseLabelColor: DESIGN_TOKENS.color.brand.turquoise.text,
-      cycleCounterColor: DESIGN_TOKENS.color.brand.turquoise.primary,
+      ringTrack: colors.ringTrack,
+      ringProgress: colors.primary,
+      orbBorder: colors.primary,
+      secondsColor: colors.primaryDark,
+      phaseLabelColor: colors.primaryDark,
+      cycleCounterColor: colors.primary,
     };
 
     switch (activePeriod) {
@@ -87,7 +86,6 @@ export const useSkyTheme = (): SkyThemeTokens => {
           progressTrack: 'rgba(255, 255, 255, 0.45)',
           progressFill: ['#EF7773', '#FF8F4B'] as const,
           progressFillColor: '#EF7773',
-          progressFillBar: 'linear-gradient(90deg, #EF7773, #FF8F4B)',
           fluidColors: ['#00C4B3', '#EF7773', '#FF8F4B'] as const,
 
           // Badges
@@ -126,7 +124,7 @@ export const useSkyTheme = (): SkyThemeTokens => {
 
           // Somatic Breathing
           instructionColor: '#E4EFFB',
-          pulseColor: DESIGN_TOKENS.color.turquoiseGray[4],
+          pulseColor: colors.turquoiseGray4,
           heartColor: '#1F77DF',
 
           // Progress / counters
@@ -136,7 +134,6 @@ export const useSkyTheme = (): SkyThemeTokens => {
           progressTrack: 'rgba(255, 255, 255, 0.25)',
           progressFill: ['#1F77DF', '#62A0E9'] as const,
           progressFillColor: '#1F77DF',
-          progressFillBar: 'linear-gradient(90deg, #1F77DF, #62A0E9)',
           fluidColors: ['#00C4B3', '#1F77DF', '#62A0E9'] as const,
 
           // Badges
@@ -185,7 +182,6 @@ export const useSkyTheme = (): SkyThemeTokens => {
           progressTrack: 'rgba(255, 255, 255, 0.65)',
           progressFill: ['#F9A000', '#F8E4B3'] as const,
           progressFillColor: '#F9A000',
-          progressFillBar: 'linear-gradient(90deg, #F9A000, #F4D280)',
           fluidColors: ['#00C4B3', '#F9A000', '#F8E4B3'] as const,
 
           // Badges
@@ -224,37 +220,33 @@ export const useSkyTheme = (): SkyThemeTokens => {
           ...oocaCIOrb,
 
           // Somatic Breathing
-          instructionColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          pulseColor: DESIGN_TOKENS.color.turquoiseGray[4],
-          heartColor: DESIGN_TOKENS.color.brand.turquoise.primary,
+          instructionColor: colors.primaryDark,
+          pulseColor: colors.turquoiseGray4,
+          heartColor: colors.primary,
 
           // Progress / counters
-          countColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          labelColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          hintColor: DESIGN_TOKENS.color.turquoiseGray[4],
-          progressTrack: 'rgba(0, 196, 179, 0.16)',
-          progressFill: [
-            DESIGN_TOKENS.color.brand.turquoise.primary,
-            DESIGN_TOKENS.color.accent.blue[300],
-          ] as const,
-          progressFillColor: DESIGN_TOKENS.color.brand.turquoise.primary,
-          progressFillBar: 'linear-gradient(90deg, #00C4B3, #62A0E9)',
+          countColor: colors.primaryDark,
+          labelColor: colors.primaryDark,
+          hintColor: colors.turquoiseGray4,
+          progressTrack: colors.ringTrack,
+          progressFill: [colors.primary, colors.accentBlue] as const,
+          progressFillColor: colors.primary,
           fluidColors: ['#00C4B3', '#62A0E9', '#B3EDE8'] as const,
 
           // Badges
           badgeBg: '#E0F8F6',
-          badgeBorder: '#B3EDE8',
-          badgeText: DESIGN_TOKENS.color.brand.turquoise.text,
-          badgeTextColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          badgeIconColor: DESIGN_TOKENS.color.brand.turquoise.primary,
+          badgeBorder: colors.borderTeal,
+          badgeText: colors.primaryDark,
+          badgeTextColor: colors.primaryDark,
+          badgeIconColor: colors.primary,
 
           // Audio Matrix
           cardBg: 'rgba(255, 255, 255, 0.92)',
-          cardBorder: '#B3EDE8',
-          scriptTitle: DESIGN_TOKENS.color.brand.turquoise.text,
-          scriptText: DESIGN_TOKENS.color.turquoiseGray[1],
-          waveColor: DESIGN_TOKENS.color.brand.turquoise.primary,
-          hintText: DESIGN_TOKENS.color.turquoiseGray[4],
+          cardBorder: colors.borderTeal,
+          scriptTitle: colors.primaryDark,
+          scriptText: colors.turquoiseGray1,
+          waveColor: colors.primary,
+          hintText: colors.turquoiseGray4,
 
           // Somatic Absorption
           glowCore: 'rgba(0, 196, 179, 0.32)',
@@ -264,9 +256,9 @@ export const useSkyTheme = (): SkyThemeTokens => {
           middleBorder: 'rgba(98, 160, 233, 0.30)',
           innerBorder: 'rgba(0, 196, 179, 0.22)',
           circleBg: 'rgba(255, 255, 255, 0.20)',
-          starColor: DESIGN_TOKENS.color.brand.turquoise.primary,
-          textColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          captionColor: DESIGN_TOKENS.color.turquoiseGray[4],
+          starColor: colors.primary,
+          textColor: colors.primaryDark,
+          captionColor: colors.turquoiseGray4,
           dots: ['#00C4B3', '#62A0E9', '#8AD866', '#FF8F4B'],
         };
     }

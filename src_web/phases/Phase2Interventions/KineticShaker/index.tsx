@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { audioService } from '../../../services/audioService';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { Sparkles, Star, CheckCircle2 } from 'lucide-react';
 import { getTranslation } from '../../../locales';
+import { ACTIVITY_TYPE } from '../../../types';
 import { KINETIC_SHAKER_CONFIG } from './constants';
 import type { KineticShakerProps } from './types';
 import styles from './styles.module.scss';
@@ -13,22 +14,24 @@ import { useSkyTheme } from '@/hooks/useSkyTheme';
 export const KineticShaker: React.FC<KineticShakerProps> = ({
   onComplete,
   lang,
-  activityType = 'shake',
+  activityType = ACTIVITY_TYPE.SHAKE,
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.kineticShaker;
-  const [mode, setMode] = useState<'shake' | 'bounce'>(activityType === 'jump' ? 'bounce' : 'shake');
+  const [mode, setMode] = useState<typeof ACTIVITY_TYPE.SHAKE | typeof ACTIVITY_TYPE.BOUNCE>(
+    activityType === ACTIVITY_TYPE.JUMP ? ACTIVITY_TYPE.BOUNCE : ACTIVITY_TYPE.SHAKE
+  );
   const [shakesLeft, setShakesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_SHAKES);
   const [bouncesLeft, setBouncesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_JUMPS);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [isShakingAnim, setIsShakingAnim] = useState<boolean>(false);
 
   useEffect(() => {
-    setMode(activityType === 'jump' ? 'bounce' : 'shake');
+    setMode(activityType === ACTIVITY_TYPE.JUMP ? ACTIVITY_TYPE.BOUNCE : ACTIVITY_TYPE.SHAKE);
   }, [activityType]);
 
-  const currentCount = mode === 'shake' ? shakesLeft : bouncesLeft;
-  const maxCount = mode === 'shake' ? KINETIC_SHAKER_CONFIG.REQUIRED_SHAKES : KINETIC_SHAKER_CONFIG.REQUIRED_JUMPS;
+  const currentCount = mode === ACTIVITY_TYPE.SHAKE ? shakesLeft : bouncesLeft;
+  const maxCount = mode === ACTIVITY_TYPE.SHAKE ? KINETIC_SHAKER_CONFIG.REQUIRED_SHAKES : KINETIC_SHAKER_CONFIG.REQUIRED_JUMPS;
   const progressPercent = Math.round(((maxCount - currentCount) / maxCount) * 100);
   const fluidHeightPercent = isFinished ? 0 : Math.round((currentCount / maxCount) * 100);
 
@@ -40,7 +43,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
     setIsShakingAnim(true);
     setTimeout(() => setIsShakingAnim(false), 240);
 
-    if (mode === 'shake') {
+    if (mode === ACTIVITY_TYPE.SHAKE) {
       const remaining = Math.max(0, shakesLeft - 1);
       setShakesLeft(remaining);
       audioService.playShakerClick(remaining);
@@ -68,8 +71,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       {/* 1. Mascot View - Standardized Height */}
       <div
         className={classNames(styles.mascotWrapper, {
-          [styles.isShaking]: isShakingAnim && mode === 'shake',
-          [styles.isBouncing]: isShakingAnim && mode === 'bounce',
+          [styles.isShaking]: isShakingAnim && mode === ACTIVITY_TYPE.SHAKE,
+          [styles.isBouncing]: isShakingAnim && mode === ACTIVITY_TYPE.BOUNCE,
         })}
       >
         <MoocaMascot
@@ -77,10 +80,10 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           size="sm"
           speakingBubble={
             isFinished
-              ? mode === 'shake'
+              ? mode === ACTIVITY_TYPE.SHAKE
                 ? strings.bubbleDone
                 : strings.bubbleDoneBounce
-              : mode === 'shake'
+              : mode === ACTIVITY_TYPE.SHAKE
                 ? strings.bubbleShake
                 : strings.bubbleBounce
           }
@@ -97,7 +100,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           className={classNames(styles.flaskWrapper, {
             [styles.flaskShaking]: isShakingAnim,
           })}
-          title={mode === 'shake' ? strings.captionShake : strings.captionBounce}
+          title={mode === ACTIVITY_TYPE.SHAKE ? strings.captionShake : strings.captionBounce}
         >
           {/* Top Wooden Cork Cap with Golden Star Seal */}
           <div className={styles.capsuleCorkTop}>
@@ -157,7 +160,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           <span className={styles.organicCountLabel} style={{ color: skyTheme.labelColor }}>
             {isFinished
               ? strings.released
-              : mode === 'shake'
+              : mode === ACTIVITY_TYPE.SHAKE
                 ? `${currentCount} ${strings.shakesLeft}`
                 : `${currentCount} ${strings.bouncesLeft}`}
           </span>
@@ -171,7 +174,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
               className={styles.organicProgressFill}
               style={{
                 width: `${progressPercent}%`,
-                background: skyTheme.progressFill,
+                background: skyTheme.progressFillBar,
               }}
             />
           </div>
@@ -190,7 +193,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           />
         ) : (
           <span className={styles.organicSensorHint} style={{ color: skyTheme.hintColor }}>
-            {mode === 'shake' ? strings.descShake : strings.descBounce}
+            {mode === ACTIVITY_TYPE.SHAKE ? strings.descShake : strings.descBounce}
           </span>
         )}
       </div>

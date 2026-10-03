@@ -9,13 +9,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { EmotionTag } from '../types';
-import { audioService } from '../services/audioService';
+import { EmotionTag } from '../../../types';
+import { audioService } from '../../../services/audioService';
 import {
   Check,
   Activity,
   CircleDashed,
-  HelpCircle,
   Anchor,
   Snowflake,
   BatteryLow,
@@ -29,8 +28,8 @@ import {
   Plus,
   Heart,
 } from 'lucide-react-native';
-import { colors, radii, shadows, typography } from '../design-system/tokens';
-import { getTranslation, getTagLabel } from '../locales';
+import { colors, radii, typography } from '../../../design-system/tokens';
+import { getTranslation, getTagLabel } from '../../../locales';
 
 export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
   if (tagId.startsWith('custom')) {
