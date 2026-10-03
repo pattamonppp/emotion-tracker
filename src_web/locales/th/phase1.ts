@@ -12,7 +12,7 @@ export const phase1 = {
   tellMoocaBtn: 'บอก Mooca',
   tellMoocaPlaceholder: 'บอก Mooca...',
   noteToMoocaDefault: 'ข้อความถึง Mooca',
-  clearJar: 'เทโหลทิ้งทั้งหมด',
+  clearJar: 'เททิ้งทั้งหมด',
   clear: 'เทออก',
   selectionPrompt: 'แตะได้สูงสุด 3 อารมณ์ที่ถ่วงใจมากที่สุด',
   resetModeTitle: 'โหมดรีเซ็ตใจกับ Mooca:',
