@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { EmotionTag, EmotionTagId, CustomMessageItem } from '../../types';
 import { EMOTION_TAGS, matchOptionFromKeywords } from '../../data/matrixData';
 import { audioService } from '../../services/audioService';
@@ -39,7 +39,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   lang = 'th',
   skyPeriod,
 }) => {
-  const selectedEmotionsRef = React.useRef(selectedEmotions);
+  const selectedEmotionsRef = useRef(selectedEmotions);
+  const jarRef = useRef<HTMLDivElement | null>(null);
+
   selectedEmotionsRef.current = selectedEmotions;
 
   const [customMessages, setCustomMessages] = React.useState<CustomMessageItem[]>([]);
@@ -147,15 +149,15 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
     customText?: string;
     isAddButton?: boolean;
   }> = [
-    ...presetsInSky.map((tagItem) => ({ id: tagItem.id, tag: tagItem })),
-    ...customInSky.map((c) => ({
-      id: c.id,
-      tag: c,
-      isCustom: true,
-      customText: c.customText,
-    })),
-    ...(showAddButton
-      ? [
+      ...presetsInSky.map((tagItem) => ({ id: tagItem.id, tag: tagItem })),
+      ...customInSky.map((c) => ({
+        id: c.id,
+        tag: c,
+        isCustom: true,
+        customText: c.customText,
+      })),
+      ...(showAddButton
+        ? [
           {
             id: 'btn_add_custom',
             tag: {
@@ -170,8 +172,8 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             isAddButton: true,
           },
         ]
-      : []),
-  ];
+        : []),
+    ];
 
   // 4) STRICTLY MAXIMUM 3 CLOUDS PER ROW!
   const chunkedRows: typeof allSkyItems[] = [];
@@ -218,8 +220,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
                           index={rowIdx * 3 + colIdx}
                           isSelected={false}
                           isJarFull={isJarFull}
-                          onToggle={() => {}}
+                          onToggle={() => { }}
                           lang={lang}
+                          jarRef={jarRef}
                           isAddButton={true}
                           onEditCustom={() => {
                             setEditingMessageId(null);
@@ -238,13 +241,14 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
                         onToggle={toggleEmotion}
                         onDropIntoJar={handleDropIntoJar}
                         lang={lang}
+                        jarRef={jarRef}
                         customText={item.customText}
                         onEditCustom={
                           item.isCustom
                             ? () => {
-                                setEditingMessageId(item.id);
-                                setIsCustomModalOpen(true);
-                              }
+                              setEditingMessageId(item.id);
+                              setIsCustomModalOpen(true);
+                            }
                             : undefined
                         }
                       />
@@ -256,7 +260,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           </div>
 
           {/* The Sanctuary Apothecary Glass Emotion Jar with Perched Mooca */}
-          <div className={styles.jarSection}>
+          <div className={styles.jarSection} ref={jarRef}>
             <GlassEmotionJar
               selectedEmotions={selectedEmotions}
               onRemoveEmotion={(id) => toggleEmotion(id)}

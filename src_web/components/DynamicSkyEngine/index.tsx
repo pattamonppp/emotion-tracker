@@ -19,7 +19,7 @@ export interface SkyContextType {
 const SkyContext = createContext<SkyContextType>({
   activePeriod: 'day',
   skyMode: 'auto',
-  setSkyMode: () => {},
+  setSkyMode: () => { },
   lang: 'th',
 });
 
@@ -45,22 +45,22 @@ export const SvgFluffyCloud: React.FC<{
   shadowColor = 'rgba(255, 255, 255, 0.4)',
   opacity = 0.85,
 }) => {
-  const gradId = `cloudGrad_${Math.round(width)}_${Math.round(height)}`;
-  return (
-    <svg width={width} height={height} viewBox="0 0 110 55" style={{ opacity }}>
-      <defs>
-        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={fillColor} stopOpacity="1" />
-          <stop offset="100%" stopColor={shadowColor} stopOpacity="0.9" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M25 46 C12 46 2 38 2 26 C2 15 12 8 22 9 C26 3 37 0 52 0 C68 0 80 7 85 16 C93 14 104 18 107 27 C110 37 100 46 88 46 Z"
-        fill={`url(#${gradId})`}
-      />
-    </svg>
-  );
-};
+    const gradId = `cloudGrad_${Math.round(width)}_${Math.round(height)}`;
+    return (
+      <svg width={width} height={height} viewBox="0 0 110 55" style={{ opacity }}>
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={fillColor} stopOpacity="1" />
+            <stop offset="100%" stopColor={shadowColor} stopOpacity="0.9" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M25 46 C12 46 2 38 2 26 C2 15 12 8 22 9 C26 3 37 0 52 0 C68 0 80 7 85 16 C93 14 104 18 107 27 C110 37 100 46 88 46 Z"
+          fill={`url(#${gradId})`}
+        />
+      </svg>
+    );
+  };
 
 export const SvgDiamondStar: React.FC<{
   size: number;
@@ -192,7 +192,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             {getPeriodIcon('dawn', 12, skyMode === 'dawn')}
             <span className={classNames(styles.optionText, { [styles.optionTextActive]: skyMode === 'dawn' })}>
-              {skyLabels.dawnShort}
+              {skyLabels.dawn}
             </span>
           </button>
 
@@ -224,7 +224,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             {getPeriodIcon('sunset', 12, skyMode === 'sunset')}
             <span className={classNames(styles.optionText, { [styles.optionTextActive]: skyMode === 'sunset' })}>
-              {skyLabels.sunsetShort}
+              {skyLabels.sunset}
             </span>
           </button>
 
@@ -241,7 +241,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
             {getPeriodIcon('night', 12, skyMode === 'night')}
             <span className={classNames(styles.optionText, { [styles.optionTextActive]: skyMode === 'night' })}>
               {skyLabels.night}
-            </span>
+            </span>ห
           </button>
         </div>
       )}
@@ -333,10 +333,10 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               background: isNight
                 ? 'radial-gradient(circle, rgba(147, 197, 253, 0.4) 0%, rgba(56, 189, 248, 0.1) 70%, transparent 100%)'
                 : isSunset
-                ? 'radial-gradient(circle, rgba(251, 146, 60, 0.45) 0%, rgba(244, 114, 182, 0.2) 70%, transparent 100%)'
-                : isDawn
-                ? 'radial-gradient(circle, rgba(253, 230, 138, 0.5) 0%, rgba(254, 215, 170, 0.25) 70%, transparent 100%)'
-                : 'radial-gradient(circle, rgba(255, 243, 199, 0.5) 0%, rgba(207, 250, 254, 0.25) 70%, transparent 100%)',
+                  ? 'radial-gradient(circle, rgba(251, 146, 60, 0.45) 0%, rgba(244, 114, 182, 0.2) 70%, transparent 100%)'
+                  : isDawn
+                    ? 'radial-gradient(circle, rgba(253, 230, 138, 0.5) 0%, rgba(254, 215, 170, 0.25) 70%, transparent 100%)'
+                    : 'radial-gradient(circle, rgba(255, 243, 199, 0.5) 0%, rgba(207, 250, 254, 0.25) 70%, transparent 100%)',
             }}
           />
 
@@ -348,8 +348,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               background: isNight
                 ? 'radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%)'
                 : isSunset
-                ? 'radial-gradient(circle, rgba(244, 63, 94, 0.35) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(0, 196, 179, 0.2) 0%, transparent 70%)',
+                  ? 'radial-gradient(circle, rgba(244, 63, 94, 0.35) 0%, transparent 70%)'
+                  : 'radial-gradient(circle, rgba(0, 196, 179, 0.2) 0%, transparent 70%)',
             }}
           />
 

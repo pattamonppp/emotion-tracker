@@ -20,7 +20,6 @@ import {
 
 import { EmotionTag } from '../../../../types';
 import { audioService } from '../../../../services/audioService';
-import { DESIGN_TOKENS } from '../../../../design-system/tokens';
 import { getTranslation, getTagLabel } from '../../../../locales';
 
 import styles from './styles.module.scss';
@@ -77,6 +76,7 @@ interface FloatingEmotionCloudProps {
   customText?: string;
   onEditCustom?: () => void;
   isAddButton?: boolean;
+  jarRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 const FLOAT_CONFIGS = [
@@ -100,6 +100,7 @@ export const FloatingEmotionCloud: React.FC<
   customText,
   onEditCustom,
   isAddButton = false,
+  jarRef,
 }) => {
     const isCustom =
       tag.id.startsWith('custom') || Boolean(customText);
@@ -118,6 +119,7 @@ export const FloatingEmotionCloud: React.FC<
     const [isDragging, setIsDragging] = useState(false);
     const [isFlying, setIsFlying] = useState(false);
     const [isPressed, setIsPressed] = useState(false);
+    const [isOverJar, setIsOverJar] = useState(false);
 
     const pointerId = useRef<number | null>(null);
 
@@ -153,28 +155,55 @@ export const FloatingEmotionCloud: React.FC<
 
     const resetDrag = () => {
       setIsDragging(false);
+      setIsOverJar(false);
       setDragOffset({
         x: 0,
         y: 0,
       });
     };
 
+    const isPointerOverJar = (
+      clientX: number,
+      clientY: number,
+    ) => {
+      if (!jarRef?.current) {
+        return false;
+      }
+
+      const rect = jarRef.current.getBoundingClientRect();
+
+      const padding = 30;
+
+      return (
+        clientX >= rect.left - padding &&
+        clientX <= rect.right + padding &&
+        clientY >= rect.top - padding &&
+        clientY <= rect.bottom + padding
+      );
+    };
+
     const handleFlyIntoJar = () => {
       if (isFlying) return;
+
+      /*
+       * Update selected state immediately.
+       * This is important because the parent removes the
+       * cloud from the sky once it becomes selected.
+       */
+      if (onDropIntoJar) {
+        onDropIntoJar(tag.id);
+      } else {
+        onToggle(tag.id);
+      }
 
       audioService.triggerHaptic('success');
       audioService.playJarDrop();
 
       setIsFlying(true);
       setIsDragging(false);
+      setIsOverJar(false);
 
       window.setTimeout(() => {
-        if (onDropIntoJar) {
-          onDropIntoJar(tag.id);
-        } else {
-          onToggle(tag.id);
-        }
-
         setDragOffset({
           x: 0,
           y: 0,
@@ -203,7 +232,7 @@ export const FloatingEmotionCloud: React.FC<
     const handlePointerDown = (
       event: React.PointerEvent<HTMLDivElement>,
     ) => {
-      if (isFlying) return;
+      if (isFlying || isJarFull) return;
 
       pointerId.current = event.pointerId;
 
@@ -242,6 +271,13 @@ export const FloatingEmotionCloud: React.FC<
         x: dx,
         y: dy,
       });
+
+      setIsOverJar(
+        isPointerOverJar(
+          event.clientX,
+          event.clientY,
+        ),
+      );
     };
 
     const handlePointerUp = (
@@ -260,6 +296,15 @@ export const FloatingEmotionCloud: React.FC<
       const dy =
         event.clientY - startPoint.current.y;
 
+      const droppedOnJar = isPointerOverJar(
+        event.clientX,
+        event.clientY,
+      );
+
+      const wasDragged =
+        Math.abs(dx) >= 8 ||
+        Math.abs(dy) >= 8;
+
       pointerId.current = null;
 
       try {
@@ -271,15 +316,15 @@ export const FloatingEmotionCloud: React.FC<
       }
 
       /*
-       * Same threshold as the RN implementation.
+       * Actual drag + drop into jar.
        */
-      if (dy > 45) {
+      if (wasDragged && droppedOnJar) {
         handleFlyIntoJar();
         return;
       }
 
       /*
-       * Same generous tap threshold as RN.
+       * Normal tap.
        */
       if (
         Math.abs(dx) < 22 &&
@@ -291,8 +336,8 @@ export const FloatingEmotionCloud: React.FC<
       }
 
       /*
+       * Dragged somewhere else.
        * Snap back.
-       * CSS transition handles the animation.
        */
       resetDrag();
     };
@@ -430,6 +475,7 @@ export const FloatingEmotionCloud: React.FC<
         [styles.isFlying]: isFlying,
         [styles.isJarFull]:
           isJarFull && !isSelected,
+        [styles.isOverJar]: isOverJar,
       },
     );
 

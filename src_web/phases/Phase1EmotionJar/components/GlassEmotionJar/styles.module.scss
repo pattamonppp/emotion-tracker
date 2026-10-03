@@ -629,7 +629,8 @@
 
   overflow: hidden;
 
-  font-family: var(--font-prompt-semibold, sans-serif);
+  font-weight: 700;
+  font-family: var(--font-prompt-bold, sans-serif);
   font-size: 10.5px;
 
   color: var(--color-primary-dark, #00695c);

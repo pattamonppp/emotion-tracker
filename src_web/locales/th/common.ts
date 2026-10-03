@@ -14,7 +14,5 @@ export const common = {
     sunset: 'ยามเย็น',
     night: 'ราตรี',
     auto: 'เวลาจริง',
-    dawnShort: 'เช้า',
-    sunsetShort: 'เย็น',
   },
 };

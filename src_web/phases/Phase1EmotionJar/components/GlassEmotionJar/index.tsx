@@ -430,8 +430,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
               background: `linear-gradient(
                 135deg,
                 rgba(255, 255, 255, 0.28),
-                rgba(230, 250, 248, 0.08),
-                rgba(255, 255, 255, 0.18)
+                rgba(68, 134, 127, 0.25),
+                rgba(138, 227, 218, 0.18)
               )`,
             }}
           >
