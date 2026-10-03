@@ -20,7 +20,7 @@ export const phase3 = {
   stampAction: 'Seal Inner Promise',
   promisedStamp: 'PROMISED',
   sealedHint: 'Inner promise is sealed! Step forward with confidence!',
-  unsealedHint: 'Tap the box to seal your mint promise with Mooca.',
+  unsealedHint: 'Tap the box to seal your turquoise promise with Mooca.',
   measureBtn: 'Measure Recovery Outcome',
   nextPhase: 'Measure Shift Outcome',
 };

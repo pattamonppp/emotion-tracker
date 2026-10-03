@@ -11,5 +11,3 @@ export const VICTORY_SIP_CONFIG = {
 } as const;
 
 export const SIP_CONFIG = VICTORY_SIP_CONFIG;
-
-export type BreathPhase = 'ready' | 'inhale' | 'swallow' | 'exhale';

@@ -5,7 +5,13 @@ import {
   EmotionTagId,
   InterventionOption,
   ShiftFeedback,
-  SkyTimePeriod
+  SkyTimePeriod,
+  Language,
+  LANG,
+  PHASE,
+  INTERVENTION,
+  SKY,
+  ACTIVITY_TYPE,
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { MobileFrame } from './components/MobileFrame';
@@ -15,13 +21,13 @@ import { LivePulseSensorModal } from './phases/Phase1EmotionJar/modals/LivePulse
 import { SomaticAbsorption } from './phases/Phase2Interventions/SomaticAbsorption';
 import { VictorySip } from './phases/Phase2Interventions/VictorySip';
 import { KineticShaker } from './phases/Phase2Interventions/KineticShaker';
-import { SomaticBreathingPacer } from './phases/Phase2Interventions/SomaticBreathingPacer';
+import { BREATH_PATTERN, SomaticBreathingPacer } from './phases/Phase2Interventions/SomaticBreathingPacer';
 import { AudioMatrixSanctuary } from './phases/Phase2Interventions/AudioMatrixSanctuary';
 import { Phase3CognitiveReframing } from './phases/Phase3CognitiveReframing';
 import { Phase4Feedback } from './phases/Phase4Feedback';
 import { AiFeedbackModal, ResetCompletedView } from './phases/ResetCompletedView';
 import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
-import { audioService } from './services/audioService';
+import { audioService, HAPTIC_STYLE } from './services/audioService';
 import { DEV_MODE, DEV_START } from './config';
 import { STORAGE_KEYS, getStorageJSON, setStorageJSON } from './utils';
 import { useUserProfile } from './hooks/useUserProfile';
@@ -31,12 +37,12 @@ export default function App() {
   const { profile, setProfile } = useUserProfile();
 
   const [currentPhase, setCurrentPhase] = useState<ResetPhase>(
-    DEV_MODE ? DEV_START.phase : 'phase1_jar'
+    DEV_MODE ? DEV_START.phase : PHASE.PHASE1_JAR
   );
   const [activeOption, setActiveOption] = useState<InterventionOption>(
-    DEV_MODE && ['A', 'B', 'C', 'D', 'E', 'F', 'G'].includes(DEV_START.activity)
+    DEV_MODE && (Object.values(INTERVENTION)).includes(DEV_START.activity)
       ? (DEV_START.activity as InterventionOption)
-      : 'A'
+      : INTERVENTION.A
   );
   const [selectedEmotions, setSelectedEmotions] = useState<EmotionTagId[]>([]);
   const [heartRate, setHeartRate] = useState(105);
@@ -48,17 +54,17 @@ export default function App() {
   // 120-second session timer
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(
-    DEV_MODE && DEV_START.phase === 'phase2_intervention'
+    DEV_MODE && DEV_START.phase === PHASE.PHASE2_INTERVENTION
   );
 
   // Modals
   const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(
-    DEV_MODE && (DEV_START.phase as any) === 'onboarding'
+    DEV_MODE && (DEV_START.phase as any) === PHASE.ONBOARDING
   );
   const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>('day');
+  const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>(SKY.DAY);
 
   // Start background ambient music on mount
   useEffect(() => {
@@ -72,13 +78,13 @@ export default function App() {
   };
 
   const toggleLanguage = () => {
-    const nextLang: 'en' | 'th' = profile.language === 'th' ? 'en' : 'th';
+    const nextLang: Language = profile.language === LANG.TH ? LANG.EN : LANG.TH;
     setProfile({ ...profile, language: nextLang });
-    audioService.triggerHaptic('selection');
+    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
   };
 
   const handleOpenFeedback = () => {
-    console.log('OPEN FEEDBACK');
+    // console.log('OPEN FEEDBACK');
     setIsFeedbackModalOpen(true);
   };
 
@@ -96,18 +102,18 @@ export default function App() {
   // Phase navigation handlers
   const handleStartIntervention = () => {
     const firstTag = EMOTION_TAGS.find((t) => t.id === selectedEmotions[0]);
-    const option = firstTag?.recommendedOption || 'A';
+    const option = firstTag?.recommendedOption || INTERVENTION.A;
     setActiveOption(option);
-    setCurrentPhase('phase2_intervention');
+    setCurrentPhase(PHASE.PHASE2_INTERVENTION);
     setIsTimerRunning(true);
   };
 
   const handleInterventionComplete = () => {
-    setCurrentPhase('phase3_reframing');
+    setCurrentPhase(PHASE.PHASE3_REFRAMING);
   };
 
   const handleReframingComplete = () => {
-    setCurrentPhase('phase4_feedback');
+    setCurrentPhase(PHASE.PHASE4_FEEDBACK);
   };
 
   const handleFinishFeedback = (result: ShiftFeedback) => {
@@ -115,13 +121,13 @@ export default function App() {
     const updatedHistory = [result, ...history];
     setHistory(updatedHistory);
     setStorageJSON(STORAGE_KEYS.HISTORY, updatedHistory);
-    setCurrentPhase('completed');
+    setCurrentPhase(PHASE.COMPLETED);
     setIsTimerRunning(false);
   };
 
   const handleRestart = () => {
     audioService.stopAllVoice();
-    setCurrentPhase('phase1_jar');
+    setCurrentPhase(PHASE.PHASE1_JAR);
     setElapsedSeconds(0);
     setIsTimerRunning(false);
     setSelectedEmotions([]);
@@ -129,10 +135,10 @@ export default function App() {
 
   const locationText =
     profile.goal === 'exam'
-      ? (profile.language === 'th' ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
+      ? (profile.language === LANG.TH ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
       : profile.goal === 'stage'
-        ? (profile.language === 'th' ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
-        : (profile.language === 'th' ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation');
+        ? (profile.language === LANG.TH ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
+        : (profile.language === LANG.TH ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation');
 
   return (
     <LanguageProvider initialLang={profile.language}>
@@ -145,7 +151,7 @@ export default function App() {
         onTimePeriodChange={setSkyPeriod}
       >
         {/* Phase 1: Zero-Friction Capture & Tactile Emotion Jar */}
-        {currentPhase === 'phase1_jar' && (
+        {currentPhase === PHASE.PHASE1_JAR && (
           <Phase1EmotionJar
             currentLocation={locationText}
             heartRate={heartRate}
@@ -159,52 +165,52 @@ export default function App() {
         )}
 
         {/* Phase 2: Tailored Intervention Engine (65s Dedicated Focus) */}
-        {currentPhase === 'phase2_intervention' && (
+        {currentPhase === PHASE.PHASE2_INTERVENTION && (
           <div className="flex flex-col h-full flex-1 display-flex">
             {/* Active Intervention View - Mirrored from Mobile RN App.tsx */}
             <div className="flex-1 overflow-hidden display-flex">
-              {activeOption === 'A' && (
+              {activeOption === INTERVENTION.A && (
                 <SomaticAbsorption
                   onComplete={handleInterventionComplete}
                   lang={profile.language}
                   skyPeriod={skyPeriod}
                 />
               )}
-              {activeOption === 'B' && (
+              {activeOption === INTERVENTION.B && (
                 <VictorySip
                   onComplete={handleInterventionComplete}
                   lang={profile.language}
                 />
               )}
-              {activeOption === 'C' && (
+              {activeOption === INTERVENTION.C && (
                 <KineticShaker
-                  activityType="shake"
+                  activityType={ACTIVITY_TYPE.SHAKE}
                   onComplete={handleInterventionComplete}
                   lang={profile.language}
                 />
               )}
-              {activeOption === 'D' && (
+              {activeOption === INTERVENTION.D && (
                 <KineticShaker
-                  activityType="jump"
+                  activityType={ACTIVITY_TYPE.JUMP}
                   onComplete={handleInterventionComplete}
                   lang={profile.language}
                 />
               )}
-              {activeOption === 'E' && (
+              {activeOption === INTERVENTION.E && (
                 <SomaticBreathingPacer
-                  pattern="box"
+                  pattern={BREATH_PATTERN.BOX}
                   onComplete={handleInterventionComplete}
                   lang={profile.language}
                 />
               )}
-              {activeOption === 'F' && (
+              {activeOption === INTERVENTION.F && (
                 <SomaticBreathingPacer
-                  pattern="relax478"
+                  pattern={BREATH_PATTERN.RELAX_478}
                   onComplete={handleInterventionComplete}
                   lang={profile.language}
                 />
               )}
-              {activeOption === 'G' && (
+              {activeOption === INTERVENTION.G && (
                 <AudioMatrixSanctuary
                   mbti={profile.mbti}
                   onComplete={handleInterventionComplete}
@@ -216,7 +222,7 @@ export default function App() {
         )}
 
         {/* Phase 3: Cognitive Reframing Letter with Washi Tape */}
-        {currentPhase === 'phase3_reframing' && (
+        {currentPhase === PHASE.PHASE3_REFRAMING && (
           <Phase3CognitiveReframing
             goal={profile.goal}
             onProceed={handleReframingComplete}
@@ -225,7 +231,7 @@ export default function App() {
         )}
 
         {/* Phase 4: Shift Assessment & Biofeedback Shift */}
-        {currentPhase === 'phase4_feedback' && (
+        {currentPhase === PHASE.PHASE4_FEEDBACK && (
           <Phase4Feedback
             preHeartRate={heartRate}
             selectedEmotions={selectedEmotions}
@@ -236,7 +242,7 @@ export default function App() {
         )}
 
         {/* Phase 5: Completion & Micro-Recovery Metrics Summary */}
-        {currentPhase === 'completed' && (
+        {currentPhase === PHASE.COMPLETED && (
           <ResetCompletedView
             profile={profile}
             feedback={feedback}

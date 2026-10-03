@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import * as Speech from 'expo-speech';
+import { Language, LANG } from '../types';
 
 let expoAudio: any = null;
 let expoAv: any = null;
@@ -35,25 +36,25 @@ class NativeAudioMatrixService {
   private bgmListeners: Array<(isPlaying: boolean) => void> = [];
 
   // Trigger tactile haptics on real mobile devices
-  public async triggerHaptic(style: 'light' | 'medium' | 'heavy' | 'selection' | 'success' | 'warning' = 'medium') {
+  public async triggerHaptic(style: HapticStyle) {
     try {
       switch (style) {
-        case 'light':
+        case HAPTIC_STYLE.LIGHT:
           await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           break;
-        case 'heavy':
+        case HAPTIC_STYLE.HEAVY:
           await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
           break;
-        case 'selection':
+        case HAPTIC_STYLE.SELECTION:
           await Haptics.selectionAsync();
           break;
-        case 'success':
+        case HAPTIC_STYLE.SUCCESS:
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           break;
-        case 'warning':
+        case HAPTIC_STYLE.WARNING:
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
           break;
-        case 'medium':
+        case HAPTIC_STYLE.MEDIUM:
         default:
           await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           break;
@@ -95,7 +96,7 @@ class NativeAudioMatrixService {
           this.notifyBgmListeners();
           return;
         } catch (e) {
-          console.log('expo-audio player initialization fallback:', e);
+          // console.log('expo-audio player initialization fallback:', e);
         }
       }
 
@@ -117,7 +118,7 @@ class NativeAudioMatrixService {
           this.notifyBgmListeners();
           return;
         } catch (e) {
-          console.log('expo-av sound initialization fallback:', e);
+          // console.log('expo-av sound initialization fallback:', e);
         }
       }
 
@@ -125,7 +126,7 @@ class NativeAudioMatrixService {
       this.isBgmPlaying = true;
       this.notifyBgmListeners();
     } catch (err) {
-      console.log('Background music initialization notice:', err);
+      // console.log('Background music initialization notice:', err);
       this.isBgmPlaying = true;
       this.notifyBgmListeners();
     }
@@ -140,14 +141,14 @@ class NativeAudioMatrixService {
         await this.bgmSound.pauseAsync();
       }
     } catch (err) {
-      console.log('Background music pause notice:', err);
+      // console.log('Background music pause notice:', err);
     }
     this.isBgmPlaying = false;
     this.notifyBgmListeners();
   }
 
   public async toggleBackgroundMusic() {
-    this.triggerHaptic('selection');
+    this.triggerHaptic(HAPTIC_STYLE.SELECTION);
     if (this.isBgmPlaying) {
       await this.stopBackgroundMusic();
     } else {
@@ -173,7 +174,7 @@ class NativeAudioMatrixService {
 
   // Tactile Glass Clink & Chime (for dropping emotion clouds into glass jar)
   public async playJarDrop() {
-    await this.triggerHaptic('success');
+    await this.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     try {
       if (expoAudio?.createAudioPlayer && JAR_CHIME) {
         try {
@@ -181,7 +182,7 @@ class NativeAudioMatrixService {
           chimePlayer.volume = 0.5;
           chimePlayer.play();
           return;
-        } catch {}
+        } catch { }
       }
       if (expoAv?.Audio && JAR_CHIME) {
         try {
@@ -195,7 +196,7 @@ class NativeAudioMatrixService {
             }
           });
           return;
-        } catch {}
+        } catch { }
       }
     } catch {
       // Graceful fallback to haptic
@@ -204,21 +205,21 @@ class NativeAudioMatrixService {
 
   // Friction rub sound / tactile feedback for Option A (The Somatic Absorption)
   public async playFrictionTick(_intensity = 0.5) {
-    await this.triggerHaptic('light');
+    await this.triggerHaptic(HAPTIC_STYLE.LIGHT);
   }
 
   // Rhythmic haptic grounding pulse (for Haptic Rhythm breath-sync)
-  public async playGroundingRhythm(phase: 'in' | 'hold' | 'out') {
+  public async playGroundingRhythm(phase: PlayGroundingRhythmPhase) {
     try {
-      if (phase === 'in') {
+      if (phase === PLAYGROUNDING_RHYTHM_PHASE.IN) {
         // Quick double tap on inhale
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         await new Promise((r) => setTimeout(r, 90));
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      } else if (phase === 'hold') {
+      } else if (phase === PLAYGROUNDING_RHYTHM_PHASE.HOLD) {
         // Single gentle pulse on hold
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      } else {
+      } else if (phase === PLAYGROUNDING_RHYTHM_PHASE.OUT) {
         // Soft trailing exhale — light then very slight
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         await new Promise((r) => setTimeout(r, 150));
@@ -231,23 +232,23 @@ class NativeAudioMatrixService {
 
   // Chime Shockwave (when Sigil of Confidence is fully absorbed)
   public async playChimeShockwave() {
-    await this.triggerHaptic('heavy');
+    await this.triggerHaptic(HAPTIC_STYLE.HEAVY);
   }
 
   // Liquid Gulp & Slosh (Option B: The Victory Sip)
   public async playLiquidSip(_sipNumber = 1) {
-    await this.triggerHaptic('medium');
+    await this.triggerHaptic(HAPTIC_STYLE.MEDIUM);
   }
 
   // Tension Shaker Click (Option C: Kinetic Tension Shaker)
   public async playShakerClick(_remaining: number) {
-    await this.triggerHaptic('light');
+    await this.triggerHaptic(HAPTIC_STYLE.LIGHT);
   }
 
   // Neural Entrainment Soundscapes
-  public startNeuralEntrainment(_type: 'alpha' | 'brown' | 'both' = 'both') {
+  public startNeuralEntrainment(_type: NeutralEnvironmentType = NEUTRAL_ENVIRONMENT_TYPE.ALPHA) {
     this.isAmbiencePlaying = true;
-    this.triggerHaptic('selection');
+    this.triggerHaptic(HAPTIC_STYLE.SELECTION);
   }
 
   public stopNeuralEntrainment() {
@@ -259,11 +260,11 @@ class NativeAudioMatrixService {
   }
 
   // Pre-Generated Studio MBTI Voice Sanctuary
-  public playVoiceSanctuary(text: string, lang: 'th' | 'en' = 'th', rate = 0.88) {
+  public playVoiceSanctuary(text: string, lang: Language = LANG.TH, rate = 0.88) {
     try {
       Speech.stop();
       Speech.speak(text, {
-        language: lang === 'th' ? 'th-TH' : 'en-US',
+        language: lang === LANG.TH ? 'th-TH' : 'en-US',
         rate: rate,
         pitch: 0.95,
       });
@@ -281,5 +282,32 @@ class NativeAudioMatrixService {
     this.stopNeuralEntrainment();
   }
 }
+
+export const HAPTIC_STYLE = {
+  SELECTION: 'selection',
+  LIGHT: 'light',
+  MEDIUM: 'medium',
+  HEAVY: 'heavy',
+  SUCCESS: 'success',
+  WARNING: 'warning',
+} as const;
+
+export type HapticStyle = typeof HAPTIC_STYLE[keyof typeof HAPTIC_STYLE];
+
+export const NEUTRAL_ENVIRONMENT_TYPE = {
+  ALPHA: 'alpha',
+  BROWN: 'brown',
+  BOTH: 'both',
+} as const;
+
+export type NeutralEnvironmentType = typeof NEUTRAL_ENVIRONMENT_TYPE[keyof typeof NEUTRAL_ENVIRONMENT_TYPE]
+
+export const PLAYGROUNDING_RHYTHM_PHASE = {
+  IN: 'in',
+  HOLD: 'hold',
+  OUT: 'out',
+} as const;
+
+export type PlayGroundingRhythmPhase = typeof PLAYGROUNDING_RHYTHM_PHASE[keyof typeof PLAYGROUNDING_RHYTHM_PHASE]
 
 export const audioService = new NativeAudioMatrixService();

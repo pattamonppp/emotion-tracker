@@ -8,7 +8,7 @@ import {
   TextStyle,
   StyleProp,
 } from 'react-native';
-import { audioService } from '../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../services/audioService';
 import { colors, radii, shadows } from './tokens';
 
 export const MARSHMALLOW_VARIANT = {
@@ -47,8 +47,8 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
   onPress,
   title,
   children,
-  variant = 'primary',
-  size = 'md',
+  variant = MARSHMALLOW_VARIANT.PRIMARY,
+  size = MARSHMALLOW_SIZE.MD,
   style,
   textStyle,
   disabled = false,
@@ -59,7 +59,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
 
   const handlePressIn = () => {
     if (disabled) return;
-    audioService.triggerHaptic('light');
+    audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
     Animated.parallel([
       Animated.timing(scaleAnim, {
         toValue: 0.96,
@@ -94,7 +94,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
 
   const getVariantStyles = (): { btn: ViewStyle; text: TextStyle } => {
     switch (variant) {
-      case 'secondary':
+      case MARSHMALLOW_VARIANT.SECONDARY:
         return {
           btn: {
             backgroundColor: colors.secondary, // #FF8F4B (Sunshade 500)
@@ -103,7 +103,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             color: '#FFFFFF',
           },
         };
-      case 'softCream':
+      case MARSHMALLOW_VARIANT.SOFT_CREAM:
         return {
           btn: {
             backgroundColor: '#FFF2E9', // Sunshade 50
@@ -114,7 +114,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             color: colors.primaryDark,
           },
         };
-      case 'mint':
+      case MARSHMALLOW_VARIANT.MINT:
         return {
           btn: {
             backgroundColor: '#E0F8F6', // Turquoise 50
@@ -125,7 +125,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             color: colors.primaryDark,
           },
         };
-      case 'pink':
+      case MARSHMALLOW_VARIANT.PINK:
         return {
           btn: {
             backgroundColor: '#FDEFEE', // Flamingo 50
@@ -136,7 +136,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             color: '#EF7773', // Flamingo 500
           },
         };
-      case 'outline':
+      case MARSHMALLOW_VARIANT.OUTLINE:
         return {
           btn: {
             backgroundColor: '#FFFFFF',
@@ -147,7 +147,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             color: colors.primary,
           },
         };
-      case 'ghost':
+      case MARSHMALLOW_VARIANT.GHOST:
         return {
           btn: {
             backgroundColor: 'transparent',
@@ -159,7 +159,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             color: colors.primaryDark,
           },
         };
-      case 'primary':
+      case MARSHMALLOW_VARIANT.PRIMARY:
       default:
         return {
           btn: {
@@ -231,7 +231,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
         onPressOut={handlePressOut}
         onPress={() => {
           if (!disabled) {
-            audioService.triggerHaptic('selection');
+            audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
             onPress();
           }
         }}

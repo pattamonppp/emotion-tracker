@@ -1,4 +1,4 @@
-import { EmotionTag, GoalType, MBTIType, InterventionOption, InterventionOptionMeta } from '../types';
+import { EmotionTag, GoalType, MBTIType, InterventionOption, InterventionOptionMeta, INTERVENTION } from '../types';
 
 export const EMOTION_TAGS: EmotionTag[] = [
   {
@@ -8,7 +8,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#FF8F4B', // Sunshade 1 (500)
     weightDescription: '',
-    recommendedOption: 'A', // The Somatic Absorption (rubbing warms cold shaking hands)
+    recommendedOption: INTERVENTION.A, // The Somatic Absorption (rubbing warms cold shaking hands)
   },
   {
     id: 'forgetting',
@@ -17,7 +17,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#EF7773', // Flamingo 1 (500)
     weightDescription: '',
-    recommendedOption: 'A', // Somatic Absorption / Blessing Sigil
+    recommendedOption: INTERVENTION.A, // Somatic Absorption / Blessing Sigil
   },
   {
     id: 'pressure',
@@ -26,7 +26,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#1F77DF', // Blue 1 (500)
     weightDescription: '',
-    recommendedOption: 'B', // The Victory Sip (Vagal Maneuver)
+    recommendedOption: INTERVENTION.B, // The Victory Sip (Vagal Maneuver)
   },
   {
     id: 'freeze',
@@ -35,7 +35,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#62A0E9', // Blue 2 (300)
     weightDescription: '',
-    recommendedOption: 'C', // Kinetic Tension Shaker (discharge)
+    recommendedOption: INTERVENTION.C, // Kinetic Tension Shaker (discharge)
   },
   {
     id: 'burnout',
@@ -44,7 +44,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#00C4B3', // Turquoise 1 (500)
     weightDescription: '',
-    recommendedOption: 'G', // Pre-Generated Studio Audio Matrix
+    recommendedOption: INTERVENTION.G, // Pre-Generated Studio Audio Matrix
   },
   {
     id: 'anxious',
@@ -53,7 +53,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#F9A000', // Marigo 1 (500)
     weightDescription: '',
-    recommendedOption: 'E', // Somatic Breathwork Pacer (Box 4-4-4-4)
+    recommendedOption: INTERVENTION.E, // Somatic Breathwork Pacer (Box 4-4-4-4)
   },
   {
     id: 'overthinking',
@@ -62,7 +62,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#8FBBEF', // Blue 3 (200)
     weightDescription: '',
-    recommendedOption: 'B',
+    recommendedOption: INTERVENTION.B,
   },
   {
     id: 'lonely',
@@ -71,7 +71,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#1764D7', // Blue 700
     weightDescription: '',
-    recommendedOption: 'G', // Audio Matrix Sanctuary
+    recommendedOption: INTERVENTION.G, // Audio Matrix Sanctuary
   },
   {
     id: 'confused',
@@ -80,7 +80,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#8AD866', // Guava 1 (500)
     weightDescription: '',
-    recommendedOption: 'D', // Vertical Grounding / Jump
+    recommendedOption: INTERVENTION.D, // Vertical Grounding / Jump
   },
   {
     id: 'custom',
@@ -89,13 +89,13 @@ export const EMOTION_TAGS: EmotionTag[] = [
     emoji: '',
     color: '#EF7773', // Flamingo 1 (500)
     weightDescription: 'Personal heart message directly to Mooca',
-    recommendedOption: 'A',
+    recommendedOption: INTERVENTION.A,
   },
 ];
 
 export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOptionMeta> = {
   A: {
-    option: 'A',
+    option: INTERVENTION.A,
     nameTh: 'Somatic Absorption',
     nameEn: 'Somatic Absorption',
     keywordsTh: ['สั่น', 'ตื่นเต้น', 'เคว้งคว้าง', 'ว่างเปล่า', 'หวาดกลัว', 'หวิวในใจ', 'มือเย็น', 'ต้องการการโอบกอด'],
@@ -104,7 +104,7 @@ export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOption
     descriptionEn: 'Soothing warmth and tactile touch to calm the sympathetic surge and signal safety to the nervous system.',
   },
   B: {
-    option: 'B',
+    option: INTERVENTION.B,
     nameTh: 'The Victory Sip',
     nameEn: 'The Victory Sip',
     keywordsTh: ['กดดัน', 'คิดมาก', 'เครียดวนลูป', 'หนักหัว', 'เกร็งคอ', 'กลัวคนอื่นผิดหวัง', 'ตึงเครียดสะสม'],
@@ -113,7 +113,7 @@ export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOption
     descriptionEn: 'A mindful sip of water activating the vagal response to release deep physical tension and slow heartbeat.',
   },
   C: {
-    option: 'C',
+    option: INTERVENTION.C,
     nameTh: 'Kinetic Shaker',
     nameEn: 'Kinetic Shaker',
     keywordsTh: ['สมองตื้อ', 'คิดไม่ออก', 'อึดอัดตัว', 'นั่งนาน', 'เกร็งไหล่', 'รู้สึกตึงสะสม', 'อยากสลัดทิ้ง'],
@@ -122,7 +122,7 @@ export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOption
     descriptionEn: 'Vigorous wrist and arm shaking to discharge excess adrenaline and unfreeze muscle tension.',
   },
   D: {
-    option: 'D',
+    option: INTERVENTION.D,
     nameTh: 'Micro-Bounce / Vertical Grounding',
     nameEn: 'Micro-Bounce / Vertical Grounding',
     keywordsTh: ['สับสน', 'เบลอ', 'มึน', 'ใจลอย', 'จับต้นชนปลายไม่ถูก', 'หลุดโฟกัส', 'เลือกไม่ถูก'],
@@ -131,7 +131,7 @@ export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOption
     descriptionEn: 'Gentle rhythmic bouncing and firm heel drops to ground the mind and anchor focus back into the body.',
   },
   E: {
-    option: 'E',
+    option: INTERVENTION.E,
     nameTh: 'Box Breathing (4-4-4-4)',
     nameEn: 'Box Breathing (4-4-4-4)',
     keywordsTh: ['กังวล', 'ฟุ้งซ่าน', 'ว้าวุ่น', 'สมาธิสั้น', 'ร้อนรน', 'อยากรีเซ็ตแป๊บๆ', 'ใจไม่อยู่กับเนื้อกับตัว'],
@@ -140,7 +140,7 @@ export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOption
     descriptionEn: 'Box Breathing (4-4-4-4) to steady erratic breathing, clear mental noise, and restore inner balance.',
   },
   F: {
-    option: 'F',
+    option: INTERVENTION.F,
     nameTh: '4-7-8 Deep Pacer',
     nameEn: '4-7-8 Deep Pacer',
     keywordsTh: ['ใจเต้นแรง', 'พานิก', 'ตื่นตระหนก', 'แน่นหน้าอก', 'หายใจไม่ทัน', 'ตระหนกตกใจ', 'เครียดนอนไม่หลับ'],
@@ -149,7 +149,7 @@ export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOption
     descriptionEn: '4-7-8 deep parasympathetic pacing to rapidly bring down elevated heart rate and defuse acute panic.',
   },
   G: {
-    option: 'G',
+    option: INTERVENTION.G,
     nameTh: 'Audio Sanctuary',
     nameEn: 'Audio Sanctuary',
     keywordsTh: ['หมดไฟ', 'เหนื่อยล้า', 'เหงา', 'โดดเดี่ยว', 'ท้อแท้', 'ต้องการกำลังใจ', 'พลังงานติดลบ', 'ไม่อยากออกแรง'],
@@ -179,7 +179,7 @@ export const INTERVENTION_KEYWORD_MAP: Record<string, InterventionOption> = Obje
  */
 export const matchOptionFromKeywords = (
   text: string,
-  defaultOption: InterventionOption = 'A'
+  defaultOption: InterventionOption = INTERVENTION.A
 ): InterventionOption => {
   if (!text) return defaultOption;
   const normalized = text.trim().toLowerCase();

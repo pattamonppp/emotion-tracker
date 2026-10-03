@@ -8,9 +8,9 @@ import {
   Easing,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { EmotionTagId } from '../../../types';
+import { EmotionTagId, INTERVENTION, Language, SKY, SkyTimePeriod, SPEECH_ICON } from '../../../types';
 import { EMOTION_TAGS, matchOptionFromKeywords } from '../../../data/matrixData';
-import { audioService } from '../../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import {
   Sparkles,
   X,
@@ -31,17 +31,17 @@ import { SpeechMessage } from '../../../types';
 
 const renderSpeechIcon = (iconType: SpeechMessage['iconType']) => {
   switch (iconType) {
-    case 'sparkles':
+    case SPEECH_ICON.SPARKLES:
       return <Sparkles size={11} color={colors.primary} strokeWidth={2.4} />;
-    case 'wind':
+    case SPEECH_ICON.WIND:
       return <Wind size={11} color="#4A90E2" strokeWidth={2.4} />;
-    case 'heart':
+    case SPEECH_ICON.HEART:
       return <Heart size={11} color="#FF6B8B" fill="#FF6B8B" strokeWidth={1.5} />;
-    case 'shield':
+    case SPEECH_ICON.SHIELD:
       return <ShieldCheck size={11} color={colors.primary} strokeWidth={2.4} />;
-    case 'smile':
+    case SPEECH_ICON.SMILE:
       return <Smile size={11} color={colors.secondary} strokeWidth={2.4} />;
-    case 'cloud':
+    case SPEECH_ICON.CLOUD:
     default:
       return <Cloud size={11} color={colors.primary} strokeWidth={2.4} />;
   }
@@ -51,11 +51,11 @@ interface GlassEmotionJarProps {
   selectedEmotions: EmotionTagId[];
   onRemoveEmotion: (id: EmotionTagId) => void;
   onClearAll?: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
   onMoocaHug?: () => void;
   customEmotionText?: string;
   customMessages?: Array<{ id: string; text: string }>;
-  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
+  skyPeriod?: SkyTimePeriod;
 }
 
 export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
@@ -86,10 +86,10 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   const getSpeechPool = (): SpeechMessage[] => {
     if (selectedEmotions.length >= PHASE1_CONFIG.maxSelectedEmotions) {
       return [
-        { text: js.full1, iconType: 'cloud' },
-        { text: js.full2, iconType: 'sparkles' },
-        { text: js.full3, iconType: 'wind' },
-        { text: js.full4, iconType: 'heart' },
+        { text: js.full1, iconType: SPEECH_ICON.CLOUD },
+        { text: js.full2, iconType: SPEECH_ICON.SPARKLES },
+        { text: js.full3, iconType: SPEECH_ICON.WIND },
+        { text: js.full4, iconType: SPEECH_ICON.HEART },
       ];
     }
     if (selectedEmotions.length > 0) {
@@ -100,15 +100,15 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
       return [
         ...customMsg,
         { text: js.holdingCount.replace('{count}', String(selectedEmotions.length)), iconType: 'shield' },
-        { text: js.braveToFace, iconType: 'smile' },
-        { text: js.safeInJar, iconType: 'sparkles' },
+        { text: js.braveToFace, iconType: SPEECH_ICON.SMILE },
+        { text: js.safeInJar, iconType: SPEECH_ICON.SPARKLES },
       ];
     }
     return [
-      { text: js.restWorries, iconType: 'cloud' },
-      { text: js.full1, iconType: 'cloud' },
-      { text: js.tapOrDrag, iconType: 'sparkles' },
-      { text: js.howIsHeart, iconType: 'heart' },
+      { text: js.restWorries, iconType: SPEECH_ICON.CLOUD },
+      { text: js.full1, iconType: SPEECH_ICON.CLOUD },
+      { text: js.tapOrDrag, iconType: SPEECH_ICON.SPARKLES },
+      { text: js.howIsHeart, iconType: SPEECH_ICON.HEART },
     ];
   };
 
@@ -297,7 +297,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   }, [moocaOrbitX, moocaOrbitY, puffBobAnim]);
 
   const handleJarTap = () => {
-    audioService.triggerHaptic('light');
+    audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
     Animated.sequence([
       Animated.timing(jarSquishAnim, {
         toValue: 0.97,
@@ -322,19 +322,19 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
 
   const getJarSunAuraColors = () => {
     switch (skyPeriod) {
-      case 'sunset':
+      case SKY.SUNSET:
         return {
           core: '#f597b0ff',
           mid: '#ffea94ff',
           outer: '#ffffffff',
         };
-      case 'dawn':
+      case SKY.DAWN:
         return {
           core: '#FFFBEB',
           mid: '#FDE68A',
           outer: '#FED7AA',
         };
-      case 'night':
+      case SKY.NIGHT:
         return {
           core: '#F0F9FF',
           mid: '#BAE6FD',
@@ -488,8 +488,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   <Text
                     style={[
                       styles.emptyBadgeTitle,
-                      (skyPeriod === 'sunset' || skyPeriod === 'night') && { color: '#ffffffff' },
-                      skyPeriod === 'dawn' && { color: '#78350F' },
+                      (skyPeriod === SKY.SUNSET || skyPeriod === SKY.NIGHT) && { color: '#ffffffff' },
+                      skyPeriod === SKY.DAWN && { color: '#78350F' },
                     ]}
                   >
                     {p1.emptyTitle}
@@ -497,8 +497,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   <Text
                     style={[
                       styles.emptyBadgeSubtitle,
-                      (skyPeriod === 'sunset' || skyPeriod === 'night') && { color: '#fafcffff' },
-                      skyPeriod === 'dawn' && { color: '#92400E' },
+                      (skyPeriod === SKY.SUNSET || skyPeriod === SKY.NIGHT) && { color: '#fafcffff' },
+                      skyPeriod === SKY.DAWN && { color: '#92400E' },
                     ]}
                   >
                     {p1.emptySubtitleFromAbove}
@@ -523,7 +523,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                         color: '#EC4899',
                         emoji: '',
                         weightDescription: '',
-                        recommendedOption: matchOptionFromKeywords(customItem?.text || customEmotionText || '', 'A'),
+                        recommendedOption: matchOptionFromKeywords(customItem?.text || customEmotionText || '', INTERVENTION.A),
                       }
                       : EMOTION_TAGS.find((t) => t.id === id);
                     if (!tag) return null;
@@ -591,7 +591,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                           <TouchableOpacity
                             hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
                             onPress={() => {
-                              audioService.triggerHaptic('light');
+                              audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
                               onRemoveEmotion(tag.id);
                             }}
                             style={styles.miniRemoveBtn}

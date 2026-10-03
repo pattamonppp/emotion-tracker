@@ -32,15 +32,18 @@ import {
   typography,
 } from '../../../design-system/tokens';
 import {
+  MARSHMALLOW_SIZE,
+  MARSHMALLOW_VARIANT,
   MarshmallowButton,
 } from '../../../design-system/MarshmallowButton';
-import { audioService } from '../../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { getTranslation } from '../../../locales';
+import { FEEDBACK_ACCURACY, FeedbackAccuracy, Language } from '../../../types';
 
 export interface FeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 export const FeedbackModal: React.FC<
@@ -54,9 +57,7 @@ export const FeedbackModal: React.FC<
       useState<number>(5);
 
     const [accuracy, setAccuracy] =
-      useState<
-        'spot_on' | 'helpful' | 'needs_work'
-      >('spot_on');
+      useState<FeedbackAccuracy>(FEEDBACK_ACCURACY.SPOT_ON);
 
     const [selectedAspects, setSelectedAspects] =
       useState<string[]>([
@@ -103,7 +104,7 @@ export const FeedbackModal: React.FC<
 
     const ACCURACY = [
       {
-        id: 'spot_on',
+        id: FEEDBACK_ACCURACY.SPOT_ON,
         label: fb.accuracySpotOn,
         icon: Target,
         color: '#00C4B3',
@@ -112,7 +113,7 @@ export const FeedbackModal: React.FC<
         text: '#00695C',
       },
       {
-        id: 'helpful',
+        id: FEEDBACK_ACCURACY.HELPFUL,
         label: fb.accuracyHelpful,
         icon: Lightbulb,
         color: '#F59E0B',
@@ -121,7 +122,7 @@ export const FeedbackModal: React.FC<
         text: '#B45309',
       },
       {
-        id: 'needs_work',
+        id: FEEDBACK_ACCURACY.NEEDS_WORK,
         label: fb.accuracyNeedsWork,
         icon: RotateCcw,
         color: '#F43F5E',
@@ -163,7 +164,7 @@ export const FeedbackModal: React.FC<
       setSubmitted(true);
 
       audioService.triggerHaptic(
-        'success',
+        HAPTIC_STYLE.SUCCESS,
       );
 
       audioService.playJarDrop();
@@ -281,7 +282,7 @@ export const FeedbackModal: React.FC<
                               );
 
                               audioService.triggerHaptic(
-                                'selection',
+                                HAPTIC_STYLE.SELECTION,
                               );
                             }}
                             activeOpacity={0.8}
@@ -383,7 +384,7 @@ export const FeedbackModal: React.FC<
                               );
 
                               audioService.triggerHaptic(
-                                'selection',
+                                HAPTIC_STYLE.SELECTION,
                               );
                             }}
                             style={[
@@ -464,7 +465,7 @@ export const FeedbackModal: React.FC<
                               );
 
                               audioService.triggerHaptic(
-                                'selection',
+                                HAPTIC_STYLE.SELECTION,
                               );
                             }}
                             style={[
@@ -533,8 +534,8 @@ export const FeedbackModal: React.FC<
                   style={styles.submitWrap}
                 >
                   <MarshmallowButton
-                    variant="primary"
-                    size="md"
+                    variant={MARSHMALLOW_VARIANT.PRIMARY}
+                    size={MARSHMALLOW_SIZE.MD}
                     onPress={
                       handleSubmit
                     }
@@ -589,8 +590,8 @@ export const FeedbackModal: React.FC<
                   }
                 >
                   <MarshmallowButton
-                    variant="primary"
-                    size="md"
+                    variant={MARSHMALLOW_VARIANT.PRIMARY}
+                    size={MARSHMALLOW_SIZE.MD}
                     onPress={
                       handleClose
                     }

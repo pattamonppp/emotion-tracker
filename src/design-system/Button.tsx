@@ -1,15 +1,15 @@
 import React from 'react';
-import { 
-  TouchableOpacity, 
-  Text, 
-  StyleSheet, 
-  ViewStyle, 
-  TextStyle, 
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
   ActivityIndicator,
-  View 
+  View
 } from 'react-native';
 import { colors, radii, shadows } from './tokens';
-import { audioService } from '../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../services/audioService';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -36,13 +36,13 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   const handlePress = () => {
     if (disabled || loading) return;
-    audioService.triggerHaptic('selection');
+    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
     onPress();
   };
 
   const getContainerStyle = (): ViewStyle[] => {
     const list: ViewStyle[] = [styles.base];
-    
+
     // Size
     if (size === 'sm') list.push(styles.sizeSm);
     else if (size === 'lg') list.push(styles.sizeLg);

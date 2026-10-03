@@ -26,6 +26,7 @@ class AudioMatrixService {
     }
   }
 
+
   // Trigger tactile feedback on supported mobile browsers.
   public async triggerHaptic(
     style:
@@ -207,7 +208,7 @@ class AudioMatrixService {
   }
 
   // Start Alpha Wave Binaural Beat (10 Hz beat frequency: 200 Hz Left, 210 Hz Right)
-  public startNeuralEntrainment(type: 'alpha' | 'brown' | 'both' = 'both') {
+  public startNeuralEntrainment(type: NeutralEnvironmentType = NEUTRAL_ENVIRONMENT_TYPE.BOTH) {
     this.initContext();
     if (!this.ctx || this.isAmbiencePlaying) return;
 
@@ -387,7 +388,7 @@ class AudioMatrixService {
   }
 
   public toggleBackgroundMusic() {
-    this.triggerHaptic('selection');
+    this.triggerHaptic(HAPTIC_STYLE.SELECTION);
     if (this.isBgmPlaying) {
       this.stopBackgroundMusic();
     } else {
@@ -418,5 +419,24 @@ class AudioMatrixService {
     this.stopNeuralEntrainment();
   }
 }
+
+export const HAPTIC_STYLE = {
+  SELECTION: 'selection',
+  LIGHT: 'light',
+  MEDIUM: 'medium',
+  HEAVY: 'heavy',
+  SUCCESS: 'success',
+  WARNING: 'warning',
+} as const;
+
+export type HapticStyle = typeof HAPTIC_STYLE[keyof typeof HAPTIC_STYLE];
+
+export const NEUTRAL_ENVIRONMENT_TYPE = {
+  ALPHA: 'alpha',
+  BROWN: 'brown',
+  BOTH: 'both',
+} as const;
+
+export type NeutralEnvironmentType = typeof NEUTRAL_ENVIRONMENT_TYPE[keyof typeof NEUTRAL_ENVIRONMENT_TYPE]
 
 export const audioService = new AudioMatrixService();

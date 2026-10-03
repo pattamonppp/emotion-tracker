@@ -23,7 +23,7 @@ import {
   User,
 } from 'lucide-react-native';
 import { colors, radii, typography } from '../../../design-system/tokens';
-import { audioService } from '../../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { getTranslation } from '../../../locales';
 import { MODAL_CONFIG } from '../../../constants';
 
@@ -73,7 +73,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   ];
 
   const handleSave = () => {
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     onSave(profile);
   };
 
@@ -135,7 +135,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   <TouchableOpacity
                     key={g.id}
                     onPress={() => {
-                      audioService.triggerHaptic('selection');
+                      audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
                       setProfile({ ...profile, goal: g.id });
                     }}
                     style={[
@@ -166,7 +166,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   <TouchableOpacity
                     key={m}
                     onPress={() => {
-                      audioService.triggerHaptic('selection');
+                      audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
                       setProfile({ ...profile, mbti: m });
                     }}
                     style={[

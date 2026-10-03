@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { 
-  Languages, 
-  Volume2, 
-  VolumeX 
+import {
+  Languages,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
-import type { UserProfile, ResetPhase, SkyTimePeriod } from '@/types';
+import { type UserProfile, type ResetPhase, type SkyTimePeriod, PHASE, LANG } from '@/types';
 import { MindfullLogo } from '../MindfullLogo';
 import { DynamicSkyEngine, SkyPeriodSwitcher } from '../DynamicSkyEngine';
-import { audioService } from '@/services/audioService';
+import { audioService, HAPTIC_STYLE } from '@/services/audioService';
 import styles from './styles.module.scss';
 
 export interface MobileFrameProps {
@@ -38,22 +38,22 @@ export function MobileFrame({
   }, []);
 
   const getPhaseName = () => {
-    if (profile.language === 'th') {
+    if (profile.language === LANG.TH) {
       switch (currentPhase) {
-        case 'phase1_jar': return '1. โหลเก็บความกังวล';
-        case 'phase2_intervention': return '2. กายกรรมรีเซ็ต';
-        case 'phase3_reframing': return '3. ปลดล็อกความคิด';
-        case 'phase4_feedback': return '4. วัดผลลัพธ์ใจ';
-        case 'completed': return 'กอดใจสำเร็จ';
+        case PHASE.PHASE1_JAR: return '1. โหลเก็บความกังวล';
+        case PHASE.PHASE2_INTERVENTION: return '2. กายกรรมรีเซ็ต';
+        case PHASE.PHASE3_REFRAMING: return '3. ปลดล็อกความคิด';
+        case PHASE.PHASE4_FEEDBACK: return '4. วัดผลลัพธ์ใจ';
+        case PHASE.COMPLETED: return 'กอดใจสำเร็จ';
         default: return 'เริ่มรีเซ็ต';
       }
     } else {
       switch (currentPhase) {
-        case 'phase1_jar': return '1. Emotion Jar';
-        case 'phase2_intervention': return '2. Somatic Shift';
-        case 'phase3_reframing': return '3. Cognitive Insight';
-        case 'phase4_feedback': return '4. Bio Feedback';
-        case 'completed': return 'Reset Complete';
+        case PHASE.PHASE1_JAR: return '1. Emotion Jar';
+        case PHASE.PHASE2_INTERVENTION: return '2. Somatic Shift';
+        case PHASE.PHASE3_REFRAMING: return '3. Cognitive Insight';
+        case PHASE.PHASE4_FEEDBACK: return '4. Bio Feedback';
+        case PHASE.COMPLETED: return 'Reset Complete';
         default: return 'Start Reset';
       }
     }
@@ -94,7 +94,7 @@ export function MobileFrame({
                 <button
                   type="button"
                   onClick={() => {
-                    audioService.triggerHaptic('selection');
+                    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
                     audioService.toggleBackgroundMusic();
                   }}
                   className={classNames(styles.soundBtn, {
@@ -113,7 +113,7 @@ export function MobileFrame({
                 <button
                   type="button"
                   onClick={() => {
-                    audioService.triggerHaptic('selection');
+                    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
                     onOpenProfile();
                   }}
                   className={styles.avatarWrapper}

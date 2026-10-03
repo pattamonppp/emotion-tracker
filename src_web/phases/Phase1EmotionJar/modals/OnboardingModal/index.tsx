@@ -11,7 +11,7 @@ import {
   X,
   User,
 } from 'lucide-react';
-import { audioService } from '../../../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
 import { getTranslation } from '../../../../locales';
 import { MODAL_CONFIG } from '../../../../constants';
 import styles from './styles.module.scss';
@@ -64,7 +64,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   ];
 
   const handleSave = () => {
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     onSave(profile);
   };
 
@@ -119,7 +119,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     key={g.id}
                     type="button"
                     onClick={() => {
-                      audioService.triggerHaptic('selection');
+                      audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
                       setProfile({ ...profile, goal: g.id });
                     }}
                     className={styles.goalCard}
@@ -156,7 +156,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     key={m}
                     type="button"
                     onClick={() => {
-                      audioService.triggerHaptic('selection');
+                      audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
                       setProfile({ ...profile, mbti: m });
                     }}
                     className={`${styles.mbtiChip} ${isSelected ? styles.mbtiChipActive : ''}`}

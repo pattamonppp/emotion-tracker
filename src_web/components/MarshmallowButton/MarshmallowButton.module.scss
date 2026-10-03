@@ -12,11 +12,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-style: solid;
-  border-top-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  font-family: inherit;
+  border: none;
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
@@ -70,7 +66,6 @@
 
 .variant_softCream {
   background-color: #FFF2E9;
-  border: 1.5px solid #FFDDC9;
   color: var(--color-primary-dark, #009688);
 
   .text {
@@ -80,7 +75,6 @@
 
 .variant_mint {
   background-color: #E0F8F6;
-  border: 1.5px solid #B3EDE8;
   color: var(--color-primary-dark, #009688);
 
   .text {
@@ -100,7 +94,7 @@
 
 .variant_outline {
   background-color: #FFFFFF;
-  border: 2px solid var(--color-primary, #00C4B3);
+  border: 1.5px solid var(--color-primary, #00C4B3);
   color: var(--color-primary, #00C4B3);
 
   .text {
@@ -110,7 +104,6 @@
 
 .variant_ghost {
   background-color: transparent;
-  border-bottom-width: 0;
   box-shadow: none;
   color: var(--color-primary-dark, #009688);
 

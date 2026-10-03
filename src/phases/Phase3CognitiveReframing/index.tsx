@@ -8,11 +8,11 @@ import {
   Animated,
   Platform,
 } from 'react-native';
-import { GoalType } from '../../types';
+import { GoalType, LANG, Language } from '../../types';
 import { REFRAMING_INSIGHTS } from '../../data/matrixData';
-import { audioService } from '../../services/audioService';
-import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../../components/MoocaMascot';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { Heart, Dna, ArrowRight, Sparkles, HeartHandshake, Sprout } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
@@ -21,7 +21,7 @@ import { PHASE3_CONFIG } from '../../constants';
 export interface Phase3CognitiveReframingProps {
   goal: GoalType;
   onProceed: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> = ({
@@ -38,7 +38,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 
   const handleCommitAction = () => {
     setIsActionCommitted(true);
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     audioService.playJarDrop();
 
     stampAnim.setValue(0);
@@ -65,7 +65,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
         {/* 1. Mascot View with Dedicated Bubble Clearance (Height: 145) */}
         <View style={styles.mascotWrapper}>
           <MoocaMascot
-            mood={isActionCommitted ? 'celebrating' : 'comforting'}
+            mood={isActionCommitted ? MOOCA_MOOD.CELEBRATING : MOOCA_MOOD.COMFORTING}
             size="sm"
             speakingBubble={
               isActionCommitted
@@ -111,14 +111,14 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 
             {/* Emotional Reframing Message */}
             <Text style={styles.letterBody} textBreakStrategy="balanced">
-              {lang === 'th' ? insight.reflectionTh : insight.reflectionEn}
+              {lang === LANG.TH ? insight.reflectionTh : insight.reflectionEn}
             </Text>
 
             {/* Biological Reassurance Note */}
             <View style={styles.biologyNote}>
               <Dna size={15} color={colors.primaryDark} style={{ marginTop: 2 }} />
               <Text style={styles.biologyText} textBreakStrategy="balanced">
-                {lang === 'th' ? insight.biologyFactTh : insight.biologyFactEn}
+                {lang === LANG.TH ? insight.biologyFactTh : insight.biologyFactEn}
               </Text>
             </View>
           </View>
@@ -156,7 +156,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
                 style={[styles.commitActionText, isActionCommitted && { color: colors.primaryDark }]}
                 textBreakStrategy="balanced"
               >
-                {lang === 'th' ? insight.microActionTh : insight.microActionEn}
+                {lang === LANG.TH ? insight.microActionTh : insight.microActionEn}
               </Text>
             </View>
 
@@ -192,8 +192,8 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
       {isActionCommitted && (
         <View style={styles.bottomBar}>
           <MarshmallowButton
-            variant="primary"
-            size="lg"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.LG}
             onPress={onProceed}
             icon={<ArrowRight size={18} color="#FFFFFF" />}
             title={p3.measureBtn}

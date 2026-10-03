@@ -11,12 +11,12 @@ import {
 } from 'lucide-react';
 import classNames from 'classnames';
 
-import { EmotionTagId, SpeechMessage } from '../../../../types';
+import { EmotionTagId, SPEECH_ICON, SpeechMessage, Language, SkyTimePeriod, INTERVENTION, SKY } from '../../../../types';
 import {
   EMOTION_TAGS,
   matchOptionFromKeywords,
 } from '../../../../data/matrixData';
-import { audioService } from '../../../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
 import { getEmotionIcon } from '../FloatingEmotionCloud';
 import { MoocaMascot } from '../../../../components/MoocaMascot';
 import { DESIGN_TOKENS } from '../../../../design-system/tokens';
@@ -29,7 +29,7 @@ const renderSpeechIcon = (
   iconType: SpeechMessage['iconType'],
 ) => {
   switch (iconType) {
-    case 'sparkles':
+    case SPEECH_ICON.SPARKLES:
       return (
         <Sparkles
           size={11}
@@ -38,7 +38,7 @@ const renderSpeechIcon = (
         />
       );
 
-    case 'wind':
+    case SPEECH_ICON.WIND:
       return (
         <Wind
           size={11}
@@ -47,7 +47,7 @@ const renderSpeechIcon = (
         />
       );
 
-    case 'heart':
+    case SPEECH_ICON.HEART:
       return (
         <Heart
           size={11}
@@ -57,7 +57,7 @@ const renderSpeechIcon = (
         />
       );
 
-    case 'shield':
+    case SPEECH_ICON.SHIELD:
       return (
         <ShieldCheck
           size={11}
@@ -66,7 +66,7 @@ const renderSpeechIcon = (
         />
       );
 
-    case 'smile':
+    case SPEECH_ICON.SMILE:
       return (
         <Smile
           size={11}
@@ -75,7 +75,7 @@ const renderSpeechIcon = (
         />
       );
 
-    case 'cloud':
+    case SPEECH_ICON.CLOUD:
     default:
       return (
         <Cloud
@@ -91,11 +91,11 @@ interface GlassEmotionJarProps {
   selectedEmotions: EmotionTagId[];
   onRemoveEmotion: (id: EmotionTagId) => void;
   onClearAll?: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
   onMoocaHug?: () => void;
   customEmotionText?: string;
   customMessages?: Array<{ id: string; text: string }>;
-  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
+  skyPeriod?: SkyTimePeriod;
 }
 
 export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
@@ -258,7 +258,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   }, [selectedEmotions.length, lang]);
 
   const handleJarTap = () => {
-    audioService.triggerHaptic('light');
+    audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
 
     setIsJarPressed(true);
 
@@ -282,21 +282,21 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
 
   const jarSunAura = useMemo(() => {
     switch (skyPeriod) {
-      case 'sunset':
+      case SKY.SUNSET:
         return {
           core: '#f597b0ff',
           mid: '#ffea94ff',
           outer: '#ffffffff',
         };
 
-      case 'dawn':
+      case SKY.DAWN:
         return {
           core: '#FFFBEB',
           mid: '#FDE68A',
           outer: '#FED7AA',
         };
 
-      case 'night':
+      case SKY.NIGHT:
         return {
           core: '#F0F9FF',
           mid: '#BAE6FD',
@@ -458,10 +458,10 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   <span
                     className={classNames(
                       styles.emptyBadgeTitle,
-                      (skyPeriod === 'sunset' ||
-                        skyPeriod === 'night') &&
+                      (skyPeriod === SKY.SUNSET ||
+                        skyPeriod === SKY.NIGHT) &&
                       styles.emptyTitleLight,
-                      skyPeriod === 'dawn' &&
+                      skyPeriod === SKY.DAWN &&
                       styles.emptyTitleDawn,
                     )}
                   >
@@ -471,10 +471,10 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   <span
                     className={classNames(
                       styles.emptyBadgeSubtitle,
-                      (skyPeriod === 'sunset' ||
-                        skyPeriod === 'night') &&
+                      (skyPeriod === SKY.SUNSET ||
+                        skyPeriod === SKY.NIGHT) &&
                       styles.emptySubtitleLight,
-                      skyPeriod === 'dawn' &&
+                      skyPeriod === SKY.DAWN &&
                       styles.emptySubtitleDawn,
                     )}
                   >
@@ -512,7 +512,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                             customItem?.text ||
                             customEmotionText ||
                             '',
-                            'A',
+                            INTERVENTION.A,
                           ),
                       }
                       : EMOTION_TAGS.find(
@@ -621,7 +621,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                               event.stopPropagation();
 
                               audioService.triggerHaptic(
-                                'light',
+                                HAPTIC_STYLE.LIGHT,
                               );
 
                               onRemoveEmotion(tag.id);

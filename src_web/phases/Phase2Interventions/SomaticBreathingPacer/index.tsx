@@ -2,23 +2,36 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Wind, Heart, CheckCircle2, ArrowRight } from 'lucide-react';
 
-import { audioService } from '../../../services/audioService';
-import { MoocaMascot } from '../../../components/MoocaMascot';
-import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
+import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { getTranslation } from '../../../locales';
 import { BREATHING_CONFIG } from '../constants';
 import { useSkyTheme } from '../../../hooks/useSkyTheme';
+import { Language } from '../../../types';
 
 import styles from './styles.module.scss';
 
+export const BREATH_PATTERN = {
+  BOX: 'box',
+  RELAX_478: 'relax478',
+} as const;
+
+export const BREATH_PHASE = {
+  INHALE: 'inhale',
+  HOLD1: 'hold1',
+  EXHALE: 'exhale',
+  HOLD2: 'hold2',
+} as const;
+
+export type BreathPattern = typeof BREATH_PATTERN[keyof typeof BREATH_PATTERN];
+export type PhaseType = typeof BREATH_PHASE[keyof typeof BREATH_PHASE];
+
 export interface SomaticBreathingPacerProps {
   onComplete: () => void;
-  lang: 'th' | 'en';
-  pattern?: 'box' | 'relax478';
+  lang: Language;
+  pattern?: BreathPattern;
 }
-
-type BreathPattern = 'box' | 'relax478';
-type PhaseType = 'inhale' | 'hold1' | 'exhale' | 'hold2';
 
 const ORB_SIZE = 220;
 const SVG_R = (ORB_SIZE - 20) / 2;
@@ -26,13 +39,13 @@ const CIRCUMFERENCE = 2 * Math.PI * SVG_R;
 
 export const SomaticBreathingPacer: React.FC<
   SomaticBreathingPacerProps
-> = ({ onComplete, lang, pattern = 'box' }) => {
+> = ({ onComplete, lang, pattern = BREATH_PATTERN.BOX }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.breathingPacer;
   const skyTheme = useSkyTheme();
 
   const [isStarted, setIsStarted] = useState(false);
-  const [phase, setPhase] = useState<PhaseType>('inhale');
+  const [phase, setPhase] = useState<PhaseType>(BREATH_PHASE.INHALE);
   const [phaseProgress, setPhaseProgress] = useState(0);
   const [phaseSecondsLeft, setPhaseSecondsLeft] = useState(4);
   const [cycleCount, setCycleCount] = useState(0);
@@ -43,18 +56,18 @@ export const SomaticBreathingPacer: React.FC<
     pat: BreathPattern,
     ph: PhaseType,
   ): number => {
-    if (pat === 'box') {
+    if (pat === BREATH_PATTERN.BOX) {
       return BREATHING_CONFIG.BOX_PATTERN.inhale;
     }
 
     switch (ph) {
-      case 'inhale':
+      case BREATH_PHASE.INHALE:
         return BREATHING_CONFIG.PATTERN_478.inhale;
-      case 'hold1':
+      case BREATH_PHASE.HOLD1:
         return BREATHING_CONFIG.PATTERN_478.hold;
-      case 'exhale':
+      case BREATH_PHASE.EXHALE:
         return BREATHING_CONFIG.PATTERN_478.exhale;
-      case 'hold2':
+      case BREATH_PHASE.HOLD2:
         return 1;
     }
   };
@@ -65,29 +78,29 @@ export const SomaticBreathingPacer: React.FC<
 
     if (nextCycle >= 3) {
       setIsFinished(true);
-      audioService.triggerHaptic('success');
+      audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
       audioService.playChimeShockwave();
     } else {
-      setPhase('inhale');
+      setPhase(BREATH_PHASE.INHALE);
       setPhaseProgress(0);
     }
   };
 
   const advancePhase = () => {
-    if (phase === 'inhale') {
-      setPhase('hold1');
-    } else if (phase === 'hold1') {
-      setPhase('exhale');
+    if (phase === BREATH_PHASE.INHALE) {
+      setPhase(BREATH_PHASE.HOLD1);
+    } else if (phase === BREATH_PHASE.HOLD1) {
+      setPhase(BREATH_PHASE.EXHALE);
       setBpmEstimate((prev) =>
         Math.max(74, prev - Math.floor(Math.random() * 4 + 4)),
       );
-    } else if (phase === 'exhale') {
-      if (pattern === 'box') {
-        setPhase('hold2');
+    } else if (phase === BREATH_PHASE.EXHALE) {
+      if (pattern === BREATH_PATTERN.BOX) {
+        setPhase(BREATH_PHASE.HOLD2);
       } else {
         completeCycle();
       }
-    } else if (phase === 'hold2') {
+    } else if (phase === BREATH_PHASE.HOLD2) {
       completeCycle();
     }
   };
@@ -106,7 +119,7 @@ export const SomaticBreathingPacer: React.FC<
     let elapsedMs = 0;
 
     audioService.triggerHaptic(
-      phase === 'inhale' ? 'medium' : 'light',
+      phase === BREATH_PHASE.INHALE ? HAPTIC_STYLE.MEDIUM : HAPTIC_STYLE.LIGHT,
     );
 
     const timer = setInterval(() => {
@@ -141,13 +154,13 @@ export const SomaticBreathingPacer: React.FC<
     }
 
     switch (phase) {
-      case 'inhale':
+      case BREATH_PHASE.INHALE:
         return strings.phaseInhale;
-      case 'hold1':
+      case BREATH_PHASE.HOLD1:
         return strings.phaseHold;
-      case 'exhale':
+      case BREATH_PHASE.EXHALE:
         return strings.phaseExhale;
-      case 'hold2':
+      case BREATH_PHASE.HOLD2:
         return strings.phaseHoldEmpty;
     }
   };
@@ -156,17 +169,17 @@ export const SomaticBreathingPacer: React.FC<
 
   const orbScale = !isStarted
     ? 1
-    : phase === 'inhale' || phase === 'hold1'
+    : phase === BREATH_PHASE.INHALE || phase === BREATH_PHASE.HOLD1
       ? 1.32
       : 1;
 
   const auraOpacity = !isStarted
     ? 0.4
-    : phase === 'inhale'
+    : phase === BREATH_PHASE.INHALE
       ? 0.85
-      : phase === 'hold1'
+      : phase === BREATH_PHASE.HOLD1
         ? 0.7
-        : phase === 'exhale'
+        : phase === BREATH_PHASE.EXHALE
           ? 0.35
           : 0.3;
 
@@ -176,12 +189,12 @@ export const SomaticBreathingPacer: React.FC<
 
   const orbBorderColor = isFinished
     ? '#10B981'
-    : phase === 'exhale'
+    : phase === BREATH_PHASE.EXHALE
       ? skyTheme.progressFill
       : skyTheme.badgeIconColor;
 
   const progressColor =
-    phase === 'exhale'
+    phase === BREATH_PHASE.EXHALE
       ? skyTheme.progressFill
       : skyTheme.badgeIconColor;
 
@@ -192,19 +205,19 @@ export const SomaticBreathingPacer: React.FC<
         <MoocaMascot
           mood={
             isFinished
-              ? 'celebrating'
+              ? MOOCA_MOOD.CELEBRATING
               : !isStarted
-                ? 'happy'
-                : phase === 'inhale'
-                  ? 'happy'
-                  : 'comforting'
+                ? MOOCA_MOOD.HAPPY
+                : phase === BREATH_PHASE.INHALE
+                  ? MOOCA_MOOD.HAPPY
+                  : MOOCA_MOOD.COMFORTING
           }
           size="sm"
           speakingBubble={
             isFinished
               ? strings.bubbleDone
               : !isStarted
-                ? pattern === 'box'
+                ? pattern === BREATH_PATTERN.BOX
                   ? strings.bubbleBox
                   : strings.bubble478
                 : strings.caption
@@ -217,7 +230,7 @@ export const SomaticBreathingPacer: React.FC<
         <div
           className={classNames(styles.ambientAura, {
             [styles.auraFinished]: isFinished,
-            [styles.auraExhale]: phase === 'exhale',
+            [styles.auraExhale]: phase === BREATH_PHASE.EXHALE,
           })}
           style={{
             width: ORB_SIZE * 1.15,
@@ -238,7 +251,7 @@ export const SomaticBreathingPacer: React.FC<
           disabled={isStarted}
           onClick={() => {
             if (!isStarted) {
-              audioService.triggerHaptic('medium');
+              audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
               setIsStarted(true);
             }
           }}
@@ -249,7 +262,7 @@ export const SomaticBreathingPacer: React.FC<
             width: ORB_SIZE,
             height: ORB_SIZE,
             borderRadius: '50%',
-            borderColor: orbBorderColor,
+            borderColor: orbBorderColor as string,
             transform: `scale(${orbScale})`,
             transition: `
       transform ${currentDuration}s cubic-bezier(
@@ -278,7 +291,7 @@ export const SomaticBreathingPacer: React.FC<
               cx={ORB_SIZE / 2}
               cy={ORB_SIZE / 2}
               r={SVG_R}
-              stroke={progressColor}
+              stroke={progressColor as string}
               strokeWidth={6}
               strokeDasharray={CIRCUMFERENCE}
               strokeDashoffset={
@@ -303,7 +316,7 @@ export const SomaticBreathingPacer: React.FC<
                   className={styles.startOrbTitle}
                   style={{ color: skyTheme.secondsColor }}
                 >
-                  {pattern === 'box'
+                  {pattern === BREATH_PATTERN.BOX
                     ? strings.badgeBox
                     : strings.badge478}
                 </span>
@@ -340,9 +353,9 @@ export const SomaticBreathingPacer: React.FC<
                   className={styles.phaseLabelText}
                   style={{ color: skyTheme.phaseLabelColor }}
                 >
-                  {phase === 'inhale'
+                  {phase === BREATH_PHASE.INHALE
                     ? strings.inhalePrompt
-                    : phase === 'hold1' || phase === 'hold2'
+                    : phase === BREATH_PHASE.HOLD1 || phase === BREATH_PHASE.HOLD2
                       ? strings.holdPrompt
                       : strings.exhalePrompt}
                 </span>
@@ -397,8 +410,8 @@ export const SomaticBreathingPacer: React.FC<
         {isFinished ? (
           <div className={styles.actionBtnWrapper}>
             <MarshmallowButton
-              variant="primary"
-              size="md"
+              variant={MARSHMALLOW_VARIANT.PRIMARY}
+              size={MARSHMALLOW_SIZE.MD}
               onPress={onComplete}
               icon={
                 <ArrowRight

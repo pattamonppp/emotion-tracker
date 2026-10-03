@@ -18,8 +18,8 @@ import {
   Heart,
 } from 'lucide-react';
 
-import { EmotionTag } from '../../../../types';
-import { audioService } from '../../../../services/audioService';
+import { EmotionTag, Language } from '../../../../types';
+import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
 import { getTranslation, getTagLabel } from '../../../../locales';
 
 import styles from './styles.module.scss';
@@ -71,7 +71,7 @@ interface FloatingEmotionCloudProps {
   isSelected: boolean;
   onToggle: (id: EmotionTag['id']) => void;
   onDropIntoJar?: (id: EmotionTag['id']) => void;
-  lang: 'th' | 'en';
+  lang: Language;
   isJarFull?: boolean;
   customText?: string;
   onEditCustom?: () => void;
@@ -196,7 +196,7 @@ export const FloatingEmotionCloud: React.FC<
         onToggle(tag.id);
       }
 
-      audioService.triggerHaptic('success');
+      audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
       audioService.playJarDrop();
 
       setIsFlying(true);
@@ -214,7 +214,7 @@ export const FloatingEmotionCloud: React.FC<
     };
 
     const handleTap = () => {
-      audioService.triggerHaptic('medium');
+      audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
 
       setIsPressed(true);
 
@@ -247,7 +247,7 @@ export const FloatingEmotionCloud: React.FC<
 
       setIsDragging(true);
 
-      audioService.triggerHaptic('light');
+      audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
     };
 
     const handlePointerMove = (
@@ -376,7 +376,7 @@ export const FloatingEmotionCloud: React.FC<
             className={styles.addButton}
             onClick={() => {
               audioService.triggerHaptic(
-                'selection',
+                HAPTIC_STYLE.SELECTION,
               );
 
               onEditCustom?.();
@@ -640,7 +640,7 @@ export const FloatingEmotionCloud: React.FC<
                 event.stopPropagation();
 
                 audioService.triggerHaptic(
-                  'selection',
+                  HAPTIC_STYLE.SELECTION,
                 );
 
                 onEditCustom();

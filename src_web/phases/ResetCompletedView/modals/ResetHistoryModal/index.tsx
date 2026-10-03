@@ -1,5 +1,5 @@
 import React from 'react';
-import { Language, ShiftFeedback, UserProfile } from '../../../../types';
+import { Language, ShiftFeedback, UserProfile, SHIFT_RESULT } from '../../../../types';
 import { getTranslation } from '../../../../locales';
 import {
   X,
@@ -30,13 +30,13 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
 
   const mockDefaultHistory: ShiftFeedback[] = [
     {
-      shiftResult: 'empowered',
+      shiftResult: SHIFT_RESULT.EMPOWERED,
       preHeartRate: 106,
       postHeartRate: 82,
       timestamp: '08:15',
     },
     {
-      shiftResult: 'grounded',
+      shiftResult: SHIFT_RESULT.GROUNDED,
       preHeartRate: 102,
       postHeartRate: 80,
       timestamp: h.today,

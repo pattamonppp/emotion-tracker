@@ -8,14 +8,14 @@ import {
   RotateCcw,
 } from 'lucide-react';
 
-import { MBTIType } from '../../../types';
+import { MBTIType, Language, LANG } from '../../../types';
 import {
   MBTI_SANCTUARY_SCRIPTS,
   getMBTIArchetype,
 } from '../../../data/matrixData';
-import { audioService } from '../../../services/audioService';
-import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../../../components/MoocaMascot';
+import { audioService, HAPTIC_STYLE, NEUTRAL_ENVIRONMENT_TYPE } from '../../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import { useSkyTheme } from '@/hooks/useSkyTheme';
 import { getTranslation } from '../../../locales';
 
@@ -24,7 +24,7 @@ import styles from './styles.module.scss';
 export interface AudioMatrixSanctuaryProps {
   mbti?: MBTIType;
   onComplete: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 const WAVE_HEIGHTS = [26, 48, 22, 64, 40, 58, 30, 52, 36, 20];
@@ -116,7 +116,7 @@ export const AudioMatrixSanctuary: React.FC<
   }, [isPlaying]);
 
   useEffect(() => {
-    audioService.startNeuralEntrainment('both');
+    audioService.startNeuralEntrainment(NEUTRAL_ENVIRONMENT_TYPE.BOTH);
 
     const text = script[lang];
 
@@ -148,13 +148,13 @@ export const AudioMatrixSanctuary: React.FC<
   const togglePlayback = () => {
     if (isPlaying) {
       audioService.stopAllVoice();
-      audioService.triggerHaptic('selection');
+      audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
       setIsPlaying(false);
       return;
     }
 
-    audioService.triggerHaptic('medium');
-    audioService.startNeuralEntrainment('both');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
+    audioService.startNeuralEntrainment(NEUTRAL_ENVIRONMENT_TYPE.BOTH);
 
     const text = script[lang];
 
@@ -169,8 +169,8 @@ export const AudioMatrixSanctuary: React.FC<
 
   const handleReplay = () => {
     audioService.stopAllVoice();
-    audioService.triggerHaptic('medium');
-    audioService.startNeuralEntrainment('both');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
+    audioService.startNeuralEntrainment(NEUTRAL_ENVIRONMENT_TYPE.BOTH);
 
     const text = script[lang];
 
@@ -192,8 +192,8 @@ export const AudioMatrixSanctuary: React.FC<
         <MoocaMascot
           mood={
             countdown === 0
-              ? 'celebrating'
-              : 'listening'
+              ? MOOCA_MOOD.CELEBRATING
+              : MOOCA_MOOD.LISTENING
           }
           size="sm"
           speakingBubble={
@@ -343,7 +343,7 @@ export const AudioMatrixSanctuary: React.FC<
           }}
         >
           "
-          {lang === 'th'
+          {lang === LANG.TH
             ? script.th
             : script.en}
           "
@@ -365,8 +365,8 @@ export const AudioMatrixSanctuary: React.FC<
           </span>
         ) : (
           <MarshmallowButton
-            variant="primary"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={() => {
               audioService.stopAllVoice();
               onComplete();

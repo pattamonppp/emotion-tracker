@@ -378,12 +378,12 @@ export const OOCA_TOKENS = {
 
 export const DESIGN_TOKENS = OOCA_TOKENS;
 
-import type { SkyTimePeriod, SkyMode } from '../types';
+import { type SkyTimePeriod, type SkyMode, SKY } from '../types';
 export type { SkyTimePeriod, SkyMode };
 
 export const SKY_THEMES = {
-  dawn: {
-    id: 'dawn' as const,
+  [SKY.DAWN]: {
+    id: SKY.DAWN,
     nameTh: 'ยามรุ่งอรุณ',
     nameEn: 'Dawn',
     timeRange: '05:00 - 09:00',
@@ -409,8 +409,8 @@ export const SKY_THEMES = {
       opacity: 0.85,
     },
   },
-  day: {
-    id: 'day' as const,
+  [SKY.DAY]: {
+    id: SKY.DAY,
     nameTh: 'กลางวัน',
     nameEn: 'Day',
     timeRange: '09:00 - 17:00',
@@ -436,8 +436,8 @@ export const SKY_THEMES = {
       opacity: 0.92,
     },
   },
-  sunset: {
-    id: 'sunset' as const,
+  [SKY.SUNSET]: {
+    id: SKY.SUNSET,
     nameTh: 'ยามเย็น',
     nameEn: 'Sunset',
     timeRange: '17:00 - 19:00',
@@ -463,8 +463,8 @@ export const SKY_THEMES = {
       opacity: 0.82,
     },
   },
-  night: {
-    id: 'night' as const,
+  [SKY.NIGHT]: {
+    id: SKY.NIGHT,
     nameTh: 'กลางคืน',
     nameEn: 'Night',
     timeRange: '19:00 - 05:00',
@@ -493,10 +493,10 @@ export const SKY_THEMES = {
 } as const;
 
 export const getPeriodFromHour = (hour: number): SkyTimePeriod => {
-  if (hour >= 5 && hour < 9) return 'dawn';
-  if (hour >= 9 && hour < 17) return 'day';
-  if (hour >= 17 && hour < 19) return 'sunset';
-  return 'night';
+  if (hour >= 5 && hour < 9) return SKY.DAWN;
+  if (hour >= 9 && hour < 17) return SKY.DAY;
+  if (hour >= 17 && hour < 19) return SKY.SUNSET;
+  return SKY.NIGHT;
 };
 
 export const getSkyTheme = (period: SkyTimePeriod) => {

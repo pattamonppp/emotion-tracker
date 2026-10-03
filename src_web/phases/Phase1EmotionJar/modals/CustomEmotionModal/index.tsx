@@ -7,11 +7,12 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import classNames from 'classnames';
-import { audioService } from '../../../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
 import { MoocaMascot } from '../../../../components/MoocaMascot';
 import { DESIGN_TOKENS } from '../../../../design-system/tokens';
 import { getTranslation } from '../../../../locales';
 import { MODAL_CONFIG } from '../../../../constants';
+import { Language } from '../../../../types';
 import styles from './styles.module.scss';
 
 export interface CustomEmotionModalProps {
@@ -25,7 +26,7 @@ export interface CustomEmotionModalProps {
   ) => void;
   onDelete?: (id: string) => void;
   onClose: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
   isJarFull: boolean;
 }
 
@@ -51,7 +52,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
   }, [isOpen, initialText]);
 
   const handleSuggestionPress = (suggestion: string) => {
-    audioService.triggerHaptic('light');
+    audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
     setInputText(suggestion);
   };
 
@@ -60,7 +61,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
 
     if (!trimmed) return;
 
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     audioService.playJarDrop();
 
     onSave(trimmed, !isJarFull, editingId);
@@ -72,14 +73,14 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
 
     if (!trimmed) return;
 
-    audioService.triggerHaptic('light');
+    audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
 
     onSave(trimmed, false, editingId);
     onClose();
   };
 
   const handleDelete = () => {
-    audioService.triggerHaptic('medium');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
 
     if (editingId && onDelete) {
       onDelete(editingId);

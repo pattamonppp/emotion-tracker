@@ -105,22 +105,22 @@
 }
 
 .bpmPreValue {
-  font-family: $font-mono;
-  font-weight: 900;
+  font-family: $font-th;
+  font-weight: 800;
   font-size: 1.375rem;
   color: #355956;
 }
 
 .bpmPostValue {
-  font-family: $font-mono;
-  font-weight: 900;
+  font-family: $font-th;
+  font-weight: 800;
   font-size: 1.375rem;
   color: $color-brand-contrast;
 }
 
 .bpmUnit {
   font-size: 0.625rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #79ADA9;
 }
 
@@ -132,8 +132,8 @@
 }
 
 .deltaText {
-  font-family: $font-mono;
-  font-weight: 900;
+  font-family: $font-th;
+  font-weight: 800;
   font-size: 0.875rem;
   color: $color-brand-contrast;
 }
@@ -247,7 +247,7 @@
 
 .stampMainLabel {
   font-size: 0.8125rem;
-  font-weight: 800;
+  font-weight: 700;
   color: $color-slate-800;
 }
 
@@ -268,7 +268,7 @@
 
 .stampPillText {
   font-size: 0.5625rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #FFFFFF;
   letter-spacing: 0.04em;
   text-transform: uppercase;

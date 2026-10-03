@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { audioService } from '../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
 import styles from './MarshmallowButton.module.scss';
 
 export const MARSHMALLOW_VARIANT = {
@@ -63,7 +63,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
     onClick?.();
 
     try {
-      audioService.triggerHaptic('selection');
+      audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
     } catch {
       // Ignore haptic errors in web environments.
     }
@@ -77,7 +77,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
     setIsPressed(true);
 
     try {
-      audioService.triggerHaptic('light');
+      audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
     } catch {
       // Ignore haptic errors in web environments.
     }

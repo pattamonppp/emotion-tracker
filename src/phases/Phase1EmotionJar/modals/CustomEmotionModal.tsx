@@ -11,11 +11,12 @@ import {
   ScrollView,
 } from 'react-native';
 import { Sparkles, X, ArrowDown, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
-import { audioService } from '../../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { colors, shadows, typography } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 import { MODAL_CONFIG } from '../../../constants';
+import { Language } from '../../../types';
 
 export interface CustomEmotionModalProps {
   isOpen: boolean;
@@ -24,7 +25,7 @@ export interface CustomEmotionModalProps {
   onSave: (text: string, putInJarImmediately: boolean, editingId?: string | null) => void;
   onDelete?: (id: string) => void;
   onClose: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
   isJarFull: boolean;
 }
 
@@ -49,14 +50,14 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
   }, [isOpen, initialText]);
 
   const handleSuggestionPress = (suggestion: string) => {
-    audioService.triggerHaptic('light');
+    audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
     setInputText(suggestion);
   };
 
   const handleSaveToJar = () => {
     const trimmed = inputText.trim();
     if (!trimmed) return;
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     audioService.playJarDrop();
     onSave(trimmed, !isJarFull, editingId);
     onClose();
@@ -65,13 +66,13 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
   const handleSaveToSky = () => {
     const trimmed = inputText.trim();
     if (!trimmed) return;
-    audioService.triggerHaptic('light');
+    audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
     onSave(trimmed, false, editingId);
     onClose();
   };
 
   const handleDelete = () => {
-    audioService.triggerHaptic('medium');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
     if (editingId && onDelete) {
       onDelete(editingId);
     }

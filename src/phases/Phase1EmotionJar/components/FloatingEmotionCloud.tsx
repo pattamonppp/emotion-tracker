@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { EmotionTag } from '../../../types';
-import { audioService } from '../../../services/audioService';
+import { EmotionTag, Language } from '../../../types';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import {
   Check,
   Activity,
@@ -67,7 +67,7 @@ interface FloatingEmotionCloudProps {
   isSelected: boolean;
   onToggle: (id: EmotionTag['id']) => void;
   onDropIntoJar?: (id: EmotionTag['id']) => void;
-  lang: 'th' | 'en';
+  lang: Language;
   isJarFull?: boolean;
   customText?: string;
   onEditCustom?: () => void;
@@ -142,7 +142,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
       >
         <TouchableOpacity
           onPress={() => {
-            audioService.triggerHaptic('selection');
+            audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
             if (onEditCustom) onEditCustom();
           }}
           activeOpacity={0.75}
@@ -175,7 +175,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   }
 
   const handleFlyIntoJar = () => {
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     audioService.playJarDrop();
 
     Animated.parallel([
@@ -217,7 +217,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
       },
       onPanResponderGrant: () => {
         isDragging.current = true;
-        audioService.triggerHaptic('light');
+        audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
         Animated.spring(scaleAnim, {
           toValue: 1.08,
           friction: 4,
@@ -258,7 +258,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   ).current;
 
   const handleTap = () => {
-    audioService.triggerHaptic('medium');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
     // Squish effect on tap
     Animated.sequence([
       Animated.timing(scaleAnim, {
@@ -381,7 +381,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
           <TouchableOpacity
             hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
             onPress={() => {
-              audioService.triggerHaptic('selection');
+              audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
               onEditCustom();
             }}
             style={[styles.downArrowPill, { backgroundColor: tag.color + '1A' }]}

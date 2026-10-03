@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Accelerometer } from 'expo-sensors';
-import { audioService } from '../../services/audioService';
-import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../../components/MoocaMascot';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { CheckCircle2, Star, Sparkles } from 'lucide-react-native';
 import { colors, typography } from '../../design-system/tokens';
@@ -132,7 +132,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
   const finishIntervention = () => {
     setIsFinished(true);
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     audioService.playChimeShockwave();
     // No auto-advance: require user to tap proceed button
   };
@@ -170,7 +170,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         ]}
       >
         <MoocaMascot
-          mood={isFinished ? 'celebrating' : 'shaking'}
+          mood={isFinished ? MOOCA_MOOD.CELEBRATING : MOOCA_MOOD.SHAKING}
           size="sm"
           speakingBubble={
             isFinished
@@ -289,8 +289,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       <View style={styles.actionSection}>
         {isFinished ? (
           <MarshmallowButton
-            variant="primary"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
             icon={<CheckCircle2 size={16} color="#FFFFFF" />}
             title={strings.proceedBtn}

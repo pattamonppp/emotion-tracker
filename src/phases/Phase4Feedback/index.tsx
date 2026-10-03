@@ -6,10 +6,18 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { EmotionTagId, ShiftFeedback, MoodStampType } from '../../types';
-import { audioService } from '../../services/audioService';
-import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../../components/MoocaMascot';
+import {
+  EmotionTagId,
+  ShiftFeedback,
+  MoodStampType,
+  MOOD_STAMP,
+  SHIFT_RESULT,
+  Language,
+  SKY,
+} from '../../types';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { useSky } from '../../components/DynamicSkyEngine';
 import { Activity, Check, Plus, Minus, ArrowRight, Zap, Leaf, Heart } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
@@ -21,7 +29,7 @@ export interface Phase4FeedbackProps {
   selectedEmotions: EmotionTagId[];
   onFinishReset: (feedback: ShiftFeedback) => void;
   onRestart: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
@@ -30,28 +38,28 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
   lang,
 }) => {
   const { activePeriod } = useSky();
-  const isNight = activePeriod === 'night';
+  const isNight = activePeriod === SKY.NIGHT;
   const t = getTranslation(lang);
   const p4 = t.phases.phase4;
 
   const [postHeartRate, setPostHeartRate] = useState(
     Math.max(PHASE4_CONFIG.minPostHeartRateFloor, preHeartRate - PHASE4_CONFIG.defaultBpmDrop)
   );
-  const [shiftResult, setShiftResult] = useState<MoodStampType>('empowered');
+  const [shiftResult, setShiftResult] = useState<MoodStampType>(MOOD_STAMP.EMPOWERED);
 
   const bpmDrop = preHeartRate - postHeartRate;
 
   const handleSelectStamp = (stamp: MoodStampType) => {
-    audioService.triggerHaptic('medium');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
     audioService.playJarDrop();
     setShiftResult(stamp);
   };
 
   const handleFinish = () => {
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     audioService.playChimeShockwave();
     onFinishReset({
-      shiftResult: shiftResult === 'hug' ? 'same' : shiftResult,
+      shiftResult: shiftResult === MOOD_STAMP.HUG ? SHIFT_RESULT.SAME : shiftResult,
       preHeartRate,
       postHeartRate,
       timestamp: new Date().toISOString(),
@@ -60,11 +68,11 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
 
   const getSpeakingBubble = () => {
     switch (shiftResult) {
-      case 'hug':
+      case MOOD_STAMP.HUG:
         return p4.bubbleHug;
-      case 'empowered':
+      case MOOD_STAMP.EMPOWERED:
         return p4.bubbleEmpoweredReady;
-      case 'grounded':
+      case MOOD_STAMP.GROUNDED:
       default:
         return p4.bubbleGroundedSteady;
     }
@@ -80,7 +88,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
         {/* Header & Mascot (Height: 145) */}
         <View style={styles.mascotWrapper}>
           <MoocaMascot
-            mood={shiftResult === 'hug' ? 'hugging' : 'celebrating'}
+            mood={shiftResult === MOOD_STAMP.HUG ? MOOCA_MOOD.HUGGING : MOOCA_MOOD.CELEBRATING}
             size="sm"
             speakingBubble={getSpeakingBubble()}
           />
@@ -121,7 +129,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
               <View style={styles.stepperRow}>
                 <TouchableOpacity
                   onPress={() => {
-                    audioService.triggerHaptic('selection');
+                    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
                     setPostHeartRate((prev) => Math.max(PHASE4_CONFIG.minHeartRate, prev - 1));
                   }}
                   activeOpacity={0.7}
@@ -131,7 +139,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    audioService.triggerHaptic('selection');
+                    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
                     setPostHeartRate((prev) => Math.min(PHASE4_CONFIG.maxHeartRate, prev + 1));
                   }}
                   activeOpacity={0.7}
@@ -150,10 +158,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             {/* Stamp 1: Ready & Confident */}
             <TouchableOpacity
               activeOpacity={0.88}
-              onPress={() => handleSelectStamp('empowered')}
+              onPress={() => handleSelectStamp(MOOD_STAMP.EMPOWERED)}
               style={[
                 styles.stampBtn,
-                shiftResult === 'empowered' && styles.stampBtnActiveAmber,
+                shiftResult === MOOD_STAMP.EMPOWERED && styles.stampBtnActiveAmber,
               ]}
             >
               <View style={styles.stampLeftRow}>
@@ -174,7 +182,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   </Text>
                 </View>
               </View>
-              {shiftResult === 'empowered' ? (
+              {shiftResult === MOOD_STAMP.EMPOWERED ? (
                 <View style={[styles.stampPill, { backgroundColor: '#F9A000' }]}>
                   <Check size={12} color="#FFFFFF" strokeWidth={3} />
                   <Text style={styles.stampPillText}>{p4.stampedBadge}</Text>
@@ -185,10 +193,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             {/* Stamp 2: Calm & Grounded */}
             <TouchableOpacity
               activeOpacity={0.88}
-              onPress={() => handleSelectStamp('grounded')}
+              onPress={() => handleSelectStamp(MOOD_STAMP.GROUNDED)}
               style={[
                 styles.stampBtn,
-                shiftResult === 'grounded' && styles.stampBtnActiveTeal,
+                shiftResult === MOOD_STAMP.GROUNDED && styles.stampBtnActiveTeal,
               ]}
             >
               <View style={styles.stampLeftRow}>
@@ -209,7 +217,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   </Text>
                 </View>
               </View>
-              {shiftResult === 'grounded' ? (
+              {shiftResult === MOOD_STAMP.GROUNDED ? (
                 <View style={[styles.stampPill, { backgroundColor: '#00C4B3' }]}>
                   <Check size={12} color="#FFFFFF" strokeWidth={3} />
                   <Text style={styles.stampPillText}>{p4.stampedBadge}</Text>
@@ -220,10 +228,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             {/* Stamp 3: Need Extra Warm Hug */}
             <TouchableOpacity
               activeOpacity={0.88}
-              onPress={() => handleSelectStamp('hug')}
+              onPress={() => handleSelectStamp(MOOD_STAMP.HUG)}
               style={[
                 styles.stampBtn,
-                shiftResult === 'hug' && styles.stampBtnActivePink,
+                shiftResult === MOOD_STAMP.HUG && styles.stampBtnActivePink,
               ]}
             >
               <View style={styles.stampLeftRow}>
@@ -244,7 +252,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   </Text>
                 </View>
               </View>
-              {shiftResult === 'hug' ? (
+              {shiftResult === MOOD_STAMP.HUG ? (
                 <View style={[styles.stampPill, { backgroundColor: '#EF7773' }]}>
                   <Check size={12} color="#FFFFFF" strokeWidth={3} />
                   <Text style={styles.stampPillText}>{p4.stampedBadge}</Text>
@@ -258,8 +266,8 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
       {/* Pinned Bottom CTA Button */}
       <View style={styles.bottomBar}>
         <MarshmallowButton
-          variant="primary"
-          size="lg"
+          variant={MARSHMALLOW_VARIANT.PRIMARY}
+          size={MARSHMALLOW_SIZE.LG}
           onPress={handleFinish}
           icon={<ArrowRight size={18} color="#FFFFFF" />}
           title={p4.claimPolaroid}

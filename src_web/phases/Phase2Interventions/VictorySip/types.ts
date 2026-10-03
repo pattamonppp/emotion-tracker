@@ -1,5 +1,7 @@
+import { Language, SkyTimePeriod } from '../../../types';
+
 export interface VictorySipProps {
   onComplete: () => void;
-  lang: 'th' | 'en';
-  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
+  lang: Language;
+  skyPeriod?: SkyTimePeriod;
 }

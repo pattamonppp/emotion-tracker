@@ -8,7 +8,7 @@ import {
   ScrollView 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ShiftFeedback, UserProfile } from '../../../types';
+import { ShiftFeedback, UserProfile, Language, SHIFT_RESULT } from '../../../types';
 import { Award, X, Activity, Sparkles } from 'lucide-react-native';
 import { colors, radii, shadows } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
@@ -18,7 +18,7 @@ export interface ResetHistoryModalProps {
   onClose: () => void;
   profile: UserProfile;
   history: ShiftFeedback[];
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
@@ -32,13 +32,13 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
 
   const mockDefaultHistory: ShiftFeedback[] = [
     {
-      shiftResult: 'empowered',
+      shiftResult: SHIFT_RESULT.EMPOWERED,
       preHeartRate: 106,
       postHeartRate: 82,
       timestamp: '08:15',
     },
     {
-      shiftResult: 'grounded',
+      shiftResult: SHIFT_RESULT.GROUNDED,
       preHeartRate: 102,
       postHeartRate: 80,
       timestamp: h.today,

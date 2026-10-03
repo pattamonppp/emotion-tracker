@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { audioService } from '../../../services/audioService';
-import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../../../components/MoocaMascot';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import { Sparkles, Star, CheckCircle2 } from 'lucide-react';
 import { getTranslation } from '../../../locales';
 import { ACTIVITY_TYPE } from '../../../types';
@@ -50,7 +50,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
       if (remaining === 0) {
         setIsFinished(true);
-        audioService.triggerHaptic('success');
+        audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
         audioService.playChimeShockwave();
       }
     } else {
@@ -60,7 +60,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
       if (remaining === 0) {
         setIsFinished(true);
-        audioService.triggerHaptic('success');
+        audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
         audioService.playChimeShockwave();
       }
     }
@@ -76,7 +76,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         })}
       >
         <MoocaMascot
-          mood={isFinished ? 'celebrating' : 'shaking'}
+          mood={isFinished ? MOOCA_MOOD.CELEBRATING : MOOCA_MOOD.SHAKING}
           size="sm"
           speakingBubble={
             isFinished
@@ -185,8 +185,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       <div className={styles.actionSection}>
         {isFinished ? (
           <MarshmallowButton
-            variant="primary"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
             icon={<CheckCircle2 size={16} color="#FFFFFF" />}
             title={strings.proceedBtn}

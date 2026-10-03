@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { UserProfile, ShiftFeedback } from '../../types';
-import { MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { UserProfile, ShiftFeedback, SKY, LANG } from '../../types';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../components/MoocaMascot';
 import { useSky } from '../../components/DynamicSkyEngine';
 import { audioService } from '../../services/audioService';
@@ -37,7 +37,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
   onOpenFeedback,
 }) => {
   const { activePeriod } = useSky();
-  const isNight = activePeriod === 'night';
+  const isNight = activePeriod === SKY.NIGHT;
 
   const lang = profile.language;
   const t = getTranslation(lang);
@@ -67,7 +67,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
     } else {
       navigator.clipboard.writeText(shareMessage);
       alert(
-        lang === 'th'
+        lang === LANG.TH
           ? 'คัดลอกข้อความแชร์แล้ว!'
           : 'Copied keepsake text!',
       );
@@ -75,7 +75,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
   };
 
   const currentDate = new Date().toLocaleDateString(
-    lang === 'th' ? 'th-TH' : 'en-US',
+    lang === LANG.TH ? 'th-TH' : 'en-US',
     {
       day: 'numeric',
       month: 'short',
@@ -251,8 +251,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         <div className={styles.actionsContainer}>
           {/* Feedback Button */}
           <MarshmallowButton
-            variant="mint"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.MINT}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onOpenFeedback}
             icon={
               <MessageSquareHeart
@@ -265,8 +265,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
           {/* Share Keepsake Button */}
           <MarshmallowButton
-            variant="secondary"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.SECONDARY}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={handleShareKeepsake}
             icon={
               <Share2
@@ -279,8 +279,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
           {/* Start New Session */}
           <MarshmallowButton
-            variant="primary"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onRestart}
             icon={
               <RotateCcw
@@ -293,8 +293,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
           {/* View History Button */}
           <MarshmallowButton
-            variant="softCream"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.SOFT_CREAM}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onOpenHistory}
             icon={
               <History

@@ -10,19 +10,20 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import { audioService } from '../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
-import { MoocaMascot } from '../../components/MoocaMascot';
-import { MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
 import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCircle } from 'react-native-svg';
 import { Star, Sun, Hand, Sparkles, HelpCircle, Check, X } from 'lucide-react-native';
 import { typography, radii, shadows, colors } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
+import { Language, SKY, SkyTimePeriod } from '../../types';
 
 interface SomaticAbsorptionProps {
   onComplete: () => void;
-  lang: 'th' | 'en';
-  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
+  lang: Language;
+  skyPeriod?: SkyTimePeriod;
 }
 
 const { width: SCREEN_W } = Dimensions.get('window');
@@ -101,7 +102,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 
       if (next >= 100 && !isFinished) {
         setIsFinished(true);
-        audioService.triggerHaptic('success');
+        audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
         audioService.playChimeShockwave();
         Animated.sequence([
           Animated.timing(completeScaleAnim, { toValue: 1.12, duration: 240, useNativeDriver: true }),
@@ -191,7 +192,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
       {/* 1. Mooca Mascot - Positioned slightly lower for cozy spacing */}
       <View style={styles.mascotSection}>
         <MoocaMascot
-          mood={isFinished ? 'celebrating' : isRubbing ? 'rubbing' : 'comforting'}
+          mood={isFinished ? MOOCA_MOOD.CELEBRATING : isRubbing ? MOOCA_MOOD.RUBBING : MOOCA_MOOD.COMFORTING}
           size="sm"
           speakingBubble={
             isFinished
@@ -206,7 +207,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
       {/* 2. Instruction Badge & Multi-touch Indicator with Info Tip */}
       <TouchableOpacity
         onPress={() => {
-          audioService.triggerHaptic('selection');
+          audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
           setIsGuideOpen(true);
         }}
         activeOpacity={0.8}
@@ -345,9 +346,9 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                 { transform: [{ rotate: starRotation }] },
               ]}
             >
-              {skyPeriod === 'day' ? (
+              {skyPeriod === SKY.DAY ? (
                 <Sun size={76} color={theme.starColor} strokeWidth={2} />
-              ) : skyPeriod === 'sunset' ? (
+              ) : skyPeriod === SKY.SUNSET ? (
                 <Sparkles size={74} color={theme.starColor} strokeWidth={2} />
               ) : (
                 <Star size={76} color={theme.starColor} strokeWidth={2} />
@@ -365,8 +366,8 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
       {isFinished ? (
         <View style={styles.actionSection}>
           <MarshmallowButton
-            variant="primary"
-            size="lg"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.LG}
             onPress={onComplete}
             icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceedBtn}
@@ -447,7 +448,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 
             <TouchableOpacity
               onPress={() => {
-                audioService.triggerHaptic('success');
+                audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
                 setIsGuideOpen(false);
               }}
               activeOpacity={0.85}

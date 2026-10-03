@@ -4,9 +4,12 @@ import {
   UserProfile,
   ShiftFeedback,
   Feedback,
+  Language,
+  FeedbackAccuracy,
+  FEEDBACK_ACCURACY,
 } from '../../../../types';
-import { Button } from '../../../../components/Button';
-import { audioService } from '../../../../services/audioService';
+import { Button, BUTTON_THEME } from '../../../../components/Button';
+import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
 import { getTranslation, getTagLabel } from '../../../../locales';
 import {
   CloseIcon,
@@ -28,7 +31,7 @@ export interface AiFeedbackModalProps {
   onClose: () => void;
   profile: UserProfile;
   feedback: ShiftFeedback | null;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 const STAR_COLORS = [
@@ -52,8 +55,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
   const strings = getTranslation(lang).feedback;
 
   const [rating, setRating] = useState<number>(5);
-  const [accuracy, setAccuracy] =
-    useState<'spot_on' | 'helpful' | 'needs_work'>('spot_on');
+  const [accuracy, setAccuracy] = useState<FeedbackAccuracy>(FEEDBACK_ACCURACY.SPOT_ON);
 
   const [selectedAspects, setSelectedAspects] = useState<string[]>([
     'audio_binaural',
@@ -75,19 +77,17 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
         : [...prev, id],
     );
 
-    audioService.triggerHaptic('selection');
+    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
   };
 
   const handleRatingChange = (value: number) => {
     setRating(value);
-    audioService.triggerHaptic('selection');
+    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
   };
 
-  const handleAccuracyChange = (
-    value: 'spot_on' | 'helpful' | 'needs_work',
-  ) => {
+  const handleAccuracyChange = (value: FeedbackAccuracy) => {
     setAccuracy(value);
-    audioService.triggerHaptic('selection');
+    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
   };
 
   const handleSubmit = () => {
@@ -127,7 +127,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
     setSavedRecord(record);
     setSubmitted(true);
 
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     audioService.playJarDrop();
   };
 
@@ -372,7 +372,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 <div className={styles.submitWrap}>
                   <Button
                     variant="primary"
-                    colorTheme="turquoise"
+                    colorTheme={BUTTON_THEME.TURQUOISE}
                     size="md"
                     onClick={handleSubmit}
                     leadingIcon={<CheckCircleIcon />}
@@ -415,7 +415,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 <div className={styles.successButtonWrap}>
                   <Button
                     variant="primary"
-                    colorTheme="turquoise"
+                    colorTheme={BUTTON_THEME.TURQUOISE}
                     size="md"
                     onClick={handleClose}
                     label={strings.doneButton}
@@ -451,3 +451,5 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
 };
 
 export default AiFeedbackModal;
+export { AiFeedbackModal as FeedbackModal };
+export type { AiFeedbackModalProps as FeedbackModalProps };

@@ -16,11 +16,17 @@ import {
   EmotionTagId,
   InterventionOption,
   ShiftFeedback,
-  SkyTimePeriod
+  SkyTimePeriod,
+  Language,
+  LANG,
+  PHASE,
+  INTERVENTION,
+  SKY,
+  ACTIVITY_TYPE
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { storageService } from './services/storageService';
-import { audioService } from './services/audioService';
+import { audioService, HAPTIC_STYLE } from './services/audioService';
 import { DEV_MODE, DEV_START } from './config';
 
 import { MindfullLogo } from './components/MindfullLogo';
@@ -29,7 +35,7 @@ import { Phase1EmotionJar } from './phases/Phase1EmotionJar';
 import { SomaticAbsorption } from './phases/Phase2Interventions/SomaticAbsorption';
 import { VictorySip } from './phases/Phase2Interventions/VictorySip';
 import { KineticShaker } from './phases/Phase2Interventions/KineticShaker';
-import { SomaticBreathingPacer } from './phases/Phase2Interventions/SomaticBreathingPacer';
+import { BREATH_PATTERN, SomaticBreathingPacer } from './phases/Phase2Interventions/SomaticBreathingPacer';
 import { AudioMatrixSanctuary } from './phases/Phase2Interventions/AudioMatrixSanctuary';
 import { Phase3CognitiveReframing } from './phases/Phase3CognitiveReframing';
 import { Phase4Feedback } from './phases/Phase4Feedback';
@@ -65,10 +71,10 @@ export default function App() {
     Prompt_800ExtraBold,
   });
   const [currentPhase, setCurrentPhase] = useState<ResetPhase>(
-    DEV_MODE ? DEV_START.phase : 'phase1_jar'
+    DEV_MODE ? DEV_START.phase : PHASE.PHASE1_JAR
   );
   const [activeOption, setActiveOption] = useState<InterventionOption>(
-    DEV_MODE ? DEV_START.activity : 'A'
+    DEV_MODE ? DEV_START.activity : INTERVENTION.A
   );
   const [selectedEmotions, setSelectedEmotions] = useState<EmotionTagId[]>([]);
   const [heartRate, setHeartRate] = useState(105);
@@ -111,25 +117,25 @@ export default function App() {
   };
 
   const toggleLanguage = () => {
-    const newLang: 'en' | 'th' = profile.language === 'th' ? 'en' : 'th';
+    const newLang: Language = profile.language === LANG.TH ? LANG.EN : LANG.TH;
     setProfile({ ...profile, language: newLang });
-    audioService.triggerHaptic('selection');
+    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
   };
 
   const handleStartIntervention = () => {
     const firstTag = EMOTION_TAGS.find((t) => t.id === selectedEmotions[0]);
-    const option = firstTag?.recommendedOption || 'A';
+    const option = firstTag?.recommendedOption || INTERVENTION.A;
     setActiveOption(option);
-    setCurrentPhase('phase2_intervention');
+    setCurrentPhase(PHASE.PHASE2_INTERVENTION);
     setIsTimerRunning(true);
   };
 
   const handleInterventionComplete = () => {
-    setCurrentPhase('phase3_reframing');
+    setCurrentPhase(PHASE.PHASE3_REFRAMING);
   };
 
   const handleReframingComplete = () => {
-    setCurrentPhase('phase4_feedback');
+    setCurrentPhase(PHASE.PHASE4_FEEDBACK);
   };
 
   const handleFinishFeedback = (result: ShiftFeedback) => {
@@ -137,13 +143,13 @@ export default function App() {
     const updatedHistory = [result, ...history];
     setHistory(updatedHistory);
     storageService.saveHistory(updatedHistory);
-    setCurrentPhase('completed');
+    setCurrentPhase(PHASE.COMPLETED);
     setIsTimerRunning(false);
   };
 
   const handleRestart = () => {
     audioService.stopAllVoice();
-    setCurrentPhase('phase1_jar');
+    setCurrentPhase(PHASE.PHASE1_JAR);
     setElapsedSeconds(0);
     setIsTimerRunning(false);
     setSelectedEmotions([]);
@@ -156,22 +162,22 @@ export default function App() {
   };
 
   const getPhaseName = () => {
-    if (profile.language === 'th') {
+    if (profile.language === LANG.TH) {
       switch (currentPhase) {
-        case 'phase1_jar': return '1. โหลเก็บความกังวล';
-        case 'phase2_intervention': return '2. กายกรรมรีเซ็ต';
-        case 'phase3_reframing': return '3. ปลดล็อกความคิด';
-        case 'phase4_feedback': return '4. วัดผลลัพธ์ใจ';
-        case 'completed': return 'กอดใจสำเร็จ';
+        case PHASE.PHASE1_JAR: return '1. โหลเก็บความกังวล';
+        case PHASE.PHASE2_INTERVENTION: return '2. กายกรรมรีเซ็ต';
+        case PHASE.PHASE3_REFRAMING: return '3. ปลดล็อกความคิด';
+        case PHASE.PHASE4_FEEDBACK: return '4. วัดผลลัพธ์ใจ';
+        case PHASE.COMPLETED: return 'กอดใจสำเร็จ';
         default: return 'เริ่มรีเซ็ต';
       }
     } else {
       switch (currentPhase) {
-        case 'phase1_jar': return '1. Emotion Jar';
-        case 'phase2_intervention': return '2. Somatic Shift';
-        case 'phase3_reframing': return '3. Cognitive Insight';
-        case 'phase4_feedback': return '4. Bio Feedback';
-        case 'completed': return 'Reset Complete';
+        case PHASE.PHASE1_JAR: return '1. Emotion Jar';
+        case PHASE.PHASE2_INTERVENTION: return '2. Somatic Shift';
+        case PHASE.PHASE3_REFRAMING: return '3. Cognitive Insight';
+        case PHASE.PHASE4_FEEDBACK: return '4. Bio Feedback';
+        case PHASE.COMPLETED: return 'Reset Complete';
         default: return 'Start Reset';
       }
     }
@@ -190,223 +196,223 @@ export default function App() {
   return (
     <LanguageProvider initialLang={profile.language}>
       <SafeAreaProvider>
-      <StatusBar style={skyPeriod === 'night' ? 'light' : 'dark'} />
-      <DynamicSkyEngine
-        onTimePeriodChange={setSkyPeriod}
-        lang={profile.language}
-      >
-        <SafeAreaView style={styles.safeArea}>
-          {/* Top Bar (Wordmark, Language Actions, Profile Avatar) - Stable CI */}
-          <View style={styles.topBar}>
-            {/* Zone 1: Logo */}
-            <View style={styles.logoRow}>
-              <MindfullLogo size="sm" />
-            </View>
+        <StatusBar style={skyPeriod === SKY.NIGHT ? 'light' : 'dark'} />
+        <DynamicSkyEngine
+          onTimePeriodChange={setSkyPeriod}
+          lang={profile.language}
+        >
+          <SafeAreaView style={styles.safeArea}>
+            {/* Top Bar (Wordmark, Language Actions, Profile Avatar) - Stable CI */}
+            <View style={styles.topBar}>
+              {/* Zone 1: Logo */}
+              <View style={styles.logoRow}>
+                <MindfullLogo size="sm" />
+              </View>
 
-            {/* Zone 2: Actions */}
-            <View style={styles.actionsRow}>
-              {/* Language Switch */}
-              <TouchableOpacity
-                onPress={toggleLanguage}
-                activeOpacity={0.8}
-                style={styles.langBtn}
-              >
-                <Languages size={13} color={colors.primary} />
-                <Text style={styles.langText}>{profile.language.toUpperCase()}</Text>
-              </TouchableOpacity>
-
-              {/* Sound / Music Toggle Button (Between Language & Avatar) */}
-              <TouchableOpacity
-                onPress={() => {
-                  audioService.toggleBackgroundMusic();
-                }}
-                activeOpacity={0.8}
-                style={[
-                  styles.soundBtn,
-                  isMusicPlaying && styles.soundBtnActive,
-                ]}
-              >
-                {isMusicPlaying ? (
-                  <Volume2 size={13} color={colors.primaryDark} />
-                ) : (
-                  <VolumeX size={13} color={colors.textMuted} />
-                )}
-              </TouchableOpacity>
-
-              {/* Profile Avatar (Rounded 12px Turquoise-Blue Gradient) */}
-              <TouchableOpacity
-                onPress={() => {
-                  audioService.triggerHaptic('selection');
-                  setIsOnboardingOpen(true);
-                }}
-                activeOpacity={0.85}
-                style={styles.avatarWrapper}
-              >
-                <LinearGradient
-                  colors={[colors.primary, colors.accentBlue]}
-                  start={{ x: 0, y: 1 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.avatarGradient}
+              {/* Zone 2: Actions */}
+              <View style={styles.actionsRow}>
+                {/* Language Switch */}
+                <TouchableOpacity
+                  onPress={toggleLanguage}
+                  activeOpacity={0.8}
+                  style={styles.langBtn}
                 >
-                  <Text style={styles.avatarText}>
-                    {profile.name.charAt(0).toUpperCase() || 'M'}
-                  </Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
-          </View>
+                  <Languages size={13} color={colors.primary} />
+                  <Text style={styles.langText}>{profile.language.toUpperCase()}</Text>
+                </TouchableOpacity>
 
-          {/* Dynamic Island Session Pill with Countdown & Sky Atmosphere Switcher - Stable CI */}
-          <View style={styles.dynamicIslandContainer}>
-            <View style={styles.dynamicIslandRow}>
-              <View style={styles.dynamicPill}>
-                <View style={styles.pingDot} />
-                <Text style={styles.phaseLabelText}>{getPhaseName()}</Text>
-                <View style={styles.timerChip}>
-                  <Text style={styles.timerChipText}>{formatSeconds(elapsedSeconds)}</Text>
-                </View>
+                {/* Sound / Music Toggle Button (Between Language & Avatar) */}
+                <TouchableOpacity
+                  onPress={() => {
+                    audioService.toggleBackgroundMusic();
+                  }}
+                  activeOpacity={0.8}
+                  style={[
+                    styles.soundBtn,
+                    isMusicPlaying && styles.soundBtnActive,
+                  ]}
+                >
+                  {isMusicPlaying ? (
+                    <Volume2 size={13} color={colors.primaryDark} />
+                  ) : (
+                    <VolumeX size={13} color={colors.textMuted} />
+                  )}
+                </TouchableOpacity>
+
+                {/* Profile Avatar (Rounded 12px Turquoise-Blue Gradient) */}
+                <TouchableOpacity
+                  onPress={() => {
+                    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
+                    setIsOnboardingOpen(true);
+                  }}
+                  activeOpacity={0.85}
+                  style={styles.avatarWrapper}
+                >
+                  <LinearGradient
+                    colors={[colors.primary, colors.accentBlue]}
+                    start={{ x: 0, y: 1 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.avatarGradient}
+                  >
+                    <Text style={styles.avatarText}>
+                      {profile.name.charAt(0).toUpperCase() || 'M'}
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
-
-              {/* Dynamic Sky Period Switcher */}
-              <SkyPeriodSwitcher />
             </View>
-          </View>
 
-          {/* Main Phase Viewport */}
-          <View style={styles.viewport}>
-            {currentPhase === 'phase1_jar' && (
-              <Phase1EmotionJar
-                currentLocation={
-                  profile.goal === 'exam'
-                    ? (profile.language === 'th' ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
-                    : profile.goal === 'stage'
-                      ? (profile.language === 'th' ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
-                      : (profile.language === 'th' ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation')
-                }
-                heartRate={heartRate}
-                selectedEmotions={selectedEmotions}
-                onSelectEmotions={setSelectedEmotions}
-                onProceed={handleStartIntervention}
-                onOpenPulseSensor={() => setIsPulseModalOpen(true)}
-                lang={profile.language}
-                skyPeriod={skyPeriod}
-              />
-            )}
-
-            {currentPhase === 'phase2_intervention' && (
-              <View style={styles.interventionContainer}>
-
-                {/* Active Intervention View */}
-                <View style={{ flex: 1 }}>
-                  {activeOption === 'A' && (
-                    <SomaticAbsorption
-                      onComplete={handleInterventionComplete}
-                      lang={profile.language}
-                      skyPeriod={skyPeriod}
-                    />
-                  )}
-                  {activeOption === 'B' && (
-                    <VictorySip
-                      onComplete={handleInterventionComplete}
-                      lang={profile.language}
-                    />
-                  )}
-                  {activeOption === 'C' && (
-                    <KineticShaker
-                      activityType="shake"
-                      onComplete={handleInterventionComplete}
-                      lang={profile.language}
-                    />
-                  )}
-                  {activeOption === 'D' && (
-                    <KineticShaker
-                      activityType="jump"
-                      onComplete={handleInterventionComplete}
-                      lang={profile.language}
-                    />
-                  )}
-                  {activeOption === 'E' && (
-                    <SomaticBreathingPacer
-                      pattern="box"
-                      onComplete={handleInterventionComplete}
-                      lang={profile.language}
-                    />
-                  )}
-                  {activeOption === 'F' && (
-                    <SomaticBreathingPacer
-                      pattern="relax478"
-                      onComplete={handleInterventionComplete}
-                      lang={profile.language}
-                    />
-                  )}
-                  {activeOption === 'G' && (
-                    <AudioMatrixSanctuary
-                      mbti={profile.mbti}
-                      onComplete={handleInterventionComplete}
-                      lang={profile.language}
-                    />
-                  )}
+            {/* Dynamic Island Session Pill with Countdown & Sky Atmosphere Switcher - Stable CI */}
+            <View style={styles.dynamicIslandContainer}>
+              <View style={styles.dynamicIslandRow}>
+                <View style={styles.dynamicPill}>
+                  <View style={styles.pingDot} />
+                  <Text style={styles.phaseLabelText}>{getPhaseName()}</Text>
+                  <View style={styles.timerChip}>
+                    <Text style={styles.timerChipText}>{formatSeconds(elapsedSeconds)}</Text>
+                  </View>
                 </View>
+
+                {/* Dynamic Sky Period Switcher */}
+                <SkyPeriodSwitcher />
               </View>
-            )}
+            </View>
 
-            {currentPhase === 'phase3_reframing' && (
-              <Phase3CognitiveReframing
-                goal={profile.goal}
-                onProceed={handleReframingComplete}
-                lang={profile.language}
-              />
-            )}
+            {/* Main Phase Viewport */}
+            <View style={styles.viewport}>
+              {currentPhase === PHASE.PHASE1_JAR && (
+                <Phase1EmotionJar
+                  currentLocation={
+                    profile.goal === 'exam'
+                      ? (profile.language === LANG.TH ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
+                      : profile.goal === 'stage'
+                        ? (profile.language === LANG.TH ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
+                        : (profile.language === LANG.TH ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation')
+                  }
+                  heartRate={heartRate}
+                  selectedEmotions={selectedEmotions}
+                  onSelectEmotions={setSelectedEmotions}
+                  onProceed={handleStartIntervention}
+                  onOpenPulseSensor={() => setIsPulseModalOpen(true)}
+                  lang={profile.language}
+                  skyPeriod={skyPeriod}
+                />
+              )}
 
-            {currentPhase === 'phase4_feedback' && (
-              <Phase4Feedback
-                preHeartRate={heartRate}
-                selectedEmotions={selectedEmotions}
-                onFinishReset={handleFinishFeedback}
-                onRestart={handleRestart}
-                lang={profile.language}
-              />
-            )}
+              {currentPhase === PHASE.PHASE2_INTERVENTION && (
+                <View style={styles.interventionContainer}>
 
-            {currentPhase === 'completed' && (
-              <ResetCompletedView
-                profile={profile}
-                feedback={feedback}
-                onRestart={handleRestart}
-                onOpenProfile={() => setIsOnboardingOpen(true)}
-                onOpenHistory={() => setIsHistoryOpen(true)}
-              />
-            )}
-          </View>
+                  {/* Active Intervention View */}
+                  <View style={{ flex: 1 }}>
+                    {activeOption === INTERVENTION.A && (
+                      <SomaticAbsorption
+                        onComplete={handleInterventionComplete}
+                        lang={profile.language}
+                        skyPeriod={skyPeriod}
+                      />
+                    )}
+                    {activeOption === INTERVENTION.B && (
+                      <VictorySip
+                        onComplete={handleInterventionComplete}
+                        lang={profile.language}
+                      />
+                    )}
+                    {activeOption === INTERVENTION.C && (
+                      <KineticShaker
+                        activityType={ACTIVITY_TYPE.SHAKE}
+                        onComplete={handleInterventionComplete}
+                        lang={profile.language}
+                      />
+                    )}
+                    {activeOption === INTERVENTION.D && (
+                      <KineticShaker
+                        activityType={ACTIVITY_TYPE.JUMP}
+                        onComplete={handleInterventionComplete}
+                        lang={profile.language}
+                      />
+                    )}
+                    {activeOption === INTERVENTION.E && (
+                      <SomaticBreathingPacer
+                        pattern={BREATH_PATTERN.BOX}
+                        onComplete={handleInterventionComplete}
+                        lang={profile.language}
+                      />
+                    )}
+                    {activeOption === INTERVENTION.F && (
+                      <SomaticBreathingPacer
+                        pattern={BREATH_PATTERN.RELAX_478}
+                        onComplete={handleInterventionComplete}
+                        lang={profile.language}
+                      />
+                    )}
+                    {activeOption === INTERVENTION.G && (
+                      <AudioMatrixSanctuary
+                        mbti={profile.mbti}
+                        onComplete={handleInterventionComplete}
+                        lang={profile.language}
+                      />
+                    )}
+                  </View>
+                </View>
+              )}
 
-          {/* Modals */}
-          <OnboardingModal
-            initialProfile={profile}
-            onSave={handleSaveProfile}
-            isOpen={isOnboardingOpen}
-            onClose={() => setIsOnboardingOpen(false)}
-          />
+              {currentPhase === PHASE.PHASE3_REFRAMING && (
+                <Phase3CognitiveReframing
+                  goal={profile.goal}
+                  onProceed={handleReframingComplete}
+                  lang={profile.language}
+                />
+              )}
 
-          <LivePulseSensorModal
-            isOpen={isPulseModalOpen}
-            onClose={() => setIsPulseModalOpen(false)}
-            currentBpm={heartRate}
-            onUpdateBpm={setHeartRate}
-            lang={profile.language}
-          />
+              {currentPhase === PHASE.PHASE4_FEEDBACK && (
+                <Phase4Feedback
+                  preHeartRate={heartRate}
+                  selectedEmotions={selectedEmotions}
+                  onFinishReset={handleFinishFeedback}
+                  onRestart={handleRestart}
+                  lang={profile.language}
+                />
+              )}
 
-          <ResetHistoryModal
-            isOpen={isHistoryOpen}
-            onClose={() => setIsHistoryOpen(false)}
-            profile={profile}
-            history={history}
-            lang={profile.language}
-          />
-        </SafeAreaView>
-      </DynamicSkyEngine>
-    </SafeAreaProvider>
-  </LanguageProvider>
-);
+              {currentPhase === PHASE.COMPLETED && (
+                <ResetCompletedView
+                  profile={profile}
+                  feedback={feedback}
+                  onRestart={handleRestart}
+                  onOpenProfile={() => setIsOnboardingOpen(true)}
+                  onOpenHistory={() => setIsHistoryOpen(true)}
+                />
+              )}
+            </View>
+
+            {/* Modals */}
+            <OnboardingModal
+              initialProfile={profile}
+              onSave={handleSaveProfile}
+              isOpen={isOnboardingOpen}
+              onClose={() => setIsOnboardingOpen(false)}
+            />
+
+            <LivePulseSensorModal
+              isOpen={isPulseModalOpen}
+              onClose={() => setIsPulseModalOpen(false)}
+              currentBpm={heartRate}
+              onUpdateBpm={setHeartRate}
+              lang={profile.language}
+            />
+
+            <ResetHistoryModal
+              isOpen={isHistoryOpen}
+              onClose={() => setIsHistoryOpen(false)}
+              profile={profile}
+              history={history}
+              lang={profile.language}
+            />
+          </SafeAreaView>
+        </DynamicSkyEngine>
+      </SafeAreaProvider>
+    </LanguageProvider>
+  );
 }
 
 const styles = StyleSheet.create({

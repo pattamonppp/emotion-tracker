@@ -21,17 +21,18 @@ import {
   Zap,
 } from 'lucide-react-native';
 
-import { audioService } from '../../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { Button } from '../../../design-system/Button';
 import { getTranslation } from '../../../locales';
 import { typography } from '../../../design-system/tokens';
+import { Language } from '../../../types';
 
 export interface LivePulseSensorModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentBpm: number;
   onUpdateBpm: (bpm: number) => void;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 export const LivePulseSensorModal: React.FC<
@@ -201,7 +202,7 @@ export const LivePulseSensorModal: React.FC<
         scanProgress % 20 === 0
       ) {
         audioService.triggerHaptic(
-          'light',
+          HAPTIC_STYLE.LIGHT,
         );
       }
     }, [
@@ -228,7 +229,7 @@ export const LivePulseSensorModal: React.FC<
       setIsScanComplete(true);
 
       audioService.triggerHaptic(
-        'success',
+        HAPTIC_STYLE.SUCCESS,
       );
 
       audioService.playJarDrop();
@@ -263,7 +264,7 @@ export const LivePulseSensorModal: React.FC<
       setIsFingerOnSensor(true);
 
       audioService.triggerHaptic(
-        'medium',
+        HAPTIC_STYLE.MEDIUM,
       );
     };
 

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import cn from 'classnames';
 import { audioService } from '../../../../services/audioService';
-import { Button } from '../../../../components/Button';
+import { Button, BUTTON_THEME } from '../../../../components/Button';
 import { Activity, X, Heart } from 'lucide-react';
 import { LeafIcon, ZapIcon } from '../../../../icons';
 import { getTranslation } from '../../../../locales';
+import { Language } from '../../../../types';
 import styles from './styles.module.scss';
 
 export interface LivePulseSensorModalProps {
@@ -12,7 +13,7 @@ export interface LivePulseSensorModalProps {
   onClose: () => void;
   currentBpm: number;
   onUpdateBpm: (bpm: number) => void;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
@@ -206,7 +207,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
         <div className={styles.footerArea}>
           <Button
             variant="primary"
-            colorTheme="turquoise"
+            colorTheme={BUTTON_THEME.TURQUOISE}
             size="md"
             fullWidth
             onClick={onClose}

@@ -10,15 +10,16 @@ import {
   X,
 } from 'lucide-react';
 
-import { audioService } from '../../../services/audioService';
-import { MoocaMascot } from '../../../components/MoocaMascot';
-import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
+import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { DESIGN_TOKENS } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 
 import type { SomaticAbsorptionProps } from './types';
 import styles from './styles.module.scss';
 import { useSkyTheme } from '@/hooks/useSkyTheme';
+import { SKY } from '@/types';
 
 const MAX_CIRCLE_SIZE = 268;
 const CIRCLE_WIDTH_RATIO = 0.72;
@@ -85,7 +86,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 
       if (next >= 100) {
         setIsFinished(true);
-        audioService.triggerHaptic('success');
+        audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
         audioService.playChimeShockwave();
       }
 
@@ -264,10 +265,10 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
         <MoocaMascot
           mood={
             isFinished
-              ? 'celebrating'
+              ? MOOCA_MOOD.CELEBRATING
               : isRubbing
-                ? 'rubbing'
-                : 'comforting'
+                ? MOOCA_MOOD.RUBBING
+                : MOOCA_MOOD.COMFORTING
           }
           size="sm"
           speakingBubble={
@@ -288,7 +289,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           borderColor: theme.badgeBorder,
         }}
         onClick={() => {
-          audioService.triggerHaptic('selection');
+          audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
           setIsGuideOpen(true);
         }}
       >
@@ -406,13 +407,13 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 
           <div className={styles.centerContent}>
             <div className={styles.starBackground}>
-              {skyPeriod === 'day' ? (
+              {skyPeriod === SKY.DAY ? (
                 <Sun
                   size={76}
                   color={theme.starColor}
                   strokeWidth={2}
                 />
-              ) : skyPeriod === 'sunset' ? (
+              ) : skyPeriod === SKY.SUNSET ? (
                 <Sparkles
                   size={74}
                   color={theme.starColor}
@@ -442,9 +443,9 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
       {isFinished ? (
         <div className={styles.actionSection}>
           <MarshmallowButton
-            variant="primary"
-            size="lg"
-            onClick={onComplete}
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.LG}
+            onPress={onComplete}
             icon={
               <Check
                 size={18}
@@ -467,7 +468,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               className={styles.progressBarFill}
               style={{
                 width: `${rubProgress}%`,
-                backgroundColor: theme.progressFill,
+                backgroundColor: theme.progressFillBar,
               }}
             />
           </div>
@@ -561,7 +562,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               type="button"
               className={styles.guideConfirmBtn}
               onClick={() => {
-                audioService.triggerHaptic('success');
+                audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
                 setIsGuideOpen(false);
               }}
             >

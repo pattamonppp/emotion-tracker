@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSky } from '../components/DynamicSkyEngine';
+import { SKY, useSky } from '../components/DynamicSkyEngine';
 import { colors } from '../design-system/tokens';
 import type { SkyTimePeriod } from '../types';
 
@@ -24,6 +24,7 @@ export interface SkyThemeTokens {
   progressTrack: string;
   progressFill: readonly [string, string];
   progressFillColor: string;
+  progressFillBar: string;
   fluidColors: readonly [string, string, ...string[]];
 
   // Badges & Actions
@@ -69,9 +70,9 @@ export const useSkyTheme = (): SkyThemeTokens => {
     };
 
     switch (activePeriod) {
-      case 'sunset':
+      case SKY.SUNSET:
         return {
-          period: 'sunset',
+          period: SKY.SUNSET,
           ...oocaCIOrb,
 
           // Somatic Breathing
@@ -86,6 +87,7 @@ export const useSkyTheme = (): SkyThemeTokens => {
           progressTrack: 'rgba(255, 255, 255, 0.45)',
           progressFill: ['#EF7773', '#FF8F4B'] as const,
           progressFillColor: '#EF7773',
+          progressFillBar: 'linear-gradient(90deg, #EF7773, #FF8F4B)',
           fluidColors: ['#00C4B3', '#EF7773', '#FF8F4B'] as const,
 
           // Badges
@@ -117,9 +119,9 @@ export const useSkyTheme = (): SkyThemeTokens => {
           dots: ['#EF7773', '#FF8F4B', '#E44743', '#00C4B3'],
         };
 
-      case 'night':
+      case SKY.NIGHT:
         return {
-          period: 'night',
+          period: SKY.NIGHT,
           ...oocaCIOrb,
 
           // Somatic Breathing
@@ -134,6 +136,7 @@ export const useSkyTheme = (): SkyThemeTokens => {
           progressTrack: 'rgba(255, 255, 255, 0.25)',
           progressFill: ['#1F77DF', '#62A0E9'] as const,
           progressFillColor: '#1F77DF',
+          progressFillBar: 'linear-gradient(90deg, #1F77DF, #62A0E9)',
           fluidColors: ['#00C4B3', '#1F77DF', '#62A0E9'] as const,
 
           // Badges
@@ -165,9 +168,9 @@ export const useSkyTheme = (): SkyThemeTokens => {
           dots: ['#1F77DF', '#62A0E9', '#00C4B3', '#8FBBEF'],
         };
 
-      case 'dawn':
+      case SKY.DAWN:
         return {
-          period: 'dawn',
+          period: SKY.DAWN,
           ...oocaCIOrb,
 
           // Somatic Breathing
@@ -182,6 +185,7 @@ export const useSkyTheme = (): SkyThemeTokens => {
           progressTrack: 'rgba(255, 255, 255, 0.65)',
           progressFill: ['#F9A000', '#F8E4B3'] as const,
           progressFillColor: '#F9A000',
+          progressFillBar: 'linear-gradient(90deg, #F9A000, #F4D280)',
           fluidColors: ['#00C4B3', '#F9A000', '#F8E4B3'] as const,
 
           // Badges
@@ -213,10 +217,10 @@ export const useSkyTheme = (): SkyThemeTokens => {
           dots: ['#F9A000', '#F0BF4D', '#8AD866', '#FF8F4B'],
         };
 
-      case 'day':
+      case SKY.DAY:
       default:
         return {
-          period: 'day',
+          period: SKY.DAY,
           ...oocaCIOrb,
 
           // Somatic Breathing
@@ -231,6 +235,7 @@ export const useSkyTheme = (): SkyThemeTokens => {
           progressTrack: colors.ringTrack,
           progressFill: [colors.primary, colors.accentBlue] as const,
           progressFillColor: colors.primary,
+          progressFillBar: 'linear-gradient(90deg, #00C4B3, #62A0E9)',
           fluidColors: ['#00C4B3', '#62A0E9', '#B3EDE8'] as const,
 
           // Badges

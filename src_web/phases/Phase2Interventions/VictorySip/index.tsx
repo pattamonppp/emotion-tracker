@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import { audioService } from '../../../services/audioService';
-import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../../../components/MoocaMascot';
+import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import { Check, GlassWater, ArrowRight, X, Sparkles, Heart, HelpCircle } from 'lucide-react';
 import { getTranslation } from '../../../locales';
 import type { VictorySipProps } from './types';
@@ -28,11 +28,11 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     const nextSip = sipCount + 1;
     setSipCount(nextSip);
     audioService.playLiquidSip(nextSip);
-    audioService.triggerHaptic('medium');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
 
     if (nextSip >= 3) {
       setIsFinished(true);
-      audioService.triggerHaptic('success');
+      audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
       audioService.playChimeShockwave();
     }
   };
@@ -41,7 +41,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     if (isFinished || isTiltingToDrink) return;
 
     setIsTiltingToDrink(true);
-    audioService.triggerHaptic('medium');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
 
     tiltTimer.current = setTimeout(() => {
       triggerSip();
@@ -63,7 +63,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       {/* 1. Mascot View - Standardized Height */}
       <div className={styles.mascotWrapper}>
         <MoocaMascot
-          mood={isFinished ? 'celebrating' : 'drinking'}
+          mood={isFinished ? MOOCA_MOOD.CELEBRATING : MOOCA_MOOD.DRINKING}
           size="sm"
           speakingBubble={isFinished ? strings.bubbleDone : strings.bubbleDrinking}
         />
@@ -73,7 +73,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       <button
         type="button"
         onClick={() => {
-          audioService.triggerHaptic('selection');
+          audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
           setIsGuideOpen(true);
         }}
         className={styles.instructionPill}
@@ -208,8 +208,8 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       <div className={styles.actionSection}>
         {isFinished ? (
           <MarshmallowButton
-            variant="primary"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
             icon={<ArrowRight size={16} color="#FFFFFF" />}
             title={strings.proceedBtn}
@@ -267,7 +267,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             <button
               type="button"
               onClick={() => {
-                audioService.triggerHaptic('success');
+                audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
                 setIsGuideOpen(false);
               }}
               className={styles.guideConfirmBtn}

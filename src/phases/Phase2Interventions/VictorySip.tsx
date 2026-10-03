@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Accelerometer } from 'expo-sensors';
-import { audioService } from '../../services/audioService';
-import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../../components/MoocaMascot';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { Heart, Check, GlassWater, Sparkles, ArrowRight, X, HelpCircle } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
@@ -166,7 +166,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     const nextSip = sipCount + 1;
     setSipCount(nextSip);
     audioService.playLiquidSip(nextSip);
-    audioService.triggerHaptic('medium');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
 
     // Smooth fluid drain animation downward
     const targetLevel = Math.max(0, 100 - nextSip * 33.34);
@@ -179,7 +179,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
     if (nextSip >= 3) {
       setIsFinished(true);
-      audioService.triggerHaptic('success');
+      audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
       audioService.playChimeShockwave();
     }
   };
@@ -196,7 +196,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       {/* 1. Mascot View - Standardized Height across all screens */}
       <View style={styles.mascotWrapper}>
         <MoocaMascot
-          mood={isFinished ? 'celebrating' : 'drinking'}
+          mood={isFinished ? MOOCA_MOOD.CELEBRATING : MOOCA_MOOD.DRINKING}
           size="sm"
           speakingBubble={
             isFinished
@@ -209,7 +209,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       {/* 2. Instruction Badge & Sip Indicator with Info Tip */}
       <TouchableOpacity
         onPress={() => {
-          audioService.triggerHaptic('selection');
+          audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
           setIsGuideOpen(true);
         }}
         activeOpacity={0.8}
@@ -374,8 +374,8 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       <View style={styles.actionSection}>
         {isFinished ? (
           <MarshmallowButton
-            variant="primary"
-            size="md"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
             icon={<ArrowRight size={16} color="#FFFFFF" />}
             title={strings.proceedBtn}
@@ -446,7 +446,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
             <TouchableOpacity
               onPress={() => {
-                audioService.triggerHaptic('success');
+                audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
                 setIsGuideOpen(false);
               }}
               activeOpacity={0.85}

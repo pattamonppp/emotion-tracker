@@ -1,3 +1,5 @@
+// Mirrors src/components/DynamicSkyEngine.tsx StyleSheet + Animated loops 1:1.
+
 .container {
   position: relative;
   width: 100%;
@@ -16,7 +18,7 @@
   pointer-events: none;
   overflow: hidden;
   z-index: 0;
-  transition: opacity 1s ease;
+  container-type: size;
 }
 
 .content {
@@ -30,52 +32,70 @@
   flex-direction: column;
 }
 
-// Celestial Orbs & Sun/Moon/Stars
-.celestialOrb1 {
+.periodLayer {
   position: absolute;
-  top: 60px;
-  right: -20px;
-  border-radius: 50%;
+  inset: 0;
   pointer-events: none;
-  filter: blur(28px);
-  animation: floatOrb1 9s infinite ease-in-out;
 }
 
-.celestialOrb2 {
+.celestialAura {
   position: absolute;
-  top: 140px;
-  left: -30px;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(34px);
-  animation: floatOrb2 11s infinite ease-in-out;
 }
 
-@keyframes floatOrb1 {
+// ---------------------------------------------------------------
+// Dream orbs (bokeh)
+// ---------------------------------------------------------------
+.dreamOrb1 {
+  position: absolute;
+  top: 90px;
+  left: -40px;
+  width: 220px;
+  height: 220px;
+  border-radius: 110px;
+  animation: dreamOrb1 14s ease-in-out infinite;
+}
 
-  0%,
-  100% {
-    transform: scale(1) translateY(0);
+.dreamOrb2 {
+  position: absolute;
+  top: 250px;
+  right: -50px;
+  width: 240px;
+  height: 240px;
+  border-radius: 120px;
+  animation: dreamOrb2 17s ease-in-out infinite;
+}
+
+@keyframes dreamOrb1 {
+  0% {
+    transform: scale(0.92);
   }
 
   50% {
-    transform: scale(1.1) translateY(-10px);
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(0.92);
   }
 }
 
-@keyframes floatOrb2 {
-
-  0%,
-  100% {
-    transform: scale(1) translateY(0);
+@keyframes dreamOrb2 {
+  0% {
+    transform: scale(1.08);
   }
 
   50% {
-    transform: scale(1.08) translateY(12px);
+    transform: scale(0.88);
+  }
+
+  100% {
+    transform: scale(1.08);
   }
 }
 
-// Drifting Clouds
+// ---------------------------------------------------------------
+// Drifting clouds
+// ---------------------------------------------------------------
 .cloudLayer {
   position: absolute;
   inset: 0;
@@ -83,50 +103,63 @@
   overflow: hidden;
 }
 
-.driftingCloud1 {
+.driftingCloud1,
+.driftingCloud2,
+.driftingCloud3,
+.driftingCloud4 {
   position: absolute;
-  top: 40px;
-  animation: driftRight 45s linear infinite, cloudBob1 4.5s ease-in-out infinite;
+  left: 0;
+  line-height: 0;
+}
+
+.driftingCloud1 {
+  top: 55px;
+  animation: driftRight1 32s linear infinite, cloudBob1 8.4s ease-in-out infinite;
 }
 
 .driftingCloud2 {
-  position: absolute;
-  top: 120px;
-  animation: driftLeft 38s linear infinite, cloudBob2 5s ease-in-out infinite;
+  top: 130px;
+  animation: driftLeft2 26s linear infinite, cloudBob2 7.2s ease-in-out infinite;
 }
 
 .driftingCloud3 {
-  position: absolute;
-  top: 210px;
-  animation: driftRight 52s linear infinite, cloudBob1 6s ease-in-out infinite;
+  top: 90px;
+  animation: driftRight3 38s linear infinite, cloudBob3 9.6s ease-in-out infinite;
 }
 
 .driftingCloud4 {
-  position: absolute;
-  bottom: 120px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0.4;
-  animation: cloudSway 9s ease-in-out infinite;
+  top: 240px;
+  left: 20%;
+  animation: cloudSway4 15s ease-in-out infinite;
 }
 
-@keyframes driftRight {
-  0% {
-    transform: translateX(-220px);
+@keyframes driftRight1 {
+  from {
+    transform: translateX(-160px);
   }
 
-  100% {
-    transform: translateX(500px);
+  to {
+    transform: translateX(calc(100cqw + 90px));
   }
 }
 
-@keyframes driftLeft {
-  0% {
-    transform: translateX(500px);
+@keyframes driftLeft2 {
+  from {
+    transform: translateX(calc(100cqw + 70px));
   }
 
-  100% {
-    transform: translateX(-220px);
+  to {
+    transform: translateX(-150px);
+  }
+}
+
+@keyframes driftRight3 {
+  from {
+    transform: translateX(-120px);
+  }
+
+  to {
+    transform: translateX(calc(100cqw + 110px));
   }
 }
 
@@ -134,11 +167,15 @@
 
   0%,
   100% {
-    margin-top: 0;
+    translate: 0 0;
   }
 
-  50% {
-    margin-top: -6px;
+  25% {
+    translate: 0 -5px;
+  }
+
+  75% {
+    translate: 0 5px;
   }
 }
 
@@ -146,203 +183,408 @@
 
   0%,
   100% {
-    margin-top: 0;
+    translate: 0 0;
   }
 
-  50% {
-    margin-top: 7px;
+  25% {
+    translate: 0 6px;
+  }
+
+  75% {
+    translate: 0 -6px;
   }
 }
 
-@keyframes cloudSway {
+@keyframes cloudBob3 {
 
   0%,
   100% {
-    transform: translateX(-50%) translateY(0);
+    translate: 0 0;
   }
 
-  50% {
-    transform: translateX(calc(-50% + 14px)) translateY(-4px);
+  25% {
+    translate: 0 -4px;
+  }
+
+  75% {
+    translate: 0 4px;
   }
 }
 
-// Stars for night sky
-.starField {
+@keyframes cloudSway4 {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(24px);
+  }
+
+  75% {
+    transform: translateX(-24px);
+  }
+}
+
+// ---------------------------------------------------------------
+// Stars, sun, moon
+// ---------------------------------------------------------------
+.starsLayer,
+.daySparklesLayer {
   position: absolute;
   inset: 0;
-  pointer-events: none;
 }
 
-.twinkleStar {
+.vectorStarItem {
   position: absolute;
-  animation: starPulse 2.8s ease-in-out infinite;
+  line-height: 0;
 }
 
-@keyframes starPulse {
+.starTwinkle1 {
+  animation: starTwinkle1 3.2s ease-in-out infinite;
+}
+
+.starTwinkle2 {
+  animation: starTwinkle2 3.8s ease-in-out infinite;
+}
+
+@keyframes starTwinkle1 {
 
   0%,
   100% {
-    opacity: 0.3;
-    transform: scale(0.85);
+    opacity: 0.4;
   }
 
-  50% {
+  25% {
     opacity: 1;
-    transform: scale(1.15);
+  }
+
+  75% {
+    opacity: 0.25;
   }
 }
 
-// -------------------------------------------------------------
-// Sky Period Switcher Pill & Dropdown
-// -------------------------------------------------------------
+@keyframes starTwinkle2 {
+
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  25% {
+    opacity: 0.2;
+  }
+
+  75% {
+    opacity: 1;
+  }
+}
+
+.sunPulse {
+  animation: sunPulse 6s ease-in-out infinite;
+}
+
+@keyframes sunPulse {
+
+  0%,
+  100% {
+    scale: 1;
+  }
+
+  50% {
+    scale: 1.08;
+  }
+}
+
+.nightMoonContainer,
+.sunriseSunContainer,
+.daySunContainer,
+.sunsetSunContainer {
+  position: absolute;
+  top: 185px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.nightMoonContainer,
+.daySunContainer,
+.sunsetSunContainer {
+  right: 22px;
+}
+
+.sunriseSunContainer {
+  left: 22px;
+}
+
+.diffusedSunCoreDawn,
+.diffusedSunCoreDay,
+.diffusedSunCoreSunset {
+  border-radius: 50%;
+}
+
+.diffusedSunCoreDawn {
+  width: 44px;
+  height: 44px;
+  background-color: #FFF7ED;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.85);
+}
+
+.diffusedSunCoreDay {
+  width: 48px;
+  height: 48px;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 22px rgba(253, 224, 71, 0.9);
+}
+
+.diffusedSunCoreSunset {
+  width: 44px;
+  height: 44px;
+  background-color: #FFF1F2;
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.85);
+}
+
+.morningMist1,
+.morningMist2 {
+  position: absolute;
+}
+
+.morningMist1 {
+  top: 180px;
+  left: -40px;
+  right: -40px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.22);
+  border-radius: 25px;
+}
+
+.morningMist2 {
+  top: 250px;
+  left: -20px;
+  right: -20px;
+  height: 40px;
+  background-color: rgba(255, 247, 237, 0.28);
+  border-radius: 20px;
+}
+
+.daySunbeamsLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  animation: dayBeam 8.4s ease-in-out infinite;
+}
+
+@keyframes dayBeam {
+
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  75% {
+    opacity: 0.25;
+  }
+}
+
+// ---------------------------------------------------------------
+// Fairy motes & bottom shimmer
+// ---------------------------------------------------------------
+.bottomShimmerContainer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 110px;
+  height: 120px;
+  z-index: 0;
+  animation: shimmerGentle 15s ease-in-out infinite, shimmerOpacity 8.4s ease-in-out infinite;
+}
+
+@keyframes shimmerGentle {
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  25% {
+    translate: 0 -6px;
+  }
+
+  75% {
+    translate: 0 6px;
+  }
+}
+
+@keyframes shimmerOpacity {
+
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  25% {
+    opacity: 0.95;
+  }
+
+  75% {
+    opacity: 0.52;
+  }
+}
+
+.fairyMote {
+  position: absolute;
+  line-height: 0;
+}
+
+.fairyMoteGlow {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+}
+
+.fairyMoteCore {
+  width: 5px;
+  height: 5px;
+  border-radius: 2.5px;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+}
+
+// ---------------------------------------------------------------
+// Sky Period Switcher Pill & Options (mirrors RN styles)
+// ---------------------------------------------------------------
 .switcherContainer {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 999;
   user-select: none;
-  z-index: 100;
 }
 
 .pillBtn {
-  display: inline-flex;
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 5px;
-  padding: 3px 8px 3px 7px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(0, 196, 179, 0.25);
+  background-color: rgba(255, 255, 255, 0.96);
+  padding: 4px 9px;
   border-radius: 9999px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1.3px solid rgba(0, 196, 179, 0.3);
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: transform 120ms ease, background 150ms ease;
   font-family: inherit;
-
-  &:hover {
-    background: #FFFFFF;
-    transform: scale(1.02);
-  }
+  transition: transform 120ms ease;
 
   &:active {
-    transform: scale(0.94);
+    transform: scale(0.92);
   }
 }
 
 .pillBtnNight {
-  background: rgba(15, 23, 42, 0.88);
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-
-  &:hover {
-    background: rgba(15, 23, 42, 0.96);
-  }
+  background-color: rgba(30, 41, 59, 0.96);
+  border-color: rgba(253, 224, 71, 0.4);
 }
 
 .pillText {
-  font-size: 10px;
-  font-weight: 700;
-  color: #00695c;
-  line-height: 1;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #009688;
+  line-height: 1.2;
+}
+
+.pillTextNight {
+  color: #F1F5F9;
 }
 
 .autoTag {
-  display: inline-flex;
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 2.5px;
-  background: rgba(0, 196, 179, 0.12);
-  padding: 1.5px 5px;
-  border-radius: 9999px;
+  background-color: #E6F9F7;
+  padding: 1px 4.5px;
+  border-radius: 5px;
+  gap: 2px;
 }
 
 .autoTagText {
-  font-size: 8.5px;
-  font-weight: 800;
-  color: #00897b;
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #009688;
 }
 
 .customTag {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(250, 140, 61, 0.14);
-  padding: 1.5px 5px;
-  border-radius: 9999px;
+  background-color: #FEF3C7;
+  padding: 1px 4.5px;
+  border-radius: 5px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  display: flex;
 }
 
 .customTagText {
-  font-size: 8.5px;
-  font-weight: 800;
-  color: #d97706;
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #92400E;
 }
 
 .expandArrowBtn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
   border: 0;
-  padding: 0;
+  padding: 0 1px;
   cursor: pointer;
 }
 
 .optionsPopup {
   position: absolute;
-  top: calc(100% + 4px);
+  top: 30px;
   right: 0;
-  min-width: 130px;
-  background: rgba(255, 255, 255, 0.98);
-  border: 1.2px solid rgba(0, 196, 179, 0.3);
-  border-radius: 16px;
-  padding: 4px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  z-index: 1000;
-  animation: popIn 150ms ease-out;
-}
-
-@keyframes popIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px) scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  flex-direction: row;
+  background-color: #FFFFFF;
+  border-radius: 14px;
+  padding: 4px;
+  border: 1.5px solid #B3EDE8;
+  gap: 3px;
+  box-shadow: 0 2px 8px rgba(53, 89, 86, 0.08);
+  z-index: 9999;
 }
 
 .optionBtn {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 7px;
-  padding: 6px 10px;
-  border-radius: 12px;
+  padding: 4.5px 6px;
+  border-radius: 9999px;
   border: 0;
-  background: transparent;
+  background-color: #F8FAFC;
+  gap: 3px;
   cursor: pointer;
-  width: 100%;
   font-family: inherit;
-  transition: background 100ms ease;
-
-  &:hover {
-    background: #f0fdfa;
-  }
 }
 
 .optionBtnActive {
-  background: #00c4b3;
-
-  &:hover {
-    background: #00b4a4;
-  }
+  background-color: #00C4B3;
 }
 
 .optionText {
-  font-size: 11px;
+  font-size: 8.5px;
   font-weight: 600;
-  color: #0f172a;
+  color: #009688;
+  white-space: nowrap;
 }
 
 .optionTextActive {
-  color: #ffffff;
-  font-weight: 700;
+  color: #FFFFFF;
 }

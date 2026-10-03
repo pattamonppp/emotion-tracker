@@ -2,21 +2,24 @@ import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Heart, Sparkles } from 'lucide-react';
 
-import { audioService } from '../../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
 import styles from './styles.module.scss';
 
-export type MoocaMood =
-  | 'happy'
-  | 'comforting'
-  | 'hugging'
-  | 'praying'
-  | 'rubbing'
-  | 'drinking'
-  | 'shaking'
-  | 'listening'
-  | 'celebrating'
-  | 'sleepy'
-  | 'sad';
+export const MOOCA_MOOD = {
+  HAPPY: 'happy',
+  COMFORTING: 'comforting',
+  HUGGING: 'hugging',
+  PRAYING: 'praying',
+  RUBBING: 'rubbing',
+  DRINKING: 'drinking',
+  SHAKING: 'shaking',
+  LISTENING: 'listening',
+  CELEBRATING: 'celebrating',
+  SLEEPY: 'sleepy',
+  SAD: 'sad',
+} as const;
+
+export type MoocaMood = typeof MOOCA_MOOD[keyof typeof MOOCA_MOOD];
 
 interface MoocaMascotProps {
   mood?: MoocaMood;
@@ -73,7 +76,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
   const handlePetting = () => {
     if (!interactive) return;
 
-    audioService.triggerHaptic('selection');
+    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
 
     setIsBlushing(true);
     setIsPetting(true);
@@ -199,7 +202,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
             />
 
             {/* Rainbow */}
-            {mood === 'celebrating' && (
+            {mood === MOOCA_MOOD.CELEBRATING && (
               <path
                 d="M 28 72 A 52 52 0 0 1 132 72"
                 stroke="url(#moocaRainbowGrad)"
@@ -221,8 +224,8 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
             {/* Cloud Body */}
             <path
               d="M 44 112 C 20 112, 12 88, 24 70 C 16 46, 42 32, 60 40 C 70 20, 94 20, 104 40 C 122 32, 148 46, 140 70 C 152 88, 142 112, 118 112 Z"
-              fill={mood === 'sad' ? '#E2E8F0' : '#FFFFFF'}
-              stroke={mood === 'sad' ? '#94A3B8' : '#BEECE6'}
+              fill={mood === MOOCA_MOOD.SAD ? '#E2E8F0' : '#FFFFFF'}
+              stroke={mood === MOOCA_MOOD.SAD ? '#94A3B8' : '#BEECE6'}
               strokeWidth="3.5"
               strokeLinejoin="round"
             />
@@ -258,9 +261,9 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
             />
 
             {/* Eyes */}
-            {mood === 'praying' ||
-              mood === 'rubbing' ||
-              mood === 'comforting' ? (
+            {mood === MOOCA_MOOD.PRAYING ||
+              mood === MOOCA_MOOD.RUBBING ||
+              mood === MOOCA_MOOD.COMFORTING ? (
               <g
                 stroke="#006B63"
                 strokeWidth="3.2"
@@ -270,7 +273,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
                 <path d="M 48 76 Q 58 67 68 76" />
                 <path d="M 92 76 Q 102 67 112 76" />
               </g>
-            ) : mood === 'sleepy' ? (
+            ) : mood === MOOCA_MOOD.SLEEPY ? (
               <g
                 stroke="#006B63"
                 strokeWidth="2.8"
@@ -280,7 +283,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
                 <path d="M 50 78 Q 58 83 66 78" />
                 <path d="M 94 78 Q 102 83 110 78" />
               </g>
-            ) : mood === 'sad' ? (
+            ) : mood === MOOCA_MOOD.SAD ? (
               <g>
                 <circle cx="58" cy="74" r="3.8" fill="#334155" />
                 <circle cx="102" cy="74" r="3.8" fill="#334155" />
@@ -304,7 +307,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
             )}
 
             {/* Mouth */}
-            {mood === 'sad' ? (
+            {mood === MOOCA_MOOD.SAD ? (
               <path
                 d="M 76 86 Q 80 82 84 86"
                 stroke="#006B63"
@@ -312,7 +315,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
                 strokeLinecap="round"
                 fill="none"
               />
-            ) : mood === 'drinking' ? (
+            ) : mood === MOOCA_MOOD.DRINKING ? (
               <ellipse
                 cx="80"
                 cy="85"
@@ -320,8 +323,8 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
                 ry="4.5"
                 fill="#006B63"
               />
-            ) : mood === 'celebrating' ||
-              mood === 'happy' ||
+            ) : mood === MOOCA_MOOD.CELEBRATING ||
+              mood === MOOCA_MOOD.HAPPY ||
               isBlushing ? (
               <path
                 d="M 72 81 Q 80 94 88 81 Z"

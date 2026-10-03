@@ -1,5 +1,6 @@
 import { MBTIType, SkyTimePeriod, ACTIVITY_TYPE } from '../../types';
 import { Language } from '../../locales';
+import { BreathPattern } from './SomaticBreathingPacer';
 
 export interface BaseInterventionProps {
   onComplete: () => void;
@@ -21,10 +22,8 @@ export interface AudioMatrixSanctuaryProps extends BaseInterventionProps {
 }
 
 export interface SomaticBreathingPacerProps extends BaseInterventionProps {
-  pattern?: 'box' | '478';
+  pattern?: BreathPattern;
 }
-
-export type BreathingPhase = 'inhale' | 'hold' | 'exhale' | 'holdEmpty';
 
 export interface CelestialParticle {
   x: number;

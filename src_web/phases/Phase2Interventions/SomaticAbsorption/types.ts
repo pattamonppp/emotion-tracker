@@ -1,9 +1,11 @@
+import { Language, SkyTimePeriod } from '../../../types';
+
 export type { Particle } from '../../../utils';
 
 export interface SomaticAbsorptionProps {
   onComplete: () => void;
-  lang?: 'th' | 'en';
-  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
+  lang?: Language;
+  skyPeriod?: SkyTimePeriod;
 }
 
 export interface PointerPos {

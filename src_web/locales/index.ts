@@ -1,7 +1,13 @@
 import { th } from './th';
 import { en } from './en';
 
-export type Language = 'th' | 'en';
+
+export const LANG = {
+  TH: 'th',
+  EN: 'en',
+} as const;
+
+export type Language = typeof LANG[keyof typeof LANG];
 export type LocaleTranslations = typeof th;
 
 export const locales = {
@@ -16,7 +22,7 @@ export const getTranslation = (lang: Language): LocaleTranslations => {
 };
 
 export const getTagLabel = (tag: { labelTh: string; labelEn: string }, lang: Language): string => {
-  return lang === 'th' ? tag.labelTh : tag.labelEn;
+  return lang === LANG.TH ? tag.labelTh : tag.labelEn;
 };
 
 export const getLocalizedText = <T extends { th: string; en: string }>(item: T, lang: Language): string => {
@@ -35,7 +41,7 @@ export const getReframingText = (
   field: 'reflection' | 'biologyFact' | 'microAction',
   lang: Language
 ): string => {
-  if (field === 'reflection') return lang === 'th' ? insight.reflectionTh : insight.reflectionEn;
-  if (field === 'biologyFact') return lang === 'th' ? insight.biologyFactTh : insight.biologyFactEn;
-  return lang === 'th' ? insight.microActionTh : insight.microActionEn;
+  if (field === 'reflection') return lang === LANG.TH ? insight.reflectionTh : insight.reflectionEn;
+  if (field === 'biologyFact') return lang === LANG.TH ? insight.biologyFactTh : insight.biologyFactEn;
+  return lang === LANG.TH ? insight.microActionTh : insight.microActionEn;
 };

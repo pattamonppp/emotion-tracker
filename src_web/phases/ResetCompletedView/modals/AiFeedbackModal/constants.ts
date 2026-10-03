@@ -14,6 +14,7 @@ import {
   WindIcon,
   IconProps,
 } from '../../../../icons';
+import { FEEDBACK_ACCURACY, FEEDBACK_ACCURACY_THEME, FeedbackAccuracy, FeedbackAccuracyTheme } from '@/types';
 
 export interface FeedbackAspect {
   id: string;
@@ -32,17 +33,17 @@ export const FEEDBACK_ASPECTS: FeedbackAspect[] = [
 ];
 
 export interface AccuracyOption {
-  id: 'spot_on' | 'helpful' | 'needs_work';
+  id: FeedbackAccuracy;
   labelTh: string;
   labelEn: string;
   Icon: React.FC<IconProps>;
-  colorTheme: 'spotOn' | 'helpful' | 'needsWork';
+  colorTheme: FeedbackAccuracyTheme;
 }
 
 export const ACCURACY_OPTIONS: AccuracyOption[] = [
-  { id: 'spot_on', labelTh: 'ตรงใจมาก', labelEn: 'Spot On', Icon: TargetIcon, colorTheme: 'spotOn' },
-  { id: 'helpful', labelTh: 'ช่วยได้ดี', labelEn: 'Helpful', Icon: LightbulbIcon, colorTheme: 'helpful' },
-  { id: 'needs_work', labelTh: 'ยังไม่ค่อยตรงจุด', labelEn: 'Needs Work', Icon: RotateCcwIcon, colorTheme: 'needsWork' },
+  { id: FEEDBACK_ACCURACY.SPOT_ON, labelTh: 'ตรงใจมาก', labelEn: 'Spot On', Icon: TargetIcon, colorTheme: FEEDBACK_ACCURACY_THEME.SPOT_ON },
+  { id: FEEDBACK_ACCURACY.HELPFUL, labelTh: 'ช่วยได้ดี', labelEn: 'Helpful', Icon: LightbulbIcon, colorTheme: FEEDBACK_ACCURACY_THEME.HELPFUL },
+  { id: FEEDBACK_ACCURACY.NEEDS_WORK, labelTh: 'ยังไม่ค่อยตรงจุด', labelEn: 'Needs Work', Icon: RotateCcwIcon, colorTheme: FEEDBACK_ACCURACY_THEME.NEEDS_WORK },
 ];
 
 export interface RatingContextInfo {

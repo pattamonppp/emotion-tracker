@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { EmotionTag, EmotionTagId, CustomMessageItem } from '../../types';
+import { EmotionTag, EmotionTagId, CustomMessageItem, Language, LANG, SkyTimePeriod, INTERVENTION } from '../../types';
 import { EMOTION_TAGS, matchOptionFromKeywords } from '../../data/matrixData';
-import { audioService } from '../../services/audioService';
-import { MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { FloatingEmotionCloud } from './components/FloatingEmotionCloud';
 import { GlassEmotionJar } from './components/GlassEmotionJar';
 import { CustomEmotionModal } from './modals/CustomEmotionModal';
@@ -22,8 +22,8 @@ export interface Phase1EmotionJarProps {
   onProceed: () => void;
   onOpenPulseSensor?: () => void;
   onOpenStory?: () => void;
-  lang?: 'th' | 'en';
-  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
+  lang?: Language;
+  skyPeriod?: SkyTimePeriod;
 }
 
 const MAX_SELECTED_EMOTIONS = PHASE1_CONFIG.maxSelectedEmotions;
@@ -36,7 +36,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   onProceed,
   onOpenPulseSensor,
   onOpenStory,
-  lang = 'th',
+  lang = LANG.TH,
   skyPeriod,
 }) => {
   const selectedEmotionsRef = useRef(selectedEmotions);
@@ -84,11 +84,11 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   const toggleEmotion = (id: EmotionTagId) => {
     const current = selectedEmotionsRef.current;
     if (current.includes(id)) {
-      audioService.triggerHaptic('light');
+      audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
       onSelectEmotions(current.filter((item) => item !== id));
     } else {
       if (current.length >= MAX_SELECTED_EMOTIONS) {
-        audioService.triggerHaptic('warning');
+        audioService.triggerHaptic(HAPTIC_STYLE.WARNING);
         return;
       }
       audioService.playJarDrop();
@@ -100,7 +100,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
     const current = selectedEmotionsRef.current;
     if (!current.includes(id)) {
       if (current.length >= MAX_SELECTED_EMOTIONS) {
-        audioService.triggerHaptic('warning');
+        audioService.triggerHaptic(HAPTIC_STYLE.WARNING);
         return;
       }
       audioService.playJarDrop();
@@ -109,7 +109,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   };
 
   const handleClearAll = () => {
-    audioService.triggerHaptic('medium');
+    audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
     onSelectEmotions([]);
   };
 
@@ -133,7 +133,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
       emoji: '',
       color: '#EC4899',
       weightDescription: '',
-      recommendedOption: matchOptionFromKeywords(m.text, 'A'),
+      recommendedOption: matchOptionFromKeywords(m.text, INTERVENTION.A),
       isCustom: true,
       customText: m.text,
     }));
@@ -167,7 +167,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
               emoji: '',
               color: '#EC4899',
               weightDescription: '',
-              recommendedOption: 'A' as const,
+              recommendedOption: INTERVENTION.A,
             },
             isAddButton: true,
           },
@@ -194,7 +194,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
           <button
             type="button"
             onClick={() => {
-              audioService.triggerHaptic('selection');
+              audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
               if (onOpenPulseSensor) onOpenPulseSensor();
             }}
             className={styles.pulsePill}
@@ -277,8 +277,8 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
       {/* Sticky Bottom Marshmallow 3D Proceed CTA */}
       <div className={styles.stickyBottomBar}>
         <MarshmallowButton
-          variant="primary"
-          size="md"
+          variant={MARSHMALLOW_VARIANT.PRIMARY}
+          size={MARSHMALLOW_SIZE.MD}
           onPress={() => {
             if (selectedEmotions.length === 0) {
               toggleEmotion(EMOTION_TAGS[0].id);

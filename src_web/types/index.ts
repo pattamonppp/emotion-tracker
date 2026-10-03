@@ -33,7 +33,7 @@ export const EMOTION_TAG_ID = {
   CUSTOM: 'custom',
 } as const;
 
-export type EmotionTagId = 
+export type EmotionTagId =
   | typeof EMOTION_TAG_ID[keyof typeof EMOTION_TAG_ID]
   | (string & {});
 
@@ -46,6 +46,7 @@ export const INTERVENTION = {
   F: 'F',
   G: 'G',
 } as const;
+
 export type InterventionOption = typeof INTERVENTION[keyof typeof INTERVENTION];
 
 export const ACTIVITY_TYPE = {
@@ -53,6 +54,7 @@ export const ACTIVITY_TYPE = {
   JUMP: 'jump',
   BOUNCE: 'bounce',
 } as const;
+
 export type ActivityType = typeof ACTIVITY_TYPE[keyof typeof ACTIVITY_TYPE];
 
 export interface EmotionTag {
@@ -96,6 +98,7 @@ export const PHASE = {
   PHASE4_FEEDBACK: 'phase4_feedback',     // 1:45 - 2:00
   COMPLETED: 'completed',
 } as const;
+
 export type ResetPhase = typeof PHASE[keyof typeof PHASE];
 
 export const SHIFT_RESULT = {
@@ -103,6 +106,7 @@ export const SHIFT_RESULT = {
   GROUNDED: 'grounded',
   SAME: 'same',
 } as const;
+
 export type ShiftResultType = typeof SHIFT_RESULT[keyof typeof SHIFT_RESULT];
 
 export interface ShiftFeedback {
@@ -117,7 +121,16 @@ export const FEEDBACK_ACCURACY = {
   HELPFUL: 'helpful',
   NEEDS_WORK: 'needs_work',
 } as const;
+
 export type FeedbackAccuracy = typeof FEEDBACK_ACCURACY[keyof typeof FEEDBACK_ACCURACY];
+
+export const FEEDBACK_ACCURACY_THEME = {
+  SPOT_ON: 'spotOn',
+  HELPFUL: 'helpful',
+  NEEDS_WORK: 'needsWork',
+} as const;
+
+export type FeedbackAccuracyTheme = typeof FEEDBACK_ACCURACY_THEME[keyof typeof FEEDBACK_ACCURACY_THEME];
 
 export interface Feedback {
   id: string;
@@ -168,6 +181,9 @@ export const SKY = {
   SUNSET: 'sunset',
   NIGHT: 'night',
 } as const;
+
+export const AUTO_SKY = 'auto';
+
 export const SKY_PERIOD = SKY; // backward compatibility
 export type SkyTimePeriod = typeof SKY[keyof typeof SKY];
-export type SkyMode = 'auto' | SkyTimePeriod;
+export type SkyMode = typeof AUTO_SKY | SkyTimePeriod;

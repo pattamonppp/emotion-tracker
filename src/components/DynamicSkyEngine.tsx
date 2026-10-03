@@ -17,11 +17,11 @@ import Svg, {
   Circle,
   Stop,
 } from 'react-native-svg';
-import { audioService } from '../services/audioService';
+import { audioService, HAPTIC_STYLE } from '../services/audioService';
 import { Sun, Moon, Sunrise, Sunset, Clock, ChevronDown } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../design-system/tokens';
 import { getTranslation } from '../locales';
-import { SKY_PERIOD, type SkyTimePeriod, type SkyMode } from '../types';
+import { SKY, SKY_PERIOD, type SkyTimePeriod, type SkyMode, type Language, LANG, AUTO_SKY } from '../types';
 
 /**
  * Dreamy Celestial Aura - Pure SVG Radial Gradient for an ethereal, soft-diffused glow
@@ -49,30 +49,30 @@ const DreamyCelestialAura: React.FC<{
   );
 };
 
-export { SKY_PERIOD };
-export type { SkyTimePeriod, SkyMode };
+export { SKY, SKY_PERIOD };
+export type { SkyTimePeriod, SkyMode, Language };
 
 export interface SkyContextType {
   activePeriod: SkyTimePeriod;
   skyMode: SkyMode;
   setSkyMode: (mode: SkyMode) => void;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 const SkyContext = createContext<SkyContextType>({
-  activePeriod: SKY_PERIOD.DAY,
-  skyMode: 'auto',
+  activePeriod: SKY.DAY,
+  skyMode: AUTO_SKY,
   setSkyMode: () => { },
-  lang: 'th',
+  lang: LANG.TH,
 });
 
 export const useSky = () => useContext(SkyContext);
 
 export const getPeriodFromHour = (hour: number): SkyTimePeriod => {
-  if (hour >= 5 && hour < 9) return 'dawn';
-  if (hour >= 9 && hour < 17) return 'day';
-  if (hour >= 17 && hour < 19) return 'sunset';
-  return 'night';
+  if (hour >= 5 && hour < 9) return SKY.DAWN;
+  if (hour >= 9 && hour < 17) return SKY.DAY;
+  if (hour >= 17 && hour < 19) return SKY.SUNSET;
+  return SKY.NIGHT;
 };
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -130,15 +130,15 @@ export const SvgDiamondStar: React.FC<{
 export interface DynamicSkyEngineProps {
   children: React.ReactNode;
   onTimePeriodChange?: (period: SkyTimePeriod) => void;
-  lang?: 'th' | 'en';
+  lang?: Language;
 }
 
 export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
   children,
   onTimePeriodChange,
-  lang = 'th',
+  lang = LANG.TH,
 }) => {
-  const [skyMode, setSkyMode] = useState<SkyMode>('auto');
+  const [skyMode, setSkyMode] = useState<SkyMode>(AUTO_SKY);
   const [activePeriod, setActivePeriod] = useState<SkyTimePeriod>(() =>
     getPeriodFromHour(new Date().getHours())
   );
@@ -168,7 +168,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
   // Real-time hour watcher for Auto mode
   useEffect(() => {
     const updateAuto = () => {
-      if (skyMode === 'auto') {
+      if (skyMode === AUTO_SKY) {
         const detected = getPeriodFromHour(new Date().getHours());
         setActivePeriod(detected);
         if (onTimePeriodChange) onTimePeriodChange(detected);
@@ -181,9 +181,9 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
   }, [skyMode, onTimePeriodChange]);
 
   const handleSetSkyMode = (mode: SkyMode) => {
-    audioService.triggerHaptic('selection');
+    audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
     setSkyMode(mode);
-    const period = mode === 'auto' ? getPeriodFromHour(new Date().getHours()) : mode;
+    const period = mode === AUTO_SKY ? getPeriodFromHour(new Date().getHours()) : mode;
     setActivePeriod(period);
     if (onTimePeriodChange) onTimePeriodChange(period);
   };
@@ -464,13 +464,13 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
 
   const getSkyGradients = (): [string, string, ...string[]] => {
     switch (activePeriod) {
-      case 'dawn':
+      case SKY.DAWN:
         return ['#FFF2E9', '#F8E4B3', '#F0BF4D', '#E4EFFB', '#E0F8F6'];
-      case 'day':
+      case SKY.DAY:
         return ['#C7DDF7', '#B3EDE8', '#E4EFFB', '#DBF0EE', '#FFFFFF'];
-      case 'sunset':
+      case SKY.SUNSET:
         return ['#C7DDF7', '#F8E4B3', '#FAD6D5', '#F18B88', '#EF7773', '#FF8F4B'];
-      case 'night':
+      case SKY.NIGHT:
       default:
         return ['#000000', '#26313c', '#272727', '#355956'];
     }
@@ -478,7 +478,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
 
   const getCloudTheme = () => {
     switch (activePeriod) {
-      case 'dawn':
+      case SKY.DAWN:
         return {
           fill1: '#FCF4E0',
           shadow1: '#F8E4B3',
@@ -493,7 +493,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
           shadow4: '#F8E4B3',
           opacity4: 0.75,
         };
-      case 'day':
+      case SKY.DAY:
         return {
           fill1: '#FFFFFF',
           shadow1: '#DBF0EE',
@@ -508,7 +508,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
           shadow4: '#E0F8F6',
           opacity4: 0.8,
         };
-      case 'sunset':
+      case SKY.SUNSET:
         return {
           fill1: '#FDEFEE',
           shadow1: '#F18B88',
@@ -523,7 +523,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
           shadow4: '#F7BBB9',
           opacity4: 0.72,
         };
-      case 'night':
+      case SKY.NIGHT:
       default:
         return {
           fill1: '#26313c',
@@ -567,11 +567,11 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               styles.dreamOrb1,
               {
                 backgroundColor:
-                  activePeriod === 'sunset'
+                  activePeriod === SKY.SUNSET
                     ? 'rgba(244, 114, 182, 0.28)'
-                    : activePeriod === 'night'
+                    : activePeriod === SKY.NIGHT
                       ? 'rgba(99, 102, 241, 0.22)'
-                      : activePeriod === 'dawn'
+                      : activePeriod === SKY.DAWN
                         ? 'rgba(254, 215, 170, 0.35)'
                         : 'rgba(186, 230, 253, 0.38)',
                 transform: [{ scale: dreamOrbAnim1 }],
@@ -583,11 +583,11 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               styles.dreamOrb2,
               {
                 backgroundColor:
-                  activePeriod === 'sunset'
+                  activePeriod === SKY.SUNSET
                     ? 'rgba(232, 121, 249, 0.25)'
-                    : activePeriod === 'night'
+                    : activePeriod === SKY.NIGHT
                       ? 'rgba(56, 189, 248, 0.18)'
-                      : activePeriod === 'dawn'
+                      : activePeriod === SKY.DAWN
                         ? 'rgba(253, 230, 138, 0.32)'
                         : 'rgba(204, 251, 241, 0.38)',
                 transform: [{ scale: dreamOrbAnim2 }],
@@ -688,7 +688,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
         </View>
 
         {/* Night Stars & Moon (Pure Vector Icons & Svg, NO EMOJI) */}
-        {activePeriod === 'night' && (
+        {activePeriod === SKY.NIGHT && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
             <View style={styles.nightMoonContainer}>
               <DreamyCelestialAura
@@ -766,7 +766,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
         )}
 
         {/* Dawn Sunrise (Pure Diffused Glowing Circle Sun - NO ICON) */}
-        {activePeriod === 'dawn' && (
+        {activePeriod === SKY.DAWN && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
             <Animated.View
               style={[
@@ -789,7 +789,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
         )}
 
         {/* Daytime Sky: Radiant Sunbeams, Sunlight Sparkles & Diffused Sun (NO ICON) */}
-        {activePeriod === 'day' && (
+        {activePeriod === SKY.DAY && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
             {/* Dreamy Sunlight Beams radiating across the sky */}
             <Animated.View style={[styles.daySunbeamsLayer, { opacity: dayBeamAnim }]}>
@@ -851,7 +851,7 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
         )}
 
         {/* Sunset Sun (Pure Diffused Glowing Circle Sun - NO ICON) */}
-        {activePeriod === 'sunset' && (
+        {activePeriod === SKY.SUNSET && (
           <View style={StyleSheet.absoluteFill} pointerEvents="none">
             <Animated.View
               style={[
@@ -884,46 +884,46 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
         >
           {/* Fairy Mote 1: Stardust Gold / Rose with soft ambient aura */}
           <View style={{ position: 'absolute', bottom: 24, left: '8%' }}>
-            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'sunset' ? '#F18B88' : '#F4D280', opacity: 0.35 }]} />
-            <View style={[styles.fairyMoteCore, { backgroundColor: activePeriod === 'sunset' ? '#FDEFEE' : '#F8E4B3' }]} />
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === SKY.SUNSET ? '#F18B88' : '#F4D280', opacity: 0.35 }]} />
+            <View style={[styles.fairyMoteCore, { backgroundColor: activePeriod === SKY.SUNSET ? '#FDEFEE' : '#F8E4B3' }]} />
           </View>
 
           {/* Fairy Mote 2: Pastel Peach / Celestial Cyan */}
           <View style={{ position: 'absolute', bottom: 74, left: '22%' }}>
-            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#62A0E9' : '#F0BF4D', opacity: 0.3 }]} />
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === SKY.NIGHT ? '#62A0E9' : '#F0BF4D', opacity: 0.3 }]} />
             <View style={[styles.fairyMoteCore, { backgroundColor: '#FFFFFF' }]} />
           </View>
 
           {/* Fairy Mote 3: Rose Stardust */}
           <View style={{ position: 'absolute', bottom: 16, right: '18%' }}>
-            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#C5ECB3' : '#FAD6D5', opacity: 0.35 }]} />
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === SKY.NIGHT ? '#C5ECB3' : '#FAD6D5', opacity: 0.35 }]} />
             <View style={[styles.fairyMoteCore, { backgroundColor: '#FFFFFF' }]} />
           </View>
 
           {/* Fairy Mote 4: Twilight Violet / Mint */}
           <View style={{ position: 'absolute', bottom: 92, right: '12%' }}>
-            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#8FBBEF' : '#80E2D9', opacity: 0.32 }]} />
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === SKY.NIGHT ? '#8FBBEF' : '#80E2D9', opacity: 0.32 }]} />
             <View style={[styles.fairyMoteCore, { backgroundColor: '#F8E4B3' }]} />
           </View>
 
           {/* Fairy Mote 5: Center subtle float */}
           <View style={{ position: 'absolute', bottom: 44, left: '46%' }}>
-            <View style={[styles.fairyMoteGlow, { width: 14, height: 14, backgroundColor: activePeriod === 'sunset' ? '#EF7773' : '#4DD6CA', opacity: 0.3 }]} />
+            <View style={[styles.fairyMoteGlow, { width: 14, height: 14, backgroundColor: activePeriod === SKY.SUNSET ? '#EF7773' : '#4DD6CA', opacity: 0.3 }]} />
             <View style={[styles.fairyMoteCore, { width: 4.5, height: 4.5, backgroundColor: '#FFFFFF' }]} />
           </View>
 
           {/* Whimsical Fantasy Twinkling Diamond Stars */}
           <View style={{ position: 'absolute', bottom: 84, left: '14%' }}>
-            <SvgDiamondStar size={11} color={activePeriod === 'sunset' ? '#F4D280' : activePeriod === 'night' ? '#C7DDF7' : '#F0BF4D'} opacity={0.9} />
+            <SvgDiamondStar size={11} color={activePeriod === SKY.SUNSET ? '#F4D280' : activePeriod === SKY.NIGHT ? '#C7DDF7' : '#F0BF4D'} opacity={0.9} />
           </View>
           <View style={{ position: 'absolute', bottom: 36, left: '32%' }}>
-            <SvgDiamondStar size={8} color={activePeriod === 'sunset' ? '#F18B88' : activePeriod === 'night' ? '#4DD6CA' : '#FFFFFF'} opacity={0.85} />
+            <SvgDiamondStar size={8} color={activePeriod === SKY.SUNSET ? '#F18B88' : activePeriod === SKY.NIGHT ? '#4DD6CA' : '#FFFFFF'} opacity={0.85} />
           </View>
           <View style={{ position: 'absolute', bottom: 78, right: '28%' }}>
-            <SvgDiamondStar size={10} color={activePeriod === 'sunset' ? '#F4D280' : activePeriod === 'night' ? '#F4D280' : '#80E2D9'} opacity={0.92} />
+            <SvgDiamondStar size={10} color={activePeriod === SKY.SUNSET ? '#F4D280' : activePeriod === SKY.NIGHT ? '#F4D280' : '#80E2D9'} opacity={0.92} />
           </View>
           <View style={{ position: 'absolute', bottom: 58, right: '40%' }}>
-            <SvgDiamondStar size={7.5} color={activePeriod === 'sunset' ? '#FAD6D5' : activePeriod === 'night' ? '#8FBBEF' : '#F8E4B3'} opacity={0.8} />
+            <SvgDiamondStar size={7.5} color={activePeriod === SKY.SUNSET ? '#FAD6D5' : activePeriod === SKY.NIGHT ? '#8FBBEF' : '#F8E4B3'} opacity={0.8} />
           </View>
           <View style={{ position: 'absolute', bottom: 104, right: '35%' }}>
             <SvgDiamondStar size={8.5} color="#FFFFFF" opacity={0.88} />
@@ -951,32 +951,32 @@ export const SkyPeriodSwitcher: React.FC = () => {
 
   const getPeriodLabel = () => {
     switch (activePeriod) {
-      case 'dawn':
+      case SKY.DAWN:
         return skyLabels.dawn;
-      case 'day':
+      case SKY.DAY:
         return skyLabels.day;
-      case 'sunset':
+      case SKY.SUNSET:
         return skyLabels.sunset;
-      case 'night':
+      case SKY.NIGHT:
         return skyLabels.night;
     }
   };
 
   const getPeriodIcon = (period: SkyTimePeriod, size = 13, isActive = false) => {
     switch (period) {
-      case 'dawn':
+      case SKY.DAWN:
         return <Sunrise size={size} color={isActive ? '#FFFFFF' : '#D97706'} strokeWidth={2.4} />;
-      case 'day':
+      case SKY.DAY:
         return <Sun size={size} color={isActive ? '#FFFFFF' : '#0284C7'} strokeWidth={2.4} />;
-      case 'sunset':
+      case SKY.SUNSET:
         return <Sunset size={size} color={isActive ? '#FFFFFF' : '#DB2777'} strokeWidth={2.4} />;
-      case 'night':
+      case SKY.NIGHT:
         return <Moon size={size} color={isActive ? '#FFFFFF' : '#FDE047'} fill={isActive ? '#FFFFFF' : '#FDE047'} strokeWidth={2.4} />;
     }
   };
 
   const cycleToNextPeriod = () => {
-    audioService.triggerHaptic('light');
+    audioService.triggerHaptic(HAPTIC_STYLE.LIGHT);
 
     // Soft tactile squish bounce on tap
     Animated.sequence([
@@ -994,7 +994,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
     ]).start();
 
     // Cycle order: auto -> dawn -> day -> sunset -> night -> auto
-    const modes: SkyMode[] = ['auto', 'dawn', 'day', 'sunset', 'night'];
+    const modes: SkyMode[] = [AUTO_SKY, ...Object.values(SKY)];
     const currentIndex = modes.indexOf(skyMode);
     const nextMode = modes[(currentIndex + 1) % modes.length];
     setSkyMode(nextMode);
@@ -1007,12 +1007,12 @@ export const SkyPeriodSwitcher: React.FC = () => {
           activeOpacity={0.82}
           onPress={cycleToNextPeriod}
           onLongPress={() => {
-            audioService.triggerHaptic('medium');
+            audioService.triggerHaptic(HAPTIC_STYLE.MEDIUM);
             setIsOpen((prev) => !prev);
           }}
           style={[
             styles.pillBtn,
-            activePeriod === 'night' && styles.pillBtnNight,
+            activePeriod === SKY.NIGHT && styles.pillBtnNight,
           ]}
         >
           {getPeriodIcon(activePeriod, 13)}
@@ -1020,13 +1020,13 @@ export const SkyPeriodSwitcher: React.FC = () => {
           <Text
             style={[
               styles.pillText,
-              activePeriod === 'night' && { color: '#F1F5F9' },
+              activePeriod === SKY.NIGHT && { color: '#F1F5F9' },
             ]}
           >
             {getPeriodLabel()}
           </Text>
 
-          {skyMode === 'auto' ? (
+          {skyMode === AUTO_SKY ? (
             <View style={styles.autoTag}>
               <Clock size={8.5} color={colors.primary} strokeWidth={2.5} />
               <Text style={styles.autoTagText}>Auto</Text>
@@ -1042,14 +1042,14 @@ export const SkyPeriodSwitcher: React.FC = () => {
             hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
             onPress={(e) => {
               e.stopPropagation();
-              audioService.triggerHaptic('selection');
+              audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
               setIsOpen((prev) => !prev);
             }}
             style={styles.expandArrowBtn}
           >
             <ChevronDown
               size={11}
-              color={activePeriod === 'night' ? '#CBD5E1' : '#64748B'}
+              color={activePeriod === SKY.NIGHT ? '#CBD5E1' : '#64748B'}
               strokeWidth={2.4}
             />
           </TouchableOpacity>
@@ -1062,13 +1062,13 @@ export const SkyPeriodSwitcher: React.FC = () => {
           {/* Option: Auto Real-Time Clock */}
           <TouchableOpacity
             onPress={() => {
-              setSkyMode('auto');
+              setSkyMode(AUTO_SKY);
               setIsOpen(false);
             }}
-            style={[styles.optionBtn, skyMode === 'auto' && styles.optionBtnActive]}
+            style={[styles.optionBtn, skyMode === AUTO_SKY && styles.optionBtnActive]}
           >
-            <Clock size={12} color={skyMode === 'auto' ? '#FFFFFF' : colors.primaryDark} strokeWidth={2.2} />
-            <Text style={[styles.optionText, skyMode === 'auto' && styles.optionTextActive]}>
+            <Clock size={12} color={skyMode === AUTO_SKY ? '#FFFFFF' : colors.primaryDark} strokeWidth={2.2} />
+            <Text style={[styles.optionText, skyMode === AUTO_SKY && styles.optionTextActive]}>
               {skyLabels.auto}
             </Text>
           </TouchableOpacity>
@@ -1076,13 +1076,13 @@ export const SkyPeriodSwitcher: React.FC = () => {
           {/* Option: Dawn */}
           <TouchableOpacity
             onPress={() => {
-              setSkyMode('dawn');
+              setSkyMode(SKY.DAWN);
               setIsOpen(false);
             }}
-            style={[styles.optionBtn, skyMode === 'dawn' && styles.optionBtnActive]}
+            style={[styles.optionBtn, skyMode === SKY.DAWN && styles.optionBtnActive]}
           >
-            {getPeriodIcon('dawn', 12, skyMode === 'dawn')}
-            <Text style={[styles.optionText, skyMode === 'dawn' && styles.optionTextActive]}>
+            {getPeriodIcon(SKY.DAWN, 12, skyMode === SKY.DAWN)}
+            <Text style={[styles.optionText, skyMode === SKY.DAWN && styles.optionTextActive]}>
               {skyLabels.dawn}
             </Text>
           </TouchableOpacity>
@@ -1090,13 +1090,13 @@ export const SkyPeriodSwitcher: React.FC = () => {
           {/* Option: Day */}
           <TouchableOpacity
             onPress={() => {
-              setSkyMode('day');
+              setSkyMode(SKY.DAY);
               setIsOpen(false);
             }}
-            style={[styles.optionBtn, skyMode === 'day' && styles.optionBtnActive]}
+            style={[styles.optionBtn, skyMode === SKY.DAY && styles.optionBtnActive]}
           >
-            {getPeriodIcon('day', 12, skyMode === 'day')}
-            <Text style={[styles.optionText, skyMode === 'day' && styles.optionTextActive]}>
+            {getPeriodIcon(SKY.DAY, 12, skyMode === SKY.DAY)}
+            <Text style={[styles.optionText, skyMode === SKY.DAY && styles.optionTextActive]}>
               {skyLabels.day}
             </Text>
           </TouchableOpacity>
@@ -1104,13 +1104,13 @@ export const SkyPeriodSwitcher: React.FC = () => {
           {/* Option: Sunset */}
           <TouchableOpacity
             onPress={() => {
-              setSkyMode('sunset');
+              setSkyMode(SKY.SUNSET);
               setIsOpen(false);
             }}
-            style={[styles.optionBtn, skyMode === 'sunset' && styles.optionBtnActive]}
+            style={[styles.optionBtn, skyMode === SKY.SUNSET && styles.optionBtnActive]}
           >
-            {getPeriodIcon('sunset', 12, skyMode === 'sunset')}
-            <Text style={[styles.optionText, skyMode === 'sunset' && styles.optionTextActive]}>
+            {getPeriodIcon(SKY.SUNSET, 12, skyMode === SKY.SUNSET)}
+            <Text style={[styles.optionText, skyMode === SKY.SUNSET && styles.optionTextActive]}>
               {skyLabels.sunset}
             </Text>
           </TouchableOpacity>
@@ -1118,13 +1118,13 @@ export const SkyPeriodSwitcher: React.FC = () => {
           {/* Option: Night */}
           <TouchableOpacity
             onPress={() => {
-              setSkyMode('night');
+              setSkyMode(SKY.NIGHT);
               setIsOpen(false);
             }}
-            style={[styles.optionBtn, skyMode === 'night' && styles.optionBtnActive]}
+            style={[styles.optionBtn, skyMode === SKY.NIGHT && styles.optionBtnActive]}
           >
-            {getPeriodIcon('night', 12, skyMode === 'night')}
-            <Text style={[styles.optionText, skyMode === 'night' && styles.optionTextActive]}>
+            {getPeriodIcon(SKY.NIGHT, 12, skyMode === SKY.NIGHT)}
+            <Text style={[styles.optionText, skyMode === SKY.NIGHT && styles.optionTextActive]}>
               {skyLabels.night}
             </Text>
           </TouchableOpacity>

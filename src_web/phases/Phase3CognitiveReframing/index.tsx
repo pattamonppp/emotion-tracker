@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { GoalType } from '../../types';
+import { GoalType, LANG, Language } from '../../types';
 import { REFRAMING_INSIGHTS } from '../../data/matrixData';
-import { audioService } from '../../services/audioService';
-import { MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { MoocaMascot } from '../../components/MoocaMascot';
+import { audioService, HAPTIC_STYLE } from '../../services/audioService';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import {
   Heart,
   Dna,
@@ -20,7 +20,7 @@ import styles from './styles.module.scss';
 export interface Phase3CognitiveReframingProps {
   goal: GoalType;
   onProceed: () => void;
-  lang: 'th' | 'en';
+  lang: Language;
 }
 
 export const Phase3CognitiveReframing: React.FC<
@@ -37,7 +37,7 @@ export const Phase3CognitiveReframing: React.FC<
   const handleCommitAction = () => {
     setIsActionCommitted(true);
 
-    audioService.triggerHaptic('success');
+    audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
     audioService.playJarDrop();
   };
 
@@ -50,8 +50,8 @@ export const Phase3CognitiveReframing: React.FC<
             <MoocaMascot
               mood={
                 isActionCommitted
-                  ? 'celebrating'
-                  : 'comforting'
+                  ? MOOCA_MOOD.CELEBRATING
+                  : MOOCA_MOOD.COMFORTING
               }
               size="sm"
               speakingBubble={
@@ -109,7 +109,7 @@ export const Phase3CognitiveReframing: React.FC<
               </div>
 
               <p className={styles.letterBody}>
-                {lang === 'th'
+                {lang === LANG.TH
                   ? insight.reflectionTh
                   : insight.reflectionEn}
               </p>
@@ -122,7 +122,7 @@ export const Phase3CognitiveReframing: React.FC<
                 />
 
                 <p className={styles.biologyText}>
-                  {lang === 'th'
+                  {lang === LANG.TH
                     ? insight.biologyFactTh
                     : insight.biologyFactEn}
                 </p>
@@ -181,7 +181,7 @@ export const Phase3CognitiveReframing: React.FC<
                     },
                   )}
                 >
-                  {lang === 'th'
+                  {lang === LANG.TH
                     ? insight.microActionTh
                     : insight.microActionEn}
                 </span>
@@ -222,8 +222,8 @@ export const Phase3CognitiveReframing: React.FC<
       {isActionCommitted && (
         <div className={styles.bottomBar}>
           <MarshmallowButton
-            variant="primary"
-            size="lg"
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.LG}
             onPress={onProceed}
             icon={
               <ArrowRight
