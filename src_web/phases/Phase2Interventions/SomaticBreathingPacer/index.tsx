@@ -196,7 +196,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
               cx={ORB_SIZE / 2}
               cy={ORB_SIZE / 2}
               r={SVG_R}
-              stroke="rgba(0, 196, 179, 0.2)"
+              stroke="rgba(0, 196, 179, 0.16)"
               strokeWidth={5}
               fill="transparent"
             />

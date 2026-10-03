@@ -9,9 +9,11 @@
   justify-content: space-between;
   padding: 8px 16px 8px 16px;
   user-select: none;
-  font-family: $font-sans;
+  -webkit-user-select: none;
+  font-family: inherit;
   box-sizing: border-box;
   overflow: hidden;
+  flex: 1;
 }
 
 .mascotWrapper {
@@ -30,40 +32,43 @@
   justify-content: center;
   position: relative;
   width: 100%;
+  margin: 8px 0;
 }
 
 .ambientAura {
   position: absolute;
-  width: 250px;
-  height: 250px;
-  border-radius: $radius-circle;
-  background-color: rgba(0, 196, 179, 0.22);
+  width: 253px;
+  height: 253px;
+  border-radius: 50%;
+  background-color: rgba(0, 203, 167, 0.20);
   filter: blur(14px);
   pointer-events: none;
-  transition: transform 3.8s ease-in-out, background-color 800ms ease;
 
   &.auraFinished {
-    background-color: rgba(16, 185, 129, 0.28);
+    background-color: rgba(16, 185, 129, 0.25);
   }
 
   &.auraExhale {
-    background-color: rgba(0, 196, 179, 0.35);
+    background-color: rgba(0, 203, 167, 0.32);
   }
 }
 
 .orbBody {
   width: 220px;
   height: 220px;
-  border-radius: $radius-circle;
+  border-radius: 50%;
   background-color: #FFFFFF;
   border: 4px solid #00C4B3;
-  box-shadow: 0 4px 20px rgba(0, 196, 179, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 196, 179, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
   padding: 0;
+  border-style: solid;
+  outline: none;
+  box-sizing: border-box;
 
   &.orbFinished {
     border-color: #10B981;
@@ -83,7 +88,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  z-index: 5;
   text-align: center;
 }
 
@@ -95,52 +100,59 @@
 }
 
 .startOrbTitle {
-  font-size: 0.9375rem;
-  font-weight: 800;
-  color: $color-brand-contrast;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: #004D40;
   margin-top: 4px;
 }
 
 .startOrbSub {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: $color-turquoise-1;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: #00C4B3;
 }
 
 .finishedContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   padding: 0 16px;
 }
 
 .finishedTitle {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #047857;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #004D40;
   line-height: 1.4;
 }
 
 .secondsText {
-  font-family: $font-mono;
-  font-size: 2.25rem;
-  font-weight: 900;
-  color: $color-brand-contrast;
+  font-family: inherit;
+  font-size: 38px;
+  font-weight: 800;
+  color: #004D40;
+  letter-spacing: -1px;
   line-height: 1;
 }
 
 .phaseLabelText {
-  font-size: 0.8125rem;
-  font-weight: 800;
-  color: $color-brand-contrast;
-  margin-top: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #004D40;
+  letter-spacing: 1px;
+  margin-top: -2px;
 }
 
 .cycleCounterText {
-  font-size: 0.65625rem;
-  font-weight: 700;
-  color: $color-turquoise-1;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  color: #64748B;
   margin-top: 4px;
 }
 
@@ -149,19 +161,22 @@
 // -------------------------------------------------------------
 .bottomSection {
   width: 100%;
+  max-width: 340px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 4px;
   gap: 6px;
-  margin-bottom: 4px;
 }
 
 .organicInstructionText {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: $color-brand-contrast;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: #004D40;
   text-align: center;
-  line-height: 1.4;
+  line-height: 18px;
+  max-width: 290px;
 
   &.textNight {
     color: #F8FAFC;
@@ -172,12 +187,14 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  padding: 3px 12px;
 }
 
 .pulseIndicatorText {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: $color-slate-500;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748B;
 
   &.textNight {
     color: #94A3B8;
@@ -186,11 +203,14 @@
 
 .actionBtnWrapper {
   width: 100%;
+  min-height: 46px;
   display: flex;
   justify-content: center;
-  min-height: 48px;
+  margin-top: 4px;
 }
 
 .actionBtnPlaceholder {
-  height: 48px;
+  width: 100%;
+  height: 46px;
+  margin-top: 4px;
 }

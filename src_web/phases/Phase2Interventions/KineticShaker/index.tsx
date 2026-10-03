@@ -4,7 +4,7 @@ import { audioService } from '../../../services/audioService';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { useSky } from '../../../components/DynamicSkyEngine';
-import { Zap, Activity, ArrowRight, Sparkles, Star } from 'lucide-react';
+import { Zap, Activity, ArrowRight, Sparkles, Star, CheckCircle2 } from 'lucide-react';
 import { DESIGN_TOKENS } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 import { KINETIC_SHAKER_CONFIG } from './constants';
@@ -103,7 +103,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* 1. Mascot Guidance */}
+      {/* 1. Mascot View - Standardized Height */}
       <div
         className={classNames(styles.mascotWrapper, {
           [styles.isShaking]: isShakingAnim && mode === 'shake',
@@ -125,39 +125,11 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         />
       </div>
 
-      {/* 2. Mode Switcher (Shake Phone vs Jump/Bounce) */}
-      <div className={styles.modeToggleRow}>
-        <button
-          type="button"
-          onClick={() => {
-            audioService.triggerHaptic('selection');
-            setMode('shake');
-          }}
-          className={classNames(styles.modeBtn, {
-            [styles.modeBtnActive]: mode === 'shake',
-          })}
-        >
-          <Zap size={12} strokeWidth={2.4} />
-          <span>{strings.modeShake}</span>
-        </button>
+      {/* 2. Hero Centerpiece: Centered Fantasy Apothecary Tension Vial */}
+      <div className={styles.centerStage}>
+        {/* Soft Ambient Radiating Halo behind the centered vial */}
+        <div className={styles.capsuleAuraHalo} />
 
-        <button
-          type="button"
-          onClick={() => {
-            audioService.triggerHaptic('selection');
-            setMode('bounce');
-          }}
-          className={classNames(styles.modeBtn, {
-            [styles.modeBtnActive]: mode === 'bounce',
-          })}
-        >
-          <Activity size={12} strokeWidth={2.4} />
-          <span>{strings.modeBounce}</span>
-        </button>
-      </div>
-
-      {/* 3. Main Stage: Interactive Energy Flask */}
-      <div className={styles.mainStage}>
         <div
           onClick={handleFlaskInteraction}
           className={classNames(styles.flaskWrapper, {
@@ -204,36 +176,43 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
               <Star size={9} color="rgba(255,255,255,0.85)" fill="#FFFFFF" />
             </div>
 
-            {/* Center Content */}
-            <div className={styles.flaskCenterContent}>
+            {/* Center Star Emblem */}
+            <div className={styles.capsuleCenterIcon}>
               {isFinished ? (
-                <Sparkles size={36} color="#00C4B3" />
+                <Star size={24} color="#F59E0B" fill="#FDE047" />
               ) : (
-                <>
-                  <span className={styles.energyCountNumber} style={{ color: skyTheme.countColor }}>
-                    {currentCount}
-                  </span>
-                  <span className={styles.energyCountLabel} style={{ color: skyTheme.labelColor }}>
-                    {mode === 'shake' ? strings.captionShake : strings.captionBounce}
-                  </span>
-                </>
+                <Sparkles size={20} color="rgba(255,255,255,0.95)" />
               )}
             </div>
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div
-          className={styles.kineticProgressTrack}
-          style={{ backgroundColor: skyTheme.progressTrack }}
-        >
+        {/* 3. Organic Count Display (NO block, NO badge!) */}
+        <div className={styles.organicCountSection}>
+          <span className={styles.organicCountNumber} style={{ color: skyTheme.countColor }}>
+            {isFinished ? 0 : currentCount}
+          </span>
+          <span className={styles.organicCountLabel} style={{ color: skyTheme.labelColor }}>
+            {isFinished
+              ? strings.released
+              : mode === 'shake'
+                ? `${currentCount} ${strings.shakesLeft}`
+                : `${currentCount} ${strings.bouncesLeft}`}
+          </span>
+
+          {/* Slim glowing 4px progress line */}
           <div
-            className={styles.kineticProgressFill}
-            style={{
-              width: `${progressPercent}%`,
-              background: skyTheme.progressFill,
-            }}
-          />
+            className={styles.organicProgressTrack}
+            style={{ backgroundColor: skyTheme.progressTrack }}
+          >
+            <div
+              className={styles.organicProgressFill}
+              style={{
+                width: `${progressPercent}%`,
+                background: skyTheme.progressFill,
+              }}
+            />
+          </div>
         </div>
       </div>
 
@@ -244,12 +223,12 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             variant="primary"
             size="md"
             onPress={onComplete}
-            icon={<ArrowRight size={16} color="#FFFFFF" />}
+            icon={<CheckCircle2 size={16} color="#FFFFFF" />}
             title={strings.proceedBtn}
           />
         ) : (
-          <span className={styles.kineticTapHint} style={{ color: skyTheme.hintColor }}>
-            {mode === 'shake' ? strings.captionShake : strings.captionBounce}
+          <span className={styles.organicSensorHint} style={{ color: skyTheme.hintColor }}>
+            {mode === 'shake' ? strings.descShake : strings.descBounce}
           </span>
         )}
       </div>

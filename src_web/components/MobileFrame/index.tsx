@@ -70,61 +70,63 @@ export function MobileFrame({
     <div className={styles.container} data-lang={profile.language} lang={profile.language}>
       <DynamicSkyEngine onTimePeriodChange={onTimePeriodChange} lang={profile.language}>
         <div className={styles.appShell}>
-          {/* Top Bar (Wordmark, Language Actions, Music Toggle, Profile Avatar) - Aligned 1-to-1 with Mobile RN App.tsx */}
+          {/* Top Bar (Wordmark, Language Actions, Music Toggle, Profile Avatar) - Full width responsive */}
           <header className={styles.topBar}>
-            {/* Zone 1: Logo */}
-            <div className={styles.logoRow}>
-              <MindfullLogo size="sm" />
-            </div>
+            <div className={styles.topBarInner}>
+              {/* Zone 1: Logo */}
+              <div className={styles.logoRow}>
+                <MindfullLogo size="sm" />
+              </div>
 
-            {/* Zone 2: Actions */}
-            <div className={styles.actionsRow}>
-              {/* Language Switch */}
-              <button
-                type="button"
-                onClick={onToggleLanguage}
-                className={styles.langBtn}
-                title="Toggle TH / EN"
-              >
-                <Languages size={13} color="#00C4B3" />
-                <span className={styles.langText}>{profile.language.toUpperCase()}</span>
-              </button>
+              {/* Zone 2: Actions */}
+              <div className={styles.actionsRow}>
+                {/* Language Switch */}
+                <button
+                  type="button"
+                  onClick={onToggleLanguage}
+                  className={styles.langBtn}
+                  title="Toggle TH / EN"
+                >
+                  <Languages size={13} color="#00C4B3" />
+                  <span className={styles.langText}>{profile.language.toUpperCase()}</span>
+                </button>
 
-              {/* Sound / Music Toggle Button */}
-              <button
-                type="button"
-                onClick={() => {
-                  audioService.triggerHaptic('selection');
-                  audioService.toggleBackgroundMusic();
-                }}
-                className={classNames(styles.soundBtn, {
-                  [styles.soundBtnActive]: isMusicPlaying,
-                })}
-                title="Toggle Background Music"
-              >
-                {isMusicPlaying ? (
-                  <Volume2 size={13} color="#004D40" />
-                ) : (
-                  <VolumeX size={13} color="#64748B" />
-                )}
-              </button>
+                {/* Sound / Music Toggle Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    audioService.triggerHaptic('selection');
+                    audioService.toggleBackgroundMusic();
+                  }}
+                  className={classNames(styles.soundBtn, {
+                    [styles.soundBtnActive]: isMusicPlaying,
+                  })}
+                  title="Toggle Background Music"
+                >
+                  {isMusicPlaying ? (
+                    <Volume2 size={13} color="#004D40" />
+                  ) : (
+                    <VolumeX size={13} color="#64748B" />
+                  )}
+                </button>
 
-              {/* User Profile Avatar with rounded turquoise-blue gradient */}
-              <button
-                type="button"
-                onClick={() => {
-                  audioService.triggerHaptic('selection');
-                  onOpenProfile();
-                }}
-                className={styles.avatarWrapper}
-                title="Profile & Calibration"
-              >
-                <div className={styles.avatarGradient}>
-                  <span className={styles.avatarText}>
-                    {profile.name.charAt(0).toUpperCase() || 'M'}
-                  </span>
-                </div>
-              </button>
+                {/* User Profile Avatar with rounded turquoise-blue gradient */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    audioService.triggerHaptic('selection');
+                    onOpenProfile();
+                  }}
+                  className={styles.avatarWrapper}
+                  title="Profile & Calibration"
+                >
+                  <div className={styles.avatarGradient}>
+                    <span className={styles.avatarText}>
+                      {profile.name.charAt(0).toUpperCase() || 'M'}
+                    </span>
+                  </div>
+                </button>
+              </div>
             </div>
           </header>
 

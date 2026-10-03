@@ -1,3 +1,5 @@
+@use 'abstracts' as *;
+
 .container {
   display: flex;
   flex-direction: column;
@@ -12,6 +14,7 @@
   font-family: inherit;
   box-sizing: border-box;
   overflow: hidden;
+  flex: 1;
 }
 
 .mascotWrapper {
@@ -26,7 +29,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 9999px;
   border-width: 1.2px;
   border-style: solid;
@@ -41,233 +44,275 @@
   }
 }
 
-.pillIconBadge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.instructionText {
+.instructionPillText {
   font-size: 11px;
   font-weight: 700;
   line-height: 1.2;
 }
 
-.helpIconSlot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.8;
-}
-
-.mainStage {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 14px;
-}
-
 // -------------------------------------------------------------
-// Boba Drink Cup
+// Boba Crystal Tumbler Cup (Mirrored exactly from Mobile RN)
 // -------------------------------------------------------------
-.cupWrapper {
+.cupContainer {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  margin: 4px 0;
   cursor: pointer;
+  user-select: none;
   touch-action: none;
-  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  &.isDrinking {
-    transform: rotate(14deg) scale(1.04);
-  }
+  flex: 1;
 }
 
-.strawWrapper {
+.cupAuraHalo {
   position: absolute;
-  top: -36px;
-  right: 28px;
+  top: 20px;
+  width: 140px;
+  height: 160px;
+  border-radius: 70px;
+  background-color: rgba(94, 234, 212, 0.22);
+  box-shadow: 0 0 28px rgba(45, 212, 191, 0.45);
+  pointer-events: none;
+}
+
+.strawStarTopper {
+  margin-bottom: -8px;
+  z-index: 5;
+  transform: translateX(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.straw {
   width: 14px;
-  height: 50px;
-  background: repeating-linear-gradient(
-    45deg,
-    #F43F5E,
-    #F43F5E 6px,
-    #FFFFFF 6px,
-    #FFFFFF 12px
-  );
-  border-radius: 6px;
-  transform: rotate(18deg);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
-  z-index: 10;
+  height: 38px;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-bottom: -4px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  transform: rotate(12deg);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+}
+
+.strawStripe {
+  flex: 1;
+  width: 100%;
+}
+
+.cupDome {
+  width: 104px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  border: 2px solid #BFEFEB;
+  z-index: 3;
+  box-sizing: border-box;
 }
 
 .cupBody {
+  width: 96px;
+  height: 124px;
+  background-color: rgba(240, 253, 250, 0.65);
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+  border: 2.5px solid #00C4B3;
+  overflow: hidden;
   position: relative;
-  width: 140px;
-  height: 175px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 3px solid rgba(0, 196, 179, 0.45);
-  border-top: 0;
-  border-bottom-left-radius: 36px;
-  border-bottom-right-radius: 36px;
-  overflow: hidden;
-  box-shadow: 0 10px 24px rgba(0, 196, 179, 0.15);
-  backdrop-filter: blur(8px);
-}
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0 4px 16px rgba(0, 196, 179, 0.12);
+  box-sizing: border-box;
+  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-.cupLid {
-  position: absolute;
-  top: -8px;
-  left: -6px;
-  right: -6px;
-  height: 12px;
-  background: #FFFFFF;
-  border: 2px solid rgba(0, 196, 179, 0.5);
-  border-radius: 8px;
-  z-index: 5;
-}
-
-.liquidFill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(180deg, #A7F3D0 0%, #00C4B3 60%, #00897B 100%);
-  transition: height 380ms ease-out;
-  border-bottom-left-radius: 32px;
-  border-bottom-right-radius: 32px;
-  overflow: hidden;
-}
-
-.liquidWave {
-  position: absolute;
-  top: -6px;
-  left: 0;
-  right: 0;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
+  &.cupBodyTilting {
+    transform: rotate(14deg) scale(1.03);
+  }
 }
 
 .glassReflection {
   position: absolute;
-  top: 10px;
-  left: 12px;
-  width: 6px;
-  height: 60px;
-  border-radius: 4px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 100%);
-  z-index: 8;
+  left: 6px;
+  top: 8px;
+  width: 4px;
+  height: 80px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 2px;
+  z-index: 5;
   pointer-events: none;
 }
 
-.bobaPearl {
+.liquidContainer {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  background: #3B2A1D;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.25);
+  bottom: -10px;
+  left: -22px;
+  width: 140px;
+  overflow: hidden;
+  transition: height 380ms ease-out, transform 250ms ease;
+
+  &.liquidTilting {
+    transform: rotate(-14deg);
+  }
+}
+
+.liquidGradient {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: linear-gradient(180deg, #A7F3D0 0%, #5EEAD4 50%, #2DD4BF 100%);
+}
+
+.liquidWaveTop {
+  position: absolute;
+  top: 0;
+  left: -10px;
+  right: -10px;
+  height: 5px;
+  background-color: rgba(255, 255, 255, 0.65);
+  border-radius: 2.5px;
+  animation: waveFloat 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes waveFloat {
+  from {
+    transform: translateX(-4px);
+  }
+
+  to {
+    transform: translateX(4px);
+  }
+}
+
+.pearlsContainer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50px;
+  pointer-events: none;
   animation: bobaBob 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes bobaBob {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+.pearl {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: #0F766E;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1.5px solid #14B8A6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
 }
 
 .pearlFace {
-  font-size: 8px;
-  color: #FDE68A;
+  font-size: 9px;
+  color: #CCFBF1;
   font-weight: 700;
   line-height: 1;
+  user-select: none;
 }
 
 .floatingBubble {
   position: absolute;
-  animation: bobaBob 2s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
-@keyframes bobaBob {
-  from { transform: translateY(0); }
-  to { transform: translateY(-5px); }
-}
-
-.cupFace {
+.cupFaceContainer {
   position: absolute;
-  inset: 0;
+  top: 40px;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
   z-index: 4;
+  pointer-events: none;
 }
 
 .cupEyes {
-  font-size: 16px;
-  font-weight: 800;
-  color: #004D40;
-  letter-spacing: 12px;
-  margin-left: 12px;
+  font-size: 10px;
+  color: rgba(0, 77, 64, 0.65);
+  letter-spacing: 8px;
+  font-weight: 700;
+  margin-left: 8px;
 }
 
 .cupMouth {
-  font-size: 14px;
-  color: #004D40;
+  font-size: 10px;
+  color: rgba(0, 77, 64, 0.65);
   margin-top: -4px;
+  font-weight: 700;
 }
 
 .organicCountSection {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  width: 100%;
-  max-width: 240px;
+  margin-top: 14px;
+  gap: 4px;
 }
 
 .organicCountNumber {
-  font-size: 26px;
-  font-weight: 800;
-  line-height: 1;
+  font-family: inherit;
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 700;
 }
 
 .organicCountLabel {
-  font-size: 11px;
-  font-weight: 600;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .organicProgressTrack {
-  width: 100%;
-  height: 5px;
-  border-radius: 9999px;
+  width: 140px;
+  height: 4.5px;
+  border-radius: 2.25px;
   overflow: hidden;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .organicProgressFill {
   height: 100%;
-  border-radius: 9999px;
-  transition: width 280ms ease;
+  border-radius: 2.25px;
+  transition: width 300ms ease;
 }
 
 .actionSection {
   width: 100%;
+  min-height: 52px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 4px 0;
+  justify-content: center;
+  padding-bottom: 6px;
 }
 
 .organicSensorHint {
+  font-family: inherit;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
+  text-align: center;
 }
 
 // -------------------------------------------------------------
@@ -276,7 +321,7 @@
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background: rgba(7, 26, 43, 0.65);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -288,10 +333,10 @@
 .modalCard {
   position: relative;
   width: 100%;
-  max-width: 320px;
+  max-width: 340px;
   background: #FFFFFF;
   border-radius: 24px;
-  padding: 20px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -300,43 +345,51 @@
 
 .modalCloseBtn {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 16px;
+  right: 16px;
   background: transparent;
   border: 0;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
 }
 
 .guideIconWrapper {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
   background: #E6F9F7;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 12px;
+  border: 2px solid rgba(0, 196, 179, 0.3);
 }
 
 .guideTitle {
-  font-size: 15px;
-  font-weight: 800;
-  color: #00695C;
-  margin: 0 0 14px 0;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  color: #004D40;
+  margin: 0 0 16px 0;
+  text-align: center;
 }
 
 .guideStepsBox {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 20px;
+  background: #F8FAFC;
+  border-radius: 16px;
+  padding: 14px;
+  border: 1px solid rgba(0, 196, 179, 0.12);
+  box-sizing: border-box;
 }
 
 .guideStepRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   text-align: left;
 }
@@ -345,38 +398,40 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #E6F9F7;
-  border: 1px solid #00C4B3;
+  background: #00C4B3;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-top: 1px;
 }
 
 .stepNumText {
+  font-family: inherit;
   font-size: 11px;
-  font-weight: 800;
-  color: #00897B;
+  font-weight: 700;
+  color: #FFFFFF;
 }
 
 .guideStepText {
-  font-size: 12px;
-  font-weight: 600;
-  color: #334155;
-  line-height: 1.35;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: #475569;
+  line-height: 18px;
 }
 
 .guideConfirmBtn {
   width: 100%;
-  padding: 11px;
-  border-radius: 14px;
+  padding: 12px 24px;
+  border-radius: 9999px;
   background: #00C4B3;
   border: 0;
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   transition: transform 80ms ease;
 
@@ -386,11 +441,17 @@
 }
 
 .guideConfirmText {
-  font-size: 13px;
+  font-family: inherit;
+  font-size: 13.5px;
   font-weight: 700;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

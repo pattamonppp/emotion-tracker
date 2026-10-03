@@ -557,8 +557,8 @@ export const FloatingEmotionCloud: React.FC<
             )}
             style={{
               color: isSelected
-                ? DESIGN_TOKENS.color.brand.turquoise.primary
-                : DESIGN_TOKENS.color.gray.darkText
+                ? '#004D40'
+                : '#1E293B'
             }}
           >
             {isCustom && customText

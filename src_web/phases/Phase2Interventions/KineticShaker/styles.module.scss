@@ -12,6 +12,7 @@
   font-family: inherit;
   box-sizing: border-box;
   overflow: hidden;
+  flex: 1;
 }
 
 .mascotWrapper {
@@ -32,13 +33,23 @@
 }
 
 @keyframes mascotWiggle {
-  from { transform: translateX(-6px) rotate(-3deg); }
-  to { transform: translateX(6px) rotate(3deg); }
+  from {
+    transform: translateX(-6px) rotate(-3deg);
+  }
+
+  to {
+    transform: translateX(6px) rotate(3deg);
+  }
 }
 
 @keyframes mascotBounce {
-  from { transform: translateY(0); }
-  to { transform: translateY(-16px); }
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-16px);
+  }
 }
 
 .modeToggleRow {
@@ -74,14 +85,26 @@
   }
 }
 
-.mainStage {
+.centerStage {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
+  position: relative;
   gap: 12px;
+}
+
+.capsuleAuraHalo {
+  position: absolute;
+  top: 10px;
+  width: 150px;
+  height: 180px;
+  border-radius: 75px;
+  background-color: rgba(94, 234, 212, 0.22);
+  box-shadow: 0 0 28px rgba(45, 212, 191, 0.45);
+  pointer-events: none;
 }
 
 // -------------------------------------------------------------
@@ -108,8 +131,13 @@
 }
 
 @keyframes flaskShake {
-  from { transform: translateX(-8px) rotate(-4deg); }
-  to { transform: translateX(8px) rotate(4deg); }
+  from {
+    transform: translateX(-8px) rotate(-4deg);
+  }
+
+  to {
+    transform: translateX(8px) rotate(4deg);
+  }
 }
 
 .capsuleCorkTop {
@@ -193,8 +221,13 @@
 }
 
 @keyframes starFloat {
-  from { transform: translateY(0); }
-  to { transform: translateY(-6px); }
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-6px);
+  }
 }
 
 .fluidFill {
@@ -215,57 +248,83 @@
 }
 
 @keyframes bubbleRise {
-  0% { transform: translateY(0) scale(0.7); opacity: 0; }
-  50% { opacity: 0.8; }
-  100% { transform: translateY(-70px) scale(1.1); opacity: 0; }
+  0% {
+    transform: translateY(0) scale(0.7);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateY(-70px) scale(1.1);
+    opacity: 0;
+  }
 }
 
-.flaskCenterContent {
+.capsuleCenterIcon {
   position: absolute;
   inset: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   pointer-events: none;
   z-index: 10;
 }
 
-.energyCountNumber {
-  font-size: 28px;
-  font-weight: 800;
+.organicCountSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  max-width: 220px;
+  margin-top: 4px;
+}
+
+.organicCountNumber {
+  font-family: inherit;
+  font-size: 32px;
+  font-weight: 700;
   line-height: 1;
 }
 
-.energyCountLabel {
-  font-size: 11px;
-  font-weight: 700;
-  margin-top: 2px;
+.organicCountLabel {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-.kineticProgressTrack {
-  width: 100%;
-  max-width: 220px;
-  height: 6px;
-  border-radius: 9999px;
+.organicProgressTrack {
+  width: 140px;
+  height: 4.5px;
+  border-radius: 2.25px;
   overflow: hidden;
+  margin-top: 4px;
 }
 
-.kineticProgressFill {
+.organicProgressFill {
   height: 100%;
-  border-radius: 9999px;
+  border-radius: 2.25px;
   transition: width 200ms ease;
 }
 
 .actionSection {
   width: 100%;
+  min-height: 52px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 4px 0;
 }
 
-.kineticTapHint {
+.organicSensorHint {
+  font-family: inherit;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.4;
+  max-width: 280px;
 }

@@ -4,7 +4,7 @@ import { audioService } from '../../../services/audioService';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { useSky } from '../../../components/DynamicSkyEngine';
-import { Check, GlassWater, ArrowRight, X, Sparkles, Heart } from 'lucide-react';
+import { Check, GlassWater, ArrowRight, X, Sparkles, Heart, HelpCircle } from 'lucide-react';
 import { DESIGN_TOKENS } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 import type { VictorySipProps } from './types';
@@ -80,18 +80,16 @@ export const VictorySip: React.FC<VictorySipProps> = ({
   }, [activePeriod]);
 
   const triggerSip = () => {
-    audioService.triggerHaptic('success');
-    audioService.playLiquidSip();
+    const nextSip = sipCount + 1;
+    setSipCount(nextSip);
+    audioService.playLiquidSip(nextSip);
+    audioService.triggerHaptic('medium');
 
-    setSipCount((prev) => {
-      const next = prev + 1;
-      if (next >= 3) {
-        setIsFinished(true);
-        audioService.triggerHaptic('success');
-        audioService.playChimeShockwave();
-      }
-      return next;
-    });
+    if (nextSip >= 3) {
+      setIsFinished(true);
+      audioService.triggerHaptic('success');
+      audioService.playChimeShockwave();
+    }
   };
 
   const handleCupPress = () => {
@@ -113,11 +111,11 @@ export const VictorySip: React.FC<VictorySipProps> = ({
     };
   }, []);
 
-  const liquidHeightPercent = Math.max(0, 100 - (sipCount / 3) * 100);
+  const liquidHeightPercent = Math.max(0, 100 - sipCount * 33.34);
 
   return (
     <div className={styles.container}>
-      {/* 1. Mascot Guidance */}
+      {/* 1. Mascot View - Standardized Height */}
       <div className={styles.mascotWrapper}>
         <MoocaMascot
           mood={isFinished ? 'celebrating' : 'drinking'}
@@ -126,7 +124,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         />
       </div>
 
-      {/* 2. Instruction Badge with Info Tip */}
+      {/* 2. Instruction Badge & Sip Indicator with Info Tip */}
       <button
         type="button"
         onClick={() => {
@@ -139,87 +137,113 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           borderColor: skyTheme.badgeBorder,
         }}
       >
-        <span className={styles.pillIconBadge}>
-          {isFinished ? (
-            <Check size={13} color="#FFFFFF" strokeWidth={2.8} />
-          ) : (
-            <GlassWater size={13} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
-          )}
+        {isFinished ? (
+          <Sparkles size={14} color="#10B981" strokeWidth={2.4} />
+        ) : isTiltingToDrink ? (
+          <Sparkles size={14} color="#3B82F6" strokeWidth={2.4} />
+        ) : (
+          <GlassWater size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
+        )}
+
+        <span className={styles.instructionPillText} style={{ color: skyTheme.badgeTextColor }}>
+          {isFinished
+            ? strings.sipProgressDone
+            : isTiltingToDrink
+              ? strings.tiltActive
+              : strings.tiltReady}
         </span>
 
-        <span className={styles.instructionText} style={{ color: skyTheme.badgeTextColor }}>
-          {isFinished ? strings.bubbleDone : strings.desc}
-        </span>
-
-        <span className={styles.helpIconSlot}>
-          <Sparkles size={11} color={skyTheme.badgeIconColor} />
-        </span>
+        <HelpCircle size={13} color={skyTheme.badgeIconColor} strokeWidth={2} />
       </button>
 
-      {/* 3. Main Stage: Interactive Boba Victory Cup */}
-      <div className={styles.mainStage}>
+      {/* 3. Hero Centerpiece: Fantasy Crystal Potion Tumbler */}
+      <div className={styles.cupContainer} onClick={handleCupPress} title={strings.tiltPhoneHint}>
+        {/* Soft Ambient Radiating Halo behind the tumbler */}
+        <div className={styles.cupAuraHalo} />
+
+        {/* Straw Top Star Topper */}
+        <div className={styles.strawStarTopper}>
+          <Sparkles size={14} color="#F59E0B" fill="#FDE047" />
+        </div>
+
+        {/* Iridescent Striped Straw */}
+        <div className={styles.straw}>
+          <div className={styles.strawStripe} style={{ backgroundColor: '#F472B6' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#5EEAD4' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#FDE047' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#5EEAD4' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#F472B6' }} />
+        </div>
+
+        {/* Cup Dome Rim */}
+        <div className={styles.cupDome} />
+
+        {/* Crystal Potion Cup Glass Body with physical tilt animation */}
         <div
-          onClick={handleCupPress}
-          className={classNames(styles.cupWrapper, {
-            [styles.isDrinking]: isTiltingToDrink,
+          className={classNames(styles.cupBody, {
+            [styles.cupBodyTilting]: isTiltingToDrink,
           })}
-          title={strings.tiltPhoneHint}
         >
-          {/* Straw */}
-          <div className={styles.strawWrapper} />
+          {/* Glass Highlight */}
+          <div className={styles.glassReflection} />
 
-          {/* Cup Lid & Body */}
-          <div className={styles.cupBody}>
-            <div className={styles.cupLid} />
-
-            {/* Liquid Fill */}
-            <div
-              className={styles.liquidFill}
-              style={{ height: `${liquidHeightPercent}%` }}
-            >
-              {/* Glass Highlight Reflection */}
-              <div className={styles.glassReflection} />
-
-              {/* Smiling Boba Pearls inside Cup */}
-              <div className={styles.bobaPearl} style={{ bottom: 8, left: 14 }}>
-                <span className={styles.pearlFace}>•‿•</span>
-              </div>
-              <div className={styles.bobaPearl} style={{ bottom: 12, left: 40 }}>
-                <span className={styles.pearlFace}>◕‿◕</span>
-              </div>
-              <div className={styles.bobaPearl} style={{ bottom: 8, right: 14 }}>
-                <span className={styles.pearlFace}>^‿^</span>
-              </div>
-              <div className={styles.floatingBubble} style={{ bottom: 38, left: 24 }}>
-                <Sparkles size={11} color="#FDE047" fill="#FDE047" />
-              </div>
-              <div className={styles.floatingBubble} style={{ bottom: 44, right: 26 }}>
-                <Heart size={10} color="#F472B6" fill="#F472B6" />
-              </div>
+          {/* Realistic Gravity-Aligned Liquid Fluid */}
+          <div
+            className={classNames(styles.liquidContainer, {
+              [styles.liquidTilting]: isTiltingToDrink,
+            })}
+            style={{ height: `${liquidHeightPercent}%` }}
+          >
+            <div className={styles.liquidGradient}>
+              <div className={styles.liquidWaveTop} />
             </div>
+          </div>
 
-            {/* Cup Front Smiling Face */}
-            <div className={styles.cupFace}>
-              <span className={styles.cupEyes}>{isTiltingToDrink ? '˘   ³' : '◕   ◕'}</span>
-              <span className={styles.cupMouth}>‿</span>
+          {/* Smiling Boba Pearls inside Cup */}
+          <div className={styles.pearlsContainer}>
+            {/* Pearl 1 */}
+            <div className={styles.pearl} style={{ left: 14, bottom: 8 }}>
+              <span className={styles.pearlFace}>•‿•</span>
             </div>
+            {/* Pearl 2 */}
+            <div className={styles.pearl} style={{ left: 40, bottom: 12 }}>
+              <span className={styles.pearlFace}>◕‿◕</span>
+            </div>
+            {/* Pearl 3 */}
+            <div className={styles.pearl} style={{ right: 14, bottom: 8 }}>
+              <span className={styles.pearlFace}>^‿^</span>
+            </div>
+            {/* Floating Bubble 4 */}
+            <div className={styles.floatingBubble} style={{ left: 24, bottom: 38 }}>
+              <Sparkles size={11} color="#FDE047" fill="#FDE047" />
+            </div>
+            {/* Floating Bubble 5 */}
+            <div className={styles.floatingBubble} style={{ right: 26, bottom: 44 }}>
+              <Heart size={10} color="#F472B6" fill="#F472B6" />
+            </div>
+          </div>
+
+          {/* Cup Front Smiling Face */}
+          <div className={styles.cupFaceContainer}>
+            <span className={styles.cupEyes}>{isTiltingToDrink ? '˘   ³' : '◕   ◕'}</span>
+            <span className={styles.cupMouth}>‿</span>
           </div>
         </div>
 
-        {/* Sip Counter Progress */}
+        {/* 3. Organic Sip Count Section with Interactive Tilt Guidance Gauge */}
         <div className={styles.organicCountSection}>
           <span className={styles.organicCountNumber} style={{ color: skyTheme.countColor }}>
             {sipCount}/3
           </span>
-
           <span className={styles.organicCountLabel} style={{ color: skyTheme.labelColor }}>
             {isFinished
               ? strings.sipProgressDone
               : isTiltingToDrink
-              ? strings.sipProgressSipping
-              : strings.sipProgressIdle}
+                ? strings.sipProgressSipping
+                : strings.sipProgressIdle}
           </span>
 
+          {/* Slim glowing 4.5px progress line */}
           <div
             className={styles.organicProgressTrack}
             style={{ backgroundColor: skyTheme.progressTrack }}

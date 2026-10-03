@@ -4,7 +4,7 @@ import { audioService } from '../../../services/audioService';
 import { useSky } from '../../../components/DynamicSkyEngine';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
-import { Star, Sun, Hand, Sparkles, Check, X, Volume2 } from 'lucide-react';
+import { Star, Sun, Hand, Sparkles, Check, X, Volume2, HelpCircle } from 'lucide-react';
 import { DESIGN_TOKENS } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 import { SOMATIC_CONFIG } from './constants';
@@ -190,16 +190,22 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* 1. Mascot Guidance View */}
+      {/* 1. Mooca Mascot - Matching Mobile SomaticAbsorption.tsx */}
       <div className={styles.mascotWrapper}>
         <MoocaMascot
-          mood={isFinished ? 'celebrating' : 'comforting'}
+          mood={isFinished ? 'celebrating' : isRubbing ? 'rubbing' : 'comforting'}
           size="sm"
-          speakingBubble={isFinished ? strings.mascotDone : strings.mascotRubbing}
+          speakingBubble={
+            isFinished
+              ? strings.mascotDone
+              : isRubbing
+                ? strings.mascotRubbing
+                : strings.mascotIdle
+          }
         />
       </div>
 
-      {/* 2. Instruction Badge with Info Tip Button */}
+      {/* 2. Instruction Badge & Multi-touch Indicator with Info Tip */}
       <button
         type="button"
         onClick={() => {
@@ -212,21 +218,21 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           borderColor: theme.badgeBorder,
         }}
       >
-        <span className={styles.pillIconBadge}>
-          {isFinished ? (
-            <Check size={13} color="#FFFFFF" strokeWidth={2.8} />
-          ) : (
-            <Sparkles size={13} color={theme.badgeIconColor} strokeWidth={2.4} />
-          )}
+        {touchCount >= 2 ? (
+          <Sparkles size={14} color="#10B981" strokeWidth={2.4} />
+        ) : (
+          <Hand size={14} color={theme.badgeIconColor} strokeWidth={2.4} />
+        )}
+
+        <span className={styles.instructionPillText} style={{ color: theme.badgeText }}>
+          {touchCount >= 2
+            ? strings.fingerActive2
+            : touchCount === 1
+              ? strings.fingerWarning1
+              : strings.fingerPrompt}
         </span>
 
-        <span className={styles.instructionText} style={{ color: theme.badgeText }}>
-          {isFinished ? strings.heroFinished : strings.instruction}
-        </span>
-
-        <span className={styles.helpIconSlot}>
-          <Hand size={12} color={theme.badgeIconColor} />
-        </span>
+        <HelpCircle size={13} color={theme.badgeIconColor} strokeWidth={2} />
       </button>
 
       {/* 3. Hero Centerpiece: Celestial Sigil Circle */}
@@ -398,6 +404,13 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                   <span className={styles.stepNumText}>2</span>
                 </div>
                 <span className={styles.guideStepText}>{strings.guideStep2Desc}</span>
+              </div>
+
+              <div className={styles.guideStepRow}>
+                <div className={styles.stepNumBadge}>
+                  <span className={styles.stepNumText}>3</span>
+                </div>
+                <span className={styles.guideStepText}>{strings.guideStep3Desc}</span>
               </div>
             </div>
 

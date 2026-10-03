@@ -11,6 +11,7 @@
   font-family: $font-sans;
   box-sizing: border-box;
   overflow: hidden;
+  flex: 1;
 }
 
 .mascotWrapper {
@@ -86,6 +87,7 @@
   justify-content: center;
   gap: 8px;
   margin: 4px 0;
+  flex: 1;
 }
 
 .waveformContainer {
@@ -203,9 +205,11 @@
     .scriptCategory {
       color: #38BDF8;
     }
+
     .scriptText {
       color: #F8FAFC;
     }
+
     svg {
       color: #38BDF8;
     }
@@ -218,9 +222,11 @@
     .scriptCategory {
       color: #9F1239;
     }
+
     .scriptText {
       color: #881337;
     }
+
     svg {
       color: #9F1239;
     }
@@ -233,9 +239,11 @@
     .scriptCategory {
       color: #92400E;
     }
+
     .scriptText {
       color: #78350F;
     }
+
     svg {
       color: #92400E;
     }

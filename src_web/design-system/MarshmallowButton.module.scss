@@ -1,11 +1,12 @@
 .buttonWrapper {
-  display: inline-block;
+  display: flex;
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
 }
 
 .button {
+  flex: 1;
   position: relative;
   display: inline-flex;
   align-items: center;
