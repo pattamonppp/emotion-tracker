@@ -89,8 +89,8 @@ export const Phase3CognitiveReframing: React.FC<
               <div className={styles.letterStamp}>
                 <Heart
                   size={11}
-                  color="#EC4899"
-                  fill="#FCE7F3"
+                  color="#EF7773"
+                  fill="#FAD6D5"
                 />
 
                 <span className={styles.letterStampText}>
@@ -101,7 +101,7 @@ export const Phase3CognitiveReframing: React.FC<
               <div className={styles.letterHeader}>
                 <Heart
                   size={14}
-                  color="#F43F5E"
+                  color="#EF7773"
                 />
 
                 <span className={styles.letterGreeting}>
@@ -118,7 +118,7 @@ export const Phase3CognitiveReframing: React.FC<
               <div className={styles.biologyNote}>
                 <Dna
                   size={15}
-                  color="#004D40"
+                  color="#355956"
                   className={styles.biologyIcon}
                 />
 

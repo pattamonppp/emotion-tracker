@@ -1,98 +1,64 @@
 import { Platform, TextStyle } from 'react-native';
+import { OOCA_TOKENS } from '../../src_web/design-system/tokens';
 
-export const OOCA_TOKENS = {
-  color: {
-    brand: {
-      turquoise: {
-        primary: '#00C4B3',
-        light: '#33D0C2',
-        pale: '#E6F9F7',
-        text: '#004D40',
-        ringTrack: 'rgba(0, 196, 179, 0.16)',
-        border: 'rgba(0, 196, 179, 0.25)',
-      },
-    },
-    accent: {
-      blue: {
-        500: '#1F77DF',
-        300: '#62A0E9',
-        200: '#8FBBEF',
-        100: '#C7DDF7',
-        50: '#E4EFFB',
-      },
-    },
-    feedback: {
-      error: '#F26E6E',
-      warning: '#FA8C3D',
-      success: '#7CC954',
-      emerald: '#10B981',
-    },
-    gray: {
-      black: '#000000',
-      darkText: '#1E293B',
-      muted: '#64748B',
-      border: '#E2E8F0',
-      surface: '#F8FAFC',
-      white: '#FFFFFF',
-    },
-  },
-  geometry: {
-    borderRadius: {
-      controls: 9999,
-      avatars: 12,
-      actionablesSm: 8,
-      actionablesLg: 24,
-      containers: 0,
-    },
-  },
-} as const;
+export { OOCA_TOKENS };
+export const DESIGN_TOKENS = OOCA_TOKENS;
 
 export const colors = {
-  primary: OOCA_TOKENS.color.brand.turquoise.primary,
-  primaryDark: OOCA_TOKENS.color.brand.turquoise.text,
-  primaryLight: OOCA_TOKENS.color.brand.turquoise.pale,
-  primaryPale: OOCA_TOKENS.color.brand.turquoise.pale,
-  primaryLight2: OOCA_TOKENS.color.brand.turquoise.light,
-  primaryMuted: '#B3EDE8',
+  primary: OOCA_TOKENS.color.brand.turquoise.primary, // #00C4B3
+  primaryDark: OOCA_TOKENS.color.brand.turquoise.text, // #009688
+  primaryLight: OOCA_TOKENS.color.brand.turquoise.pale, // #DBF0EE
+  primaryPale: OOCA_TOKENS.color.brand.turquoise.pale, // #DBF0EE
+  primaryLight2: OOCA_TOKENS.color.brand.turquoise.light, // #B3EDE8
+  primaryMuted: OOCA_TOKENS.color.brand.turquoise.light, // #B3EDE8
   ringTrack: OOCA_TOKENS.color.brand.turquoise.ringTrack,
   
-  secondary: OOCA_TOKENS.color.feedback.warning, // Warm accent Sunshade
-  secondaryLight: '#FFF4EB',
+  secondary: OOCA_TOKENS.color.system.warning[500], // #FF8F4B
+  secondaryLight: OOCA_TOKENS.color.system.warning[100], // #FFDDC9
   
-  accentPink: OOCA_TOKENS.color.feedback.error, // Flamingo
-  accentPinkLight: '#FEECEC',
+  accentPink: OOCA_TOKENS.color.system.error[500], // #EF7773
+  accentPinkLight: OOCA_TOKENS.color.system.error[100], // #FAD6D5
   
-  accentBlue: OOCA_TOKENS.color.accent.blue[500],
-  accentBlueLight: OOCA_TOKENS.color.accent.blue[50],
+  accentOrange: OOCA_TOKENS.color.accent.orange[500], // #F9A000
+  accentOrangeLight: OOCA_TOKENS.color.accent.orange[100], // #F8E4B3
   
-  bgLight: '#FFFDF9',
+  accentBlue: OOCA_TOKENS.color.accent.blue[500], // #1F77DF
+  accentBlueLight: OOCA_TOKENS.color.accent.blue[50], // #E4EFFB
+  
+  bgLight: OOCA_TOKENS.color.gradient.background, // #DBF0EE
   cardBg: OOCA_TOKENS.color.gray.white,
   white: OOCA_TOKENS.color.gray.white,
+  black: OOCA_TOKENS.color.gray.black,
   
-  textPrimary: OOCA_TOKENS.color.gray.darkText,
-  textSecondary: '#475569',
-  textMuted: OOCA_TOKENS.color.gray.muted,
+  textPrimary: OOCA_TOKENS.color.gray.darkText, // #26313c
+  textSecondary: OOCA_TOKENS.color.palette.coolGray[600], // #566d80
+  textMuted: OOCA_TOKENS.color.gray.muted, // #637b91
   darkText: OOCA_TOKENS.color.gray.darkText,
   
-  borderSubtle: OOCA_TOKENS.color.gray.border,
+  borderSubtle: OOCA_TOKENS.color.gray.border, // #cdd8e1
   borderTeal: OOCA_TOKENS.color.brand.turquoise.border,
   
-  success: OOCA_TOKENS.color.feedback.emerald,
-  guava: OOCA_TOKENS.color.feedback.success,
-  warning: OOCA_TOKENS.color.feedback.warning,
+  success: OOCA_TOKENS.color.system.success[500], // #8AD866
+  guava: OOCA_TOKENS.color.system.success[500], // #8AD866
+  warning: OOCA_TOKENS.color.system.warning[500], // #FF8F4B
+  
+  turquoiseGray1: OOCA_TOKENS.color.turquoiseGray[1], // #355956
+  turquoiseGray2: OOCA_TOKENS.color.turquoiseGray[2], // #3F6866
+  turquoiseGray3: OOCA_TOKENS.color.turquoiseGray[3], // #528984
+  turquoiseGray4: OOCA_TOKENS.color.turquoiseGray[4], // #79ADA9
 };
 
 export const radii = {
-  sm: OOCA_TOKENS.geometry.borderRadius.actionablesSm, // 8
-  md: OOCA_TOKENS.geometry.borderRadius.avatars, // 12
+  sm: 8,
+  md: 12,
   lg: 18,
-  xl: OOCA_TOKENS.geometry.borderRadius.actionablesLg, // 24
-  full: OOCA_TOKENS.geometry.borderRadius.controls, // 9999
+  xl: 24,
+  full: 9999,
 };
 
 export const shadows = {
   soft: {
-    shadowColor: '#004D40',
+    shadowColor: '#355956',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
@@ -106,7 +72,7 @@ export const shadows = {
     elevation: 4,
   },
   card: {
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 6,
@@ -124,9 +90,6 @@ export const typography = {
   fontPromptExtraBold: 'Prompt_800ExtraBold',
   fontDefault: 'Prompt_400Regular',
 
-  // Safe style objects for StyleSheet.create
-  // Note: On Android, fontWeight is stripped when using custom weighted font assets
-  // to prevent Android's ReactFontManager from falling back to Roboto.
   light: {
     fontFamily: 'Prompt_300Light',
     ...(Platform.OS !== 'android' ? { fontWeight: '300' as const } : {}),

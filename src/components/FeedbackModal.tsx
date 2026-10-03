@@ -730,10 +730,10 @@ const styles = StyleSheet.create({
 
     borderRadius: 14,
 
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
 
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#f1f1f1',
   },
 
   accuracyText: {
@@ -743,7 +743,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
 
-    color: '#64748B',
+    color: '#79ADA9',
 
     textAlign: 'center',
   },
@@ -768,14 +768,14 @@ const styles = StyleSheet.create({
 
     borderRadius: 12,
 
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
 
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#f1f1f1',
   },
 
   chipActive: {
-    backgroundColor: '#E6FAF8',
+    backgroundColor: '#E0F8F6',
 
     borderColor:
       colors.primary,
@@ -787,7 +787,7 @@ const styles = StyleSheet.create({
 
     fontSize: 12,
 
-    color: '#475569',
+    color: '#528984',
 
     fontWeight: '600',
   },
@@ -801,12 +801,12 @@ const styles = StyleSheet.create({
   /* Comment */
 
   textInput: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
 
     borderRadius: 14,
 
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#f1f1f1',
 
     padding: 12,
 
@@ -846,7 +846,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 36,
 
-    backgroundColor: '#E6FAF8',
+    backgroundColor: '#E0F8F6',
 
     alignItems: 'center',
     justifyContent: 'center',

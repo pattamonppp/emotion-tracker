@@ -422,12 +422,12 @@ export const LivePulseSensorModal: React.FC<
                   size={44}
                   color={
                     isFingerOnSensor
-                      ? '#F26E6E'
+                      ? '#EF7773'
                       : '#00C4B3'
                   }
                   fill={
                     isFingerOnSensor
-                      ? '#F26E6E'
+                      ? '#EF7773'
                       : 'transparent'
                   }
                 />
@@ -630,7 +630,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
 
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: '#cdd8e1',
   },
 
   headerLeft: {
@@ -651,7 +651,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 9,
 
-    backgroundColor: '#ECFEFF',
+    backgroundColor: '#E0F8F6',
   },
 
   headerTextCol: {
@@ -673,7 +673,7 @@ const styles = StyleSheet.create({
 
     lineHeight: 20,
 
-    color: '#00695C',
+    color: '#009688',
   },
 
   headerSubtitle: {
@@ -687,7 +687,7 @@ const styles = StyleSheet.create({
 
     lineHeight: 14,
 
-    color: '#64748B',
+    color: '#637b91',
   },
 
   closeBtn: {
@@ -731,7 +731,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
 
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#cdd8e1',
 
     shadowColor: '#000000',
     shadowOffset: {
@@ -747,12 +747,12 @@ const styles = StyleSheet.create({
   },
 
   touchpadPadSensing: {
-    borderColor: '#F26E6E',
+    borderColor: '#EF7773',
 
     backgroundColor:
-      'rgba(242, 110, 110, 0.08)',
+      'rgba(239, 119, 115, 0.08)',
 
-    shadowColor: '#F26E6E',
+    shadowColor: '#EF7773',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -768,7 +768,7 @@ const styles = StyleSheet.create({
    *
    * width: 170px
    * height: 170px
-   * border: 2px solid #99f6e4
+   * border: 2px solid #B3EDE8
    */
   touchpadRing: {
     position: 'absolute',
@@ -780,13 +780,13 @@ const styles = StyleSheet.create({
 
     borderWidth: 2,
 
-    borderColor: '#99F6E4',
+    borderColor: '#B3EDE8',
 
     pointerEvents: 'none',
   },
 
   touchpadRingSensing: {
-    borderColor: '#F26E6E',
+    borderColor: '#EF7773',
   },
 
   touchpadProgress: {
@@ -800,7 +800,7 @@ const styles = StyleSheet.create({
 
     lineHeight: 14,
 
-    color: '#64748B',
+    color: '#637b91',
 
     textAlign: 'center',
 
@@ -825,7 +825,7 @@ const styles = StyleSheet.create({
 
     textAlign: 'center',
 
-    color: '#64748B',
+    color: '#637b91',
   },
 
   /* Metrics */
@@ -835,12 +835,12 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
 
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
 
     borderRadius: 16,
 
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#cdd8e1',
 
     overflow: 'hidden',
   },
@@ -865,7 +865,7 @@ const styles = StyleSheet.create({
 
     alignSelf: 'center',
 
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#cdd8e1',
   },
 
   metricBoxLabel: {
@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
 
     textAlign: 'center',
 
-    color: '#64748B',
+    color: '#637b91',
   },
 
   metricBoxValue: {
@@ -893,7 +893,7 @@ const styles = StyleSheet.create({
 
     lineHeight: 34,
 
-    color: '#00695C',
+    color: '#009688',
 
     textAlign: 'center',
   },
@@ -905,7 +905,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
 
-    color: '#64748B',
+    color: '#637b91',
   },
 
   stateBoxValue: {
@@ -926,7 +926,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 999,
 
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#F1FAED',
   },
 
   stateTagParasympatheticText: {
@@ -936,9 +936,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '700',
 
-    color: '#047857',
-
-    whiteSpace: 'nowrap',
+    color: '#8AD866',
   },
 
   stateTagSympathetic: {
@@ -952,7 +950,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 999,
 
-    backgroundColor: '#FFF1F2',
+    backgroundColor: '#FDEFEE',
   },
 
   stateTagSympatheticText: {
@@ -962,9 +960,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '700',
 
-    color: '#BE123C',
-
-    whiteSpace: 'nowrap',
+    color: '#EB6460',
   },
 
   /* Footer */

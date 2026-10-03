@@ -24,10 +24,8 @@ export interface ResetCompletedViewProps {
   profile: UserProfile;
   feedback: ShiftFeedback | null;
   onRestart: () => void;
-  onOpenDesignSystem?: () => void;
   onOpenProfile?: () => void;
   onOpenHistory: () => void;
-  onOpenStory?: () => void;
   onOpenFeedback: () => void;
 }
 
@@ -114,7 +112,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 styles.sparkleTopLeft,
               )}
             >
-              <Sparkles size={16} color="#F59E0B" fill="#FDE047" />
+              <Sparkles size={16} color="#F9A000" fill="#F8E4B3" />
             </div>
 
             <div
@@ -123,7 +121,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 styles.sparkleTopRight,
               )}
             >
-              <PartyPopper size={16} color="#EC4899" />
+              <PartyPopper size={16} color="#EF7773" />
             </div>
 
             <div
@@ -132,7 +130,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 styles.sparkleBottomLeft,
               )}
             >
-              <Star size={15} color="#F59E0B" fill="#FDE047" />
+              <Star size={15} color="#F9A000" fill="#F8E4B3" />
             </div>
 
             <div
@@ -141,12 +139,12 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 styles.sparkleBottomRight,
               )}
             >
-              <Heart size={16} color="#F43F5E" fill="#F43F5E" />
+              <Heart size={16} color="#EF7773" fill="#EF7773" />
             </div>
 
             {/* Rainbow Arc Badge */}
             <div className={styles.rainbowArcPill}>
-              <Sparkles size={13} color="#D97706" />
+              <Sparkles size={13} color="#DF8900" />
               <span className={styles.rainbowText}>
                 {c.rainbowCelebration}
               </span>

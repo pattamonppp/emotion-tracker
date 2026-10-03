@@ -18,7 +18,6 @@ export interface MobileFrameProps {
   phaseTime: number; // in seconds
   onOpenProfile: () => void;
   onToggleLanguage: () => void;
-  onOpenStory?: () => void;
   onTimePeriodChange?: (period: SkyTimePeriod) => void;
 }
 

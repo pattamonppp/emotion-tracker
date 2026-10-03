@@ -73,9 +73,9 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
         };
       case 'night':
         return {
-          instructionColor: colors.borderSubtle,
+          instructionColor: '#E4EFFB',
           pulseColor: colors.textMuted,
-          heartColor: colors.accentPink,
+          heartColor: '#1F77DF',
           ...oocaCIOrb,
         };
       case 'dawn':

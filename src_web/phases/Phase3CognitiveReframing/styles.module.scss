@@ -161,22 +161,22 @@
   top: 0;
   left: 20px;
 
-  background: rgba(167, 243, 208, 0.88);
+  background: rgba(138, 216, 102, 0.88);
 
   transform: rotate(-4deg);
 
-  border: 1px dashed rgba(52, 211, 153, 0.4);
+  border: 1px dashed rgba(138, 216, 102, 0.4);
 }
 
 .washiTapeRight {
   top: 2px;
   right: 20px;
 
-  background: rgba(254, 205, 211, 0.88);
+  background: rgba(250, 214, 213, 0.88);
 
   transform: rotate(4deg);
 
-  border: 1px dashed rgba(251, 113, 133, 0.4);
+  border: 1px dashed rgba(239, 119, 115, 0.4);
 }
 
 .washiTapePattern {
@@ -193,13 +193,13 @@
 
   width: 100%;
 
-  background: #fffaf0;
+  background: #ffffff;
 
   border-radius: 18px;
 
   padding: 18px 16px 16px;
 
-  border: 1.5px solid #fed7aa;
+  border: 1.5px solid #F8E4B3;
 
   box-sizing: border-box;
 
@@ -226,13 +226,13 @@
 
   gap: 3px;
 
-  background: #fff1f2;
+  background: #FDEFEE;
 
   padding: 3px 7px;
 
   border-radius: 6px;
 
-  border: 1px dashed #fecdd3;
+  border: 1px dashed #FAD6D5;
 
   box-sizing: border-box;
 }
@@ -247,7 +247,7 @@
 
   line-height: normal;
 
-  color: #e11d48;
+  color: #EF7773;
 
   letter-spacing: 0.5px;
 }
@@ -276,7 +276,7 @@
 
   line-height: normal;
 
-  color: #9a3412;
+  color: #DF8900;
 }
 
 /* ─────────────────────────────────────
@@ -307,7 +307,7 @@
 
   align-items: flex-start;
 
-  background: #ecfeff;
+  background: #E0F8F6;
 
   padding: 10px;
 
@@ -315,7 +315,7 @@
 
   margin-top: 10px;
 
-  border: 1px solid #99f6e4;
+  border: 1px solid #B3EDE8;
 
   gap: 8px;
 
@@ -342,7 +342,7 @@
 
   line-height: 17px;
 
-  color: #00695c;
+  color: #355956;
 }
 
 /* ─────────────────────────────────────
@@ -358,7 +358,7 @@
 
   padding: 14px;
 
-  border: 1.5px solid #99f6e4;
+  border: 1.5px solid #B3EDE8;
 
   margin-top: 8px;
 
@@ -404,7 +404,7 @@
 
   line-height: normal;
 
-  color: #00695c;
+  color: #355956;
 }
 
 /* ─────────────────────────────────────
@@ -417,7 +417,7 @@
   align-items: center;
   justify-content: center;
 
-  background: #fef3c7;
+  background: #FCF4E0;
 
   padding: 2px 8px;
 
@@ -436,7 +436,7 @@
 
   line-height: normal;
 
-  color: #b45309;
+  color: #D97800;
 }
 
 /* ─────────────────────────────────────
@@ -460,9 +460,9 @@
   margin: 0;
   padding: 12px;
 
-  background: #fffaf0;
+  background: #fbfbfb;
 
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #f1f1f1;
 
   border-radius: 12px;
 
@@ -488,7 +488,7 @@
 }
 
 .commitBoxActive {
-  background: #ecfeff;
+  background: #E0F8F6;
 
   border-color: #00c4b3;
 }
@@ -536,11 +536,11 @@
 
   line-height: 18px;
 
-  color: #334155;
+  color: #355956;
 }
 
 .commitActionTextActive {
-  color: #00695c;
+  color: #355956;
 }
 
 /* ─────────────────────────────────────
@@ -560,7 +560,7 @@
 
   border-radius: 50%;
 
-  border: 1.5px dashed #cbd5e1;
+  border: 1.5px dashed #c4c4c4;
 
   box-sizing: border-box;
 }
@@ -577,7 +577,7 @@
 
   line-height: 1.2;
 
-  color: #64748b;
+  color: #79ADA9;
 
   text-align: center;
 }
@@ -601,9 +601,9 @@
 
   border-radius: 50%;
 
-  background: #10b981;
+  background: #8AD866;
 
-  border: 2px solid #99f6e4;
+  border: 2px solid #B3EDE8;
 
   box-sizing: border-box;
 
@@ -627,7 +627,7 @@
 
   border-radius: 50%;
 
-  background: #00695c;
+  background: #355956;
 }
 
 .mintSealText {

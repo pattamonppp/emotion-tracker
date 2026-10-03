@@ -119,7 +119,7 @@
   font-size: 9.5px;
   line-height: 13px;
 
-  color: #004D40;
+  color: #009688;
 
   text-align: left;
 }
@@ -463,7 +463,7 @@
 
   background: #fff;
 
-  border: 2px solid var(--color-border-teal, #99f6e4);
+  border: 2px solid var(--color-border-teal, #B3EDE8);
   border-radius: 50%;
 
   box-shadow:
@@ -474,7 +474,7 @@
   font-family: var(--font-prompt-bold, sans-serif);
   font-size: 11.5px;
 
-  color: #064e3b;
+  color: #009688;
 
   text-align: center;
 }
@@ -485,25 +485,25 @@
   font-family: var(--font-prompt-medium, sans-serif);
   font-size: 9px;
 
-  color: #475569;
+  color: #566d80;
 
   text-align: center;
 }
 
 .emptyTitleLight {
-  color: #ffffffff;
+  color: #ffffff;
 }
 
 .emptyTitleDawn {
-  color: #78350f;
+  color: #D97800;
 }
 
 .emptySubtitleLight {
-  color: #fafcffff;
+  color: #fbfbfb;
 }
 
 .emptySubtitleDawn {
-  color: #92400e;
+  color: #DF8900;
 }
 
 .puffsContainer {
@@ -633,7 +633,7 @@
   font-family: var(--font-prompt-bold, sans-serif);
   font-size: 10.5px;
 
-  color: var(--color-primary-dark, #00695c);
+  color: var(--color-primary-dark, #009688);
 
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -726,7 +726,7 @@
   font-family: var(--font-prompt-semibold, sans-serif);
   font-size: 9.5px;
 
-  color: var(--color-primary-dark, #00695c);
+  color: var(--color-primary-dark, #009688);
 }
 
 .clearBtnPlaceholder {

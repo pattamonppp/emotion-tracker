@@ -77,8 +77,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       case 'secondary':
         return {
           btn: {
-            backgroundColor: colors.secondary,
-            borderBottomColor: '#D97328',
+            backgroundColor: colors.secondary, // #FF8F4B (Sunshade 500)
           },
           text: {
             color: '#FFFFFF',
@@ -87,10 +86,9 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       case 'softCream':
         return {
           btn: {
-            backgroundColor: '#FFFDF9',
+            backgroundColor: '#FFF2E9', // Sunshade 50
             borderWidth: 1.5,
-            borderColor: '#FFE2D1',
-            borderBottomColor: '#F5C6A8',
+            borderColor: '#FFDDC9', // Sunshade 100
           },
           text: {
             color: colors.primaryDark,
@@ -99,10 +97,9 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       case 'mint':
         return {
           btn: {
-            backgroundColor: '#E6F9F7',
+            backgroundColor: '#E0F8F6', // Turquoise 50
             borderWidth: 1.5,
-            borderColor: '#A7ECE4',
-            borderBottomColor: '#6BD4C7',
+            borderColor: '#B3EDE8', // Turquoise 100
           },
           text: {
             color: colors.primaryDark,
@@ -111,13 +108,12 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       case 'pink':
         return {
           btn: {
-            backgroundColor: '#FFF0F0',
+            backgroundColor: '#FDEFEE', // Flamingo 50
             borderWidth: 1.5,
-            borderColor: '#FFD1D1',
-            borderBottomColor: '#FFAEAE',
+            borderColor: '#FAD6D5', // Flamingo 100
           },
           text: {
-            color: '#D44343',
+            color: '#EF7773', // Flamingo 500
           },
         };
       case 'outline':
@@ -126,7 +122,6 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             backgroundColor: '#FFFFFF',
             borderWidth: 2,
             borderColor: colors.primary,
-            borderBottomColor: '#009688',
           },
           text: {
             color: colors.primary,
@@ -148,8 +143,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       default:
         return {
           btn: {
-            backgroundColor: colors.primary,
-            borderBottomColor: '#009F91',
+            backgroundColor: colors.primary, // #00C4B3
           },
           text: {
             color: '#FFFFFF',
@@ -166,7 +160,6 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             paddingVertical: 7,
             paddingHorizontal: 14,
             borderRadius: radii.md,
-            borderBottomWidth: variant === 'ghost' ? 0 : 2.5,
           },
           text: {
             fontSize: 12,
@@ -179,7 +172,6 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             paddingVertical: 14,
             paddingHorizontal: 28,
             borderRadius: radii.xl,
-            borderBottomWidth: variant === 'ghost' ? 0 : 4,
           },
           text: {
             fontSize: 16,
@@ -193,7 +185,6 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             paddingVertical: 11,
             paddingHorizontal: 20,
             borderRadius: radii.lg,
-            borderBottomWidth: variant === 'ghost' ? 0 : 3.5,
           },
           text: {
             fontSize: 14,

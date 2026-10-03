@@ -315,7 +315,6 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
 export default Phase1EmotionJar;
 export * from './modals/LivePulseSensorModal';
-export * from './modals/MoocaStoryModal';
 export * from './modals/OnboardingModal';
 export * from './modals/CustomEmotionModal';
 export * from './components/GlassEmotionJar';

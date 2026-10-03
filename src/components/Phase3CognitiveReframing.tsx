@@ -98,12 +98,12 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           <View style={styles.letterPaper}>
             {/* Cute Decorative Stamp in Corner */}
             <View style={styles.letterStamp}>
-              <Heart size={11} color="#EC4899" fill="#FCE7F3" />
+              <Heart size={11} color="#EF7773" fill="#FAD6D5" />
               <Text style={styles.letterStampText}>MOOCA</Text>
             </View>
 
             <View style={styles.letterHeader}>
-              <Heart size={14} color="#F43F5E" />
+              <Heart size={14} color="#EF7773" />
               <Text style={styles.letterGreeting}>
                 {p3.letterBadge}
               </Text>
@@ -256,12 +256,12 @@ const styles = StyleSheet.create({
     left: 20,
     width: 68,
     height: 20,
-    backgroundColor: 'rgba(167, 243, 208, 0.88)',
+    backgroundColor: 'rgba(138, 216, 102, 0.88)',
     borderRadius: 2,
     transform: [{ rotate: '-4deg' }],
     zIndex: 10,
     borderWidth: 1,
-    borderColor: 'rgba(52, 211, 153, 0.4)',
+    borderColor: 'rgba(138, 216, 102, 0.4)',
     borderStyle: 'dashed',
     ...shadows.card,
   },
@@ -271,12 +271,12 @@ const styles = StyleSheet.create({
     right: 20,
     width: 68,
     height: 20,
-    backgroundColor: 'rgba(254, 205, 211, 0.88)',
+    backgroundColor: 'rgba(250, 214, 213, 0.88)',
     borderRadius: 2,
     transform: [{ rotate: '4deg' }],
     zIndex: 10,
     borderWidth: 1,
-    borderColor: 'rgba(251, 113, 133, 0.4)',
+    borderColor: 'rgba(239, 119, 115, 0.4)',
     borderStyle: 'dashed',
     ...shadows.card,
   },
@@ -284,12 +284,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   letterPaper: {
-    backgroundColor: colors.bgLight,
+    backgroundColor: '#ffffff',
     borderRadius: 18,
     padding: 16,
     paddingTop: 18,
     borderWidth: 1.5,
-    borderColor: '#FED7AA',
+    borderColor: '#F8E4B3',
     position: 'relative',
     ...shadows.soft,
   },
@@ -300,18 +300,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#FFF1F2',
+    backgroundColor: '#FDEFEE',
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FECDD3',
+    borderColor: '#FAD6D5',
     borderStyle: 'dashed',
   },
   letterStampText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 8,
-    color: '#E11D48',
+    color: '#EF7773',
     letterSpacing: 0.5,
   },
   letterHeader: {
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   letterGreeting: {
     fontFamily: typography.fontPromptBold,
     fontSize: 12,
-    color: '#9A3412',
+    color: '#DF8900',
   },
   letterBody: {
     fontFamily: typography.fontPromptMedium,
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
   },
   promiseBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: '#FCF4E0',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: radii.full,
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
   promiseBadgeText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 9,
-    color: '#B45309',
+    color: '#D97800',
   },
   commitBox: {
     flexDirection: 'row',

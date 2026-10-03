@@ -497,8 +497,8 @@ const styles = StyleSheet.create({
   },
   addCloudBody: {
     borderStyle: 'dashed',
-    borderColor: '#F472B6',
-    borderBottomColor: '#EC4899',
-    backgroundColor: '#FFF5F8',
+    borderColor: '#F4A09D',
+    borderBottomColor: '#EF7773',
+    backgroundColor: '#FDEFEE',
   },
 });

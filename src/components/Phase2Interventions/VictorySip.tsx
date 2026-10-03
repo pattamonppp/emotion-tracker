@@ -301,16 +301,16 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
         {/* Straw Top Star Topper */}
         <View style={styles.strawStarTopper}>
-          <Sparkles size={14} color="#F59E0B" fill="#FDE047" />
+          <Sparkles size={14} color="#F9A000" fill="#F8E4B3" />
         </View>
 
         {/* Iridescent Striped Straw */}
         <View style={styles.straw}>
-          <View style={[styles.strawStripe, { backgroundColor: '#F472B6' }]} />
-          <View style={[styles.strawStripe, { backgroundColor: '#5EEAD4' }]} />
-          <View style={[styles.strawStripe, { backgroundColor: '#FDE047' }]} />
-          <View style={[styles.strawStripe, { backgroundColor: '#5EEAD4' }]} />
-          <View style={[styles.strawStripe, { backgroundColor: '#F472B6' }]} />
+          <View style={[styles.strawStripe, { backgroundColor: '#EF7773' }]} />
+          <View style={[styles.strawStripe, { backgroundColor: '#B3EDE8' }]} />
+          <View style={[styles.strawStripe, { backgroundColor: '#F9A000' }]} />
+          <View style={[styles.strawStripe, { backgroundColor: '#B3EDE8' }]} />
+          <View style={[styles.strawStripe, { backgroundColor: '#EF7773' }]} />
         </View>
 
         {/* Cup Dome Rim */}
@@ -353,7 +353,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             ]}
           >
             <LinearGradient
-              colors={['#A7F3D0', '#5EEAD4', '#2DD4BF']}
+              colors={['#80E2D9', '#4DD6CA', '#00C4B3']}
               style={styles.liquidGradient}
             >
               <Animated.View
@@ -386,11 +386,11 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             </View>
             {/* Floating Bubble 4 */}
             <View style={[styles.floatingBubble, { left: 24, bottom: 38 }]}>
-              <Sparkles size={11} color="#FDE047" fill="#FDE047" />
+              <Sparkles size={11} color="#F9A000" fill="#F8E4B3" />
             </View>
             {/* Floating Bubble 5 */}
             <View style={[styles.floatingBubble, { right: 26, bottom: 44 }]}>
-              <Heart size={10} color="#F472B6" fill="#F472B6" />
+              <Heart size={10} color="#EF7773" fill="#EF7773" />
             </View>
           </Animated.View>
 
@@ -598,13 +598,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderWidth: 2,
-    borderColor: '#BFEFEB',
+    borderColor: '#B3EDE8',
     zIndex: 3,
   },
   cupBody: {
     width: 96,
     height: 124,
-    backgroundColor: 'rgba(240, 253, 250, 0.65)',
+    backgroundColor: 'rgba(224, 248, 246, 0.65)',
     borderBottomLeftRadius: 28,
     borderBottomRightRadius: 28,
     borderWidth: 2.5,
@@ -657,16 +657,16 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#0F766E',
+    backgroundColor: '#355956',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    borderColor: '#14B8A6',
+    borderColor: '#009688',
     ...shadows.card,
   },
   pearlFace: {
     fontSize: 9,
-    color: '#CCFBF1',
+    color: '#B3EDE8',
     fontWeight: 'bold',
   },
   floatingBubble: {

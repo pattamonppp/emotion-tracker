@@ -32,10 +32,8 @@ export interface ResetCompletedViewProps {
   profile: UserProfile;
   feedback: ShiftFeedback | null;
   onRestart: () => void;
-  onOpenDesignSystem?: () => void;
   onOpenProfile?: () => void;
   onOpenHistory: () => void;
-  onOpenStory?: () => void;
 }
 
 export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
@@ -77,7 +75,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
     >
       {/* Top Completion Header */}
       <View style={styles.topBadge}>
-        <Award size={15} color="#D97706" />
+        <Award size={15} color="#DF8900" />
         <Text style={styles.topBadgeText}>
           {c.somaticResetComplete}
         </Text>
@@ -91,27 +89,27 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
       <View style={styles.polaroidFrame}>
         {/* Photo Viewport with Rainbow Celebration */}
         <LinearGradient
-          colors={['#FDE68A', '#FBCFE8', '#BAE6FD', '#A7F3D0']}
+          colors={['#FCF4E0', '#FDEFEE', '#E4EFFB', '#E0F8F6']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.photoViewport}
         >
           <View style={[styles.sparkleItem, { top: 8, left: 12 }]}>
-            <Sparkles size={16} color="#F59E0B" fill="#FDE047" />
+            <Sparkles size={16} color="#F9A000" fill="#F8E4B3" />
           </View>
           <View style={[styles.sparkleItem, { top: 12, right: 14 }]}>
-            <PartyPopper size={16} color="#EC4899" />
+            <PartyPopper size={16} color="#EF7773" />
           </View>
           <View style={[styles.sparkleItem, { bottom: 12, left: 16 }]}>
-            <Star size={15} color="#F59E0B" fill="#FDE047" />
+            <Star size={15} color="#F9A000" fill="#F8E4B3" />
           </View>
           <View style={[styles.sparkleItem, { bottom: 10, right: 16 }]}>
-            <Heart size={16} color="#F43F5E" fill="#F43F5E" />
+            <Heart size={16} color="#EF7773" fill="#EF7773" />
           </View>
 
           {/* Rainbow Arc Badge */}
           <View style={styles.rainbowArcPill}>
-            <Sparkles size={13} color="#D97706" />
+            <Sparkles size={13} color="#DF8900" />
             <Text style={styles.rainbowText}>
               {c.rainbowCelebration}
             </Text>
@@ -130,7 +128,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           {/* Golden Badge */}
           <View style={styles.goldMedalContainer}>
             <View style={styles.goldMedal}>
-              <Award size={16} color="#78350F" />
+              <Award size={16} color="#DF8900" />
               <Text style={styles.goldMedalText}>
                 {c.goldMedalTitle}
               </Text>
@@ -227,8 +225,6 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
-        profile={profile}
-        feedback={feedback}
         lang={lang}
       />
     </ScrollView>
@@ -245,19 +241,19 @@ const styles = StyleSheet.create({
   topBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: '#FCF4E0',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: '#F8E4B3',
     gap: 6,
     marginBottom: 6,
   },
   topBadgeText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 11,
-    color: '#92400E',
+    color: '#D97800',
   },
   headline: {
     fontFamily: typography.fontPromptExtraBold,
@@ -273,7 +269,7 @@ const styles = StyleSheet.create({
     padding: 12,
     paddingBottom: 10,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#f1f1f1',
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
@@ -304,12 +300,12 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: '#F8E4B3',
   },
   rainbowText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 10,
-    color: '#B45309',
+    color: '#DF8900',
   },
   mascotHolder: {
     alignItems: 'center',
@@ -325,18 +321,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: '#FCF4E0',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radii.full,
     borderWidth: 1.5,
-    borderColor: '#F59E0B',
+    borderColor: '#F9A000',
     zIndex: 2,
   },
   goldMedalText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 9,
-    color: '#78350F',
+    color: '#D97800',
     letterSpacing: 0.3,
   },
   ribbonTailLeft: {
@@ -345,7 +341,7 @@ const styles = StyleSheet.create({
     left: 8,
     width: 8,
     height: 10,
-    backgroundColor: '#F59E0B',
+    backgroundColor: '#F9A000',
     transform: [{ rotate: '15deg' }],
   },
   ribbonTailRight: {
@@ -354,7 +350,7 @@ const styles = StyleSheet.create({
     right: 8,
     width: 8,
     height: 10,
-    backgroundColor: '#F59E0B',
+    backgroundColor: '#F9A000',
     transform: [{ rotate: '-15deg' }],
   },
   polaroidChin: {
@@ -373,7 +369,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: '#f1f1f1',
     paddingTop: 6,
   },
   chinDateText: {

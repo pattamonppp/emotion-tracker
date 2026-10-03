@@ -6,7 +6,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'ตื่นเต้น',
     labelEn: 'Nervous',
     emoji: '',
-    color: '#FA8C3D', // Sunshade warm accent
+    color: '#FF8F4B', // Sunshade 1 (500)
     weightDescription: '',
     recommendedOption: 'A', // The Somatic Absorption (rubbing warms cold shaking hands)
   },
@@ -15,7 +15,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'ว่างเปล่า',
     labelEn: 'Empty',
     emoji: '',
-    color: '#F26E6E', // Flamingo
+    color: '#EF7773', // Flamingo 1 (500)
     weightDescription: '',
     recommendedOption: 'A', // Somatic Absorption / Blessing Sigil
   },
@@ -24,7 +24,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'กดดัน',
     labelEn: 'Pressure',
     emoji: '',
-    color: '#3B82F6', // Accent Blue
+    color: '#1F77DF', // Blue 1 (500)
     weightDescription: '',
     recommendedOption: 'B', // The Victory Sip (Vagal Maneuver)
   },
@@ -33,7 +33,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'สมองตื้อ',
     labelEn: 'Freeze',
     emoji: '',
-    color: '#60A5FA',
+    color: '#62A0E9', // Blue 2 (300)
     weightDescription: '',
     recommendedOption: 'C', // Kinetic Tension Shaker (discharge)
   },
@@ -42,7 +42,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'หมดไฟ',
     labelEn: 'Burnout',
     emoji: '',
-    color: '#00C4B3', // Brand turquoise
+    color: '#00C4B3', // Turquoise 1 (500)
     weightDescription: '',
     recommendedOption: 'G', // Pre-Generated Studio Audio Matrix
   },
@@ -51,7 +51,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'กังวล',
     labelEn: 'Anxious',
     emoji: '',
-    color: '#F59E0B', // Warm Amber
+    color: '#F9A000', // Marigo 1 (500)
     weightDescription: '',
     recommendedOption: 'E', // Somatic Breathwork Pacer (Box 4-4-4-4)
   },
@@ -60,7 +60,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'คิดมาก',
     labelEn: 'Overthinking',
     emoji: '',
-    color: '#0EA5E9', // Ocean Cyan
+    color: '#8FBBEF', // Blue 3 (200)
     weightDescription: '',
     recommendedOption: 'B',
   },
@@ -69,7 +69,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'โดดเดี่ยว',
     labelEn: 'Lonely',
     emoji: '',
-    color: '#0284C7', // Gentle Sky Blue
+    color: '#1764D7', // Blue 700
     weightDescription: '',
     recommendedOption: 'G', // Audio Matrix Sanctuary
   },
@@ -78,7 +78,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'สับสน',
     labelEn: 'Confused',
     emoji: '',
-    color: '#10B981', // Mint Emerald
+    color: '#8AD866', // Guava 1 (500)
     weightDescription: '',
     recommendedOption: 'D', // Vertical Grounding / Jump
   },
@@ -87,7 +87,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     labelTh: 'บอก Mooca',
     labelEn: 'Tell Mooca',
     emoji: '',
-    color: '#EC4899', // Soft Rose Heart
+    color: '#EF7773', // Flamingo 1 (500)
     weightDescription: 'Personal heart message directly to Mooca',
     recommendedOption: 'A',
   },

@@ -111,16 +111,16 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
         {/* Straw Top Star Topper */}
         <div className={styles.strawStarTopper}>
-          <Sparkles size={14} color="#F59E0B" fill="#FDE047" />
+          <Sparkles size={14} color="#F9A000" fill="#F8E4B3" />
         </div>
 
         {/* Iridescent Striped Straw */}
         <div className={styles.straw}>
-          <div className={styles.strawStripe} style={{ backgroundColor: '#F472B6' }} />
-          <div className={styles.strawStripe} style={{ backgroundColor: '#5EEAD4' }} />
-          <div className={styles.strawStripe} style={{ backgroundColor: '#FDE047' }} />
-          <div className={styles.strawStripe} style={{ backgroundColor: '#5EEAD4' }} />
-          <div className={styles.strawStripe} style={{ backgroundColor: '#F472B6' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#EF7773' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#B3EDE8' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#F9A000' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#B3EDE8' }} />
+          <div className={styles.strawStripe} style={{ backgroundColor: '#EF7773' }} />
         </div>
 
         {/* Cup Dome Rim */}
@@ -163,11 +163,11 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             </div>
             {/* Floating Bubble 4 */}
             <div className={styles.floatingBubble} style={{ left: 24, bottom: 38 }}>
-              <Sparkles size={11} color="#FDE047" fill="#FDE047" />
+              <Sparkles size={11} color="#F9A000" fill="#F8E4B3" />
             </div>
             {/* Floating Bubble 5 */}
             <div className={styles.floatingBubble} style={{ right: 26, bottom: 44 }}>
-              <Heart size={10} color="#F472B6" fill="#F472B6" />
+              <Heart size={10} color="#EF7773" fill="#EF7773" />
             </div>
           </div>
 

@@ -118,7 +118,7 @@ export const SvgDiamondStar: React.FC<{
   size: number;
   color?: string;
   opacity?: number;
-}> = ({ size, color = '#FDE047', opacity = 1 }) => (
+}> = ({ size, color = '#F4D280', opacity = 1 }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" style={{ opacity }}>
     <Path
       d="M12 1 C12.5 8 16 11.5 23 12 C16 12.5 12.5 16 12 23 C11.5 16 8 12.5 1 12 C8 11.5 11.5 8 12 1 Z"
@@ -466,14 +466,14 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
   const getSkyGradients = (): [string, string, ...string[]] => {
     switch (activePeriod) {
       case 'dawn':
-        return ['#FFEBE5', '#FED7AA', '#FDE68A', '#E0F2FE', '#F0FDFA'];
+        return ['#FFF2E9', '#F8E4B3', '#F0BF4D', '#E4EFFB', '#E0F8F6'];
       case 'day':
-        return ['#BAE6FD', '#CFFAFE', '#E0F2FE', '#F0FDFA', '#FFFBEB'];
+        return ['#C7DDF7', '#B3EDE8', '#E4EFFB', '#DBF0EE', '#FFFFFF'];
       case 'sunset':
-        return ['#BAE6FD', '#FEF08A', '#FDE68A', '#FBCFE8', '#F472B6', '#FB7185', '#FDA4AF'];
+        return ['#C7DDF7', '#F8E4B3', '#FAD6D5', '#F18B88', '#EF7773', '#FF8F4B'];
       case 'night':
       default:
-        return ['#090D16', '#1E1B4B', '#1E293B', '#0F172A'];
+        return ['#000000', '#26313c', '#272727', '#355956'];
     }
   };
 
@@ -481,63 +481,63 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
     switch (activePeriod) {
       case 'dawn':
         return {
-          fill1: '#FFF7ED',
-          shadow1: '#FED7AA',
+          fill1: '#FCF4E0',
+          shadow1: '#F8E4B3',
           opacity1: 0.85,
-          fill2: '#FFEDD5',
-          shadow2: '#FDBA74',
+          fill2: '#FFF2E9',
+          shadow2: '#FFDDC9',
           opacity2: 0.8,
-          fill3: '#FFFBEB',
-          shadow3: '#FDE68A',
+          fill3: '#FCF4E0',
+          shadow3: '#F0BF4D',
           opacity3: 0.82,
-          fill4: '#FFF1F2',
-          shadow4: '#FECDD3',
+          fill4: '#FFF2E9',
+          shadow4: '#F8E4B3',
           opacity4: 0.75,
         };
       case 'day':
         return {
           fill1: '#FFFFFF',
-          shadow1: '#E0F2FE',
+          shadow1: '#DBF0EE',
           opacity1: 0.92,
           fill2: '#FFFFFF',
-          shadow2: '#BAE6FD',
+          shadow2: '#B3EDE8',
           opacity2: 0.86,
-          fill3: '#F8FAFC',
-          shadow3: '#E2E8F0',
+          fill3: '#fbfbfb',
+          shadow3: '#cdd8e1',
           opacity3: 0.88,
           fill4: '#FFFFFF',
-          shadow4: '#CCFBF1',
+          shadow4: '#E0F8F6',
           opacity4: 0.8,
         };
       case 'sunset':
         return {
-          fill1: '#FFF1F2',
-          shadow1: '#F472B6',
+          fill1: '#FDEFEE',
+          shadow1: '#F18B88',
           opacity1: 0.82,
-          fill2: '#FDF4FF',
-          shadow2: '#C084FC',
+          fill2: '#FAD6D5',
+          shadow2: '#EF7773',
           opacity2: 0.78,
-          fill3: '#FEF3C7',
-          shadow3: '#FB923C',
+          fill3: '#FFF2E9',
+          shadow3: '#FF8F4B',
           opacity3: 0.8,
-          fill4: '#FCE7F3',
-          shadow4: '#E879F9',
+          fill4: '#FDEFEE',
+          shadow4: '#F7BBB9',
           opacity4: 0.72,
         };
       case 'night':
       default:
         return {
-          fill1: '#1E293B',
-          shadow1: '#0F172A',
+          fill1: '#26313c',
+          shadow1: '#000000',
           opacity1: 0.42,
-          fill2: '#334155',
-          shadow2: '#1E293B',
+          fill2: '#374654',
+          shadow2: '#26313c',
           opacity2: 0.36,
-          fill3: '#1E293B',
-          shadow3: '#0F172A',
+          fill3: '#26313c',
+          shadow3: '#000000',
           opacity3: 0.38,
-          fill4: '#334155',
-          shadow4: '#0F172A',
+          fill4: '#374654',
+          shadow4: '#000000',
           opacity4: 0.32,
         };
     }
@@ -885,46 +885,46 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
         >
           {/* Fairy Mote 1: Stardust Gold / Rose with soft ambient aura */}
           <View style={{ position: 'absolute', bottom: 24, left: '8%' }}>
-            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'sunset' ? '#F472B6' : '#FDE047', opacity: 0.35 }]} />
-            <View style={[styles.fairyMoteCore, { backgroundColor: activePeriod === 'sunset' ? '#FFF1F2' : '#FEF08A' }]} />
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'sunset' ? '#F18B88' : '#F4D280', opacity: 0.35 }]} />
+            <View style={[styles.fairyMoteCore, { backgroundColor: activePeriod === 'sunset' ? '#FDEFEE' : '#F8E4B3' }]} />
           </View>
 
           {/* Fairy Mote 2: Pastel Peach / Celestial Cyan */}
           <View style={{ position: 'absolute', bottom: 74, left: '22%' }}>
-            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#38BDF8' : '#FBBF24', opacity: 0.3 }]} />
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#62A0E9' : '#F0BF4D', opacity: 0.3 }]} />
             <View style={[styles.fairyMoteCore, { backgroundColor: '#FFFFFF' }]} />
           </View>
 
           {/* Fairy Mote 3: Rose Stardust */}
           <View style={{ position: 'absolute', bottom: 16, right: '18%' }}>
-            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#A7F3D0' : '#FDA4AF', opacity: 0.35 }]} />
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#C5ECB3' : '#FAD6D5', opacity: 0.35 }]} />
             <View style={[styles.fairyMoteCore, { backgroundColor: '#FFFFFF' }]} />
           </View>
 
           {/* Fairy Mote 4: Twilight Violet / Mint */}
           <View style={{ position: 'absolute', bottom: 92, right: '12%' }}>
-            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#C084FC' : '#5EEAD4', opacity: 0.32 }]} />
-            <View style={[styles.fairyMoteCore, { backgroundColor: '#FEF08A' }]} />
+            <View style={[styles.fairyMoteGlow, { backgroundColor: activePeriod === 'night' ? '#8FBBEF' : '#80E2D9', opacity: 0.32 }]} />
+            <View style={[styles.fairyMoteCore, { backgroundColor: '#F8E4B3' }]} />
           </View>
 
           {/* Fairy Mote 5: Center subtle float */}
           <View style={{ position: 'absolute', bottom: 44, left: '46%' }}>
-            <View style={[styles.fairyMoteGlow, { width: 14, height: 14, backgroundColor: activePeriod === 'sunset' ? '#FB7185' : '#67E8F9', opacity: 0.3 }]} />
+            <View style={[styles.fairyMoteGlow, { width: 14, height: 14, backgroundColor: activePeriod === 'sunset' ? '#EF7773' : '#4DD6CA', opacity: 0.3 }]} />
             <View style={[styles.fairyMoteCore, { width: 4.5, height: 4.5, backgroundColor: '#FFFFFF' }]} />
           </View>
 
           {/* Whimsical Fantasy Twinkling Diamond Stars */}
           <View style={{ position: 'absolute', bottom: 84, left: '14%' }}>
-            <SvgDiamondStar size={11} color={activePeriod === 'sunset' ? '#FDE047' : activePeriod === 'night' ? '#BAE6FD' : '#FBBF24'} opacity={0.9} />
+            <SvgDiamondStar size={11} color={activePeriod === 'sunset' ? '#F4D280' : activePeriod === 'night' ? '#C7DDF7' : '#F0BF4D'} opacity={0.9} />
           </View>
           <View style={{ position: 'absolute', bottom: 36, left: '32%' }}>
-            <SvgDiamondStar size={8} color={activePeriod === 'sunset' ? '#F472B6' : activePeriod === 'night' ? '#67E8F9' : '#FFFFFF'} opacity={0.85} />
+            <SvgDiamondStar size={8} color={activePeriod === 'sunset' ? '#F18B88' : activePeriod === 'night' ? '#4DD6CA' : '#FFFFFF'} opacity={0.85} />
           </View>
           <View style={{ position: 'absolute', bottom: 78, right: '28%' }}>
-            <SvgDiamondStar size={10} color={activePeriod === 'sunset' ? '#FDE047' : activePeriod === 'night' ? '#FDE047' : '#5EEAD4'} opacity={0.92} />
+            <SvgDiamondStar size={10} color={activePeriod === 'sunset' ? '#F4D280' : activePeriod === 'night' ? '#F4D280' : '#80E2D9'} opacity={0.92} />
           </View>
           <View style={{ position: 'absolute', bottom: 58, right: '40%' }}>
-            <SvgDiamondStar size={7.5} color={activePeriod === 'sunset' ? '#FDA4AF' : activePeriod === 'night' ? '#C084FC' : '#FDE68A'} opacity={0.8} />
+            <SvgDiamondStar size={7.5} color={activePeriod === 'sunset' ? '#FAD6D5' : activePeriod === 'night' ? '#8FBBEF' : '#F8E4B3'} opacity={0.8} />
           </View>
           <View style={{ position: 'absolute', bottom: 104, right: '35%' }}>
             <SvgDiamondStar size={8.5} color="#FFFFFF" opacity={0.88} />

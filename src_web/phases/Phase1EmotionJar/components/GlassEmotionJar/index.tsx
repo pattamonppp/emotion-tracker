@@ -42,7 +42,7 @@ const renderSpeechIcon = (
       return (
         <Wind
           size={11}
-          color="#4A90E2"
+          color={DESIGN_TOKENS.color.accent.blue[500]}
           strokeWidth={2.4}
         />
       );
@@ -51,8 +51,8 @@ const renderSpeechIcon = (
       return (
         <Heart
           size={11}
-          color="#FF6B8B"
-          fill="#FF6B8B"
+          color={DESIGN_TOKENS.color.system.error[500]}
+          fill={DESIGN_TOKENS.color.system.error[500]}
           strokeWidth={1.5}
         />
       );

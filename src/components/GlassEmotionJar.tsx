@@ -679,7 +679,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontPromptSemiBold,
     fontSize: 9.5,
     color: colors.primaryDark,
-    textAlign: 'center',
+    textAlign: 'left',
     lineHeight: 13,
   },
   moocaBubbleTail: {

@@ -4,18 +4,18 @@
 
 // OOCA Turquoise (Brand primary, 70% in main primary, 30% in accent)
 $color-turquoise-1: #00C4B3; // Turquoise 1 (main)
-$color-turquoise-2: #92E8E4; // Turquoise 2
-$color-turquoise-3: #DDF8F5; // Turquoise 3
-$color-turquoise-text: #007D75; // Turquoise text
-$color-brand-contrast: #004D40; // Deep contrast text
+$color-turquoise-2: #B3EDE8; // Turquoise 2
+$color-turquoise-3: #DBF0EE; // Turquoise 3
+$color-turquoise-text: #009688; // Turquoise text
+$color-brand-contrast: #009688; // Deep contrast text
 
 // Aliases for brand
 $color-brand-primary: $color-turquoise-1;
 $color-brand-light: $color-turquoise-2;
 $color-brand-pale: $color-turquoise-3;
 $color-brand-text: $color-turquoise-text;
-$color-brand-hover: #33D0C2;
-$color-brand-active: #008B7D;
+$color-brand-hover: #26CDBE;
+$color-brand-active: #00BEAC;
 
 // Accent Blue (Use to emphasize actions and highlighted information)
 $color-blue-1: #1F77DF; // Blue 1 (500)
@@ -64,34 +64,34 @@ $color-black-gray-3: #F6F6F6; // Black Gray 3 (100)
 $color-white: #FFFFFF;
 
 // Turquoise Gray (Dark container & muted backgrounds)
-$color-turquoise-gray-1: #2B4543;
-$color-turquoise-gray-2: #3F5E5C;
-$color-turquoise-gray-3: #567C7A;
-$color-turquoise-gray-4: #759D9B;
+$color-turquoise-gray-1: #355956;
+$color-turquoise-gray-2: #3F6866;
+$color-turquoise-gray-3: #528984;
+$color-turquoise-gray-4: #79ADA9;
 
-// Neutrals for UI
-$color-slate-900: #0F172A;
-$color-slate-800: #1E293B;
-$color-slate-700: #334155;
-$color-slate-600: #475569;
-$color-slate-500: #64748B;
-$color-slate-400: #94A3B8;
-$color-slate-300: #CBD5E1;
-$color-slate-200: #E2E8F0;
-$color-slate-100: #F1F5F9;
-$color-slate-50: #F8FAFC;
+// Neutrals for UI (Mapped from Cool Gray & Neutral Gray palettes)
+$color-slate-900: #26313c;
+$color-slate-800: #374654;
+$color-slate-700: #465969;
+$color-slate-600: #566d80;
+$color-slate-500: #637b91;
+$color-slate-400: #7a8fa2;
+$color-slate-300: #91a3b4;
+$color-slate-200: #cdd8e1;
+$color-slate-100: #eaeff5;
+$color-slate-50: #fbfbfb;
 
 // Surfaces & Borders
-$color-surface-bg: #F8FAFB;
+$color-surface-bg: #DBF0EE;
 $color-surface-card: #FFFFFF;
-$color-surface-subtle: #F1F5F9;
+$color-surface-subtle: #fbfbfb;
 $color-surface-raised: #FFFFFF;
-$color-border-default: #E2E8F0;
-$color-border-subtle: #F1F5F9;
+$color-border-default: #cdd8e1;
+$color-border-subtle: #F1F1F1;
 
 // Background Gradients (Background.png & Color.png)
-$gradient-bg-default: #F8FAFB;
-$gradient-bg-extended: linear-gradient(180deg, #DDF7F3 0%, #FFFFFF 100%);
-$gradient-turquoise-01: linear-gradient(180deg, #D5F2EE 0%, #FFFFFF 100%);
-$gradient-turquoise-02: linear-gradient(180deg, #DDF7F3 0%, #E0F5F6 100%);
-$gradient-black: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+$gradient-bg-default: #DBF0EE;
+$gradient-bg-extended: linear-gradient(180deg, #D7FFFC 0%, #E0FEFB 100%);
+$gradient-turquoise-01: #DBF0EE;
+$gradient-turquoise-02: linear-gradient(180deg, #D7FFFC 0%, #E0FEFB 100%);
+$gradient-black: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);

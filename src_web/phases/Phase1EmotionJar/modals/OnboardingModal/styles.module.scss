@@ -4,7 +4,7 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  background-color: rgba(15, 23, 42, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: flex-end;
@@ -38,7 +38,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-bottom: 1px solid #F1F5F9;
+  border-bottom: 1px solid #F1F1F1;
   flex-shrink: 0;
 }
 
@@ -46,7 +46,7 @@
   font-family: $font-sans;
   font-weight: 800;
   font-size: 16px;
-  color: #004D40;
+  color: #009688;
   margin: 0;
 }
 
@@ -62,7 +62,7 @@
   transition: background-color $transition-fast;
 
   &:hover {
-    background-color: #F1F5F9;
+    background-color: #eaeff5;
   }
 }
 
@@ -82,7 +82,6 @@
   min-height: 135px;
   width: 100%;
   align-items: center;
-  justify-content: center;
 }
 
 .fieldSection {
@@ -95,14 +94,14 @@
   font-family: $font-sans;
   font-weight: 700;
   font-size: 12px;
-  color: #004D40;
+  color: #009688;
 }
 
 .inputRow {
   display: flex;
   align-items: center;
-  background-color: #F8FAFC;
-  border: 1.5px solid #E2E8F0;
+  background-color: #fbfbfb;
+  border: 1.5px solid #cdd8e1;
   border-radius: 14px;
   height: 44px;
   gap: 8px;
@@ -124,11 +123,11 @@
   font-family: $font-sans;
   font-size: 13px;
   font-weight: 600;
-  color: #0F172A;
+  color: #26313c;
   outline: none;
 
   &::placeholder {
-    color: #94A3B8;
+    color: #637b91;
   }
 }
 
@@ -143,7 +142,7 @@
   align-items: center;
   padding: 10px 12px;
   border-radius: 14px;
-  border: 1.5px solid #E2E8F0;
+  border: 1.5px solid #cdd8e1;
   background-color: #FFFFFF;
   gap: 8px;
   cursor: pointer;
@@ -172,7 +171,7 @@
 .mbtiChip {
   padding: 8px 4px;
   border-radius: 12px;
-  border: 1.5px solid #E2E8F0;
+  border: 1.5px solid #cdd8e1;
   background-color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -194,7 +193,7 @@
   font-family: $font-sans;
   font-weight: 700;
   font-size: 11px;
-  color: #334155;
+  color: #566d80;
 }
 
 .mbtiChipTextActive {

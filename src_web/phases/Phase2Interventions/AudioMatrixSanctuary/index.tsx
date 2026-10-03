@@ -191,53 +191,53 @@ export const AudioMatrixSanctuary: React.FC<
       case 'sunset':
         return {
           cardBg: 'rgba(255, 255, 255, 0.90)',
-          cardBorder: '#FECDD3',
-          badgeBg: '#FFF1F2',
-          badgeBorder: '#FECDD3',
-          badgeText: '#BE123C',
-          scriptTitle: '#9F1239',
-          scriptText: '#881337',
-          waveColor: '#E11D48',
+          cardBorder: '#FAD6D5',
+          badgeBg: '#FDEFEE',
+          badgeBorder: '#FAD6D5',
+          badgeText: '#E44743',
+          scriptTitle: '#E85A56',
+          scriptText: '#EB6460',
+          waveColor: '#EF7773',
           hintText: '#FFFFFF',
         };
 
       case 'night':
         return {
-          cardBg: 'rgba(30, 41, 59, 0.92)',
-          cardBorder: 'rgba(56, 189, 248, 0.4)',
-          badgeBg: 'rgba(15, 23, 42, 0.85)',
-          badgeBorder: 'rgba(56, 189, 248, 0.4)',
-          badgeText: '#7DD3FC',
-          scriptTitle: '#38BDF8',
-          scriptText: '#F8FAFC',
-          waveColor: '#38BDF8',
-          hintText: '#94A3B8',
+          cardBg: 'rgba(38, 49, 60, 0.92)',
+          cardBorder: 'rgba(143, 187, 239, 0.4)',
+          badgeBg: 'rgba(0, 0, 0, 0.85)',
+          badgeBorder: 'rgba(143, 187, 239, 0.4)',
+          badgeText: '#8FBBEF',
+          scriptTitle: '#62A0E9',
+          scriptText: '#FFFFFF',
+          waveColor: '#1F77DF',
+          hintText: '#79ADA9',
         };
 
       case 'dawn':
         return {
           cardBg: 'rgba(255, 255, 255, 0.92)',
-          cardBorder: '#FDE68A',
-          badgeBg: '#FFFBEB',
-          badgeBorder: '#FDE68A',
-          badgeText: '#B45309',
-          scriptTitle: '#92400E',
-          scriptText: '#78350F',
-          waveColor: '#F59E0B',
-          hintText: '#92400E',
+          cardBorder: '#F8E4B3',
+          badgeBg: '#FCF4E0',
+          badgeBorder: '#F8E4B3',
+          badgeText: '#D97800',
+          scriptTitle: '#DF8900',
+          scriptText: '#E39200',
+          waveColor: '#F9A000',
+          hintText: '#D97800',
         };
 
       default:
         return {
           cardBg: 'rgba(255, 255, 255, 0.92)',
-          cardBorder: '#99F6E4',
-          badgeBg: '#ECFEFF',
-          badgeBorder: '#99F6E4',
-          badgeText: '#0F766E',
-          scriptTitle: '#0F766E',
-          scriptText: '#334155',
+          cardBorder: '#B3EDE8',
+          badgeBg: '#E0F8F6',
+          badgeBorder: '#B3EDE8',
+          badgeText: '#009688',
+          scriptTitle: '#009688',
+          scriptText: '#355956',
           waveColor: '#00C4B3',
-          hintText: '#64748B',
+          hintText: '#79ADA9',
         };
     }
   };

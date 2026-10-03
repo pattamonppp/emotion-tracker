@@ -47,7 +47,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       id: 'stage',
       label: o.goalStage,
       icon: Mic,
-      color: '#FA8C3D',
+      color: '#FF8F4B',
     },
     {
       id: 'work',
@@ -59,7 +59,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       id: 'burnout',
       label: o.goalBurnout,
       icon: BatteryCharging,
-      color: '#10B981',
+      color: '#8AD866',
     },
   ];
 

@@ -144,11 +144,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   historyCard: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
     borderRadius: radii.xl,
     padding: 16,
     borderWidth: 1.5,
-    borderColor: colors.borderSubtle,
+    borderColor: '#f1f1f1',
     ...shadows.card,
   },
   cardHeader: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   badgeShift: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E6F9F7',
+    backgroundColor: '#E0F8F6',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: radii.full,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   deltaBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E6F9F7',
+    backgroundColor: '#E0F8F6',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radii.full,

@@ -116,7 +116,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   className={styles.stepperBtn}
                   title="Decrease BPM"
                 >
-                  <Minus size={11} color="#004D40" />
+                  <Minus size={11} color="#355956" />
                 </button>
                 <button
                   type="button"
@@ -127,7 +127,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                   className={styles.stepperBtn}
                   title="Increase BPM"
                 >
-                  <Plus size={11} color="#004D40" />
+                  <Plus size={11} color="#355956" />
                 </button>
               </div>
             </div>
@@ -149,9 +149,9 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
               <div className={styles.stampLeftRow}>
                 <div
                   className={styles.stampSealIcon}
-                  style={{ backgroundColor: '#FEF3C7', borderColor: '#F59E0B' }}
+                  style={{ backgroundColor: '#FCF4E0', borderColor: '#F9A000' }}
                 >
-                  <Zap size={18} color="#D97706" fill="#D97706" />
+                  <Zap size={18} color="#D97800" fill="#D97800" />
                 </div>
                 <div className={styles.stampTextCol}>
                   <div className={styles.stampMainLabel}>{p4.empoweredTitle}</div>
@@ -159,7 +159,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 </div>
               </div>
               {shiftResult === 'empowered' && (
-                <div className={styles.stampPill} style={{ backgroundColor: '#F59E0B' }}>
+                <div className={styles.stampPill} style={{ backgroundColor: '#F9A000' }}>
                   <Check size={12} color="#FFFFFF" strokeWidth={3} />
                   <span className={styles.stampPillText}>{p4.stampedBadge}</span>
                 </div>
@@ -178,7 +178,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
               <div className={styles.stampLeftRow}>
                 <div
                   className={styles.stampSealIcon}
-                  style={{ backgroundColor: '#E6FAF8', borderColor: '#00C4B3' }}
+                  style={{ backgroundColor: '#E0F8F6', borderColor: '#00C4B3' }}
                 >
                   <Leaf size={18} color="#00C4B3" fill="#00C4B3" />
                 </div>
@@ -207,9 +207,9 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
               <div className={styles.stampLeftRow}>
                 <div
                   className={styles.stampSealIcon}
-                  style={{ backgroundColor: '#FFE4E6', borderColor: '#F43F5E' }}
+                  style={{ backgroundColor: '#FDEFEE', borderColor: '#EF7773' }}
                 >
-                  <Heart size={18} color="#F43F5E" fill="#F43F5E" />
+                  <Heart size={18} color="#EF7773" fill="#EF7773" />
                 </div>
                 <div className={styles.stampTextCol}>
                   <div className={styles.stampMainLabel}>{p4.hugTitle}</div>
@@ -217,7 +217,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 </div>
               </div>
               {shiftResult === 'hug' && (
-                <div className={styles.stampPill} style={{ backgroundColor: '#F43F5E' }}>
+                <div className={styles.stampPill} style={{ backgroundColor: '#EF7773' }}>
                   <Check size={12} color="#FFFFFF" strokeWidth={3} />
                   <span className={styles.stampPillText}>{p4.stampedBadge}</span>
                 </div>

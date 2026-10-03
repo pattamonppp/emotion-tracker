@@ -6,7 +6,7 @@
   --color-brand-turquoise-2: #B3EDE8;
   --color-brand-turquoise-3: #DBF0EE;
   --color-brand-turquoise-text: #009688;
-  --color-brand-text-contrast: #004D40;
+  --color-brand-text-contrast: #009688;
 
   /* Accent Blue */
   --color-accent-blue-500: #1F77DF;
@@ -34,6 +34,12 @@
   --color-black-gray-3: #F6F6F6;
   --color-white: #FFFFFF;
 
+  /* Turquoise Grays */
+  --color-turquoise-gray-1: #355956;
+  --color-turquoise-gray-2: #3F6866;
+  --color-turquoise-gray-3: #528984;
+  --color-turquoise-gray-4: #79ADA9;
+
   /* Geometry from CI */
   --radius-controls: 50%;
   --radius-avatars: 12px;
@@ -52,19 +58,19 @@
   --elevation-8: 0px 24px 40px 0px rgba(0, 196, 179, 0.16), 0px 8px 24px -4px rgba(0, 196, 179, 0.12);
 
   /* Centralized Sky Colors & Gradients per Time Period */
-  --sky-dawn-grad: linear-gradient(180deg, #FFEBE5 0%, #FED7AA 25%, #FDE68A 50%, #E0F2FE 75%, #F0FDFA 100%);
-  --sky-day-grad: linear-gradient(180deg, #BAE6FD 0%, #CFFAFE 25%, #E0F2FE 50%, #F0FDFA 75%, #FFFBEB 100%);
-  --sky-sunset-grad: linear-gradient(180deg, #BAE6FD 0%, #FEF08A 20%, #FBCFE8 45%, #F472B6 70%, #FB7185 100%);
-  --sky-night-grad: linear-gradient(180deg, #090D16 0%, #1E1B4B 35%, #1E293B 70%, #0F172A 100%);
+  --sky-dawn-grad: linear-gradient(180deg, #FFF2E9 0%, #F8E4B3 25%, #F0BF4D 50%, #E4EFFB 75%, #E0F8F6 100%);
+  --sky-day-grad: linear-gradient(180deg, #C7DDF7 0%, #B3EDE8 25%, #E4EFFB 50%, #DBF0EE 75%, #FFFFFF 100%);
+  --sky-sunset-grad: linear-gradient(180deg, #C7DDF7 0%, #F8E4B3 20%, #FAD6D5 45%, #F18B88 70%, #EF7773 100%);
+  --sky-night-grad: linear-gradient(180deg, #000000 0%, #26313c 35%, #272727 70%, #355956 100%);
 
-  --sky-dawn-text: #78350F;
-  --sky-dawn-accent: #B45309;
-  --sky-day-text: #004D40;
+  --sky-dawn-text: #D97800;
+  --sky-dawn-accent: #F9A000;
+  --sky-day-text: #009688;
   --sky-day-accent: #00C4B3;
-  --sky-sunset-text: #881337;
-  --sky-sunset-accent: #E11D48;
-  --sky-night-text: #F8FAFC;
-  --sky-night-accent: #38BDF8;
+  --sky-sunset-text: #E44743;
+  --sky-sunset-accent: #EF7773;
+  --sky-night-text: #F6F6F6;
+  --sky-night-accent: #62A0E9;
 }
 
 html,
@@ -83,8 +89,8 @@ body {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  background-color: #F8FAFB;
-  color: #1E293B;
+  background-color: #DBF0EE;
+  color: #26313c;
   display: flex;
   flex-direction: column;
 }
@@ -124,11 +130,11 @@ body {
 
 /* Cozy Backgrounds from Background.png */
 .bg-mooca-default {
-  background-color: #F8FAFC;
+  background-color: #fbfbfb;
 }
 
 .bg-mooca-gradient {
-  background: linear-gradient(180deg, #D7FFFC 0%, #E0FEFB 40%, #F8FAFC 100%);
+  background: linear-gradient(180deg, #D7FFFC 0%, #E0FEFB 100%);
 }
 
 .bg-mooca-card {

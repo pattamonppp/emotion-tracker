@@ -42,16 +42,16 @@
   width: 253px;
   height: 253px;
   border-radius: 50%;
-  background-color: rgba(0, 203, 167, 0.20);
+  background-color: rgba(0, 196, 179, 0.20);
   filter: blur(14px);
   pointer-events: none;
 
   &.auraFinished {
-    background-color: rgba(16, 185, 129, 0.25);
+    background-color: rgba(138, 216, 102, 0.25);
   }
 
   &.auraExhale {
-    background-color: rgba(0, 203, 167, 0.32);
+    background-color: rgba(0, 196, 179, 0.32);
   }
 }
 
@@ -189,13 +189,13 @@
   font-family: inherit;
   font-size: 12px;
   font-weight: 500;
-  color: #004D40;
+  color: #355956;
   text-align: center;
   line-height: 18px;
   max-width: 290px;
 
   &.textNight {
-    color: #F8FAFC;
+    color: #FFFFFF;
   }
 }
 
@@ -210,10 +210,10 @@
   font-family: inherit;
   font-size: 11px;
   font-weight: 500;
-  color: #64748B;
+  color: #79ADA9;
 
   &.textNight {
-    color: #94A3B8;
+    color: #8FBBEF;
   }
 }
 

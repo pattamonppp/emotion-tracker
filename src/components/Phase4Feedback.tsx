@@ -160,10 +160,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 <View
                   style={[
                     styles.stampSealIcon,
-                    { backgroundColor: '#FEF3C7', borderColor: '#F59E0B' },
+                    { backgroundColor: '#FCF4E0', borderColor: '#F9A000' },
                   ]}
                 >
-                  <Zap size={18} color="#D97706" fill="#D97706" />
+                  <Zap size={18} color="#D97800" fill="#D97800" />
                 </View>
                 <View style={styles.stampTextCol}>
                   <Text style={styles.stampMainLabel}>
@@ -175,7 +175,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 </View>
               </View>
               {shiftResult === 'empowered' ? (
-                <View style={[styles.stampPill, { backgroundColor: '#F59E0B' }]}>
+                <View style={[styles.stampPill, { backgroundColor: '#F9A000' }]}>
                   <Check size={12} color="#FFFFFF" strokeWidth={3} />
                   <Text style={styles.stampPillText}>{p4.stampedBadge}</Text>
                 </View>
@@ -195,10 +195,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 <View
                   style={[
                     styles.stampSealIcon,
-                    { backgroundColor: colors.primaryLight, borderColor: colors.primary },
+                    { backgroundColor: '#E0F8F6', borderColor: '#00C4B3' },
                   ]}
                 >
-                  <Leaf size={18} color={colors.primary} fill={colors.primary} />
+                  <Leaf size={18} color="#00C4B3" fill="#00C4B3" />
                 </View>
                 <View style={styles.stampTextCol}>
                   <Text style={styles.stampMainLabel}>
@@ -210,7 +210,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 </View>
               </View>
               {shiftResult === 'grounded' ? (
-                <View style={[styles.stampPill, { backgroundColor: colors.primary }]}>
+                <View style={[styles.stampPill, { backgroundColor: '#00C4B3' }]}>
                   <Check size={12} color="#FFFFFF" strokeWidth={3} />
                   <Text style={styles.stampPillText}>{p4.stampedBadge}</Text>
                 </View>
@@ -230,10 +230,10 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 <View
                   style={[
                     styles.stampSealIcon,
-                    { backgroundColor: '#FFE4E6', borderColor: '#F43F5E' },
+                    { backgroundColor: '#FDEFEE', borderColor: '#EF7773' },
                   ]}
                 >
-                  <Heart size={18} color="#F43F5E" fill="#F43F5E" />
+                  <Heart size={18} color="#EF7773" fill="#EF7773" />
                 </View>
                 <View style={styles.stampTextCol}>
                   <Text style={styles.stampMainLabel}>
@@ -245,7 +245,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
                 </View>
               </View>
               {shiftResult === 'hug' ? (
-                <View style={[styles.stampPill, { backgroundColor: '#F43F5E' }]}>
+                <View style={[styles.stampPill, { backgroundColor: '#EF7773' }]}>
                   <Check size={12} color="#FFFFFF" strokeWidth={3} />
                   <Text style={styles.stampPillText}>{p4.stampedBadge}</Text>
                 </View>
@@ -393,20 +393,20 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 12,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#f1f1f1',
     ...shadows.card,
   },
   stampBtnActiveAmber: {
-    borderColor: '#F59E0B',
-    backgroundColor: '#FFFBEB',
+    borderColor: '#F9A000',
+    backgroundColor: '#FCF4E0',
   },
   stampBtnActiveTeal: {
     borderColor: colors.primary,
-    backgroundColor: '#F0FDFA',
+    backgroundColor: '#E0F8F6',
   },
   stampBtnActivePink: {
-    borderColor: '#F43F5E',
-    backgroundColor: '#FFF1F2',
+    borderColor: '#EF7773',
+    backgroundColor: '#FDEFEE',
   },
   stampLeftRow: {
     flexDirection: 'row',

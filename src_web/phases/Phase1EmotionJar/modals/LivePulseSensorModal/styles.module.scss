@@ -52,7 +52,7 @@
 
   padding: 14px 20px;
 
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #f1f1f1;
 
   box-sizing: border-box;
 }
@@ -76,9 +76,9 @@
 
   border-radius: 9px;
 
-  background: #ecfeff;
+  background: #E0F8F6;
 
-  color: #00c4b3;
+  color: #00C4B3;
 
   flex: 0 0 32px;
 }
@@ -106,7 +106,7 @@
   font-weight: 800;
   line-height: 20px;
 
-  color: #00695c;
+  color: #355956;
 }
 
 .headerSubtitle {
@@ -118,7 +118,7 @@
   font-weight: 500;
   line-height: 14px;
 
-  color: #64748b;
+  color: #79ADA9;
 }
 
 .closeBtn {
@@ -140,7 +140,7 @@
 
   background: transparent;
 
-  color: #64748b;
+  color: #528984;
 
   cursor: pointer;
 
@@ -148,7 +148,7 @@
 }
 
 .closeBtn:hover {
-  background: #f8fafc;
+  background: #f6f6f6;
 }
 
 .closeBtn svg {
@@ -167,9 +167,9 @@
 
   padding: 12px;
 
-  background: #f8fafc;
+  background: #fbfbfb;
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #f1f1f1;
 
   border-radius: 16px;
 
@@ -197,7 +197,7 @@
   font-size: 10px;
   font-weight: 500;
 
-  color: #64748b;
+  color: #79ADA9;
 }
 
 .ppgStatus {
@@ -213,7 +213,7 @@
 
   border-radius: 50%;
 
-  background: #64748b;
+  background: #c4c4c4;
 
   flex: 0 0 7px;
 }
@@ -222,7 +222,7 @@
   background: #00c4b3;
 
   box-shadow:
-    0 0 0 4px rgba(0, 196, 179, 0.12);
+    0 0 0 4px rgba(0, 196, 179, 0.16);
 }
 
 /* ─────────────────────────────
@@ -257,11 +257,10 @@
   justify-content: center;
 
   border-radius: 215px;
-  ;
 
   background: #ffffff;
 
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #DBF0EE;
 
   box-sizing: border-box;
 
@@ -289,7 +288,7 @@
 
   border-radius: 85px;
 
-  border: 2px solid #99f6e4;
+  border: 2px solid #B3EDE8;
 
   box-sizing: border-box;
 
@@ -297,17 +296,17 @@
 }
 
 .touchpadPad.sensing {
-  border-color: #f26e6e;
+  border-color: #EF7773;
 
-  background: rgba(242, 110, 110, 0.08);
+  background: #FDEFEE;
 
   box-shadow:
     0 4px 10px rgba(0, 0, 0, 0.08),
-    0 0 0 6px rgba(242, 110, 110, 0.06);
+    0 0 0 6px rgba(239, 119, 115, 0.15);
 }
 
 .touchpadPad.sensing::before {
-  border-color: #f26e6e;
+  border-color: #EF7773;
 }
 
 .touchpadPad:active {
@@ -326,9 +325,9 @@
 }
 
 .touchpadPad.sensing svg {
-  color: #f26e6e;
+  color: #EF7773;
 
-  fill: #f26e6e;
+  fill: #EF7773;
 }
 
 .touchpadProgress {
@@ -340,7 +339,7 @@
   font-weight: 700;
   line-height: normal;
 
-  color: #64748b;
+  color: #355956;
 }
 
 .touchpadInstruction {
@@ -354,7 +353,7 @@
 
   text-align: center;
 
-  color: #64748b;
+  color: #79ADA9;
 }
 
 /* ─────────────────────────────
@@ -370,9 +369,9 @@
 
   margin: 0 auto;
 
-  background: #f8fafc;
+  background: #fbfbfb;
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #f1f1f1;
 
   border-radius: 16px;
 
@@ -398,7 +397,7 @@
 }
 
 .metricBox+.metricBox {
-  border-left: 1px solid #e2e8f0;
+  border-left: 1px solid #f1f1f1;
 }
 
 .metricBoxLabel {
@@ -412,7 +411,7 @@
 
   text-align: center;
 
-  color: #64748b;
+  color: #79ADA9;
 }
 
 .metricBoxValue {
@@ -422,7 +421,7 @@
   font-weight: 800;
   line-height: 34px;
 
-  color: #00695c;
+  color: #355956;
 
   white-space: nowrap;
 }
@@ -431,7 +430,7 @@
   font-size: 11px;
   font-weight: 600;
 
-  color: #64748b;
+  color: #79ADA9;
 }
 
 .stateBoxValue {
@@ -462,15 +461,15 @@
 }
 
 .stateTagParasympathetic {
-  background: #ecfdf5;
+  background: #DCF3D1;
 
-  color: #047857;
+  color: #5ABF38;
 }
 
 .stateTagSympathetic {
-  background: #fff1f2;
+  background: #FAD6D5;
 
-  color: #be123c;
+  color: #E44743;
 }
 
 .stateTagParasympathetic svg,

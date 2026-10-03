@@ -36,10 +36,8 @@ import { Phase4Feedback } from './components/Phase4Feedback';
 import { ResetCompletedView } from './components/ResetCompletedView';
 
 import { OnboardingModal } from './components/OnboardingModal';
-import { DesignSystemDrawer } from './design-system/DesignSystemDrawer';
 import { LivePulseSensorModal } from './components/LivePulseSensorModal';
 import { ResetHistoryModal } from './components/ResetHistoryModal';
-import { MoocaStoryModal } from './components/MoocaStoryModal';
 
 import { Languages, Sparkles, Volume2, VolumeX } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from './design-system/tokens';
@@ -94,10 +92,8 @@ export default function App() {
 
   // Modals
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
-  const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
   const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
   const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>('day');
   const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(true);
 
@@ -309,7 +305,6 @@ export default function App() {
                 onSelectEmotions={setSelectedEmotions}
                 onProceed={handleStartIntervention}
                 onOpenPulseSensor={() => setIsPulseModalOpen(true)}
-                onOpenStory={() => setIsStoryModalOpen(true)}
                 lang={profile.language}
                 skyPeriod={skyPeriod}
               />
@@ -429,33 +424,18 @@ export default function App() {
                 profile={profile}
                 feedback={feedback}
                 onRestart={handleRestart}
-                onOpenDesignSystem={() => setIsDesignSystemOpen(true)}
                 onOpenProfile={() => setIsOnboardingOpen(true)}
                 onOpenHistory={() => setIsHistoryOpen(true)}
-                onOpenStory={() => setIsStoryModalOpen(true)}
               />
             )}
           </View>
 
           {/* Modals */}
-          <MoocaStoryModal
-            isOpen={isStoryModalOpen}
-            onClose={() => setIsStoryModalOpen(false)}
-            lang={profile.language}
-            userName={profile.name}
-          />
-
           <OnboardingModal
             initialProfile={profile}
             onSave={handleSaveProfile}
             isOpen={isOnboardingOpen}
             onClose={() => setIsOnboardingOpen(false)}
-          />
-
-          <DesignSystemDrawer
-            isOpen={isDesignSystemOpen}
-            onClose={() => setIsDesignSystemOpen(false)}
-            lang={profile.language}
           />
 
           <LivePulseSensorModal

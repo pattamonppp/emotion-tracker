@@ -125,7 +125,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
           {/* Mooca Mascot Speaking */}
           <View style={styles.mascotSpeechRow}>
             <View style={{ width: 54, height: 54, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <MoocaMascot size="xs" mood="comforting" />
+              <MoocaMascot size="xs" mood="comforting" interactive={false} />
             </View>
             <View style={styles.mascotBubble}>
               <Text style={styles.mascotBubbleText}>
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 18,
     borderWidth: 1.5,
-    borderColor: 'rgba(236, 72, 153, 0.25)',
+    borderColor: 'rgba(239, 119, 115, 0.3)',
     ...shadows.card,
     zIndex: 10,
   },
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#FCE7F3',
+    backgroundColor: '#FDEFEE',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -293,12 +293,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#FDEFEE',
     padding: 10,
     borderRadius: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#FCE7F3',
+    borderColor: '#FAD6D5',
   },
   mascotBubble: {
     flex: 1,
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   mascotBubbleText: {
     fontFamily: typography.fontPromptSemiBold,
     fontSize: 11,
-    color: '#9D174D',
+    color: '#EB6460',
     lineHeight: 16,
     ...(Platform.OS !== 'android' ? { fontWeight: '600' } : {}),
   },
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   textInput: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
     borderRadius: 14,
     paddingHorizontal: 14,
     paddingTop: 12,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontFamily: typography.fontPromptMedium,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#cdd8e1',
   },
   charCount: {
     position: 'absolute',
@@ -350,16 +350,16 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   suggestionChip: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#eaeff5',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#cdd8e1',
   },
   suggestionChipActive: {
-    backgroundColor: '#FCE7F3',
-    borderColor: '#F472B6',
+    backgroundColor: '#FDEFEE',
+    borderColor: '#EF7773',
   },
   suggestionText: {
     fontFamily: typography.fontPromptMedium,
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
   },
   suggestionTextActive: {
     fontFamily: typography.fontPromptBold,
-    color: '#BE185D',
+    color: '#EB6460',
     ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   actionsRow: {
@@ -384,12 +384,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 14,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#FAD6D5',
   },
   clearBtnText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 11,
-    color: '#EF4444',
+    color: '#EF7773',
     ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   saveSkyBtn: {
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 11,
     borderRadius: 14,
-    backgroundColor: '#F0FDFA',
+    backgroundColor: '#E0F8F6',
     borderWidth: 1.5,
     borderColor: colors.borderTeal,
   },

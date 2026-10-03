@@ -275,7 +275,7 @@
   cursor: pointer;
 
   &:focus-visible {
-    outline: 2px solid #ec4899;
+    outline: 2px solid #EF7773;
     outline-offset: 3px;
     border-radius: 999px;
   }
@@ -288,14 +288,14 @@
 .addCloudBody {
   border-style: dashed;
 
-  border-color: #f472b6;
-  border-bottom-color: #ec4899;
+  border-color: #F4A09D;
+  border-bottom-color: #EF7773;
 
   background:
     linear-gradient(135deg,
       #ffffff 0%,
-      #fdf2f8 55%,
-      #fce7f3 100%);
+      #FDEFEE 55%,
+      #FAD6D5 100%);
 }
 
 @keyframes floatingCloud {

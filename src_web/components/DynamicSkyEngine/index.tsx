@@ -66,7 +66,7 @@ export const SvgDiamondStar: React.FC<{
   size: number;
   color?: string;
   opacity?: number;
-}> = ({ size, color = '#FDE047', opacity = 1 }) => (
+}> = ({ size, color = '#F4D280', opacity = 1 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" style={{ opacity }}>
     <path
       d="M12 1 C12.5 8 16 11.5 23 12 C16 12.5 12.5 16 12 23 C11.5 16 8 12.5 1 12 C8 11.5 11.5 8 12 1 Z"
@@ -97,13 +97,13 @@ export const SkyPeriodSwitcher: React.FC = () => {
   const getPeriodIcon = (period: SkyTimePeriod, size = 13, isActive = false) => {
     switch (period) {
       case 'dawn':
-        return <Sunrise size={size} color={isActive ? '#FFFFFF' : '#D97706'} strokeWidth={2.4} />;
+        return <Sunrise size={size} color={isActive ? '#FFFFFF' : '#F9A000'} strokeWidth={2.4} />;
       case 'day':
-        return <Sun size={size} color={isActive ? '#FFFFFF' : '#0284C7'} strokeWidth={2.4} />;
+        return <Sun size={size} color={isActive ? '#FFFFFF' : '#1F77DF'} strokeWidth={2.4} />;
       case 'sunset':
-        return <Sunset size={size} color={isActive ? '#FFFFFF' : '#DB2777'} strokeWidth={2.4} />;
+        return <Sunset size={size} color={isActive ? '#FFFFFF' : '#EF7773'} strokeWidth={2.4} />;
       case 'night':
-        return <Moon size={size} color={isActive ? '#FFFFFF' : '#FDE047'} fill={isActive ? '#FFFFFF' : '#FDE047'} strokeWidth={2.4} />;
+        return <Moon size={size} color={isActive ? '#FFFFFF' : '#F4D280'} fill={isActive ? '#FFFFFF' : '#F4D280'} strokeWidth={2.4} />;
     }
   };
 
@@ -290,20 +290,20 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
     switch (activePeriod) {
       case 'dawn':
         return {
-          background: 'linear-gradient(180deg, #FFEBE5 0%, #FED7AA 25%, #FDE68A 55%, #E0F2FE 80%, #F0FDFA 100%)',
+          background: 'linear-gradient(180deg, #FFF2E9 0%, #F8E4B3 25%, #F0BF4D 50%, #E4EFFB 75%, #E0F8F6 100%)',
         };
       case 'sunset':
         return {
-          background: 'linear-gradient(180deg, #BAE6FD 0%, #FEF08A 20%, #FDE68A 40%, #FBCFE8 60%, #F472B6 75%, #FB7185 90%, #FDA4AF 100%)',
+          background: 'linear-gradient(180deg, #C7DDF7 0%, #F8E4B3 20%, #FAD6D5 45%, #F18B88 70%, #EF7773 100%)',
         };
       case 'night':
         return {
-          background: 'linear-gradient(180deg, #090D16 0%, #1E1B4B 35%, #1E293B 70%, #0F172A 100%)',
+          background: 'linear-gradient(180deg, #000000 0%, #26313c 35%, #272727 70%, #355956 100%)',
         };
       case 'day':
       default:
         return {
-          background: 'linear-gradient(180deg, #BAE6FD 0%, #CFFAFE 25%, #E0F2FE 55%, #F0FDFA 80%, #FFFBEB 100%)',
+          background: 'linear-gradient(180deg, #C7DDF7 0%, #B3EDE8 25%, #E4EFFB 50%, #DBF0EE 75%, #FFFFFF 100%)',
         };
     }
   };
@@ -331,12 +331,12 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               width: 180,
               height: 180,
               background: isNight
-                ? 'radial-gradient(circle, rgba(147, 197, 253, 0.4) 0%, rgba(56, 189, 248, 0.1) 70%, transparent 100%)'
+                ? 'radial-gradient(circle, rgba(143, 187, 239, 0.4) 0%, rgba(98, 160, 233, 0.1) 70%, transparent 100%)'
                 : isSunset
-                  ? 'radial-gradient(circle, rgba(251, 146, 60, 0.45) 0%, rgba(244, 114, 182, 0.2) 70%, transparent 100%)'
+                  ? 'radial-gradient(circle, rgba(255, 143, 75, 0.45) 0%, rgba(241, 139, 136, 0.2) 70%, transparent 100%)'
                   : isDawn
-                    ? 'radial-gradient(circle, rgba(253, 230, 138, 0.5) 0%, rgba(254, 215, 170, 0.25) 70%, transparent 100%)'
-                    : 'radial-gradient(circle, rgba(255, 243, 199, 0.5) 0%, rgba(207, 250, 254, 0.25) 70%, transparent 100%)',
+                    ? 'radial-gradient(circle, rgba(244, 210, 128, 0.5) 0%, rgba(248, 228, 179, 0.25) 70%, transparent 100%)'
+                    : 'radial-gradient(circle, rgba(252, 244, 224, 0.5) 0%, rgba(179, 237, 232, 0.25) 70%, transparent 100%)',
             }}
           />
 
@@ -346,9 +346,9 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               width: 140,
               height: 140,
               background: isNight
-                ? 'radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%)'
+                ? 'radial-gradient(circle, rgba(31, 119, 223, 0.3) 0%, transparent 70%)'
                 : isSunset
-                  ? 'radial-gradient(circle, rgba(244, 63, 94, 0.35) 0%, transparent 70%)'
+                  ? 'radial-gradient(circle, rgba(239, 119, 115, 0.35) 0%, transparent 70%)'
                   : 'radial-gradient(circle, rgba(0, 196, 179, 0.2) 0%, transparent 70%)',
             }}
           />
@@ -357,19 +357,19 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
           {isNight && (
             <div className={styles.starField}>
               <div className={styles.twinkleStar} style={{ top: '8%', left: '15%' }}>
-                <SvgDiamondStar size={14} color="#FDE047" opacity={0.8} />
+                <SvgDiamondStar size={14} color="#F4D280" opacity={0.8} />
               </div>
               <div className={styles.twinkleStar} style={{ top: '15%', right: '20%', animationDelay: '1.2s' }}>
-                <SvgDiamondStar size={18} color="#FEF08A" opacity={0.9} />
+                <SvgDiamondStar size={18} color="#F8E4B3" opacity={0.9} />
               </div>
               <div className={styles.twinkleStar} style={{ top: '28%', left: '78%', animationDelay: '0.6s' }}>
                 <SvgDiamondStar size={12} color="#FFFFFF" opacity={0.7} />
               </div>
               <div className={styles.twinkleStar} style={{ top: '35%', left: '30%', animationDelay: '1.8s' }}>
-                <SvgDiamondStar size={15} color="#BAE6FD" opacity={0.85} />
+                <SvgDiamondStar size={15} color="#C7DDF7" opacity={0.85} />
               </div>
               <div className={styles.twinkleStar} style={{ top: '48%', right: '12%', animationDelay: '2.1s' }}>
-                <SvgDiamondStar size={11} color="#FDE047" opacity={0.65} />
+                <SvgDiamondStar size={11} color="#F4D280" opacity={0.65} />
               </div>
             </div>
           )}
@@ -380,8 +380,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               <SvgFluffyCloud
                 width={140}
                 height={70}
-                fillColor={isNight ? '#1E293B' : isSunset ? '#FFF1F2' : '#FFFFFF'}
-                shadowColor={isNight ? '#0F172A' : isSunset ? '#F472B6' : 'rgba(255, 255, 255, 0.4)'}
+                fillColor={isNight ? '#26313c' : isSunset ? '#FDEFEE' : '#FFFFFF'}
+                shadowColor={isNight ? '#000000' : isSunset ? '#F18B88' : '#DBF0EE'}
                 opacity={isNight ? 0.35 : 0.85}
               />
             </div>
@@ -389,8 +389,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               <SvgFluffyCloud
                 width={120}
                 height={60}
-                fillColor={isNight ? '#334155' : isSunset ? '#FDF4FF' : '#F8FAFC'}
-                shadowColor={isNight ? '#1E293B' : isSunset ? '#C084FC' : '#E0F2FE'}
+                fillColor={isNight ? '#374654' : isSunset ? '#FDEFEE' : '#fbfbfb'}
+                shadowColor={isNight ? '#26313c' : isSunset ? '#FAD6D5' : '#C7DDF7'}
                 opacity={isNight ? 0.3 : 0.8}
               />
             </div>
@@ -398,8 +398,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               <SvgFluffyCloud
                 width={110}
                 height={55}
-                fillColor={isNight ? '#1E293B' : isSunset ? '#FEF3C7' : '#FFFFFF'}
-                shadowColor={isNight ? '#0F172A' : isSunset ? '#FBBF24' : '#CCFBF1'}
+                fillColor={isNight ? '#26313c' : isSunset ? '#FFF2E9' : '#FFFFFF'}
+                shadowColor={isNight ? '#000000' : isSunset ? '#FF8F4B' : '#E0F8F6'}
                 opacity={isNight ? 0.25 : 0.75}
               />
             </div>
@@ -407,8 +407,8 @@ export const DynamicSkyEngine: React.FC<DynamicSkyEngineProps> = ({
               <SvgFluffyCloud
                 width={160}
                 height={80}
-                fillColor={isNight ? '#0F172A' : '#FFFFFF'}
-                shadowColor={isNight ? '#020617' : 'rgba(255, 255, 255, 0.5)'}
+                fillColor={isNight ? '#000000' : '#FFFFFF'}
+                shadowColor={isNight ? '#000000' : '#DBF0EE'}
                 opacity={isNight ? 0.4 : 0.65}
               />
             </div>

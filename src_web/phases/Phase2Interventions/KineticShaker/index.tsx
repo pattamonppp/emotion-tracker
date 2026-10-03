@@ -101,7 +101,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         >
           {/* Top Wooden Cork Cap with Golden Star Seal */}
           <div className={styles.capsuleCorkTop}>
-            <Star size={10} color="#FEF08A" fill="#FDE047" />
+            <Star size={10} color="#F8E4B3" fill="#F9A000" />
           </div>
 
           <div className={styles.flaskBody}>
@@ -141,7 +141,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             {/* Center Star Emblem */}
             <div className={styles.capsuleCenterIcon}>
               {isFinished ? (
-                <Star size={24} color="#F59E0B" fill="#FDE047" />
+                <Star size={24} color="#F9A000" fill="#F8E4B3" />
               ) : (
                 <Sparkles size={20} color="rgba(255,255,255,0.95)" />
               )}

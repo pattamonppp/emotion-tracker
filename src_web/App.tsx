@@ -12,7 +12,6 @@ import { MobileFrame } from './components/MobileFrame';
 import { Phase1EmotionJar } from './phases/Phase1EmotionJar';
 import { OnboardingModal } from './phases/Phase1EmotionJar/modals/OnboardingModal';
 import { LivePulseSensorModal } from './phases/Phase1EmotionJar/modals/LivePulseSensorModal';
-import { MoocaStoryModal } from './phases/Phase1EmotionJar/modals/MoocaStoryModal';
 import { SomaticAbsorption } from './phases/Phase2Interventions/SomaticAbsorption';
 import { VictorySip } from './phases/Phase2Interventions/VictorySip';
 import { KineticShaker } from './phases/Phase2Interventions/KineticShaker';
@@ -22,7 +21,6 @@ import { Phase3CognitiveReframing } from './phases/Phase3CognitiveReframing';
 import { Phase4Feedback } from './phases/Phase4Feedback';
 import { AiFeedbackModal, ResetCompletedView } from './phases/ResetCompletedView';
 import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
-import { DesignSystemDrawer } from './design-system/DesignSystemDrawer';
 import { audioService } from './services/audioService';
 import { DEV_MODE, DEV_START } from './config';
 import { getTranslation } from './locales';
@@ -163,7 +161,6 @@ export default function App() {
         phaseTime={elapsedSeconds}
         onOpenProfile={() => setIsOnboardingOpen(true)}
         onToggleLanguage={toggleLanguage}
-        onOpenStory={() => setIsStoryModalOpen(true)}
         onTimePeriodChange={setSkyPeriod}
       >
         {/* Phase 1: Zero-Friction Capture & Tactile Emotion Jar */}
@@ -175,7 +172,6 @@ export default function App() {
             onSelectEmotions={setSelectedEmotions}
             onProceed={handleStartIntervention}
             onOpenPulseSensor={() => setIsPulseModalOpen(true)}
-            onOpenStory={() => setIsStoryModalOpen(true)}
             lang={profile.language}
             skyPeriod={skyPeriod}
           />
@@ -264,34 +260,19 @@ export default function App() {
             profile={profile}
             feedback={feedback}
             onRestart={handleRestart}
-            onOpenDesignSystem={() => setIsDesignSystemOpen(true)}
             onOpenProfile={() => setIsOnboardingOpen(true)}
             onOpenHistory={() => setIsHistoryOpen(true)}
-            onOpenStory={() => setIsStoryModalOpen(true)}
             onOpenFeedback={handleOpenFeedback}
           />
         )}
       </MobileFrame>
 
       {/* Modals - Aligned with Mobile RN App.tsx */}
-      <MoocaStoryModal
-        isOpen={isStoryModalOpen}
-        onClose={() => setIsStoryModalOpen(false)}
-        lang={profile.language}
-        userName={profile.name}
-      />
-
       <OnboardingModal
         initialProfile={profile}
         onSave={handleSaveProfile}
         isOpen={isOnboardingOpen}
         onClose={() => setIsOnboardingOpen(false)}
-      />
-
-      <DesignSystemDrawer
-        isOpen={isDesignSystemOpen}
-        onClose={() => setIsDesignSystemOpen(false)}
-        lang={profile.language}
       />
 
       <LivePulseSensorModal

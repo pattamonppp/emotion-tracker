@@ -242,10 +242,10 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           ]}
           pointerEvents="none"
         >
-          <View style={styles.burstStar1}><Star size={20} color="#F59E0B" fill="#FDE047" /></View>
-          <View style={styles.burstStar2}><Sparkles size={18} color="#F59E0B" fill="#FDE047" /></View>
-          <View style={styles.burstStar3}><Star size={24} color="#F59E0B" fill="#FDE047" /></View>
-          <View style={styles.burstStar4}><Sparkles size={16} color="#F59E0B" fill="#FDE047" /></View>
+          <View style={styles.burstStar1}><Star size={20} color="#F9A000" fill="#F8E4B3" /></View>
+          <View style={styles.burstStar2}><Sparkles size={18} color="#F9A000" fill="#F8E4B3" /></View>
+          <View style={styles.burstStar3}><Star size={24} color="#F9A000" fill="#F8E4B3" /></View>
+          <View style={styles.burstStar4}><Sparkles size={16} color="#F9A000" fill="#F8E4B3" /></View>
         </Animated.View>
 
         {/* Centered Enchanted Apothecary Vial */}
@@ -257,7 +257,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
         >
           {/* Top Wooden / Runic Cork Cap with Golden Star Seal */}
           <View style={styles.capsuleCorkTop}>
-            <Star size={10} color="#FEF08A" fill="#FDE047" />
+            <Star size={10} color="#F8E4B3" fill="#F9A000" />
           </View>
 
           {/* Transparent Fantasy Glass Cylinder */}
@@ -291,7 +291,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             {/* Center Star Emblem */}
             <View style={styles.capsuleCenterIcon}>
               {isFinished ? (
-                <Star size={24} color="#F59E0B" fill="#FDE047" />
+                <Star size={24} color="#F9A000" fill="#F8E4B3" />
               ) : (
                 <Sparkles size={20} color="rgba(255,255,255,0.95)" />
               )}
@@ -404,17 +404,17 @@ const styles = StyleSheet.create({
   capsuleCorkTop: {
     width: 44,
     height: 18,
-    backgroundColor: '#D97706',
+    backgroundColor: '#DF8900',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderBottomLeftRadius: 2,
     borderBottomRightRadius: 2,
     borderWidth: 1.5,
-    borderColor: '#B45309',
+    borderColor: '#F9A000',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 3,
-    shadowColor: '#78350F',
+    shadowColor: '#DF8900',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 2,
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     backgroundColor: 'rgba(255, 255, 255, 0.82)',
     borderWidth: 2.5,
-    borderColor: '#7DD3FC',
+    borderColor: '#80E2D9',
     overflow: 'hidden',
     position: 'relative',
     justifyContent: 'flex-end',
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 2,
     borderRadius: 1,
-    backgroundColor: 'rgba(125, 211, 252, 0.85)',
+    backgroundColor: '#8FBBEF',
   },
   fluidContainer: {
     position: 'absolute',
@@ -497,13 +497,13 @@ const styles = StyleSheet.create({
   capsuleCorkBottom: {
     width: 44,
     height: 12,
-    backgroundColor: '#D97706',
+    backgroundColor: '#DF8900',
     borderTopLeftRadius: 3,
     borderTopRightRadius: 3,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     borderWidth: 1.5,
-    borderColor: '#B45309',
+    borderColor: '#F9A000',
     marginTop: -3,
     zIndex: 3,
   },

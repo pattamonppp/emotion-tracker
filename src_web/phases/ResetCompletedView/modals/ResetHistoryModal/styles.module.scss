@@ -27,16 +27,16 @@
   width: 100%;
   max-width: min(500px, 90vw);
   background: linear-gradient(180deg,
-      #fffdf9 0%,
+      #fbfbfb 0%,
       #ffffff 50%,
-      #e6f9f7 100%);
-  border: 2px solid rgba(0, 196, 179, 0.35);
+      #E0F8F6 100%);
+  border: 2px solid #B3EDE8;
   border-radius: 32px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
   padding: 0;
   display: flex;
   flex-direction: column;
-  color: $color-slate-800;
+  color: #355956;
   max-height: 88vh;
   overflow: hidden;
   font-family: $font-sans;
@@ -68,7 +68,7 @@
 
   padding: 14px 20px;
 
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f1f1;
 }
 
 .headerTitleRow {
@@ -85,7 +85,7 @@
 
   flex-shrink: 0;
 
-  color: #f59e0b;
+  color: #F9A000;
 }
 
 .headerTitle {
@@ -96,7 +96,7 @@
   font-weight: 800;
   line-height: normal;
 
-  color: #00695c;
+  color: #355956;
 }
 
 .closeBtn {
@@ -117,7 +117,7 @@
   width: 18px;
   height: 18px;
 
-  color: #64748b;
+  color: #79ADA9;
 }
 
 /* Content
@@ -161,10 +161,10 @@
 
   padding: 16px;
 
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #f1f1f1;
   border-radius: 20px;
 
-  background: #f8fafc;
+  background: #fbfbfb;
 
   box-shadow:
     0 2px 8px rgba(15, 23, 42, 0.06),
@@ -197,7 +197,7 @@
   border: 1px solid #00c4b3;
   border-radius: 9999px;
 
-  background: #e6f9f7;
+  background: #E0F8F6;
 }
 
 .badgeShift svg {
@@ -215,7 +215,7 @@
   font-weight: 800;
   line-height: normal;
 
-  color: #00695c;
+  color: #355956;
 }
 
 .timestampText {
@@ -224,7 +224,7 @@
   font-weight: 600;
   line-height: normal;
 
-  color: #94a3b8;
+  color: #79ADA9;
 }
 
 /* Metrics */
@@ -250,7 +250,7 @@
   font-weight: 600;
   line-height: normal;
 
-  color: #94a3b8;
+  color: #79ADA9;
 }
 
 .metricVal {
@@ -259,7 +259,7 @@
   font-weight: 800;
   line-height: normal;
 
-  color: #0f172a;
+  color: #355956;
 }
 
 .metricValPost {
@@ -280,7 +280,7 @@
   border: 1px solid #00c4b3;
   border-radius: 9999px;
 
-  background: #e6f9f7;
+  background: #E0F8F6;
 }
 
 .deltaBox svg {
@@ -298,5 +298,5 @@
   font-weight: 800;
   line-height: normal;
 
-  color: #00695c;
+  color: #355956;
 }

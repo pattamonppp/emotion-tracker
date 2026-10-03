@@ -68,7 +68,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       id: 'burnout',
       label: o.goalBurnout,
       icon: BatteryCharging,
-      color: '#10B981',
+      color: colors.success,
     },
   ];
 
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
     borderRadius: radii.lg,
     borderWidth: 1,
     borderColor: colors.borderSubtle,
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '48%',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: radii.lg,
@@ -302,14 +302,14 @@ const styles = StyleSheet.create({
     width: '23%',
     paddingVertical: 8,
     borderRadius: radii.md,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#fbfbfb',
     borderWidth: 1,
     borderColor: colors.borderSubtle,
     alignItems: 'center',
     justifyContent: 'center',
   },
   mbtiChipActive: {
-    backgroundColor: '#E6F9F7',
+    backgroundColor: '#E0F8F6',
     borderColor: colors.primary,
   },
   mbtiChipText: {
