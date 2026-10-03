@@ -1,382 +1,687 @@
-import React from 'react';
-import { EmotionTagId } from '../../../../types';
-import { EMOTION_TAGS } from '../../../../data/matrixData';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Sparkles,
+  X,
+  Heart,
+  Cloud,
+  ShieldCheck,
+  Smile,
+  Wind,
+  RotateCcw,
+} from 'lucide-react';
+import classNames from 'classnames';
+
+import { EmotionTagId, SpeechMessage } from '../../../../types';
+import {
+  EMOTION_TAGS,
+  matchOptionFromKeywords,
+} from '../../../../data/matrixData';
 import { audioService } from '../../../../services/audioService';
-import { SparklesIcon, CloseIcon, CheckIcon } from '../../../../icons';
-import { useLanguage } from '../../../../hooks/useLanguage';
-import { getTagLabel } from '../../../../locales';
-import { MAX_EMOTIONS } from '../../constants';
+import { getEmotionIcon } from '../FloatingEmotionCloud';
+import { MoocaMascot } from '../../../../components/MoocaMascot';
+import { DESIGN_TOKENS } from '../../../../design-system/tokens';
+import { getTranslation, getTagLabel } from '../../../../locales';
+import { PHASE1_CONFIG } from '../../config';
+
 import styles from './styles.module.scss';
 
-export interface GlassEmotionJarProps {
+const renderSpeechIcon = (
+  iconType: SpeechMessage['iconType'],
+) => {
+  switch (iconType) {
+    case 'sparkles':
+      return (
+        <Sparkles
+          size={11}
+          color={DESIGN_TOKENS.color.brand.turquoise.primary}
+          strokeWidth={2.4}
+        />
+      );
+
+    case 'wind':
+      return (
+        <Wind
+          size={11}
+          color="#4A90E2"
+          strokeWidth={2.4}
+        />
+      );
+
+    case 'heart':
+      return (
+        <Heart
+          size={11}
+          color="#FF6B8B"
+          fill="#FF6B8B"
+          strokeWidth={1.5}
+        />
+      );
+
+    case 'shield':
+      return (
+        <ShieldCheck
+          size={11}
+          color={DESIGN_TOKENS.color.brand.turquoise.primary}
+          strokeWidth={2.4}
+        />
+      );
+
+    case 'smile':
+      return (
+        <Smile
+          size={11}
+          color={DESIGN_TOKENS.color.feedback.warning}
+          strokeWidth={2.4}
+        />
+      );
+
+    case 'cloud':
+    default:
+      return (
+        <Cloud
+          size={11}
+          color={DESIGN_TOKENS.color.brand.turquoise.primary}
+          strokeWidth={2.4}
+        />
+      );
+  }
+};
+
+interface GlassEmotionJarProps {
   selectedEmotions: EmotionTagId[];
   onRemoveEmotion: (id: EmotionTagId) => void;
   onClearAll?: () => void;
-  isOverJar: boolean;
-  isDraggingAny: boolean;
-  recentDropEffect: boolean;
-  lang?: 'th' | 'en';
-  jarRef: React.RefObject<HTMLDivElement | null>;
+  lang: 'th' | 'en';
+  onMoocaHug?: () => void;
+  customEmotionText?: string;
+  customMessages?: Array<{ id: string; text: string }>;
+  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
 }
 
 export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   selectedEmotions,
   onRemoveEmotion,
   onClearAll,
-  isOverJar,
-  isDraggingAny,
-  recentDropEffect,
-  jarRef,
+  lang,
+  onMoocaHug,
+  customEmotionText,
+  customMessages,
+  skyPeriod,
 }) => {
-  const { t, lang } = useLanguage();
-  const strings = t.phases.phase1;
-  const handleJarTap = () => {
-    audioService.triggerHaptic([15]);
+  const [speechIndex, setSpeechIndex] = useState(0);
+  const [isBubbleVisible, setIsBubbleVisible] = useState(true);
+  const [isJarPressed, setIsJarPressed] = useState(false);
+  const [isSpeechAnimating, setIsSpeechAnimating] = useState(false);
+
+  const t = getTranslation(lang);
+  const p1 = t.phases.phase1;
+  const js = p1.jarSpeeches;
+
+  const getSpeechPool = (): SpeechMessage[] => {
+    if (
+      selectedEmotions.length >=
+      PHASE1_CONFIG.maxSelectedEmotions
+    ) {
+      return [
+        { text: js.full1, iconType: 'cloud' },
+        { text: js.full2, iconType: 'sparkles' },
+        { text: js.full3, iconType: 'wind' },
+        { text: js.full4, iconType: 'heart' },
+      ];
+    }
+
+    if (selectedEmotions.length > 0) {
+      const hasCustom = selectedEmotions.some((id) =>
+        id.startsWith('custom'),
+      );
+
+      const customMsg: SpeechMessage[] = hasCustom
+        ? [{ text: js.customHug, iconType: 'heart' }]
+        : [];
+
+      return [
+        ...customMsg,
+        {
+          text: js.holdingCount.replace(
+            '{count}',
+            String(selectedEmotions.length),
+          ),
+          iconType: 'shield',
+        },
+        {
+          text: js.braveToFace,
+          iconType: 'smile',
+        },
+        {
+          text: js.safeInJar,
+          iconType: 'sparkles',
+        },
+      ];
+    }
+
+    return [
+      {
+        text: js.restWorries,
+        iconType: 'cloud',
+      },
+      {
+        text: js.full1,
+        iconType: 'cloud',
+      },
+      {
+        text: js.tapOrDrag,
+        iconType: 'sparkles',
+      },
+      {
+        text: js.howIsHeart,
+        iconType: 'heart',
+      },
+    ];
   };
 
-  const firstTag = selectedEmotions.length > 0 
-    ? EMOTION_TAGS.find((t) => t.id === selectedEmotions[0]) 
-    : null;
-  const jarAmbientColor = firstTag?.color || '#00C4B3';
+  const speechPool = getSpeechPool();
 
-  const glowModifierClass = isOverJar
-    ? styles.isOverJar
-    : selectedEmotions.length > 0
-    ? styles.hasEmotions
-    : isDraggingAny
-    ? styles.isDraggingAny
-    : '';
+  const currentMessage =
+    speechPool[speechIndex % speechPool.length];
+
+  /*
+   * Speech bubble cycle:
+   * 4.8s visible
+   * 380ms fade out
+   * 900ms hidden
+   * 420ms fade in
+   */
+  useEffect(() => {
+    let hideTimer: ReturnType<typeof setTimeout>;
+    let nextTimer: ReturnType<typeof setTimeout>;
+    let cycleTimer: ReturnType<typeof setTimeout>;
+    let mounted = true;
+
+    const showNextMessage = () => {
+      if (!mounted) return;
+
+      setSpeechIndex((prev) => prev + 1);
+      setIsBubbleVisible(true);
+      setIsSpeechAnimating(true);
+
+      nextTimer = setTimeout(() => {
+        if (!mounted) return;
+        setIsSpeechAnimating(false);
+        startCycle();
+      }, 420);
+    };
+
+    const hideBubble = () => {
+      if (!mounted) return;
+
+      setIsSpeechAnimating(true);
+      setIsBubbleVisible(false);
+
+      hideTimer = setTimeout(() => {
+        if (!mounted) return;
+
+        nextTimer = setTimeout(() => {
+          showNextMessage();
+        }, 900);
+      }, 380);
+    };
+
+    const startCycle = () => {
+      cycleTimer = setTimeout(() => {
+        hideBubble();
+      }, 4800);
+    };
+
+    // Immediate fresh fade-in whenever emotion count/lang changes.
+    setIsBubbleVisible(false);
+    setIsSpeechAnimating(true);
+
+    const initialTimer = setTimeout(() => {
+      if (!mounted) return;
+
+      setIsBubbleVisible(true);
+
+      nextTimer = setTimeout(() => {
+        if (!mounted) return;
+        setIsSpeechAnimating(false);
+        startCycle();
+      }, 350);
+    }, 0);
+
+    return () => {
+      mounted = false;
+      clearTimeout(initialTimer);
+      clearTimeout(hideTimer);
+      clearTimeout(nextTimer);
+      clearTimeout(cycleTimer);
+    };
+  }, [selectedEmotions.length, lang]);
+
+  const handleJarTap = () => {
+    audioService.triggerHaptic('light');
+
+    setIsJarPressed(true);
+
+    setTimeout(() => {
+      setIsJarPressed(false);
+    }, 180);
+  };
+
+  const firstId = selectedEmotions[0];
+  const isFirstCustom = firstId?.startsWith('custom');
+
+  const firstTag =
+    selectedEmotions.length > 0
+      ? isFirstCustom
+        ? { color: '#EC4899' }
+        : EMOTION_TAGS.find((tag) => tag.id === firstId)
+      : null;
+
+  const jarAmbientColor =
+    firstTag?.color || DESIGN_TOKENS.color.brand.turquoise.primary;
+
+  const jarSunAura = useMemo(() => {
+    switch (skyPeriod) {
+      case 'sunset':
+        return {
+          core: '#f597b0ff',
+          mid: '#ffea94ff',
+          outer: '#ffffffff',
+        };
+
+      case 'dawn':
+        return {
+          core: '#FFFBEB',
+          mid: '#FDE68A',
+          outer: '#FED7AA',
+        };
+
+      case 'night':
+        return {
+          core: '#F0F9FF',
+          mid: '#BAE6FD',
+          outer: '#38BDF8',
+        };
+
+      default:
+        return {
+          core: '#F0FDFA',
+          mid: '#CCFBF1',
+          outer: '#E0F2FE',
+        };
+    }
+  }, [skyPeriod]);
 
   return (
     <div
-      ref={jarRef}
-      onClick={handleJarTap}
-      className={styles.container}
+      className={classNames(
+        styles.animatedJar,
+        isJarPressed && styles.jarPressed,
+      )}
     >
-      {/* 1. AMBIENT BACKLIGHT GLOW */}
-      <div
-        className={`${styles.ambientGlow} ${glowModifierClass}`}
-        style={{
-          backgroundColor: isOverJar
-            ? '#00C4B3'
-            : selectedEmotions.length > 0
-            ? jarAmbientColor
-            : '#B3EDE8',
-        }}
-      />
+      <div className={styles.container}>
 
-      {/* 2. REALISTIC APOTHECARY GLASS VESSEL WITH SVG HIGHLIGHTS */}
-      <div className={styles.vesselWrapper}>
-        {/* SVG Glass Bottle Silhouette & Reflections */}
-        <svg
-          viewBox="0 0 240 250"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={styles.svgBottle}
-        >
-          <defs>
-            {/* Glass Wall Radial Ambient */}
-            <linearGradient id="glassWallGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.85" />
-              <stop offset="6%" stopColor="#E0F7F5" stopOpacity="0.45" />
-              <stop offset="25%" stopColor="#FFFFFF" stopOpacity="0.15" />
-              <stop offset="75%" stopColor="#FFFFFF" stopOpacity="0.10" />
-              <stop offset="94%" stopColor="#E0F7F5" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.75" />
-            </linearGradient>
+        {/* Soft Magic Ambient Floor Glow */}
+        <div
+          className={styles.glow}
+          style={{
+            backgroundColor: jarAmbientColor,
+            opacity:
+              selectedEmotions.length > 0 ? 0.28 : 0.12,
+          }}
+        />
 
-            {/* Glass Left Specular Arc Reflection */}
-            <linearGradient id="specularArc" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
-              <stop offset="40%" stopColor="#FFFFFF" stopOpacity="0.40" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.05" />
-            </linearGradient>
+        {/* Mooca Companion */}
+        <div className={styles.moocaPerchContainer}>
 
-            {/* Wooden Lid Texture Gradient */}
-            <linearGradient id="woodLidGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#8D5B28" />
-              <stop offset="20%" stopColor="#C48A49" />
-              <stop offset="50%" stopColor="#DFAB6B" />
-              <stop offset="80%" stopColor="#B37839" />
-              <stop offset="100%" stopColor="#7E4C1C" />
-            </linearGradient>
+          {/* Speech Bubble */}
+          <div
+            className={classNames(
+              styles.moocaSpeechBubble,
+              isBubbleVisible
+                ? styles.speechVisible
+                : styles.speechHidden,
+              isSpeechAnimating &&
+              styles.speechAnimating,
+            )}
+          >
+            <div className={styles.speechRow}>
+              <div className={styles.speechIconSlot}>
+                {renderSpeechIcon(
+                  currentMessage.iconType,
+                )}
+              </div>
 
-            {/* Lid Rim Highlight */}
-            <linearGradient id="lidBevel" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#FFE0B2" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#5D350F" stopOpacity="0.9" />
-            </linearGradient>
+              <span className={styles.moocaSpeechText}>
+                {currentMessage.text}
+              </span>
+            </div>
 
-            {/* Liquid Floor Ambient */}
-            <linearGradient id="liquidBottom" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={jarAmbientColor} stopOpacity="0" />
-              <stop offset="100%" stopColor={jarAmbientColor} stopOpacity="0.25" />
-            </linearGradient>
-          </defs>
+            <div className={styles.moocaBubbleTail} />
+          </div>
 
-          {/* JAR SHADOW BASE */}
-          <ellipse cx="120" cy="242" rx="76" ry="7" fill="rgba(0, 196, 179, 0.18)" filter="blur(3px)" />
-
-          {/* GLASS BOTTLE BODY FILL */}
-          <path
-            d="M 86,48 
-               C 86,64 54,74 44,98 
-               C 38,112 36,132 36,160 
-               L 36,212 
-               C 36,234 56,242 120,242 
-               C 184,242 204,234 204,212 
-               L 204,160 
-               C 204,132 202,112 196,98 
-               C 186,74 154,64 154,48 
-               Z"
-            fill="url(#glassWallGrad)"
-            stroke={isOverJar ? '#00C4B3' : 'rgba(255, 255, 255, 0.95)'}
-            strokeWidth={isOverJar ? '2.5' : '1.8'}
-          />
-
-          {/* GLASS INNER DEPTH SHADE */}
-          <path
-            d="M 88,52 
-               C 88,66 56,76 46,99 
-               C 40,113 38,133 38,160 
-               L 38,210 
-               C 38,228 58,238 120,238 
-               C 182,238 202,228 202,210 
-               L 202,160 
-               C 202,133 200,113 194,99 
-               C 184,76 152,66 152,52 
-               Z"
-            fill={isOverJar ? 'rgba(0, 196, 179, 0.08)' : 'rgba(230, 249, 247, 0.25)'}
-          />
-
-          {/* INNER AMBIENT LIQUID GLOW AT BOTTOM */}
-          {selectedEmotions.length > 0 && (
-            <path
-              d="M 38,175 
-                 C 70,178 170,172 202,175 
-                 L 202,210 
-                 C 202,228 182,238 120,238 
-                 C 58,238 38,228 38,210 
-                 Z"
-              fill="url(#liquidBottom)"
+          {/* Interactive Mooca */}
+          <div className={styles.moocaMascotWrapper}>
+            <MoocaMascot
+              mood={
+                selectedEmotions.length > 0
+                  ? 'comforting'
+                  : 'happy'
+              }
+              size="xs"
+              interactive={true}
+              onHug={onMoocaHug}
             />
-          )}
+          </div>
+        </div>
 
-          {/* HEAVY GLASS BOTTOM CONVEX REFRACTION */}
-          <path
-            d="M 44,222 
-               C 70,228 170,228 196,222 
-               C 190,236 160,240 120,240 
-               C 80,240 50,236 44,222 Z"
-            fill="rgba(255, 255, 255, 0.75)"
-          />
-          <path
-            d="M 60,232 C 90,236 150,236 180,232"
-            stroke="rgba(255, 255, 255, 0.9)"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
+        {/* Jar */}
+        <button
+          type="button"
+          className={styles.jarButton}
+          onClick={handleJarTap}
+          aria-label="Emotion jar"
+        >
+          {/* Lid */}
+          <div className={styles.lidSection}>
 
-          {/* SPECULAR LIGHT HIGHLIGHTS ON GLASS */}
-          <path
-            d="M 44,115 
-               C 42,130 42,195 44,215"
-            stroke="url(#specularArc)"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-          />
-          <path
-            d="M 48,125 
-               C 47,140 47,185 48,205"
-            stroke="#FFFFFF"
-            strokeWidth="1.2"
-            strokeOpacity="0.8"
-            strokeLinecap="round"
-          />
+            <div className={styles.corkKnob} />
 
-          <path
-            d="M 82,62 
-               C 66,74 54,84 48,102"
-            stroke="#FFFFFF"
-            strokeWidth="2.5"
-            strokeOpacity="0.85"
-            strokeLinecap="round"
-          />
+            <div className={styles.corkLid}>
+              <div className={styles.corkTealPool}>
+                <div className={styles.corkReflectionDot} />
+              </div>
+            </div>
 
-          <path
-            d="M 196,115 
-               C 198,135 198,195 196,215"
-            stroke="#FFFFFF"
-            strokeWidth="1.5"
-            strokeOpacity="0.45"
-            strokeLinecap="round"
-          />
+            <div className={styles.neckWrapper}>
+              <div className={styles.glassNeck} />
 
-          {/* GLASS NECK FLANGED RIM LIP */}
-          <ellipse
-            cx="120"
-            cy="48"
-            rx="36"
-            ry="7"
-            fill="rgba(255, 255, 255, 0.9)"
-            stroke="#B3EDE8"
-            strokeWidth="1.5"
-          />
-          <ellipse
-            cx="120"
-            cy="48"
-            rx="30"
-            ry="4.5"
-            fill={isOverJar ? '#B3EDE8' : 'rgba(230, 249, 247, 0.6)'}
-          />
+              <div className={styles.twineCordLine} />
 
-          {/* DECORATIVE CORD & MOOCA CHARM ON NECK */}
-          <path
-            d="M 86,54 C 100,58 140,58 154,54"
-            stroke="#A36829"
-            strokeWidth="1.8"
-            fill="none"
-          />
-          <line x1="146" y1="56" x2="148" y2="70" stroke="#A36829" strokeWidth="1.2" />
-          <circle cx="148" cy="74" r="5" fill="#FFFFFF" stroke="#00C4B3" strokeWidth="1" />
+              <div className={styles.charmHanger}>
+                <div className={styles.charmString} />
 
-          {/* WOODEN CORK STOPPER / LID (Lifts when hovering or dragging) */}
-          <g
-            className={styles.stopperGroup}
+                <div className={styles.charmCircle}>
+                  <div className={styles.charmInnerDot} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sun Aura */}
+          <div
+            className={styles.jarAuraContainer}
+            aria-hidden="true"
             style={{
-              transform: isOverJar
-                ? 'translate(0px, -22px) rotate(3deg)'
-                : isDraggingAny
-                ? 'translate(0px, -12px) rotate(1deg)'
-                : 'translate(0px, 0px)',
+              background: `radial-gradient(
+                circle at center,
+                ${jarSunAura.core}73 0%,
+                ${jarSunAura.mid}38 42%,
+                ${jarSunAura.outer}14 72%,
+                transparent 100%
+              )`,
+            }}
+          />
+
+          {/* Glass Jar */}
+          <div
+            className={styles.jarBody}
+            style={{
+              background: `linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.28),
+                rgba(230, 250, 248, 0.08),
+                rgba(255, 255, 255, 0.18)
+              )`,
             }}
           >
-            <ellipse cx="120" cy="22" rx="14" ry="5" fill="url(#woodLidGrad)" stroke="#5D350F" strokeWidth="0.8" />
-            <rect x="110" y="22" width="20" height="7" rx="3" fill="url(#woodLidGrad)" />
-            
-            <path
-              d="M 78,36 
-                 C 78,31 92,28 120,28 
-                 C 148,28 162,31 162,36 
-                 L 158,46 
-                 C 158,50 144,52 120,52 
-                 C 96,52 82,50 82,46 
-                 Z"
-              fill="url(#woodLidGrad)"
-              stroke="#5D350F"
-              strokeWidth="1"
-            />
-            <ellipse cx="120" cy="35" rx="41" ry="6.5" fill="url(#lidBevel)" opacity="0.4" />
-            
-            <ellipse cx="120" cy="42" rx="39" ry="5" fill="#00C4B3" opacity="0.85" />
-            <circle cx="120" cy="43" r="1.5" fill="#FFFFFF" />
-          </g>
+            {/* Glass Reflections */}
+            <div className={styles.glassReflectionLeft} />
+            <div className={styles.glassReflectionTop} />
+            <div className={styles.glassReflectionRight} />
+            <div className={styles.glassReflectionBottom} />
 
-          {/* LIGHT BEAM WHEN LID IS OPENED */}
-          {isOverJar && (
-            <path
-              d="M 94,46 L 70,0 L 170,0 L 146,46 Z"
-              fill="url(#specularArc)"
-              opacity="0.3"
-              filter="blur(4px)"
-            />
-          )}
-        </svg>
+            {/* Jar Contents */}
+            <div className={styles.jarInner}>
 
-        {/* 3. INTERACTIVE EMOTION CONTENTS INSIDE JAR */}
-        <div className={styles.jarContents}>
-          {/* EMPTY STATE */}
-          {selectedEmotions.length === 0 ? (
-            <div className={styles.emptyState}>
-              <div
-                className={`${styles.dropTargetRing} ${
-                  isOverJar
-                    ? styles.ringOver
-                    : isDraggingAny
-                    ? styles.ringDragging
-                    : ''
-                }`}
-              >
-                {isOverJar ? (
-                  <SparklesIcon className={styles.sparkleIconSpin} />
-                ) : (
-                  <SparklesIcon className={styles.sparkleIcon} />
-                )}
-              </div>
+              {selectedEmotions.length === 0 ? (
+                <div className={styles.emptyContainer}>
 
-              <h3 className={styles.emptyTitle}>
-                {isOverJar ? strings.dropTitle : strings.emptyTitle}
-              </h3>
-
-              <p className={styles.emptySubtitle}>
-                {isOverJar ? strings.dropSubtitle : strings.emptySubtitle}
-              </p>
-            </div>
-          ) : (
-            /* FILLED STATE: Luminous floating emotion gems */
-            <div className={styles.filledState}>
-              {selectedEmotions.map((id, index) => {
-                const tag = EMOTION_TAGS.find((t) => t.id === id);
-                if (!tag) return null;
-                return (
-                  <div
-                    key={id}
-                    onClick={(e) => {
-                       e.stopPropagation();
-                       onRemoveEmotion(id);
-                    }}
-                    className={styles.emotionPill}
-                    style={{
-                      animation: `moocaFloat 3s ease-in-out infinite ${index * 0.4}s`,
-                    }}
-                    title={strings.tapToRemove}
-                  >
-                    <div className={styles.emotionPillLeft}>
-                      <span
-                        className={styles.emotionDot}
-                        style={{
-                          backgroundColor: tag.color,
-                          boxShadow: `0 0 6px ${tag.color}`,
-                        }}
-                      />
-                      <span className={styles.emotionLabel}>
-                        {getTagLabel(tag, lang)}
-                      </span>
-                    </div>
-
-                    <span className={styles.removeBtn}>
-                      <CloseIcon />
-                    </span>
+                  <div className={styles.emptyCircleBadge}>
+                    <Sparkles
+                      size={20}
+                      color={DESIGN_TOKENS.color.brand.turquoise.primary}
+                      strokeWidth={2.4}
+                    />
                   </div>
-                );
-              })}
 
-              {/* Status count and clear button */}
-              <div className={styles.statusBar}>
-                <span className={styles.statusCount}>
-                  <CheckIcon className={styles.checkIconStatus} />
-                  <span>{selectedEmotions.length}/{MAX_EMOTIONS}</span>
-                </span>
-
-                {onClearAll && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onClearAll();
-                    }}
-                    className={styles.clearBtn}
+                  <span
+                    className={classNames(
+                      styles.emptyBadgeTitle,
+                      (skyPeriod === 'sunset' ||
+                        skyPeriod === 'night') &&
+                      styles.emptyTitleLight,
+                      skyPeriod === 'dawn' &&
+                      styles.emptyTitleDawn,
+                    )}
                   >
-                    {strings.clear}
-                  </button>
-                )}
-              </div>
+                    {p1.emptyTitle}
+                  </span>
+
+                  <span
+                    className={classNames(
+                      styles.emptyBadgeSubtitle,
+                      (skyPeriod === 'sunset' ||
+                        skyPeriod === 'night') &&
+                      styles.emptySubtitleLight,
+                      skyPeriod === 'dawn' &&
+                      styles.emptySubtitleDawn,
+                    )}
+                  >
+                    {p1.emptySubtitleFromAbove}
+                  </span>
+                </div>
+              ) : (
+                <div className={styles.puffsContainer}>
+
+                  {selectedEmotions.map((id) => {
+                    const isCustom =
+                      id.startsWith('custom');
+
+                    const customItem =
+                      customMessages?.find(
+                        (message) => message.id === id,
+                      );
+
+                    const tag = isCustom
+                      ? {
+                        id,
+                        labelTh:
+                          customItem?.text ||
+                          customEmotionText ||
+                          p1.noteToMoocaDefault,
+                        labelEn:
+                          customItem?.text ||
+                          customEmotionText ||
+                          p1.noteToMoocaDefault,
+                        color: '#EC4899',
+                        emoji: '',
+                        weightDescription: '',
+                        recommendedOption:
+                          matchOptionFromKeywords(
+                            customItem?.text ||
+                            customEmotionText ||
+                            '',
+                            'A',
+                          ),
+                      }
+                      : EMOTION_TAGS.find(
+                        (emotion) => emotion.id === id,
+                      );
+
+                    if (!tag) return null;
+
+                    const emotionText = isCustom
+                      ? customItem?.text ||
+                      customEmotionText ||
+                      tag.labelTh
+                      : getTagLabel(tag, lang);
+
+                    return (
+                      <div
+                        key={tag.id}
+                        className={styles.miniCloudWrapper}
+                      >
+                        {/* Scallops */}
+                        <div
+                          className={
+                            styles.miniCloudScallops
+                          }
+                        >
+                          <div
+                            className={
+                              styles.miniScallopLeft
+                            }
+                            style={{
+                              backgroundColor: '#FFFFFF',
+                              borderColor: tag.color,
+                            }}
+                          />
+
+                          <div
+                            className={
+                              styles.miniScallopCenter
+                            }
+                            style={{
+                              backgroundColor: '#FFFFFF',
+                              borderColor: tag.color,
+                            }}
+                          />
+
+                          <div
+                            className={
+                              styles.miniScallopRight
+                            }
+                            style={{
+                              backgroundColor: '#FFFFFF',
+                              borderColor: tag.color,
+                            }}
+                          />
+                        </div>
+
+                        {/* Mini Cloud */}
+                        <div
+                          className={classNames(
+                            styles.miniCloudBody,
+                            isCustom &&
+                            styles.customMiniCloudBody,
+                          )}
+                          style={{
+                            borderColor: tag.color,
+                            boxShadow: `0 2px 3px ${tag.color}26`,
+                            background: isCustom
+                              ? 'linear-gradient(180deg, #FFFFFF, #FDF2F8, #FCE7F3)'
+                              : 'linear-gradient(180deg, #FFFFFF, #F0FDFA, #E6FAF8)',
+                          }}
+                        >
+                          <div
+                            className={
+                              styles.miniPuffIconWrapper
+                            }
+                            style={{
+                              backgroundColor:
+                                `${tag.color}1A`,
+                            }}
+                          >
+                            {getEmotionIcon(
+                              isCustom
+                                ? 'custom'
+                                : tag.id,
+                              tag.color,
+                              11,
+                            )}
+                          </div>
+
+                          <span
+                            className={classNames(
+                              styles.miniPuffText,
+                              isCustom &&
+                              styles.customMiniPuffText,
+                            )}
+                          >
+                            {emotionText}
+                          </span>
+
+                          <button
+                            type="button"
+                            className={
+                              styles.miniRemoveBtn
+                            }
+                            onClick={(event) => {
+                              event.stopPropagation();
+
+                              audioService.triggerHaptic(
+                                'light',
+                              );
+
+                              onRemoveEmotion(tag.id);
+                            }}
+                            aria-label={`Remove ${emotionText}`}
+                          >
+                            <X
+                              size={9}
+                              color={DESIGN_TOKENS.color.gray.muted}
+                              strokeWidth={2.6}
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Glowing Liquid Base */}
+              {selectedEmotions.length > 0 && (
+                <div
+                  className={styles.liquidBase}
+                  style={{
+                    background: `linear-gradient(
+                      to bottom,
+                      transparent,
+                      ${jarAmbientColor}20,
+                      ${jarAmbientColor}44
+                    )`,
+                  }}
+                />
+              )}
             </div>
+          </div>
+        </button>
+
+        {/* Clear Button */}
+        <div className={styles.clearBtnSlot}>
+          {selectedEmotions.length > 0 && onClearAll ? (
+            <button
+              type="button"
+              className={styles.clearBtn}
+              onClick={onClearAll}
+            >
+              <RotateCcw
+                size={10}
+                color={DESIGN_TOKENS.color.brand.turquoise.text}
+                strokeWidth={2.4}
+              />
+
+              <span className={styles.clearBtnText}>
+                {p1.clearJar}
+              </span>
+            </button>
+          ) : (
+            <div className={styles.clearBtnPlaceholder} />
           )}
         </div>
       </div>
     </div>
   );
 };
-
-export default GlassEmotionJar;

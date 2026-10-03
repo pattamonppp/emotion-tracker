@@ -1,324 +1,396 @@
-@use 'abstracts' as *;
-
 .container {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  padding: 12px;
+  padding: 6px 12px 10px 12px;
   user-select: none;
-  font-family: $font-sans;
-  animation: fadeIn 300ms ease-out;
+  -webkit-user-select: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.mascotWrapper {
+  height: 135px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.instructionPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  border-width: 1.2px;
+  border-style: solid;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  margin-bottom: 6px;
+  font-family: inherit;
+  transition: transform 120ms ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.pillIconBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.instructionText {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.helpIconSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.mainStage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 14px;
+}
+
+// -------------------------------------------------------------
+// Boba Drink Cup
+// -------------------------------------------------------------
+.cupWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  touch-action: none;
+  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &.isDrinking {
+    transform: rotate(14deg) scale(1.04);
+  }
+}
+
+.strawWrapper {
+  position: absolute;
+  top: -36px;
+  right: 28px;
+  width: 14px;
+  height: 50px;
+  background: repeating-linear-gradient(
+    45deg,
+    #F43F5E,
+    #F43F5E 6px,
+    #FFFFFF 6px,
+    #FFFFFF 12px
+  );
+  border-radius: 6px;
+  transform: rotate(18deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+.cupBody {
+  position: relative;
+  width: 140px;
+  height: 175px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 3px solid rgba(0, 196, 179, 0.45);
+  border-top: 0;
+  border-bottom-left-radius: 36px;
+  border-bottom-right-radius: 36px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 196, 179, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.cupLid {
+  position: absolute;
+  top: -8px;
+  left: -6px;
+  right: -6px;
+  height: 12px;
+  background: #FFFFFF;
+  border: 2px solid rgba(0, 196, 179, 0.5);
+  border-radius: 8px;
+  z-index: 5;
+}
+
+.liquidFill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #A7F3D0 0%, #00C4B3 60%, #00897B 100%);
+  transition: height 380ms ease-out;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+  overflow: hidden;
+}
+
+.liquidWave {
+  position: absolute;
+  top: -6px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+.glassReflection {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 6px;
+  height: 60px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 100%);
+  z-index: 8;
+  pointer-events: none;
+}
+
+.bobaPearl {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #3B2A1D;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.25);
+  animation: bobaBob 2.4s ease-in-out infinite alternate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pearlFace {
+  font-size: 8px;
+  color: #FDE68A;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.floatingBubble {
+  position: absolute;
+  animation: bobaBob 2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes bobaBob {
+  from { transform: translateY(0); }
+  to { transform: translateY(-5px); }
+}
+
+.cupFace {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.cupEyes {
+  font-size: 16px;
+  font-weight: 800;
+  color: #004D40;
+  letter-spacing: 12px;
+  margin-left: 12px;
+}
+
+.cupMouth {
+  font-size: 14px;
+  color: #004D40;
+  margin-top: -4px;
+}
+
+.organicCountSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+  max-width: 240px;
+}
+
+.organicCountNumber {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.organicCountLabel {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.organicProgressTrack {
+  width: 100%;
+  height: 5px;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.organicProgressFill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 280ms ease;
+}
+
+.actionSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.organicSensorHint {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+// -------------------------------------------------------------
+// Coaching Modal
+// -------------------------------------------------------------
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 26, 43, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+  animation: fadeIn 150ms ease-out;
+}
+
+.modalCard {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.modalCloseBtn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.guideIconWrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #E6F9F7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.guideTitle {
+  font-size: 15px;
+  font-weight: 800;
+  color: #00695C;
+  margin: 0 0 14px 0;
+}
+
+.guideStepsBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.guideStepRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.stepNumBadge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #E6F9F7;
+  border: 1px solid #00C4B3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepNumText {
+  font-size: 11px;
+  font-weight: 800;
+  color: #00897B;
+}
+
+.guideStepText {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.35;
+}
+
+.guideConfirmBtn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 14px;
+  background: #00C4B3;
+  border: 0;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 80ms ease;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.guideConfirmText {
+  font-size: 13px;
+  font-weight: 700;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Top Banner
-// -----------------------------------------------------------------------------
-.topBanner {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  padding: 6px 12px;
-  background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
-  border-radius: $radius-actionable-lg;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: $elevation-1;
-}
-
-.bannerTitle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: $color-blue-1;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-.bannerText {
-  font-weight: 600;
-  color: $color-slate-800;
-}
-
-.pulseBadge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background-color: rgba(239, 119, 115, 0.1);
-  border: 1px solid rgba(239, 119, 115, 0.3);
-  padding: 2px 10px;
-  border-radius: $radius-pill;
-  color: $color-flamingo-1;
-
-  svg {
-    width: 14px;
-    height: 14px;
-    animation: heartPulse 1.2s infinite ease-in-out;
-  }
-}
-
-@keyframes heartPulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.15);
-  }
-}
-
-.pulseText {
-  font-family: $font-mono;
-  font-weight: 700;
-  font-size: 0.75rem;
-}
-
-// -----------------------------------------------------------------------------
-// Guidance Section
-// -----------------------------------------------------------------------------
-.guidanceSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 4px;
-}
-
-.guidanceTitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: $color-slate-800;
-  letter-spacing: -0.01em;
-  margin-top: 4px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    color: $color-turquoise-1;
-  }
-}
-
-.guidanceDesc {
-  font-size: 0.75rem;
-  color: $color-slate-600;
-  max-width: 320px;
-  margin-top: 4px;
-  line-height: 1.4;
-}
-
-// -----------------------------------------------------------------------------
-// Central Glass Zone
-// -----------------------------------------------------------------------------
-.glassZone {
-  position: relative;
-  margin: 6px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.ambientGlow {
-  position: absolute;
-  width: 208px;
-  height: 256px;
-  border-radius: $radius-circle;
-  background-color: rgba(0, 196, 179, 0.15);
-  filter: blur(48px);
-  pointer-events: none;
-}
-
-.glassContainer {
-  position: relative;
-  width: 176px;
-  height: 224px;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
-  border: 4px solid #CBD5E1;
-  background-color: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  box-shadow: $elevation-2;
-}
-
-.canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.glassHighlightLeft {
-  position: absolute;
-  top: 8px;
-  left: 10px;
-  width: 6px;
-  height: 176px;
-  border-radius: $radius-pill;
-  background-color: rgba(255, 255, 255, 0.4);
-  filter: blur(1px);
-  pointer-events: none;
-}
-
-.glassHighlightRight {
-  position: absolute;
-  top: 16px;
-  right: 10px;
-  width: 4px;
-  height: 128px;
-  border-radius: $radius-pill;
-  background-color: rgba(255, 255, 255, 0.2);
-  filter: blur(1px);
-  pointer-events: none;
-}
-
-.promptOverlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  padding: 12px;
-}
-
-.completionCard {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 8px 16px;
-  border-radius: 16px;
-  border: 2px solid $color-turquoise-1;
-  box-shadow: $elevation-1;
-  animation: zoomIn 200ms ease;
-}
-
-@keyframes zoomIn {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.completionMain {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #009688;
-  display: block;
-}
-
-.completionSub {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: $color-slate-600;
-  margin-top: 2px;
-  display: block;
-}
-
-.drinkingCard {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 8px 14px;
-  border-radius: 16px;
-  border: 2px solid $color-blue-1;
-  color: $color-blue-1;
-  font-size: 0.75rem;
-  font-weight: 700;
-  box-shadow: $elevation-1;
-  animation: pulseCard 1s infinite alternate;
-}
-
-.swallowPrompt {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #0284C7;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-@keyframes pulseCard {
-  from {
-    opacity: 0.85;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.sipCounterBadge {
-  color: $color-slate-800;
-  font-family: $font-mono;
-  font-weight: 700;
-  font-size: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.85);
-  padding: 4px 12px;
-  border-radius: $radius-pill;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  border: 1px solid #E2E8F0;
-}
-
-// -----------------------------------------------------------------------------
-// Action Zone & Controls
-// -----------------------------------------------------------------------------
-.actionZone {
-  width: 100%;
-  max-width: 320px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.tiltControlBar {
-  background-color: #FFFFFF;
-  padding: 6px 12px;
-  border-radius: 12px;
-  border: 1px solid #E2E8F0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-}
-
-.tiltLabel {
-  color: $color-slate-500;
-  font-size: 0.6875rem;
-  font-weight: 500;
-}
-
-.tiltSlider {
-  width: 112px;
-  accent-color: $color-turquoise-1;
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

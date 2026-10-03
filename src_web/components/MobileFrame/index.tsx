@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import cn from 'classnames';
+import classNames from 'classnames';
 import { 
-  Wifi, 
-  Battery, 
   Languages, 
-  Maximize2, 
-  Minimize2 
+  Volume2, 
+  VolumeX 
 } from 'lucide-react';
-import type { UserProfile, ResetPhase } from '@/types';
+import type { UserProfile, ResetPhase, SkyTimePeriod } from '@/types';
 import { MindfullLogo } from '../MindfullLogo';
-import { HeartIcon } from '@/icons';
+import { DynamicSkyEngine, SkyPeriodSwitcher } from '../DynamicSkyEngine';
+import { audioService } from '@/services/audioService';
 import styles from './styles.module.scss';
 
 export interface MobileFrameProps {
@@ -20,6 +19,7 @@ export interface MobileFrameProps {
   onOpenProfile: () => void;
   onToggleLanguage: () => void;
   onOpenStory?: () => void;
+  onTimePeriodChange?: (period: SkyTimePeriod) => void;
 }
 
 export function MobileFrame({
@@ -29,20 +29,36 @@ export function MobileFrame({
   phaseTime,
   onOpenProfile,
   onToggleLanguage,
-  onOpenStory,
+  onTimePeriodChange,
 }: MobileFrameProps) {
-  const [isFramed, setIsFramed] = useState(true);
-  const [timeString, setTimeString] = useState('08:24');
+  const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(true);
 
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTimeString(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 30000);
-    return () => clearInterval(interval);
+    const unsub = audioService.subscribeBgm(setIsMusicPlaying);
+    return () => unsub();
   }, []);
+
+  const getPhaseName = () => {
+    if (profile.language === 'th') {
+      switch (currentPhase) {
+        case 'phase1_jar': return '1. โหลเก็บความกังวล';
+        case 'phase2_intervention': return '2. กายกรรมรีเซ็ต';
+        case 'phase3_reframing': return '3. ปลดล็อกความคิด';
+        case 'phase4_feedback': return '4. วัดผลลัพธ์ใจ';
+        case 'completed': return 'กอดใจสำเร็จ';
+        default: return 'เริ่มรีเซ็ต';
+      }
+    } else {
+      switch (currentPhase) {
+        case 'phase1_jar': return '1. Emotion Jar';
+        case 'phase2_intervention': return '2. Somatic Shift';
+        case 'phase3_reframing': return '3. Cognitive Insight';
+        case 'phase4_feedback': return '4. Bio Feedback';
+        case 'completed': return 'Reset Complete';
+        default: return 'Start Reset';
+      }
+    }
+  };
 
   const formatSeconds = (sec: number) => {
     const m = Math.floor(sec / 60);
@@ -52,104 +68,90 @@ export function MobileFrame({
 
   return (
     <div className={styles.container} data-lang={profile.language} lang={profile.language}>
-      {/* Desktop External Helper Bar */}
-      <div className={styles.desktopHelperBar}>
-        <div className={styles.helperIndicator}>
-          <span className={styles.pulseDot} />
-          <span className={styles.helperTitle}>
-            <span>Mooca & mindfull CI</span>
-            <span className={styles.helperBadge}>
-              <HeartIcon className="w-2.5 h-2.5 inline mr-1 text-[#00C4B3]" />
-              Best Friend Companion
-            </span>
-          </span>
+      <DynamicSkyEngine onTimePeriodChange={onTimePeriodChange} lang={profile.language}>
+        <div className={styles.appShell}>
+          {/* Top Bar (Wordmark, Language Actions, Music Toggle, Profile Avatar) - Aligned 1-to-1 with Mobile RN App.tsx */}
+          <header className={styles.topBar}>
+            {/* Zone 1: Logo */}
+            <div className={styles.logoRow}>
+              <MindfullLogo size="sm" />
+            </div>
+
+            {/* Zone 2: Actions */}
+            <div className={styles.actionsRow}>
+              {/* Language Switch */}
+              <button
+                type="button"
+                onClick={onToggleLanguage}
+                className={styles.langBtn}
+                title="Toggle TH / EN"
+              >
+                <Languages size={13} color="#00C4B3" />
+                <span className={styles.langText}>{profile.language.toUpperCase()}</span>
+              </button>
+
+              {/* Sound / Music Toggle Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  audioService.triggerHaptic('selection');
+                  audioService.toggleBackgroundMusic();
+                }}
+                className={classNames(styles.soundBtn, {
+                  [styles.soundBtnActive]: isMusicPlaying,
+                })}
+                title="Toggle Background Music"
+              >
+                {isMusicPlaying ? (
+                  <Volume2 size={13} color="#004D40" />
+                ) : (
+                  <VolumeX size={13} color="#64748B" />
+                )}
+              </button>
+
+              {/* User Profile Avatar with rounded turquoise-blue gradient */}
+              <button
+                type="button"
+                onClick={() => {
+                  audioService.triggerHaptic('selection');
+                  onOpenProfile();
+                }}
+                className={styles.avatarWrapper}
+                title="Profile & Calibration"
+              >
+                <div className={styles.avatarGradient}>
+                  <span className={styles.avatarText}>
+                    {profile.name.charAt(0).toUpperCase() || 'M'}
+                  </span>
+                </div>
+              </button>
+            </div>
+          </header>
+
+          {/* Dynamic Island Session Pill with Countdown & Sky Atmosphere Switcher - Aligned with Mobile RN App.tsx */}
+          <div className={styles.dynamicIslandContainer}>
+            <div className={styles.dynamicIslandRow}>
+              <div className={styles.dynamicPill}>
+                <span className={styles.pingDot} />
+                <span className={styles.phaseLabelText}>{getPhaseName()}</span>
+                <div className={styles.timerChip}>
+                  <span className={styles.timerChipText}>{formatSeconds(phaseTime)}</span>
+                </div>
+              </div>
+
+              {/* Dynamic Sky Period Switcher */}
+              <SkyPeriodSwitcher />
+            </div>
+          </div>
+
+          {/* Main Mobile Viewport */}
+          <main className={styles.viewport}>
+            {children}
+          </main>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setIsFramed(!isFramed)}
-          className={styles.toggleFrameBtn}
-          title="Toggle mobile device frame"
-        >
-          {isFramed ? <Maximize2 className="w-3 h-3 text-[#00C4B3]" /> : <Minimize2 className="w-3 h-3 text-[#00C4B3]" />}
-          <span>{isFramed ? 'Full View' : 'Device Frame'}</span>
-        </button>
-      </div>
-
-      {/* Main Mobile Screen Shell */}
-      <div className={cn(styles.shell, isFramed ? styles.framed : styles.fullView)}>
-        {/* Dynamic Island / Mobile Status Bar */}
-        <div className={styles.statusBar}>
-          <span className={styles.statusTime}>{timeString}</span>
-
-          {/* Dynamic Island Pill with countdown */}
-          <div className={styles.dynamicIslandPill}>
-            <span className={styles.islandPing} />
-            <span className={styles.islandText}>{formatSeconds(phaseTime)}</span>
-          </div>
-
-          <div className={styles.statusIcons}>
-            <Wifi className="w-3.5 h-3.5 text-[#00C4B3]" />
-            <Battery className="w-4 h-4 text-slate-600" />
-          </div>
-        </div>
-
-        {/* Top Bar Contract (1 row, 3 zones) */}
-        <header className={styles.header}>
-          {/* Zone 1: Mindfull Logo */}
-          <div className={styles.brandZone}>
-            <MindfullLogo size="md" />
-            <span className={styles.brandBadge}>120s</span>
-          </div>
-
-          {/* Zone 2: Step & Story trigger */}
-          {onOpenStory && (
-            <button
-              type="button"
-              onClick={onOpenStory}
-              className={styles.storyBtn}
-              title="เรื่องราวของ Mooca"
-            >
-              <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
-              <span>{profile.language === 'th' ? 'เพื่อน Mooca' : 'Mooca'}</span>
-            </button>
-          )}
-
-          {/* Zone 3: Primary Actions (Language and Profile) */}
-          <div className={styles.actionsZone}>
-            {/* Language Switch */}
-            <button
-              type="button"
-              onClick={onToggleLanguage}
-              className={styles.langBtn}
-              title="Toggle TH / EN"
-            >
-              <Languages className="w-2.5 h-2.5 text-[#00C4B3]" />
-              <span>{profile.language.toUpperCase()}</span>
-            </button>
-
-            {/* User Profile Avatar */}
-            <button
-              type="button"
-              onClick={onOpenProfile}
-              className={styles.profileAvatar}
-              title="Profile & Calibration"
-            >
-              {profile.name.charAt(0).toUpperCase() || 'M'}
-            </button>
-          </div>
-        </header>
-
-        {/* Mobile Viewport Body */}
-        <main className={styles.viewportBody}>
-          {children}
-        </main>
-
-        {/* Mobile Safe Home Indicator Bar */}
-        <div className={styles.homeIndicatorBar}>
-          <div className={styles.homePill} />
-        </div>
-      </div>
+      </DynamicSkyEngine>
     </div>
   );
 }
+
+export default MobileFrame;

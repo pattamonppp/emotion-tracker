@@ -1,4 +1,17 @@
-@use 'abstracts' as *;
+.animatedJar {
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 90ms ease-out;
+}
+
+.jarPressed {
+  transform: scale(0.97);
+
+  // Equivalent to the RN spring-back.
+  // The timeout in TSX returns it to scale(1).
+  transition:
+    transform 90ms ease-out;
+}
 
 .container {
   position: relative;
@@ -6,308 +19,778 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  user-select: none;
-  width: 100%;
-  max-width: 280px;
-  margin: 0 auto;
-  padding: 4px 0;
+
+  width: 204px;
+  margin: 4px 0;
 }
 
-// -----------------------------------------------------------------------------
-// Ambient Glow
-// -----------------------------------------------------------------------------
-.ambientGlow {
+.glow {
   position: absolute;
-  width: 224px;
-  height: 224px;
-  border-radius: $radius-circle;
-  filter: blur(48px);
-  transition: all 700ms cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: none;
-  transform: scale(0.9);
-  opacity: 0.45;
+  bottom: 8px;
 
-  &.isOverJar {
-    transform: scale(1.25);
-    opacity: 0.9;
-  }
+  width: 195px;
+  height: 85px;
 
-  &.hasEmotions {
-    transform: scale(1.05);
-    opacity: 0.75;
-  }
+  border-radius: 60px;
 
-  &.isDraggingAny {
-    transform: scale(1.1);
-    opacity: 0.7;
-  }
+  box-shadow:
+    0 0 22px rgba(0, 196, 179, 0.28);
+
+  z-index: 0;
 }
 
-// -----------------------------------------------------------------------------
-// Vessel Wrapper
-// -----------------------------------------------------------------------------
-.vesselWrapper {
-  position: relative;
-  width: 224px;
-  height: 215px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.svgBottle {
+.moocaPerchContainer {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  filter: drop-shadow(0 12px 28px rgba(0, 196, 179, 0.14));
-  overflow: visible;
-}
 
-.stopperGroup {
-  transition: transform 500ms cubic-bezier(0, 0, 0.2, 1);
-  transform-origin: 120px 45px;
-}
+  top: -24px;
+  left: 0;
+  right: 0;
 
-// -----------------------------------------------------------------------------
-// Interactive Contents Inside Jar
-// -----------------------------------------------------------------------------
-.jarContents {
-  position: absolute;
-  inset: 0;
-  padding-top: 64px;
-  padding-bottom: 16px;
-  padding-left: 32px;
-  padding-right: 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  z-index: 25;
+
+  /*
+   * RN orbit animation converted to CSS.
+   *
+   * The original path:
+   * (-58,-18)
+   * → (66,-22)
+   * → (80,14)
+   * → (0,6)
+   * → (-80,14)
+   * → (-58,-18)
+   */
+  animation: moocaOrbit 12.3s ease-in-out infinite;
+}
+
+.moocaSpeechBubble {
+  position: relative;
+
+  max-width: 232px;
+
+  margin-bottom: 4px;
+  padding: 4.5px 11px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border: 1.2px solid rgba(0, 196, 179, 0.35);
+  border-radius: 999px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 196, 179, 0.12);
+
+  transition:
+    opacity 380ms ease,
+    transform 380ms ease;
+}
+
+.speechVisible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.speechHidden {
+  opacity: 0;
+  transform: scale(0.88);
+}
+
+.speechAnimating {
+  pointer-events: none;
+}
+
+.speechRow {
+  display: flex;
+  align-items: center;
+  gap: 4.5px;
+}
+
+.speechIconSlot {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.moocaSpeechText {
+  font-family: var(--font-prompt-semibold, sans-serif);
+  font-size: 9.5px;
+  line-height: 13px;
+
+  color: var(--color-primary-dark, #00695c);
+
+  text-align: center;
+}
+
+.moocaBubbleTail {
+  position: absolute;
+
+  bottom: -5px;
+  left: 50%;
+
+  width: 0;
+  height: 0;
+
+  margin-left: -4.5px;
+
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+  border-top: 5px solid rgba(0, 196, 179, 0.35);
+}
+
+.moocaMascotWrapper {
+  display: flex;
+  align-items: center;
+
+  z-index: 30;
+}
+
+.jarButton {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: auto;
+  padding: 0;
+  margin: 0;
+
+  border: 0;
+  background: transparent;
+
+  font: inherit;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.jarButton:focus-visible {
+  outline: 2px solid var(--color-primary, #00c4b3);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+.lidSection {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   z-index: 10;
 }
 
-// Empty State
-.emptyState {
+.corkKnob {
+  width: 26px;
+  height: 11px;
+
+  background: #c0783e;
+
+  border: 1.5px solid #7c3f13;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+
+  z-index: 3;
+}
+
+.corkLid {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 4px 8px;
-  max-width: 170px;
+
+  width: 94px;
+  height: 18px;
+
+  margin-top: -2px;
+
+  background: #b87239;
+
+  border: 1.6px solid #7c3f13;
+  border-radius: 9px;
+
+  box-shadow:
+    0 2px 2px rgba(124, 63, 19, 0.22);
+
+  z-index: 2;
 }
 
-.dropTargetRing {
-  width: 40px;
-  height: 40px;
-  border-radius: $radius-circle;
+.corkTealPool {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 300ms ease;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 196, 179, 0.3);
-  color: $color-turquoise-1;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 
-  &.ringOver {
-    background-color: $color-turquoise-1;
-    color: #FFFFFF;
-    transform: scale(1.1);
-    box-shadow: 0 8px 16px rgba(0, 196, 179, 0.4);
-  }
+  width: 78px;
+  height: 9.5px;
 
-  &.ringDragging {
-    background-color: rgba(0, 196, 179, 0.2);
-    color: $color-turquoise-1;
-    transform: scale(1.05);
-    border-color: rgba(0, 196, 179, 0.4);
-  }
+  background: #00a896;
+
+  border: 1px solid #008577;
+  border-radius: 5px;
 }
 
-.sparkleIcon {
-  width: 16px;
-  height: 16px;
-  color: $color-turquoise-1;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.corkReflectionDot {
+  width: 3px;
+  height: 3px;
+
+  background: #ffffff;
+  border-radius: 50%;
+
+  opacity: 0.9;
 }
 
-.sparkleIconSpin {
-  width: 20px;
-  height: 20px;
-  color: #FFFFFF;
-  animation: spin 1s linear infinite;
-}
-
-.checkIconStatus {
-  width: 12px;
-  height: 12px;
-  color: $color-turquoise-1;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.emptyTitle {
-  margin-top: 8px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: $color-brand-contrast;
-  letter-spacing: -0.01em;
-}
-
-.emptySubtitle {
-  margin-top: 2px;
-  font-size: 0.625rem;
-  color: $color-slate-500;
-  font-weight: 500;
-  line-height: 1.3;
-}
-
-// Filled State
-.filledState {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-  padding-bottom: 8px;
-}
-
-.emotionPill {
+.neckWrapper {
   position: relative;
-  width: 100%;
-  max-width: 170px;
-  padding: 6px 10px;
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 12px rgba(0, 196, 179, 0.18);
+
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: $color-brand-contrast;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 200ms ease;
 
-  &:hover {
-    transform: scale(1.03);
-    border-color: #FCA5A5;
+  width: 86px;
 
-    .removeBtn {
-      background-color: #FEF2F2;
-      color: #EF4444;
-    }
-  }
+  margin-top: -2px;
 
-  &:active {
-    transform: scale(0.95);
-  }
+  z-index: 1;
 }
 
-.emotionPillLeft {
+.glassNeck {
+  width: 80px;
+  height: 6.5px;
+
+  background: rgba(255, 255, 255, 0.45);
+
+  border: 1.3px solid rgba(0, 196, 179, 0.35);
+  border-radius: 2.5px;
+}
+
+.twineCordLine {
+  position: absolute;
+
+  top: 2.2px;
+
+  width: 72px;
+  height: 2px;
+
+  background: #9a5826;
+  border-radius: 1px;
+}
+
+.charmHanger {
+  position: absolute;
+
+  right: 10px;
+  top: 2.5px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  z-index: 6;
+}
+
+.charmString {
+  width: 1.5px;
+  height: 18px;
+
+  background: #9a5826;
+}
+
+.charmCircle {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+
+  width: 13px;
+  height: 13px;
+
+  background: #ffffff;
+
+  border: 1.6px solid #00bfa5;
+  border-radius: 50%;
+
+  box-shadow:
+    0 1px 2px rgba(0, 191, 165, 0.25);
+}
+
+.charmInnerDot {
+  width: 2.8px;
+  height: 2.8px;
+
+  background: #00bfa5;
+  border-radius: 50%;
+}
+
+.jarAuraContainer {
+  position: absolute;
+
+  top: 25px;
+
+  width: 280px;
+  height: 250px;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+.jarBody {
+  position: relative;
+
+  width: 200px;
+  height: 172px;
+
+  margin-top: -2px;
+  padding: 7px;
+
+  border: 2px solid rgba(255, 255, 255, 0.92);
+
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  box-shadow:
+    0 5px 18px rgba(0, 196, 179, 0.2);
+
+  z-index: 1;
 }
 
-.emotionDot {
+.glassReflectionLeft {
+  position: absolute;
+
+  top: 12px;
+  left: 7px;
+
+  width: 3.5px;
+  height: 108px;
+
+  background: rgba(255, 255, 255, 0.85);
+
+  border-radius: 2px;
+
+  z-index: 2;
+}
+
+.glassReflectionTop {
+  position: absolute;
+
+  top: 6px;
+  left: 20px;
+  right: 20px;
+
+  height: 2.6px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  border-radius: 1.3px;
+
+  z-index: 2;
+}
+
+.glassReflectionRight {
+  position: absolute;
+
+  top: 18px;
+  right: 7px;
+
+  width: 3px;
+  height: 75px;
+
+  background: rgba(255, 255, 255, 0.52);
+
+  border-radius: 1.5px;
+
+  z-index: 2;
+}
+
+.glassReflectionBottom {
+  position: absolute;
+
+  bottom: 5px;
+  left: 16px;
+  right: 16px;
+
+  height: 3px;
+
+  background: rgba(255, 255, 255, 0.65);
+
+  border-radius: 1.5px;
+
+  z-index: 2;
+}
+
+.jarInner {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 5;
+}
+
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 3px;
+
+  padding: 4px 0;
+}
+
+.emptyCircleBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  margin-bottom: 3px;
+
+  background: #fff;
+
+  border: 2px solid var(--color-border-teal, #99f6e4);
+  border-radius: 50%;
+
+  box-shadow:
+    0 2px 5px rgba(0, 196, 179, 0.16);
+}
+
+.emptyBadgeTitle {
+  font-family: var(--font-prompt-bold, sans-serif);
+  font-size: 11.5px;
+
+  color: #064e3b;
+
+  text-align: center;
+}
+
+.emptyBadgeSubtitle {
+  margin-top: 1px;
+
+  font-family: var(--font-prompt-medium, sans-serif);
+  font-size: 9px;
+
+  color: #475569;
+
+  text-align: center;
+}
+
+.emptyTitleLight {
+  color: #ffffffff;
+}
+
+.emptyTitleDawn {
+  color: #78350f;
+}
+
+.emptySubtitleLight {
+  color: #fafcffff;
+}
+
+.emptySubtitleDawn {
+  color: #92400e;
+}
+
+.puffsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  max-width: 185px;
+
+  padding: 4px;
+
+  animation: puffBob 3.8s ease-in-out infinite;
+}
+
+.miniCloudWrapper {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  margin: 2px 0;
+}
+
+.miniCloudScallops {
+  position: absolute;
+
+  top: -4px;
+  left: 8px;
+  right: 8px;
+
+  height: 8px;
+
+  z-index: 1;
+}
+
+.miniScallopLeft,
+.miniScallopCenter,
+.miniScallopRight {
+  position: absolute;
+
+  border-style: solid;
+  border-bottom-width: 0;
+
+  z-index: 1;
+}
+
+.miniScallopLeft {
+  left: 4px;
+  top: 1px;
+
   width: 10px;
   height: 10px;
-  border-radius: $radius-circle;
-  flex-shrink: 0;
-  border: 1px solid #FFFFFF;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  border-width: 1px;
+  border-radius: 50%;
 }
 
-.emotionLabel {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: $color-slate-800;
+.miniScallopCenter {
+  left: 12px;
+  top: -2.5px;
+
+  width: 12px;
+  height: 12px;
+
+  border-width: 1px;
+  border-radius: 50%;
 }
 
-.removeBtn {
-  width: 16px;
-  height: 16px;
-  border-radius: $radius-circle;
-  background-color: #F1F5F9;
+.miniScallopRight {
+  left: 22px;
+  top: 1.5px;
+
+  width: 8px;
+  height: 8px;
+
+  border-width: 1px;
+  border-radius: 50%;
+}
+
+.miniCloudBody {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  max-width: 165px;
+
+  padding: 4px 8px;
+
+  background: #ffffff;
+
+  border: 1.2px solid;
+  border-bottom-width: 2px;
+  border-radius: 999px;
+
+  z-index: 2;
+}
+
+.customMiniCloudBody {
+  max-width: 155px;
+}
+
+.miniPuffIconWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $color-slate-400;
-  font-size: 9px;
-  transition: colors 150ms ease;
-  flex-shrink: 0;
-  margin-left: 4px;
 
-  svg {
-    width: 10px;
-    height: 10px;
-  }
+  flex: 0 0 auto;
+
+  width: 17px;
+  height: 17px;
+
+  border-radius: 50%;
 }
 
-.statusBar {
+.miniPuffText {
+  min-width: 0;
+
+  overflow: hidden;
+
+  font-family: var(--font-prompt-semibold, sans-serif);
+  font-size: 10.5px;
+
+  color: var(--color-primary-dark, #00695c);
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.customMiniPuffText {
+  max-width: 95px;
+}
+
+.miniRemoveBtn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  width: 15px;
+  height: 15px;
+
+  margin-left: 2px;
+  padding: 0;
+
+  background: rgba(0, 0, 0, 0.05);
+
+  border: 0;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.miniRemoveBtn:hover {
+  background: rgba(0, 0, 0, 0.09);
+}
+
+.liquidBase {
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 30px;
+
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+
+  z-index: 1;
+}
+
+.clearBtnSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
-  max-width: 170px;
-  padding: 0 4px;
-  font-size: 0.5625rem;
-  color: $color-brand-contrast;
-  font-weight: 600;
-  margin-top: 2px;
-}
+  height: 34px;
 
-.statusCount {
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.checkmark {
-  color: $color-turquoise-1;
+  margin-top: 26px;
 }
 
 .clearBtn {
-  color: $color-slate-400;
-  font-weight: 700;
-  transition: color 150ms ease;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  padding: 0;
-  font-size: inherit;
-  font-family: inherit;
+  display: flex;
+  align-items: center;
 
-  &:hover {
-    color: #EF4444;
+  gap: 4px;
+
+  padding: 3.5px 12px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  border: 1px solid rgba(0, 196, 179, 0.28);
+  border-radius: 999px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 196, 179, 0.12);
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clearBtn:hover {
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.clearBtnText {
+  font-family: var(--font-prompt-semibold, sans-serif);
+  font-size: 9.5px;
+
+  color: var(--color-primary-dark, #00695c);
+}
+
+.clearBtnPlaceholder {
+  height: 28px;
+}
+
+/* -------------------------------------------------- */
+/* Animations */
+/* -------------------------------------------------- */
+
+@keyframes moocaOrbit {
+  0% {
+    transform: translate(-58px, -18px);
+  }
+
+  21.95% {
+    transform: translate(66px, -22px);
+  }
+
+  40.65% {
+    transform: translate(80px, 14px);
+  }
+
+  60.98% {
+    transform: translate(0, 6px);
+  }
+
+  79.67% {
+    transform: translate(-80px, 14px);
+  }
+
+  100% {
+    transform: translate(-58px, -18px);
   }
 }
 
-@keyframes moocaFloat {
-  0%, 100% {
+@keyframes puffBob {
+  0% {
     transform: translateY(0);
   }
-  50% {
-    transform: translateY(-4px);
+
+  25% {
+    transform: translateY(-3px);
+  }
+
+  75% {
+    transform: translateY(2px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .moocaPerchContainer,
+  .puffsContainer {
+    animation: none;
+  }
+
+  .moocaSpeechBubble {
+    transition: none;
+  }
+
+  .animatedJar {
+    transition: none;
   }
 }

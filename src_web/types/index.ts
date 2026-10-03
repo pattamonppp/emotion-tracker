@@ -6,12 +6,24 @@ export type MBTIType =
   | 'ISTJ' | 'ISFJ' | 'ESTJ' | 'ESFJ'
   | 'ISTP' | 'ISFP' | 'ESTP' | 'ESFP';
 
-export type EmotionTagId = 'shaking' | 'forgetting' | 'pressure' | 'freeze' | 'burnout';
+export type EmotionTagId = 
+  | 'shaking' 
+  | 'forgetting' 
+  | 'pressure' 
+  | 'freeze' 
+  | 'burnout'
+  | 'anxious'
+  | 'overthinking'
+  | 'lonely'
+  | 'confused'
+  | 'custom'
+  | (string & {});
 
 export interface EmotionTag {
   id: EmotionTagId;
   labelTh: string;
   labelEn: string;
+  emoji?: string;
   color: string;
   weightDescription: string;
   recommendedOption: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
@@ -73,6 +85,18 @@ export interface Feedback {
   };
 }
 
+export type MoodStampType = 'empowered' | 'grounded' | 'hug';
+
+export interface CustomMessageItem {
+  id: string;
+  text: string;
+}
+
+export interface SpeechMessage {
+  text: string;
+  iconType: 'sparkles' | 'wind' | 'heart' | 'shield' | 'smile' | 'cloud';
+}
+
 export type SkyTimePeriod = 'dawn' | 'day' | 'sunset' | 'night';
 export type SkyMode = 'auto' | SkyTimePeriod;
 
@@ -82,4 +106,3 @@ export const SKY_PERIOD = {
   SUNSET: 'sunset',
   NIGHT: 'night',
 } as const;
-

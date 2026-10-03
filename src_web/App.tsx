@@ -4,7 +4,8 @@ import {
   ResetPhase, 
   EmotionTagId, 
   InterventionOption, 
-  ShiftFeedback 
+  ShiftFeedback,
+  SkyTimePeriod
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { MobileFrame } from './components/MobileFrame';
@@ -15,11 +16,13 @@ import { MoocaStoryModal } from './phases/Phase1EmotionJar/modals/MoocaStoryModa
 import { SomaticAbsorption } from './phases/Phase2Interventions/SomaticAbsorption';
 import { VictorySip } from './phases/Phase2Interventions/VictorySip';
 import { KineticShaker } from './phases/Phase2Interventions/KineticShaker';
+import { SomaticBreathingPacer } from './phases/Phase2Interventions/SomaticBreathingPacer';
 import { AudioMatrixSanctuary } from './phases/Phase2Interventions/AudioMatrixSanctuary';
 import { Phase3CognitiveReframing } from './phases/Phase3CognitiveReframing';
 import { Phase4Feedback } from './phases/Phase4Feedback';
 import { ResetCompletedView } from './phases/ResetCompletedView';
 import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
+import { DesignSystemDrawer } from './design-system/DesignSystemDrawer';
 import { audioService } from './services/audioService';
 import { HeartIcon } from './icons';
 import { DEV_MODE, DEV_START } from './config';
@@ -50,7 +53,7 @@ export default function App() {
     DEV_MODE ? DEV_START.phase : 'phase1_jar'
   );
   const [activeOption, setActiveOption] = useState<InterventionOption>(
-    DEV_MODE && ['A', 'B', 'C', 'D'].includes(DEV_START.activity)
+    DEV_MODE && ['A', 'B', 'C', 'D', 'E', 'F', 'G'].includes(DEV_START.activity)
       ? DEV_START.activity as InterventionOption
       : 'A'
   );
@@ -67,9 +70,11 @@ export default function App() {
 
   // Modals
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
   const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
+  const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>('day');
 
   // Save profile changes
   const handleSaveProfile = (newProfile: UserProfile) => {
@@ -134,7 +139,12 @@ export default function App() {
     setSelectedEmotions([]);
   };
 
-  const locationText = t.phases.phase1.locations[profile.goal] || t.phases.phase1.locations.work;
+  const locationText =
+    profile.goal === 'exam'
+      ? (profile.language === 'th' ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
+      : profile.goal === 'stage'
+        ? (profile.language === 'th' ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
+        : (profile.language === 'th' ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation');
 
   return (
     <>
@@ -145,6 +155,7 @@ export default function App() {
         onOpenProfile={() => setIsOnboardingOpen(true)}
         onToggleLanguage={toggleLanguage}
         onOpenStory={() => setIsStoryModalOpen(true)}
+        onTimePeriodChange={setSkyPeriod}
       >
         {/* Phase 1: Zero-Friction Capture & Tactile Emotion Jar */}
         {currentPhase === 'phase1_jar' && (
@@ -157,6 +168,7 @@ export default function App() {
             onOpenPulseSensor={() => setIsPulseModalOpen(true)}
             onOpenStory={() => setIsStoryModalOpen(true)}
             lang={lang}
+            skyPeriod={skyPeriod}
           />
         )}
 
@@ -164,43 +176,49 @@ export default function App() {
         {currentPhase === 'phase2_intervention' && (
           <div className="flex flex-col h-full">
             {/* Developer-only intervention switcher */}
-            {DEV_MODE && <div className="px-3 pt-2 pb-1.5 bg-[#E6F9F7]/80 backdrop-blur-md border-b border-[#00C4B3]/20 flex items-center justify-between text-xs shadow-2xs">
-              <span className="text-[10px] text-[#004D40] font-extrabold flex items-center gap-1.5">
-                <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
-                <span>{t.phases.phase1.resetModeTitle}</span>
-              </span>
-              <div className="flex gap-1">
-                {(['A', 'B', 'C', 'D'] as InterventionOption[]).map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => {
-                      audioService.stopAllVoice();
-                      setActiveOption(opt);
-                    }}
-                    className={`w-7 h-7 rounded-full text-xs font-black transition-all cursor-pointer ${
-                      activeOption === opt
-                        ? 'bg-[#00C4B3] text-white shadow-xs scale-105 border border-[#00C4B3]'
-                        : 'bg-white text-[#004D40] hover:bg-[#E6F9F7] border border-slate-200'
-                    }`}
-                    title={
-                      opt === 'A' ? t.phases.phase2.options.optA :
-                      opt === 'B' ? t.phases.phase2.options.optB :
-                      opt === 'C' ? t.phases.phase2.options.optC :
-                      t.phases.phase2.options.optD
-                    }
-                  >
-                    {opt}
-                  </button>
-                ))}
+            {DEV_MODE && (
+              <div className="px-3 pt-2 pb-1.5 bg-[#E6F9F7]/80 backdrop-blur-md border-b border-[#00C4B3]/20 flex items-center justify-between text-xs shadow-2xs">
+                <span className="text-[10px] text-[#004D40] font-extrabold flex items-center gap-1.5">
+                  <HeartIcon className="w-3.5 h-3.5 text-[#00C4B3]" />
+                  <span>{t.phases.phase1.resetModeTitle}</span>
+                </span>
+                <div className="flex gap-1">
+                  {(['A', 'B', 'C', 'D', 'E', 'F', 'G'] as InterventionOption[]).map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => {
+                        audioService.stopAllVoice();
+                        setActiveOption(opt);
+                      }}
+                      className={`w-7 h-7 rounded-full text-xs font-black transition-all cursor-pointer ${
+                        activeOption === opt
+                          ? 'bg-[#00C4B3] text-white shadow-xs scale-105 border border-[#00C4B3]'
+                          : 'bg-white text-[#004D40] hover:bg-[#E6F9F7] border border-slate-200'
+                      }`}
+                      title={
+                        opt === 'A' ? t.phases.phase2.options.optA :
+                        opt === 'B' ? t.phases.phase2.options.optB :
+                        opt === 'C' ? t.phases.phase2.options.optC :
+                        opt === 'D' ? t.phases.phase2.options.optD :
+                        opt === 'E' ? (t.phases.phase2.options as any).optE || 'Box Breathing' :
+                        opt === 'F' ? (t.phases.phase2.options as any).optF || '4-7-8 Breathing' :
+                        (t.phases.phase2.options as any).optG || 'Audio Matrix Sanctuary'
+                      }
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>}
+            )}
 
-            {/* Active Intervention View */}
+            {/* Active Intervention View - Mirrored from Mobile RN App.tsx */}
             <div className="flex-1 overflow-hidden">
               {activeOption === 'A' && (
                 <SomaticAbsorption
                   onComplete={handleInterventionComplete}
                   lang={lang}
+                  skyPeriod={skyPeriod}
                 />
               )}
               {activeOption === 'B' && (
@@ -211,11 +229,33 @@ export default function App() {
               )}
               {activeOption === 'C' && (
                 <KineticShaker
+                  activityType="shake"
                   onComplete={handleInterventionComplete}
                   lang={lang}
                 />
               )}
               {activeOption === 'D' && (
+                <KineticShaker
+                  activityType="jump"
+                  onComplete={handleInterventionComplete}
+                  lang={lang}
+                />
+              )}
+              {activeOption === 'E' && (
+                <SomaticBreathingPacer
+                  pattern="box"
+                  onComplete={handleInterventionComplete}
+                  lang={lang}
+                />
+              )}
+              {activeOption === 'F' && (
+                <SomaticBreathingPacer
+                  pattern="relax478"
+                  onComplete={handleInterventionComplete}
+                  lang={lang}
+                />
+              )}
+              {activeOption === 'G' && (
                 <AudioMatrixSanctuary
                   mbti={profile.mbti}
                   onComplete={handleInterventionComplete}
@@ -252,6 +292,7 @@ export default function App() {
             profile={profile}
             feedback={feedback}
             onRestart={handleRestart}
+            onOpenDesignSystem={() => setIsDesignSystemOpen(true)}
             onOpenProfile={() => setIsOnboardingOpen(true)}
             onOpenHistory={() => setIsHistoryOpen(true)}
             onOpenStory={() => setIsStoryModalOpen(true)}
@@ -293,6 +334,12 @@ export default function App() {
         userName={profile.name}
       />
 
+      {/* Design System Token & Component Drawer */}
+      <DesignSystemDrawer
+        isOpen={isDesignSystemOpen}
+        onClose={() => setIsDesignSystemOpen(false)}
+        lang={lang}
+      />
     </>
   );
 }

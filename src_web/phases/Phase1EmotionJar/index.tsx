@@ -1,33 +1,32 @@
-import React, { useState, useRef, useCallback } from 'react';
-import cn from 'classnames';
-import { EmotionTagId } from '../../types';
-import { EMOTION_TAGS } from '../../data/matrixData';
+import React from 'react';
+import { EmotionTag, EmotionTagId, CustomMessageItem } from '../../types';
+import { EMOTION_TAGS, matchOptionFromKeywords } from '../../data/matrixData';
 import { audioService } from '../../services/audioService';
-import { Button } from '../../components/Button';
+import { MarshmallowButton } from '../../design-system/MarshmallowButton';
+import { FloatingEmotionCloud } from './components/FloatingEmotionCloud';
 import { GlassEmotionJar } from './components/GlassEmotionJar';
-import {
-  MapPinIcon,
-  ActivityIcon,
-  ArrowRightIcon,
-  GripHorizontalIcon,
-  CheckIcon,
-  HeartIcon,
-} from '../../icons';
-import { useLanguage } from '../../hooks';
-import { getTagLabel } from '../../locales';
-import { MAX_EMOTIONS } from './constants';
-import styles from './styles.module.scss';
+import { CustomEmotionModal } from './modals/CustomEmotionModal';
+import { MapPin, Activity, ArrowRight } from 'lucide-react';
+import { DESIGN_TOKENS } from '../../design-system/tokens';
+import { getTranslation } from '../../locales';
+import { PHASE1_CONFIG } from '../../constants';
+import styles from './Phase1EmotionJar.module.scss';
+
+export type { CustomMessageItem };
 
 export interface Phase1EmotionJarProps {
   currentLocation: string;
   heartRate: number;
   selectedEmotions: EmotionTagId[];
-  onSelectEmotions: (ids: EmotionTagId[]) => void;
+  onSelectEmotions: (emotions: EmotionTagId[]) => void;
   onProceed: () => void;
   onOpenPulseSensor?: () => void;
   onOpenStory?: () => void;
   lang?: 'th' | 'en';
+  skyPeriod?: 'dawn' | 'day' | 'sunset' | 'night';
 }
+
+const MAX_SELECTED_EMOTIONS = PHASE1_CONFIG.maxSelectedEmotions;
 
 export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   currentLocation,
@@ -36,294 +35,276 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
   onSelectEmotions,
   onProceed,
   onOpenPulseSensor,
+  onOpenStory,
+  lang = 'th',
+  skyPeriod,
 }) => {
-  const { t, lang } = useLanguage();
-  const strings = t.phases.phase1;
-  const jarRef = useRef<HTMLDivElement | null>(null);
+  const selectedEmotionsRef = React.useRef(selectedEmotions);
+  selectedEmotionsRef.current = selectedEmotions;
 
-  // Dragging states
-  const [activeDraggingTagId, setActiveDraggingTagId] = useState<EmotionTagId | null>(null);
-  const [dragPointerPos, setDragPointerPos] = useState<{ x: number; y: number } | null>(null);
-  const [isOverJar, setIsOverJar] = useState(false);
-  const [recentDropEffect, setRecentDropEffect] = useState(false);
+  const [customMessages, setCustomMessages] = React.useState<CustomMessageItem[]>([]);
+  const [editingMessageId, setEditingMessageId] = React.useState<string | null>(null);
+  const [isCustomModalOpen, setIsCustomModalOpen] = React.useState(false);
 
-  // Tracking refs
-  const dragStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-  const isDraggingRef = useRef(false);
+  const handleSaveCustomEmotion = (
+    text: string,
+    putInJarImmediately: boolean,
+    editingId?: string | null
+  ) => {
+    if (editingId) {
+      setCustomMessages((prev) =>
+        prev.map((m) => (m.id === editingId ? { ...m, text } : m))
+      );
+      if (putInJarImmediately && !selectedEmotionsRef.current.includes(editingId)) {
+        if (selectedEmotionsRef.current.length < MAX_SELECTED_EMOTIONS) {
+          audioService.playJarDrop();
+          onSelectEmotions([...selectedEmotionsRef.current, editingId]);
+        }
+      }
+    } else {
+      if (customMessages.length >= 3) return;
+      const newId = `custom_${Date.now()}`;
+      setCustomMessages((prev) => [...prev, { id: newId, text }]);
+      if (putInJarImmediately && selectedEmotionsRef.current.length < MAX_SELECTED_EMOTIONS) {
+        audioService.playJarDrop();
+        onSelectEmotions([...selectedEmotionsRef.current, newId]);
+      }
+    }
+  };
 
-  // Check if coordinates overlap the Jar
-  const checkIsOverJar = useCallback((clientX: number, clientY: number) => {
-    if (!jarRef.current) return false;
-    const rect = jarRef.current.getBoundingClientRect();
-    const padding = 20;
-    return (
-      clientX >= rect.left - padding &&
-      clientX <= rect.right + padding &&
-      clientY >= rect.top - padding &&
-      clientY <= rect.bottom + padding
-    );
-  }, []);
+  const handleDeleteCustomEmotion = (id: string) => {
+    setCustomMessages((prev) => prev.filter((m) => m.id !== id));
+    if (selectedEmotionsRef.current.includes(id)) {
+      onSelectEmotions(selectedEmotionsRef.current.filter((item) => item !== id));
+    }
+  };
 
-  const handleDropIntoJar = useCallback(
-    (tagId: EmotionTagId) => {
-      audioService.playJarDrop();
-      audioService.triggerHaptic([30, 45]);
-      setRecentDropEffect(true);
-      setTimeout(() => setRecentDropEffect(false), 800);
-
-      if (selectedEmotions.includes(tagId)) {
+  const toggleEmotion = (id: EmotionTagId) => {
+    const current = selectedEmotionsRef.current;
+    if (current.includes(id)) {
+      audioService.triggerHaptic('light');
+      onSelectEmotions(current.filter((item) => item !== id));
+    } else {
+      if (current.length >= MAX_SELECTED_EMOTIONS) {
+        audioService.triggerHaptic('warning');
         return;
       }
+      audioService.playJarDrop();
+      onSelectEmotions([...current, id]);
+    }
+  };
 
-      if (selectedEmotions.length >= MAX_EMOTIONS) {
-        onSelectEmotions([...selectedEmotions.slice(1), tagId]);
-      } else {
-        onSelectEmotions([...selectedEmotions, tagId]);
+  const handleDropIntoJar = (id: EmotionTagId) => {
+    const current = selectedEmotionsRef.current;
+    if (!current.includes(id)) {
+      if (current.length >= MAX_SELECTED_EMOTIONS) {
+        audioService.triggerHaptic('warning');
+        return;
       }
-    },
-    [selectedEmotions, onSelectEmotions]
-  );
+      audioService.playJarDrop();
+      onSelectEmotions([...current, id]);
+    }
+  };
 
-  const handleRemoveFromJar = useCallback(
-    (tagId: EmotionTagId) => {
-      audioService.triggerHaptic([20]);
-      onSelectEmotions(selectedEmotions.filter((id) => id !== tagId));
-    },
-    [selectedEmotions, onSelectEmotions]
-  );
-
-  const handleClearAll = useCallback(() => {
-    audioService.triggerHaptic([20, 20]);
+  const handleClearAll = () => {
+    audioService.triggerHaptic('medium');
     onSelectEmotions([]);
-  }, [onSelectEmotions]);
-
-  // Pointer drag event handlers
-  const handlePointerDown = (tagId: EmotionTagId, e: React.PointerEvent) => {
-    dragStartPosRef.current = { x: e.clientX, y: e.clientY };
-    isDraggingRef.current = false;
-    setActiveDraggingTagId(tagId);
-    setDragPointerPos({ x: e.clientX, y: e.clientY });
-
-    const handlePointerMove = (moveEvent: PointerEvent) => {
-      const dx = moveEvent.clientX - dragStartPosRef.current.x;
-      const dy = moveEvent.clientY - dragStartPosRef.current.y;
-      if (Math.hypot(dx, dy) > 8) {
-        isDraggingRef.current = true;
-      }
-      setDragPointerPos({ x: moveEvent.clientX, y: moveEvent.clientY });
-      setIsOverJar(checkIsOverJar(moveEvent.clientX, moveEvent.clientY));
-    };
-
-    const handlePointerUp = (upEvent: PointerEvent) => {
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerUp);
-
-      const over = checkIsOverJar(upEvent.clientX, upEvent.clientY);
-      if (isDraggingRef.current) {
-        if (over) {
-          handleDropIntoJar(tagId);
-        }
-      } else {
-        // Direct tap: toggle in or out of jar
-        if (selectedEmotions.includes(tagId)) {
-          handleRemoveFromJar(tagId);
-        } else {
-          handleDropIntoJar(tagId);
-        }
-      }
-
-      setActiveDraggingTagId(null);
-      setDragPointerPos(null);
-      setIsOverJar(false);
-      isDraggingRef.current = false;
-    };
-
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('pointerup', handlePointerUp);
   };
 
-  const getRecommendedIntervention = () => {
-    if (selectedEmotions.length === 0) return null;
-    const firstTag = EMOTION_TAGS.find((t) => t.id === selectedEmotions[0]);
-    return firstTag?.recommendedOption || 'A';
-  };
+  const isJarFull = selectedEmotions.length >= MAX_SELECTED_EMOTIONS;
 
-  const recommended = getRecommendedIntervention();
+  const t = getTranslation(lang);
+  const p1 = t.phases.phase1;
 
-  const getMoocaSpeech = () => {
-    if (selectedEmotions.length === 0) {
-      return strings.moocaSpeech.empty;
-    }
-    if (selectedEmotions.length === 1) {
-      return strings.moocaSpeech.hasOne;
-    }
-    return strings.moocaSpeech.full;
-  };
+  // 1) Preset emotions not yet in jar (exclude placeholder 'custom')
+  const presetsInSky = EMOTION_TAGS.filter(
+    (tag) => tag.id !== 'custom' && !selectedEmotions.includes(tag.id)
+  );
 
-  const activeDraggingTag = EMOTION_TAGS.find((t) => t.id === activeDraggingTagId);
+  // 2) Custom messages not yet in jar
+  const customInSky = customMessages
+    .filter((m) => !selectedEmotions.includes(m.id))
+    .map((m) => ({
+      id: m.id,
+      labelTh: m.text,
+      labelEn: m.text,
+      emoji: '',
+      color: '#EC4899',
+      weightDescription: '',
+      recommendedOption: matchOptionFromKeywords(m.text, 'A'),
+      isCustom: true,
+      customText: m.text,
+    }));
+
+  // 3) Add button: show if customMessages.length < 3 AND selectedEmotions.length < MAX_SELECTED_EMOTIONS
+  const showAddButton =
+    customMessages.length < PHASE1_CONFIG.maxCustomMessages && selectedEmotions.length < MAX_SELECTED_EMOTIONS;
+
+  const allSkyItems: Array<{
+    id: string;
+    tag: EmotionTag;
+    isCustom?: boolean;
+    customText?: string;
+    isAddButton?: boolean;
+  }> = [
+    ...presetsInSky.map((tagItem) => ({ id: tagItem.id, tag: tagItem })),
+    ...customInSky.map((c) => ({
+      id: c.id,
+      tag: c,
+      isCustom: true,
+      customText: c.customText,
+    })),
+    ...(showAddButton
+      ? [
+          {
+            id: 'btn_add_custom',
+            tag: {
+              id: 'custom',
+              labelTh: p1.tellMoocaPlaceholder,
+              labelEn: p1.tellMoocaPlaceholder,
+              emoji: '',
+              color: '#EC4899',
+              weightDescription: '',
+              recommendedOption: 'A' as const,
+            },
+            isAddButton: true,
+          },
+        ]
+      : []),
+  ];
+
+  // 4) STRICTLY MAXIMUM 3 CLOUDS PER ROW!
+  const chunkedRows: typeof allSkyItems[] = [];
+  for (let i = 0; i < allSkyItems.length; i += 3) {
+    chunkedRows.push(allSkyItems.slice(i, i + 3));
+  }
 
   return (
-    <div className={styles.container}>
-      {/* 1. TOP CONTEXT STRIP */}
-      <div className={styles.topStrip}>
-        <div className={styles.locationBadge}>
-          <MapPinIcon />
-          <span className={styles.locationText}>{currentLocation}</span>
-        </div>
+    <div className={styles.root}>
+      <div className={styles.viewportContent}>
+        {/* Top Status Indicators (Location & Live Pulse) */}
+        <div className={styles.statusRow}>
+          <div className={styles.badgePill}>
+            <MapPin size={11} color={DESIGN_TOKENS.color.brand.turquoise.primary} />
+            <span className={styles.badgeText}>{currentLocation}</span>
+          </div>
 
-        <button
-          type="button"
-          onClick={onOpenPulseSensor}
-          className={styles.pulseBtn}
-          title={strings.tapToScanPulse}
-        >
-          <ActivityIcon />
-          <span className={styles.pulseValue}>
-            {heartRate} <span className={styles.pulseUnit}>bpm</span>
-          </span>
-        </button>
-      </div>
-
-      {/* 2. HERO HEADLINE & MOOCA SPEECH BADGE */}
-      <div className={styles.heroSection}>
-        <h1 className={styles.title}>{strings.heroTitle}</h1>
-        <p className={styles.subtitle}>{strings.heroSubtitle}</p>
-
-        <div className={styles.moocaSpeechPill}>
-          <span className={styles.moocaEmoji}>
-            <HeartIcon />
-          </span>
-          <span className={styles.moocaSpeechText}>{getMoocaSpeech()}</span>
-        </div>
-      </div>
-
-      {/* 3. HERO CENTERPIECE: REALISTIC GLASS JAR */}
-      <div className={styles.jarCenterpiece}>
-        <GlassEmotionJar
-          jarRef={jarRef}
-          selectedEmotions={selectedEmotions}
-          onRemoveEmotion={handleRemoveFromJar}
-          onClearAll={handleClearAll}
-          isOverJar={isOverJar}
-          isDraggingAny={activeDraggingTagId !== null}
-          recentDropEffect={recentDropEffect}
-          lang={lang}
-        />
-      </div>
-
-      {/* 4. TACTILE DRAGGABLE EMOTION CAPSULES TRAY */}
-      <div className={styles.traySection}>
-        <div className={styles.trayHeader}>
-          <span className={styles.trayInstruction}>{strings.dragHint}</span>
-          <span className={styles.trayCounter}>{selectedEmotions.length}/{MAX_EMOTIONS}</span>
-        </div>
-
-        <div className={styles.chipsGrid}>
-          {EMOTION_TAGS.map((tag) => {
-            const isSelected = selectedEmotions.includes(tag.id);
-            const isBeingDragged = activeDraggingTagId === tag.id;
-
-            return (
-              <div
-                key={tag.id}
-                onPointerDown={(e) => handlePointerDown(tag.id, e)}
-                className={cn(styles.chip, {
-                  [styles.selected]: isSelected,
-                  [styles.beingDragged]: isBeingDragged,
-                })}
-              >
-                <GripHorizontalIcon className={styles.gripIcon} />
-
-                <span
-                  className={styles.colorDot}
-                  style={{
-                    backgroundColor: tag.color,
-                    boxShadow: isSelected ? `0 0 6px ${tag.color}` : undefined,
-                  }}
-                />
-
-                <span className={styles.chipLabel}>
-                  {getTagLabel(tag, lang)}
-                </span>
-
-                {isSelected ? (
-                  <span className={styles.checkCircle}>
-                    <CheckIcon />
-                  </span>
-                ) : (
-                  <span className={styles.plusIcon}>+</span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 5. ACTIVE DRAGGING FLOATING GHOST PORTAL */}
-      {activeDraggingTagId && dragPointerPos && activeDraggingTag && (
-        <div
-          className={styles.dragPortal}
-          style={{
-            left: `${dragPointerPos.x}px`,
-            top: `${dragPointerPos.y}px`,
-          }}
-        >
-          <div
-            className={cn(styles.dragGhost, {
-              [styles.overJar]: isOverJar,
-            })}
+          <button
+            type="button"
+            onClick={() => {
+              audioService.triggerHaptic('selection');
+              if (onOpenPulseSensor) onOpenPulseSensor();
+            }}
+            className={styles.pulsePill}
           >
-            <span
-              className={styles.colorDot}
-              style={{
-                backgroundColor: activeDraggingTag.color,
-                boxShadow: `0 0 8px ${activeDraggingTag.color}`,
-              }}
+            <Activity size={11} color={DESIGN_TOKENS.color.feedback.warning} />
+            <span className={styles.pulseText}>{heartRate} BPM</span>
+          </button>
+        </div>
+
+        {/* Harmonious Main Stage: Clouds Sky + Apothecary Jar */}
+        <div className={styles.contentBody}>
+          {/* Floating Emotion Clouds Section (Strictly max 3 clouds per row) */}
+          <div className={styles.skyCloudsSection}>
+            <div className={styles.cloudsList}>
+              {chunkedRows.map((row, rowIdx) => (
+                <div key={`row-${rowIdx}`} className={styles.cloudRow}>
+                  {row.map((item, colIdx) => {
+                    if (item.isAddButton) {
+                      return (
+                        <FloatingEmotionCloud
+                          key={item.id}
+                          tag={item.tag}
+                          index={rowIdx * 3 + colIdx}
+                          isSelected={false}
+                          isJarFull={isJarFull}
+                          onToggle={() => {}}
+                          lang={lang}
+                          isAddButton={true}
+                          onEditCustom={() => {
+                            setEditingMessageId(null);
+                            setIsCustomModalOpen(true);
+                          }}
+                        />
+                      );
+                    }
+                    return (
+                      <FloatingEmotionCloud
+                        key={item.id}
+                        tag={item.tag}
+                        index={rowIdx * 3 + colIdx}
+                        isSelected={false}
+                        isJarFull={isJarFull}
+                        onToggle={toggleEmotion}
+                        onDropIntoJar={handleDropIntoJar}
+                        lang={lang}
+                        customText={item.customText}
+                        onEditCustom={
+                          item.isCustom
+                            ? () => {
+                                setEditingMessageId(item.id);
+                                setIsCustomModalOpen(true);
+                              }
+                            : undefined
+                        }
+                      />
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* The Sanctuary Apothecary Glass Emotion Jar with Perched Mooca */}
+          <div className={styles.jarSection}>
+            <GlassEmotionJar
+              selectedEmotions={selectedEmotions}
+              onRemoveEmotion={(id) => toggleEmotion(id)}
+              onClearAll={handleClearAll}
+              lang={lang}
+              onMoocaHug={onOpenStory}
+              customMessages={customMessages}
+              skyPeriod={skyPeriod}
             />
-            <span className={styles.dragGhostText}>
-              {getTagLabel(activeDraggingTag, lang)}
-            </span>
-            {isOverJar && (
-              <span className={styles.dropHint}>
-                {strings.dropHint}
-              </span>
-            )}
           </div>
         </div>
-      )}
+      </div>
 
-      {/* 6. BOTTOM ACTION SECTION */}
-      <div className={styles.bottomActionSection}>
-        {recommended && (
-          <div className={styles.previewBanner}>
-            <div className={styles.previewLeft}>
-              <span className={styles.previewOptionBadge}>{recommended}</span>
-              <span className={styles.previewOptionName}>
-                {recommended === 'A' && strings.previewA}
-                {recommended === 'B' && strings.previewB}
-                {recommended === 'C' && strings.previewC}
-                {recommended === 'D' && strings.previewD}
-              </span>
-            </div>
-            <span className={styles.previewDuration}>65s</span>
-          </div>
-        )}
-
-        <Button
+      {/* Sticky Bottom Marshmallow 3D Proceed CTA */}
+      <div className={styles.stickyBottomBar}>
+        <MarshmallowButton
           variant="primary"
-          colorTheme="turquoise"
-          size="lg"
-          fullWidth
-          isDisabled={selectedEmotions.length === 0}
-          onClick={onProceed}
-          trailingIcon={<ArrowRightIcon className={styles.btnArrowIcon} />}
-          label={
-            selectedEmotions.length === 0
-              ? strings.emptyButtonPrompt
-              : strings.activeButtonPrompt
-          }
+          size="md"
+          onPress={() => {
+            if (selectedEmotions.length === 0) {
+              toggleEmotion(EMOTION_TAGS[0].id);
+            }
+            onProceed();
+          }}
+          title={p1.beginCozyReset}
+          icon={<ArrowRight size={17} color="#FFFFFF" />}
+          disabled={selectedEmotions.length === 0}
         />
       </div>
+
+      {/* Sweet Custom Emotion Input Modal (Message to Mooca) */}
+      <CustomEmotionModal
+        isOpen={isCustomModalOpen}
+        editingId={editingMessageId}
+        initialText={
+          editingMessageId
+            ? customMessages.find((m) => m.id === editingMessageId)?.text || ''
+            : ''
+        }
+        onSave={handleSaveCustomEmotion}
+        onDelete={handleDeleteCustomEmotion}
+        onClose={() => {
+          setIsCustomModalOpen(false);
+          setEditingMessageId(null);
+        }}
+        lang={lang}
+        isJarFull={isJarFull}
+      />
     </div>
   );
 };
@@ -332,4 +313,6 @@ export default Phase1EmotionJar;
 export * from './modals/LivePulseSensorModal';
 export * from './modals/MoocaStoryModal';
 export * from './modals/OnboardingModal';
+export * from './modals/CustomEmotionModal';
 export * from './components/GlassEmotionJar';
+export * from './components/FloatingEmotionCloud';

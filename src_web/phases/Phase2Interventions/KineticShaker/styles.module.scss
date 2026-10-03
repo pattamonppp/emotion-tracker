@@ -1,288 +1,271 @@
-@use 'abstracts' as *;
-
 .container {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  padding: 12px;
+  padding: 6px 12px 10px 12px;
   user-select: none;
-  font-family: $font-sans;
-  animation: fadeIn 300ms ease-out;
+  -webkit-user-select: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Top Mode Switcher Bar
-// -----------------------------------------------------------------------------
-.modeSwitcher {
-  width: 100%;
+.mascotWrapper {
+  height: 135px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  padding: 6px 12px;
-  background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
-  border-radius: $radius-actionable-lg;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: $elevation-1;
+  justify-content: center;
+  margin-top: 4px;
+  transition: transform 80ms ease;
+
+  &.isShaking {
+    animation: mascotWiggle 120ms infinite alternate;
+  }
+
+  &.isBouncing {
+    animation: mascotBounce 240ms infinite alternate;
+  }
 }
 
-.modeBadge {
+@keyframes mascotWiggle {
+  from { transform: translateX(-6px) rotate(-3deg); }
+  to { transform: translateX(6px) rotate(3deg); }
+}
+
+@keyframes mascotBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-16px); }
+}
+
+.modeToggleRow {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: $color-flamingo-1;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    animation: zapBounce 1.6s infinite ease-in-out;
-  }
-}
-
-@keyframes zapBounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-2px);
-  }
-}
-
-.modeBadgeText {
-  font-weight: 600;
-  color: $color-slate-800;
-}
-
-.modeGroup {
-  display: flex;
-  gap: 4px;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 3px 6px;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 196, 179, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .modeBtn {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
   cursor: pointer;
-  background-color: #F1F5F9;
-  color: $color-slate-600;
-  transition: all 180ms ease;
+  transition: all 120ms ease;
 
-  &:hover {
-    background-color: #E2E8F0;
-  }
-
-  &.active {
-    background-color: $color-turquoise-1;
+  &.modeBtnActive {
+    background: #00C4B3;
     color: #FFFFFF;
-    box-shadow: 0 1px 3px rgba(0, 196, 179, 0.3);
+    box-shadow: 0 2px 6px rgba(0, 196, 179, 0.3);
   }
+}
+
+.mainStage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 12px;
+}
+
+// -------------------------------------------------------------
+// Interactive Kinetic Energy Flask
+// -------------------------------------------------------------
+.flaskWrapper {
+  position: relative;
+  width: 140px;
+  height: 170px;
+  cursor: pointer;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 120ms ease;
 
   &:active {
     transform: scale(0.96);
   }
-}
 
-// -----------------------------------------------------------------------------
-// Guidance & Mascot Section
-// -----------------------------------------------------------------------------
-.guidanceSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 4px;
-}
-
-.guidanceTitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: $color-slate-800;
-  letter-spacing: -0.01em;
-  margin-top: 4px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    color: $color-flamingo-1;
+  &.flaskShaking {
+    animation: flaskShake 140ms infinite alternate;
   }
 }
 
-.guidanceDesc {
-  font-size: 0.75rem;
-  color: $color-slate-600;
-  max-width: 320px;
-  margin-top: 4px;
-  line-height: 1.4;
+@keyframes flaskShake {
+  from { transform: translateX(-8px) rotate(-4deg); }
+  to { transform: translateX(8px) rotate(4deg); }
 }
 
-// -----------------------------------------------------------------------------
-// Tension Gauge Zone
-// -----------------------------------------------------------------------------
-.gaugeZone {
-  position: relative;
-  margin: 8px 0;
+.capsuleCorkTop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52px;
+  height: 18px;
+  background: #D97706;
+  border-radius: 9px 9px 4px 4px;
+  border: 1.5px solid #F59E0B;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.tensionMeterTube {
-  position: relative;
-  width: 48px;
-  height: 208px;
-  border-radius: $radius-pill;
-  border: 4px solid #CBD5E1;
-  background-color: rgba(255, 255, 255, 0.85);
+.flaskBody {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 148px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 2.5px solid rgba(0, 196, 179, 0.45);
+  border-radius: 28px 28px 44px 44px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 4px;
-  box-shadow: $elevation-1;
+  box-shadow: 0 10px 24px rgba(0, 196, 179, 0.15);
+  backdrop-filter: blur(8px);
 }
 
-.tensionFluid {
-  width: 100%;
-  border-radius: $radius-pill;
-  transition: height 240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+.capsuleGlassReflection {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 5px;
+  height: 90px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+  z-index: 8;
+  pointer-events: none;
 }
 
-.scaleMarkings {
+.capsuleTicks {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 8px;
+  width: 14px;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.capsuleTickLine {
+  position: absolute;
+  right: 0;
+  width: 8px;
+  height: 1.5px;
+  background: rgba(0, 196, 179, 0.4);
+  border-radius: 1px;
+}
+
+.fluidStarParticle1 {
+  position: absolute;
+  bottom: 24px;
+  left: 18px;
+  z-index: 5;
+  pointer-events: none;
+  animation: starFloat 2s ease-in-out infinite alternate;
+}
+
+.fluidStarParticle2 {
+  position: absolute;
+  bottom: 40px;
+  right: 22px;
+  z-index: 5;
+  pointer-events: none;
+  animation: starFloat 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes starFloat {
+  from { transform: translateY(0); }
+  to { transform: translateY(-6px); }
+}
+
+.fluidFill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #A7F3D0 0%, #00C4B3 60%, #00897B 100%);
+  transition: height 250ms ease-out;
+  border-radius: 0 0 40px 40px;
+}
+
+.energyBubble {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 50%;
+  animation: bubbleRise 1.8s ease-in infinite;
+}
+
+@keyframes bubbleRise {
+  0% { transform: translateY(0) scale(0.7); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-70px) scale(1.1); opacity: 0; }
+}
+
+.flaskCenterContent {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 16px 0;
-  pointer-events: none;
-  opacity: 0.45;
-}
-
-.scaleMark {
-  width: 100%;
-  height: 2px;
-  background-color: #94A3B8;
-}
-
-// -----------------------------------------------------------------------------
-// Counter Circle Display
-// -----------------------------------------------------------------------------
-.counterCol {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.counterCircle {
-  width: 112px;
-  height: 112px;
-  border-radius: $radius-circle;
-  border: 4px solid #CBD5E1;
-  background-color: #FFFFFF;
-  box-shadow: $elevation-1;
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: all 180ms ease;
-
-  &.shaking {
-    border-color: $color-flamingo-1;
-    background-color: rgba(239, 119, 115, 0.15);
-    transform: scale(1.1);
-    box-shadow: 0 10px 25px -3px rgba(239, 119, 115, 0.35);
-  }
-
-  &.finished {
-    border-color: $color-turquoise-1;
-    background-color: $color-turquoise-3;
-    box-shadow: 0 4px 14px rgba(0, 196, 179, 0.3);
-  }
+  pointer-events: none;
+  z-index: 10;
 }
 
-.counterNumber {
-  font-family: $font-mono;
-  font-size: 1.875rem;
+.energyCountNumber {
+  font-size: 28px;
   font-weight: 800;
-  color: $color-slate-800;
   line-height: 1;
 }
 
-.counterLabel {
-  font-size: 0.625rem;
-  color: $color-slate-500;
+.energyCountLabel {
+  font-size: 11px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
-.checkmarkIcon {
-  width: 48px;
-  height: 48px;
-  color: #009688;
-  animation: checkmarkZoom 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes checkmarkZoom {
-  from {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.counterSubtext {
-  font-size: 0.6875rem;
-  color: $color-slate-500;
-  margin-top: 8px;
-  font-weight: 500;
-}
-
-.finishedSubtext {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #059669;
-  font-weight: 700;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Action Trigger Zone
-// -----------------------------------------------------------------------------
-.actionZone {
+.kineticProgressTrack {
   width: 100%;
-  max-width: 320px;
+  max-width: 220px;
+  height: 6px;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.kineticProgressFill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 200ms ease;
+}
+
+.actionSection {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.kineticTapHint {
+  font-size: 11px;
+  font-weight: 600;
 }

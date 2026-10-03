@@ -1,289 +1,327 @@
 @use 'abstracts' as *;
 
-.container {
+.screenWrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: space-between;
-  padding: 4px 16px 12px 16px;
-  user-select: none;
-  font-family: $font-sans;
-  animation: fadeIn 300ms ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.headerSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 4px;
-}
-
-.phaseBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 12px;
-  border-radius: $radius-pill;
-  background-color: #E6F9F7;
-  border: 1px solid rgba(0, 196, 179, 0.35);
-  color: $color-brand-contrast;
-  font-size: 0.6875rem;
-  font-weight: 800;
-  margin-top: 4px;
-  margin-bottom: 2px;
-  box-shadow: 0 1px 2px rgba(0, 196, 179, 0.08);
-
-  svg {
-    width: 14px;
-    height: 14px;
-    color: $color-turquoise-1;
-  }
-}
-
-.heading {
-  font-size: 1rem;
-  font-weight: 800;
-  color: $color-brand-contrast;
-  letter-spacing: -0.015em;
-  text-align: center;
-}
-
-// -----------------------------------------------------------------------------
-// Cards Scrollable Area
-// -----------------------------------------------------------------------------
-.contentArea {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 4px 0;
   flex: 1;
-  overflow-y: auto;
-}
-
-.reflectionCard {
-  padding: 14px;
-  border-radius: 22px;
-  background-color: #FFFFFF;
-  border: 1px solid rgba(0, 196, 179, 0.3);
-  box-shadow: $elevation-1;
-  text-align: left;
   position: relative;
   overflow: hidden;
 }
 
-.cardAccentBar {
+.scrollView {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  padding: 12px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mascotWrapper {
+  height: 145px;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: visible;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.phaseBadge {
+  display: flex;
+  align-items: center;
+  background-color: $color-white;
+  padding: 5px 12px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(0, 196, 179, 0.25);
+  gap: 6px;
+  margin-top: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.phaseBadgeText {
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 11px;
+  color: $color-brand-contrast;
+}
+
+.letterWrapper {
+  width: 100%;
+  position: relative;
+  margin: 12px 0 8px;
+  padding-top: 10px;
+}
+
+.washiTapeLeft {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 8px;
+  left: 20px;
+  width: 68px;
+  height: 20px;
+  background-color: rgba(167, 243, 208, 0.88);
+  border-radius: 2px;
+  transform: rotate(-4deg);
+  z-index: 10;
+  border: 1px dashed rgba(52, 211, 153, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.washiTapeRight {
+  position: absolute;
+  top: 2px;
+  right: 20px;
+  width: 68px;
+  height: 20px;
+  background-color: rgba(254, 205, 211, 0.88);
+  border-radius: 2px;
+  transform: rotate(4deg);
+  z-index: 10;
+  border: 1px dashed rgba(251, 113, 133, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.washiTapePattern {
+  width: 100%;
   height: 100%;
-  background-color: $color-turquoise-1;
 }
 
-.cardHeaderRow {
+.letterPaper {
+  background-color: #FFFDF9;
+  border-radius: 18px;
+  padding: 16px 16px 18px;
+  padding-top: 18px;
+  border: 1.5px solid #FED7AA;
+  position: relative;
+  box-shadow: 0 4px 14px rgba(251, 146, 60, 0.08);
+}
+
+.letterStamp {
+  position: absolute;
+  top: 12px;
+  right: 14px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: $color-brand-contrast;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-
-  svg {
-    width: 14px;
-    height: 14px;
-    color: $color-flamingo-1;
-    fill: $color-flamingo-1;
-  }
+  gap: 3px;
+  background-color: #FFF1F2;
+  padding: 3px 7px;
+  border-radius: 6px;
+  border: 1px dashed #FECDD3;
 }
 
-.reflectionText {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: $color-slate-800;
-  line-height: 1.6;
-}
-
-.biologyFactRow {
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px solid #F1F5F9;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 0.6875rem;
-  color: $color-brand-contrast;
-  font-weight: 500;
-  background-color: rgba(230, 249, 247, 0.6);
-  padding: 8px;
-  border-radius: 12px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    color: $color-blue-1;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-}
-
-.microActionCard {
-  padding: 14px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFFDF9 100%);
-  border: 2px solid rgba(250, 140, 61, 0.4);
-  box-shadow: $elevation-1;
-  text-align: left;
-}
-
-.microActionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.actionBadgeLeft {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
+.letterStampText {
+  font-family: $font-sans;
   font-weight: 800;
-  color: #FA8C3D;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    color: #FA8C3D;
-  }
+  font-size: 8px;
+  color: #E11D48;
+  letter-spacing: 0.5px;
 }
 
-.immediatePill {
-  font-size: 0.625rem;
+.letterHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.letterGreeting {
+  font-family: $font-sans;
   font-weight: 700;
+  font-size: 12px;
+  color: #9A3412;
+}
+
+.letterBody {
+  font-family: $font-sans;
+  font-weight: 500;
+  font-size: 12px;
+  color: #0F172A;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.biologyNote {
+  display: flex;
+  background-color: #F0FDFB;
+  padding: 10px;
+  border-radius: 12px;
+  margin-top: 12px;
+  border: 1px solid rgba(0, 196, 179, 0.2);
+  gap: 8px;
+}
+
+.biologyText {
+  flex: 1;
+  font-family: $font-sans;
+  font-size: 11px;
   color: $color-brand-contrast;
-  background-color: #E6F9F7;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.promiseCard {
+  width: 100%;
+  background-color: $color-white;
+  border-radius: 20px;
+  padding: 14px;
+  border: 1.5px solid rgba(0, 196, 179, 0.25);
+  margin-top: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.promiseHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.promiseTitle {
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 12px;
+  color: $color-brand-contrast;
+}
+
+.promiseBadge {
+  background-color: #FEF3C7;
   padding: 2px 8px;
   border-radius: $radius-pill;
-  border: 1px solid rgba(0, 196, 179, 0.3);
 }
 
-.commitButtonBox {
-  padding: 12px;
-  border-radius: 16px;
-  border: 2px solid #E2E8F0;
-  cursor: pointer;
-  transition: all 200ms ease;
+.promiseBadgeText {
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 9px;
+  color: #B45309;
+}
+
+.commitBox {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #FFFFFF;
-  color: $color-slate-800;
+  background-color: #FFFDF9;
+  border-radius: 14px;
+  padding: 12px;
+  border: 1.5px solid #E2E8F0;
+  gap: 10px;
+  min-height: 74px;
+  cursor: pointer;
+  text-align: left;
+  transition: all $transition-fast;
 
   &:hover {
-    border-color: $color-turquoise-1;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-
-  &.committed {
-    background-color: #E6F9F7;
-    border-color: $color-turquoise-1;
-    color: $color-brand-contrast;
-    box-shadow: 0 1px 3px rgba(0, 196, 179, 0.2);
+    border-color: #00C4B3;
   }
 }
 
-.commitContentRow {
+.commitBoxActive {
+  background-color: #F0FDFB;
+  border-color: #00C4B3;
+}
+
+.commitContent {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 1;
-  padding-right: 8px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    color: $color-turquoise-1;
-    flex-shrink: 0;
-  }
 }
 
 .commitActionText {
-  font-size: 0.75rem;
+  flex: 1;
+  font-family: $font-sans;
   font-weight: 700;
-  line-height: 1.4;
+  font-size: 12px;
+  color: #0F172A;
+  line-height: 1.5;
 }
 
-.checkIndicator {
-  width: 28px;
-  height: 28px;
-  border-radius: $radius-circle;
-  border: 2px solid #CBD5E1;
-  background-color: #F8FAFC;
+.commitActionTextActive {
+  color: $color-brand-contrast;
+}
+
+.stampPlaceholder {
+  width: 52px;
+  height: 52px;
+  border-radius: 26px;
+  border: 1.5px dashed #CBD5E1;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 180ms ease;
-
-  &.active {
-    border-color: $color-turquoise-1;
-    background-color: $color-turquoise-1;
-    color: #FFFFFF;
-    box-shadow: 0 1px 3px rgba(0, 196, 179, 0.3);
-  }
-
-  svg {
-    width: 16px;
-    height: 16px;
-    stroke-width: 3;
-  }
 }
 
-.tapHint {
-  font-size: 0.625rem;
+.stampPrompt {
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 8px;
   color: #94A3B8;
+  text-align: center;
+  padding: 0 4px;
 }
 
-.microActionHint {
-  font-size: 0.625rem;
-  color: $color-slate-500;
-  margin-top: 8px;
-  font-weight: 500;
+.mintSealStamp {
+  width: 52px;
+  height: 52px;
+  border-radius: 26px;
+  background-color: #10B981;
+  padding: 2px;
   display: flex;
   align-items: center;
-  gap: 4px;
-
-  svg {
-    width: 12px;
-    height: 12px;
-    color: $color-flamingo-1;
-  }
+  justify-content: center;
+  border: 2px solid #00C4B3;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.35);
+  transform: rotate(-8deg);
+  animation: stampPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
 }
 
-// -----------------------------------------------------------------------------
-// Footer Button
-// -----------------------------------------------------------------------------
-.footerArea {
-  padding-top: 8px;
-  border-top: 1px solid #F1F5F9;
+.mintSealInner {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background-color: #004D40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mintSealText {
+  font-family: $font-sans;
+  font-weight: 800;
+  font-size: 6px;
+  color: $color-white;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+@keyframes stampPop {
+  0% { transform: scale(2.2) rotate(10deg); opacity: 0; }
+  100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+}
+
+.commitHint {
+  font-family: $font-sans;
+  font-weight: 500;
+  font-size: 10px;
+  color: #94A3B8;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.bottomBar {
+  padding: 8px 20px 20px;
+  width: 100%;
   flex-shrink: 0;
 }

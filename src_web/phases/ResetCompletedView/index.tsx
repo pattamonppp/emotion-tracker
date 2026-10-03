@@ -1,30 +1,33 @@
 import React, { useState } from 'react';
-import { ShiftFeedback, UserProfile } from '../../types';
-import { Button } from '../../components/Button';
+import classNames from 'classnames';
+import { UserProfile, ShiftFeedback } from '../../types';
+import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../components/MoocaMascot';
-import { getTranslation } from '../../locales';
 import { AiFeedbackModal } from './modals/AiFeedbackModal';
+import { useSky } from '../../components/DynamicSkyEngine';
+import { audioService } from '../../services/audioService';
 import {
-  SparklesIcon,
-  RotateCcwIcon,
-  CheckCircleIcon,
-  ShareIcon,
-  MessageHeartIcon,
-  HistoryIcon,
-  MedalIcon,
-  ZapIcon,
-  LeafIcon,
-  ScaleIcon,
-  ChevronRightIcon,
-} from '../../icons';
+  RotateCcw,
+  History,
+  Share2,
+  Award,
+  Sparkles,
+  PartyPopper,
+  Star,
+  Heart,
+  Leaf,
+  MessageSquareHeart,
+} from 'lucide-react';
+import { getTranslation } from '../../locales';
 import styles from './styles.module.scss';
 
 export interface ResetCompletedViewProps {
   profile: UserProfile;
   feedback: ShiftFeedback | null;
   onRestart: () => void;
-  onOpenProfile: () => void;
-  onOpenHistory?: () => void;
+  onOpenDesignSystem?: () => void;
+  onOpenProfile?: () => void;
+  onOpenHistory: () => void;
   onOpenStory?: () => void;
 }
 
@@ -32,192 +35,187 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
   profile,
   feedback,
   onRestart,
-  onOpenProfile,
   onOpenHistory,
-  onOpenStory,
 }) => {
+  const { activePeriod } = useSky();
+  const isNight = activePeriod === 'night';
   const lang = profile.language;
-  const strings = getTranslation(lang).phases.completed;
-  const bpmDrop = feedback ? feedback.preHeartRate - feedback.postHeartRate : 22;
-  const [isAiFeedbackOpen, setIsAiFeedbackOpen] = useState(false);
+  const t = getTranslation(lang);
+  const c = t.phases.completed;
 
-  const handleShareKeepsake = () => {
-    const shareText = strings.shareTextTemplate.replace('{name}', profile.name).replace('{bpm}', String(bpmDrop));
+  const bpmDrop = feedback ? feedback.preHeartRate - feedback.postHeartRate : 18;
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+
+  const handleShareKeepsake = async () => {
+    audioService.triggerHaptic('medium');
+    const shareMessage = c.shareKeepsakeTemplate
+      .replace('{name}', profile.name)
+      .replace('{bpm}', String(bpmDrop));
+
     if (navigator.share) {
-      navigator.share({
-        title: strings.shareTitle,
-        text: shareText,
-        url: window.location.href,
-      }).catch(() => {});
+      try {
+        await navigator.share({
+          title: c.somaticResetComplete,
+          text: shareMessage,
+          url: window.location.href,
+        });
+      } catch {
+        // user cancelled share
+      }
     } else {
-      navigator.clipboard.writeText(shareText);
-      alert(strings.copiedAlert);
+      navigator.clipboard.writeText(shareMessage);
+      alert(lang === 'th' ? 'คัดลอกข้อความแชร์แล้ว!' : 'Copied keepsake text!');
     }
   };
 
-  const renderStateValue = () => {
-    if (!feedback) return null;
-    switch (feedback.shiftResult) {
-      case 'empowered':
-        return (
-          <span className={styles.stateValueEmpowered}>
-            <ZapIcon />
-            <span>{strings.stateEmpowered}</span>
-          </span>
-        );
-      case 'grounded':
-        return (
-          <span className={styles.stateValueGrounded}>
-            <LeafIcon />
-            <span>{strings.stateGrounded}</span>
-          </span>
-        );
-      default:
-        return (
-          <span className={styles.stateValueSame}>
-            <ScaleIcon />
-            <span>{strings.stateStabilized}</span>
-          </span>
-        );
-    }
-  };
+  const currentDate = new Date().toLocaleDateString(
+    lang === 'th' ? 'th-TH' : 'en-US',
+    { day: 'numeric', month: 'short', year: 'numeric' }
+  );
 
   return (
-    <div className={styles.container}>
-      {/* Top Badge */}
-      <div className={styles.topBadge}>
-        <CheckCircleIcon />
-        <span>
-          {strings.badge}
-        </span>
-      </div>
+    <div className={styles.scrollWrapper}>
+      <div className={styles.container}>
+        {/* Top Completion Header Badge */}
+        <div className={styles.topBadge}>
+          <Award size={15} color="#D97706" />
+          <span className={styles.topBadgeText}>{c.somaticResetComplete}</span>
+        </div>
 
-      {/* Hero Affirmation with Celebrating Mooca Mascot */}
-      <div className={styles.heroSection}>
-        <div className={styles.mascotWrapper}>
-          <MoocaMascot
-            mood="celebrating"
+        <h2 className={classNames(styles.headline, { [styles.headlineNight]: isNight })}>
+          {c.congratsTitle.replace('{name}', profile.name)}
+        </h2>
+
+        {/* Polaroid Keepsake Card */}
+        <div className={classNames(styles.polaroidFrame, { [styles.polaroidFrameNight]: isNight })}>
+          {/* Photo Viewport with Rainbow Celebration */}
+          <div className={styles.photoViewport}>
+            <div className={classNames(styles.sparkleItem, styles.sparkleTopLeft)}>
+              <Sparkles size={16} color="#F59E0B" fill="#FDE047" />
+            </div>
+            <div className={classNames(styles.sparkleItem, styles.sparkleTopRight)}>
+              <PartyPopper size={16} color="#EC4899" />
+            </div>
+            <div className={classNames(styles.sparkleItem, styles.sparkleBottomLeft)}>
+              <Star size={15} color="#F59E0B" fill="#FDE047" />
+            </div>
+            <div className={classNames(styles.sparkleItem, styles.sparkleBottomRight)}>
+              <Heart size={16} color="#F43F5E" fill="#F43F5E" />
+            </div>
+
+            {/* Rainbow Arc Badge */}
+            <div className={styles.rainbowArcPill}>
+              <Sparkles size={13} color="#D97706" />
+              <span className={styles.rainbowText}>{c.rainbowCelebration}</span>
+            </div>
+
+            {/* Mascot in Celebration Mode */}
+            <div className={styles.mascotHolder}>
+              <MoocaMascot
+                mood="celebrating"
+                size="md"
+                showSunny={true}
+                interactive={true}
+              />
+            </div>
+
+            {/* Golden Badge */}
+            <div className={styles.goldMedalContainer}>
+              <div className={styles.goldMedal}>
+                <Award size={16} color="#78350F" />
+                <span className={styles.goldMedalText}>{c.goldMedalTitle}</span>
+              </div>
+              <div className={styles.ribbonTailLeft} />
+              <div className={styles.ribbonTailRight} />
+            </div>
+          </div>
+
+          {/* Polaroid Wide Bottom Chin */}
+          <div className={styles.polaroidChin}>
+            <div className={styles.handwrittenCaption}>{c.caption}</div>
+
+            <div className={styles.chinFooterRow}>
+              <span className={styles.chinDateText}>
+                {currentDate} • {c.resetDurationLabel}
+              </span>
+              <div className={styles.chinBpmDrop}>
+                <Leaf size={11} color="#00C4B3" style={{ marginRight: 2 }} />
+                <span className={styles.chinBpmText}>
+                  {`-${bpmDrop}\u00A0BPM`}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Metrics Mini Summary */}
+        <div className={classNames(styles.metricsSummary, { [styles.metricsSummaryNight]: isNight })}>
+          <div className={styles.metricItem}>
+            <span className={styles.metricLabel}>{c.preLabel}</span>
+            <span className={styles.metricVal}>
+              {`${feedback?.preHeartRate || 105}\u00A0BPM`}
+            </span>
+          </div>
+          <div className={styles.metricDivider} />
+          <div className={styles.metricItem}>
+            <span className={styles.metricLabel}>{c.nowLabel}</span>
+            <span className={classNames(styles.metricVal, styles.metricValTeal)}>
+              {`${feedback?.postHeartRate || 87}\u00A0BPM`}
+            </span>
+          </div>
+          <div className={styles.metricDivider} />
+          <div className={styles.metricItem}>
+            <span className={styles.metricLabel}>{c.calmShift}</span>
+            <span className={classNames(styles.metricVal, styles.metricValOrange)}>
+              {`-${bpmDrop}\u00A0BPM`}
+            </span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className={styles.actionsContainer}>
+          {/* Feedback Button */}
+          <MarshmallowButton
+            variant="mint"
             size="md"
-            showSunny={true}
-            speakingBubble={
-              strings.mascotBubble.replace('{name}', profile.name)
-            }
+            onPress={() => setIsFeedbackModalOpen(true)}
+            icon={<MessageSquareHeart size={18} color="#004D40" />}
+            title={c.feedbackBtn}
+          />
+
+          {/* Share Keepsake Button */}
+          <MarshmallowButton
+            variant="secondary"
+            size="md"
+            onPress={handleShareKeepsake}
+            icon={<Share2 size={16} color="#FFFFFF" />}
+            title={c.sharePolaroidBtn}
+          />
+
+          {/* Start New Session */}
+          <MarshmallowButton
+            variant="primary"
+            size="md"
+            onPress={onRestart}
+            icon={<RotateCcw size={18} color="#FFFFFF" />}
+            title={c.restartSessionBtn}
+          />
+
+          {/* View History Button */}
+          <MarshmallowButton
+            variant="softCream"
+            size="md"
+            onPress={onOpenHistory}
+            icon={<History size={16} color="#004D40" />}
+            title={c.viewHistoryBtn}
           />
         </div>
-
-        <div>
-          <h2 className={styles.heroHeading}>
-            {strings.readyTitle.replace('{name}', profile.name)}
-          </h2>
-          <p className={styles.heroSubtitle}>
-            {strings.readySubtitle}
-          </p>
-        </div>
-
-        {/* Delta Summary Card */}
-        {feedback && (
-          <div className={styles.deltaCard}>
-            <div className={styles.deltaHeader}>
-              <span className={styles.deltaTitle}>
-                <SparklesIcon />
-                {strings.bioShiftTitle}
-              </span>
-              <span className={styles.deltaBpmPill}>
-                -{bpmDrop} bpm
-              </span>
-            </div>
-
-            <div className={styles.deltaStateRow}>
-              <span className={styles.stateLabel}>{strings.stateLabel}</span>
-              <span className={styles.stateValue}>
-                {renderStateValue()}
-              </span>
-            </div>
-
-            <div className={styles.timestampRow}>
-              <span>{strings.timestampLabel}</span>
-              <span className={styles.timestampValue}>{feedback.timestamp}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Friendship Badge Card */}
-        <div onClick={onOpenStory} className={styles.badgeCard}>
-          <div className={styles.badgeLeft}>
-            <span className={styles.medalIcon}>
-              <MedalIcon />
-            </span>
-            <div>
-              <div className={styles.badgeTitle}>
-                {strings.medalTitle}
-              </div>
-              <div className={styles.badgeSubtitle}>
-                {strings.medalSubtitle}
-              </div>
-            </div>
-          </div>
-          <span className={styles.badgeChevron}>
-            <span>{strings.viewDetails}</span>
-            <ChevronRightIcon />
-          </span>
-        </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className={styles.actionFooter}>
-        {/* 1. ปุ่ม Feedback เป็นปุ่มแรกเหนือแชร์ */}
-        <Button
-          variant="secondary"
-          colorTheme="turquoise"
-          size="md"
-          fullWidth
-          onClick={() => setIsAiFeedbackOpen(true)}
-          leadingIcon={<MessageHeartIcon />}
-          label={strings.feedbackButton}
-        />
-
-        {/* 2. ปุ่มแชร์ */}
-        <Button
-          variant="secondary"
-          colorTheme="blue"
-          size="md"
-          fullWidth
-          onClick={handleShareKeepsake}
-          leadingIcon={<ShareIcon />}
-          label={strings.shareButton}
-        />
-
-        {/* 3. ปุ่มเริ่มรีเซ็ตครั้งใหม่ */}
-        <Button
-          variant="primary"
-          colorTheme="turquoise"
-          size="lg"
-          fullWidth
-          onClick={onRestart}
-          leadingIcon={<RotateCcwIcon />}
-          label={strings.restartButton}
-        />
-
-        {/* 4. Secondary actions */}
-        <div className={styles.secondaryBtnGrid}>
-          {onOpenHistory && (
-            <Button
-              variant="outline"
-              colorTheme="turquoise"
-              size="sm"
-              onClick={onOpenHistory}
-              leadingIcon={<HistoryIcon />}
-              label={strings.historyBtn}
-            />
-          )}
-
-        </div>
-      </div>
-
-      {/* Feedback Modal */}
+      {/* AI Feedback Modal */}
       <AiFeedbackModal
-        isOpen={isAiFeedbackOpen}
-        onClose={() => setIsAiFeedbackOpen(false)}
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
         profile={profile}
         feedback={feedback}
         lang={lang}

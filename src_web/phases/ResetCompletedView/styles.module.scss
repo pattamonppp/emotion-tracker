@@ -1,15 +1,19 @@
 @use 'abstracts' as *;
 
-.container {
-  display: flex;
-  flex-direction: column;
+.scrollWrapper {
+  width: 100%;
   height: 100%;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  padding: 16px;
+  overflow-y: auto;
   user-select: none;
   font-family: $font-sans;
+}
+
+.container {
+  padding: 8px 16px 28px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
   animation: zoomIn 300ms ease-out;
 }
 
@@ -28,307 +32,287 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 14px;
+  padding: 4px 12px;
   border-radius: $radius-pill;
-  background-color: rgba(124, 201, 84, 0.2);
-  border: 1px solid rgba(124, 201, 84, 0.4);
-  color: $color-brand-contrast;
-  font-size: 0.75rem;
+  background-color: #FEF3C7;
+  border: 1px solid #FDE68A;
+  margin-bottom: 6px;
+}
+
+.topBadgeText {
+  font-size: 0.6875rem;
   font-weight: 800;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-
-  svg {
-    width: 14px;
-    height: 14px;
-    color: #7CC954;
-  }
+  color: #92400E;
 }
 
-// -----------------------------------------------------------------------------
-// Hero Affirmation
-// -----------------------------------------------------------------------------
-.heroSection {
-  margin: auto 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 320px;
-}
-
-.mascotWrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.heroHeading {
-  font-size: 1.25rem;
+.headline {
+  font-size: 1.125rem;
   font-weight: 900;
   color: $color-brand-contrast;
-  letter-spacing: -0.02em;
-}
+  text-align: center;
+  margin-bottom: 10px;
+  letter-spacing: -0.015em;
 
-.heroSubtitle {
-  font-size: 0.75rem;
-  color: $color-slate-600;
-  margin-top: 4px;
-  line-height: 1.5;
-  font-weight: 500;
-}
-
-// -----------------------------------------------------------------------------
-// Delta Summary Card
-// -----------------------------------------------------------------------------
-.deltaCard {
-  padding: 14px;
-  border-radius: 22px;
-  background-color: #FFFFFF;
-  border: 1px solid rgba(0, 196, 179, 0.35);
-  box-shadow: $elevation-1;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.deltaHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: $color-slate-700;
-}
-
-.deltaTitle {
-  font-weight: 800;
-  color: $color-brand-contrast;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  svg {
-    width: 14px;
-    height: 14px;
-    color: $color-turquoise-1;
-  }
-}
-
-.deltaBpmPill {
-  color: $color-brand-contrast;
-  font-family: $font-mono;
-  font-weight: 900;
-  background-color: #E6F9F7;
-  padding: 2px 8px;
-  border-radius: $radius-pill;
-  border: 1px solid rgba(0, 196, 179, 0.3);
-}
-
-.deltaStateRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.6875rem;
-  color: $color-slate-500;
-  padding-top: 6px;
-  border-top: 1px solid #F1F5F9;
-}
-
-.stateLabel {
-  font-weight: 500;
-}
-
-.stateValue {
-  color: $color-brand-contrast;
-  font-weight: 800;
-  text-transform: capitalize;
-}
-
-.stateValueEmpowered {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #D97706;
-  font-weight: 700;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-}
-
-.stateValueGrounded {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #059669;
-  font-weight: 700;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-}
-
-.stateValueSame {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #00A896;
-  font-weight: 700;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-}
-
-.timestampRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.6875rem;
-  color: $color-slate-400;
-}
-
-.timestampValue {
-  font-family: $font-mono;
-  color: $color-slate-600;
-  font-weight: 700;
-}
-
-// -----------------------------------------------------------------------------
-// Friendship Badge Card
-// -----------------------------------------------------------------------------
-.badgeCard {
-  padding: 10px 12px;
-  border-radius: 18px;
-  background: linear-gradient(90deg, #FFF8E7 0%, #FFFFFF 50%, #E6F9F7 100%);
-  border: 1px solid rgba(250, 140, 61, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: all 180ms ease;
-
-  &:hover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-.badgeLeft {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-align: left;
-}
-
-.medalIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #FEF3C7;
-  color: #F59E0B;
-}
-
-.badgeTitle {
-  font-size: 0.6875rem;
-  font-weight: 800;
-  color: $color-brand-contrast;
-}
-
-.badgeSubtitle {
-  font-size: 0.5625rem;
-  color: #FA8C3D;
-  font-weight: 700;
-}
-
-.badgeChevron {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
-  color: $color-turquoise-1;
-  font-weight: 700;
-
-  svg {
-    width: 14px;
-    height: 14px;
+  &.headlineNight {
+    color: #FFFFFF;
   }
 }
 
 // -----------------------------------------------------------------------------
-// AI Training Feedback Card
+// Polaroid Keepsake Frame
 // -----------------------------------------------------------------------------
-.aiFeedbackCard {
-  padding: 10px 12px;
-  border-radius: 18px;
-  background: linear-gradient(90deg, #E6F9F7 0%, #FFFFFF 60%, #F5F3FF 100%);
-  border: 1.5px solid rgba(0, 196, 179, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: all 180ms ease;
-
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 196, 179, 0.15);
-    border-color: $color-turquoise-1;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-.aiFeedbackLeft {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-align: left;
-}
-
-.aiIcon {
-  font-size: 1.25rem;
-}
-
-.aiFeedbackTitle {
-  font-size: 0.6875rem;
-  font-weight: 800;
-  color: $color-brand-contrast;
-}
-
-.aiFeedbackSubtitle {
-  font-size: 0.5625rem;
-  color: #6366F1;
-  font-weight: 600;
-}
-
-.aiFeedbackAction {
-  font-size: 0.6875rem;
-  color: $color-turquoise-1;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-// -----------------------------------------------------------------------------
-// Action Buttons Footer
-// -----------------------------------------------------------------------------
-.actionFooter {
+.polaroidFrame {
   width: 100%;
-  max-width: 320px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 12px;
+  padding-bottom: 10px;
+  border: 1.5px solid #E2E8F0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  margin-bottom: 12px;
+  box-sizing: border-box;
+
+  &.polaroidFrameNight {
+    background-color: rgba(30, 41, 59, 0.95);
+    border-color: rgba(56, 189, 248, 0.35);
+
+    .handwrittenCaption {
+      color: #F8FAFC;
+    }
+    .chinDateText {
+      color: #94A3B8;
+    }
+    .chinFooterRow {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+  }
 }
 
-.secondaryBtnGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+.photoViewport {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #FDE68A 0%, #FBCFE8 35%, #BAE6FD 70%, #A7F3D0 100%);
+}
+
+.sparkleItem {
+  position: absolute;
+  pointer-events: none;
+}
+
+.sparkleTopLeft {
+  top: 8px;
+  left: 12px;
+}
+
+.sparkleTopRight {
+  top: 12px;
+  right: 14px;
+}
+
+.sparkleBottomLeft {
+  bottom: 12px;
+  left: 16px;
+}
+
+.sparkleBottomRight {
+  bottom: 10px;
+  right: 16px;
+}
+
+.rainbowArcPill {
+  position: absolute;
+  top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(4px);
+  padding: 3px 10px;
+  border-radius: $radius-pill;
+  border: 1px solid #FDE68A;
+}
+
+.rainbowText {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: #B45309;
+}
+
+.mascotHolder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.goldMedalContainer {
+  position: absolute;
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.goldMedal {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #FEF3C7;
+  padding: 3px 10px;
+  border-radius: $radius-pill;
+  border: 1.5px solid #F59E0B;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.goldMedalText {
+  font-size: 0.5625rem;
+  font-weight: 800;
+  color: #78350F;
+  letter-spacing: 0.02em;
+}
+
+.ribbonTailLeft {
+  position: absolute;
+  bottom: -4px;
+  left: 8px;
+  width: 8px;
+  height: 9px;
+  background-color: #F59E0B;
+  transform: rotate(15deg);
+}
+
+.ribbonTailRight {
+  position: absolute;
+  bottom: -4px;
+  right: 8px;
+  width: 8px;
+  height: 9px;
+  background-color: #F59E0B;
+  transform: rotate(-15deg);
+}
+
+.polaroidChin {
+  padding-top: 10px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.handwrittenCaption {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: $color-slate-800;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.chinFooterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 6px;
+}
+
+.chinDateText {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: $color-slate-500;
+}
+
+.chinBpmDrop {
+  display: flex;
+  align-items: center;
+  background-color: #F0FDFA;
+  padding: 2px 6px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(0, 196, 179, 0.4);
+}
+
+.chinBpmText {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: $color-brand-contrast;
+}
+
+// -----------------------------------------------------------------------------
+// Metrics Summary
+// -----------------------------------------------------------------------------
+.metricsSummary {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 10px 8px;
+  border: 1.5px solid rgba(0, 196, 179, 0.35);
+  margin-bottom: 14px;
+  box-sizing: border-box;
+
+  &.metricsSummaryNight {
+    background-color: rgba(30, 41, 59, 0.85);
+    border-color: rgba(56, 189, 248, 0.35);
+
+    .metricLabel {
+      color: #94A3B8;
+    }
+    .metricVal {
+      color: #F8FAFC;
+    }
+    .metricDivider {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.metricItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.metricLabel {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: $color-slate-400;
+  margin-bottom: 2px;
+}
+
+.metricVal {
+  font-family: $font-mono;
+  font-size: 0.8125rem;
+  font-weight: 900;
+  color: $color-slate-800;
+}
+
+.metricValTeal {
+  color: $color-turquoise-1;
+}
+
+.metricValOrange {
+  color: $color-flamingo-1;
+}
+
+.metricDivider {
+  width: 1px;
+  height: 24px;
+  background-color: #E2E8F0;
+}
+
+// -----------------------------------------------------------------------------
+// Actions Container
+// -----------------------------------------------------------------------------
+.actionsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

@@ -1,10 +1,15 @@
-export const SIP_CONFIG = {
+export const VICTORY_SIP_CONFIG = {
   TOTAL_SIPS: 3,
+  TILT_DRINK_THRESHOLD: 48,
+  TILT_REST_THRESHOLD: 25,
+  SIP_HOLD_TIME_MS: 1400,
+  ANIMATION_DURATION_MS: 380,
   CANVAS_WIDTH: 200,
   CANVAS_HEIGHT: 260,
-  TILT_MAX_DEG: 45,
   INACTIVITY_TIMEOUT_MS: 2200,
   COMPLETION_DELAY_MS: 2500,
 } as const;
+
+export const SIP_CONFIG = VICTORY_SIP_CONFIG;
 
 export type BreathPhase = 'ready' | 'inhale' | 'swallow' | 'exhale';

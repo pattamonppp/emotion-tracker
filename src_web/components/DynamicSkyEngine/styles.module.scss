@@ -1,0 +1,286 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: background 1.2s ease;
+}
+
+.skyBackground {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  transition: opacity 1s ease;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// Celestial Orbs & Sun/Moon/Stars
+.celestialOrb1 {
+  position: absolute;
+  top: 60px;
+  right: -20px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(28px);
+  animation: floatOrb1 9s infinite ease-in-out;
+}
+
+.celestialOrb2 {
+  position: absolute;
+  top: 140px;
+  left: -30px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(34px);
+  animation: floatOrb2 11s infinite ease-in-out;
+}
+
+@keyframes floatOrb1 {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.1) translateY(-10px); }
+}
+
+@keyframes floatOrb2 {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.08) translateY(12px); }
+}
+
+// Drifting Clouds
+.cloudLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.driftingCloud1 {
+  position: absolute;
+  top: 40px;
+  animation: driftRight 45s linear infinite, cloudBob1 4.5s ease-in-out infinite;
+}
+
+.driftingCloud2 {
+  position: absolute;
+  top: 120px;
+  animation: driftLeft 38s linear infinite, cloudBob2 5s ease-in-out infinite;
+}
+
+.driftingCloud3 {
+  position: absolute;
+  top: 210px;
+  animation: driftRight 52s linear infinite, cloudBob1 6s ease-in-out infinite;
+}
+
+.driftingCloud4 {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: cloudSway 9s ease-in-out infinite;
+}
+
+@keyframes driftRight {
+  0% { transform: translateX(-220px); }
+  100% { transform: translateX(500px); }
+}
+
+@keyframes driftLeft {
+  0% { transform: translateX(500px); }
+  100% { transform: translateX(-220px); }
+}
+
+@keyframes cloudBob1 {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -6px; }
+}
+
+@keyframes cloudBob2 {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: 7px; }
+}
+
+@keyframes cloudSway {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(calc(-50% + 14px)) translateY(-4px); }
+}
+
+// Stars for night sky
+.starField {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.twinkleStar {
+  position: absolute;
+  animation: starPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+// -------------------------------------------------------------
+// Sky Period Switcher Pill & Dropdown
+// -------------------------------------------------------------
+.switcherContainer {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+  z-index: 100;
+}
+
+.pillBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 7px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 196, 179, 0.25);
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 120ms ease, background 150ms ease;
+  font-family: inherit;
+
+  &:hover {
+    background: #FFFFFF;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.94);
+  }
+}
+
+.pillBtnNight {
+  background: rgba(15, 23, 42, 0.88);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    background: rgba(15, 23, 42, 0.96);
+  }
+}
+
+.pillText {
+  font-size: 10px;
+  font-weight: 700;
+  color: #00695c;
+  line-height: 1;
+}
+
+.autoTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5px;
+  background: rgba(0, 196, 179, 0.12);
+  padding: 1.5px 5px;
+  border-radius: 9999px;
+}
+
+.autoTagText {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #00897b;
+}
+
+.customTag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(250, 140, 61, 0.14);
+  padding: 1.5px 5px;
+  border-radius: 9999px;
+}
+
+.customTagText {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #d97706;
+}
+
+.expandArrowBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.optionsPopup {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 130px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1.2px solid rgba(0, 196, 179, 0.3);
+  border-radius: 16px;
+  padding: 4px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1000;
+  animation: popIn 150ms ease-out;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(-4px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.optionBtn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+  transition: background 100ms ease;
+
+  &:hover {
+    background: #f0fdfa;
+  }
+}
+
+.optionBtnActive {
+  background: #00c4b3;
+
+  &:hover {
+    background: #00b4a4;
+  }
+}
+
+.optionText {
+  font-size: 11px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.optionTextActive {
+  color: #ffffff;
+  font-weight: 700;
+}

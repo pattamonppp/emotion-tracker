@@ -1,340 +1,418 @@
-import React, { useState, useEffect, useRef } from 'react';
-import cn from 'classnames';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import classNames from 'classnames';
 import { audioService } from '../../../services/audioService';
-import { Button } from '../../../components/Button';
+import { useSky } from '../../../components/DynamicSkyEngine';
 import { MoocaMascot } from '../../../components/MoocaMascot';
-import { DevActivityControl } from '../../../components/DevActivityControl';
-import { Sparkles, Flame, Volume2, Shield } from 'lucide-react';
-import { SparklesIcon, WindIcon, FlameIcon } from '../../../icons';
-import { useLanguage } from '../../../hooks';
+import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
+import { Star, Sun, Hand, Sparkles, Check, X, Volume2 } from 'lucide-react';
+import { DESIGN_TOKENS } from '../../../design-system/tokens';
+import { getTranslation } from '../../../locales';
 import { SOMATIC_CONFIG } from './constants';
-import type { SomaticAbsorptionProps, Particle, PointerPos } from './types';
-import { createAuraParticles } from '../../../utils';
+import type { SomaticAbsorptionProps } from './types';
 import styles from './styles.module.scss';
+
+const CIRCLE_SIZE = 260;
 
 export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
   onComplete,
-  lang: propLang,
+  lang = 'th',
+  skyPeriod: propSkyPeriod,
 }) => {
-  const { lang: hookLang, t } = useLanguage();
-  const lang = propLang || hookLang;
+  const t = getTranslation(lang);
   const strings = t.phases.phase2.somaticAbsorption;
+  const { activePeriod } = useSky();
+  const skyPeriod = propSkyPeriod || activePeriod || 'day';
 
-  const [rubProgress, setRubProgress] = useState(0); // 0 to 100
-  const [isRubbing, setIsRubbing] = useState(false);
+  const [rubProgress, setRubProgress] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-  const [handTemp, setHandTemp] = useState<number>(SOMATIC_CONFIG.START_TEMP);
-  const [rubSpeed, setRubSpeed] = useState(0);
-  const [pointersCount, setPointersCount] = useState(0);
+  const [isRubbing, setIsRubbing] = useState(false);
+  const [touchCount, setTouchCount] = useState(0);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [starRotation, setStarRotation] = useState(0);
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const particlesRef = useRef<Particle[]>([]);
-  const pointerPositionsRef = useRef<Map<number, PointerPos>>(new Map());
-  const lastPosRef = useRef<PointerPos | null>(null);
-  const soundThrottleRef = useRef(0);
-  const animFrameRef = useRef<number | null>(null);
+  const lastHapticTick = useRef(0);
+  const lastPos = useRef<{ x: number; y: number } | null>(null);
 
-  // Whisper blessing audio
+  // Palettes tailored to each sky period (feathered radial auras)
+  const theme = useMemo(() => {
+    switch (skyPeriod) {
+      case 'dawn':
+        return {
+          glowCore: '#FFFBEB',
+          glowMid: '#FDE68A',
+          glowOuter: '#FED7AA',
+          outerBorder: 'rgba(245, 158, 11, 0.45)',
+          middleBorder: 'rgba(251, 191, 36, 0.58)',
+          innerBorder: 'rgba(254, 215, 170, 0.5)',
+          circleBg: 'rgba(255, 255, 255, 0.78)',
+          starColor: 'rgba(245, 158, 11, 0.45)',
+          textColor: '#78350F',
+          badgeBg: '#FFFBEB',
+          badgeBorder: '#FDE68A',
+          badgeText: '#B45309',
+          badgeIconColor: '#F59E0B',
+          progressFill: '#F59E0B',
+          progressTrack: 'rgba(245, 158, 11, 0.18)',
+          captionColor: '#78350F',
+          dots: ['#FBBF24', '#F59E0B', '#34D399', '#FA8C3D'],
+        };
+      case 'sunset':
+        return {
+          glowCore: '#FFFBEB',
+          glowMid: '#FDE68A',
+          glowOuter: '#FBCFE8',
+          outerBorder: 'rgba(251, 146, 60, 0.45)',
+          middleBorder: 'rgba(251, 191, 36, 0.65)',
+          innerBorder: 'rgba(251, 213, 26, 0.85)',
+          circleBg: 'rgba(255, 255, 255, 0.8)',
+          starColor: 'rgba(251, 113, 133, 0.45)',
+          textColor: '#a81642',
+          badgeBg: '#fff2f3',
+          badgeBorder: '#FECDD3',
+          badgeText: '#BE123C',
+          badgeIconColor: '#F43F5E',
+          progressFill: '#E11D48',
+          progressTrack: 'rgba(255, 190, 212, 0.45)',
+          captionColor: '#ffffff',
+          dots: ['#FB7185', '#FBBF24', '#F43F5E', '#00C4B3'],
+        };
+      case 'night':
+        return {
+          glowCore: '#F0F9FF',
+          glowMid: '#BAE6FD',
+          glowOuter: '#38BDF8',
+          outerBorder: 'rgba(56, 189, 248, 0.45)',
+          middleBorder: 'rgba(125, 211, 252, 0.62)',
+          innerBorder: 'rgba(186, 230, 253, 0.45)',
+          circleBg: 'rgba(15, 23, 42, 0.55)',
+          starColor: 'rgba(56, 189, 248, 0.45)',
+          textColor: '#F8FAFC',
+          badgeBg: 'rgba(30, 41, 59, 0.95)',
+          badgeBorder: 'rgba(56, 189, 248, 0.48)',
+          badgeText: '#E0F2FE',
+          badgeIconColor: '#38BDF8',
+          progressFill: '#38BDF8',
+          progressTrack: 'rgba(56, 189, 248, 0.22)',
+          captionColor: '#E0F2FE',
+          dots: ['#38BDF8', '#67E8F9', '#00C4B3', '#93C5FD'],
+        };
+      case 'day':
+      default:
+        return {
+          glowCore: '#F0FDFA',
+          glowMid: '#CCFBF1',
+          glowOuter: '#E0F2FE',
+          outerBorder: 'rgba(0, 196, 179, 0.45)',
+          middleBorder: 'rgba(20, 184, 166, 0.58)',
+          innerBorder: 'rgba(94, 234, 212, 0.45)',
+          circleBg: 'rgba(255, 255, 255, 0.82)',
+          starColor: DESIGN_TOKENS.color.brand.turquoise.primary,
+          textColor: DESIGN_TOKENS.color.brand.turquoise.text,
+          badgeBg: DESIGN_TOKENS.color.brand.turquoise.light,
+          badgeBorder: DESIGN_TOKENS.color.brand.turquoise.primary,
+          badgeText: DESIGN_TOKENS.color.brand.turquoise.text,
+          badgeIconColor: DESIGN_TOKENS.color.brand.turquoise.primary,
+          progressFill: DESIGN_TOKENS.color.brand.turquoise.primary,
+          progressTrack: 'rgba(0, 196, 179, 0.2)',
+          captionColor: DESIGN_TOKENS.color.brand.turquoise.text,
+          dots: ['#00C4B3', '#10B981', '#F59E0B', '#38BDF8'],
+        };
+    }
+  }, [skyPeriod]);
+
+  // Pre-generate calm, symmetrical stardust embers
+  const celestialParticles = useMemo(() => {
+    const list = [];
+    const count = 16;
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * 2 * Math.PI;
+      const radius = CIRCLE_SIZE * 0.38 + ((i % 3) - 1) * 14;
+      list.push({
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius,
+        size: 3 + (i % 3) * 1.5,
+        colorIndex: i % 4,
+        opacity: 0.55 + (i % 3) * 0.15,
+      });
+    }
+    return list;
+  }, []);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isFinished) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setIsRubbing(true);
+    setTouchCount((prev) => prev + 1);
+    lastPos.current = { x: e.clientX, y: e.clientY };
+    audioService.triggerHaptic('light');
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isRubbing || isFinished || !lastPos.current) return;
+
+    const dx = e.clientX - lastPos.current.x;
+    const dy = e.clientY - lastPos.current.y;
+    const dist = Math.hypot(dx, dy);
+
+    if (dist >= 14) {
+      setStarRotation((prev) => (prev + dist * 0.4) % 360);
+
+      const now = Date.now();
+      if (now - lastHapticTick.current > 140) {
+        audioService.triggerHaptic('light');
+        audioService.playFrictionTick(0.6);
+        lastHapticTick.current = now;
+      }
+
+      setRubProgress((prev) => {
+        const next = Math.min(100, prev + dist * 0.22);
+        if (next >= 100 && !isFinished) {
+          setIsFinished(true);
+          audioService.triggerHaptic('success');
+          audioService.playChimeShockwave();
+        }
+        return next;
+      });
+
+      lastPos.current = { x: e.clientX, y: e.clientY };
+    }
+  };
+
+  const handlePointerUp = () => {
+    setIsRubbing(false);
+    setTouchCount(0);
+    lastPos.current = null;
+  };
+
   const playBlessingVoice = () => {
     audioService.playVoiceSanctuary(strings.blessingVoice, lang, 0.84);
   };
 
-  // Initialize Canvas Particle Field
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const width = (canvas.width = SOMATIC_CONFIG.CANVAS_WIDTH);
-    const height = (canvas.height = SOMATIC_CONFIG.CANVAS_HEIGHT);
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    particlesRef.current = createAuraParticles({
-      centerX,
-      centerY,
-      total: SOMATIC_CONFIG.TOTAL_PARTICLES,
-      colors: SOMATIC_CONFIG.PARTICLE_COLORS,
-    });
-
-    // Render loop
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      particlesRef.current.forEach((p) => {
-        if (!p.absorbed) {
-          // Slow drift or orbital pull
-          p.x += p.vx;
-          p.y += p.vy;
-
-          // Gentle bounds bounce
-          if (p.x < 10 || p.x > width - 10) p.vx *= -1;
-          if (p.y < 10 || p.y > height - 10) p.vy *= -1;
-
-          // Draw shimmering particle
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = p.alpha;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = p.color;
-          ctx.fill();
-          ctx.restore();
-        }
-      });
-
-      animFrameRef.current = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
-  }, []);
-
-  // Multi-Touch and Mouse Drag tracking
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    e.currentTarget.setPointerCapture(e.pointerId);
-    pointerPositionsRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    setPointersCount(pointerPositionsRef.current.size);
-    setIsRubbing(true);
-    lastPosRef.current = { x: e.clientX, y: e.clientY };
-
-    audioService.triggerHaptic([30, 40]);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!pointerPositionsRef.current.has(e.pointerId)) return;
-
-    const currentX = e.clientX;
-    const currentY = e.clientY;
-    const lastPos = lastPosRef.current;
-
-    if (lastPos) {
-      const dx = currentX - lastPos.x;
-      const dy = currentY - lastPos.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance > SOMATIC_CONFIG.MIN_RUB_SPEED_THRESHOLD) {
-        setRubSpeed(distance);
-
-        // Advance progress based on distance rubbed
-        const isDualThumb = pointerPositionsRef.current.size >= 2;
-        const progressIncrement = (distance * 0.15) * (isDualThumb ? 1.6 : 1.0);
-
-        setRubProgress((prev) => {
-          const next = Math.min(100, prev + progressIncrement);
-          if (next >= 100 && !isFinished) {
-            handleComplete();
-          }
-          return next;
-        });
-
-        // Simulate physiological hand warming
-        setHandTemp((prev) => {
-          if (prev < SOMATIC_CONFIG.TARGET_TEMP) {
-            return Math.min(SOMATIC_CONFIG.TARGET_TEMP, prev + (distance * 0.008));
-          }
-          return prev;
-        });
-
-        // Play gentle tactile feedback throttle
-        const now = Date.now();
-        if (now - soundThrottleRef.current > 120) {
-          audioService.triggerHaptic([20, 30]);
-          soundThrottleRef.current = now;
-        }
-
-        // Absorb nearest particles toward pointer
-        absorbParticlesNear(e.clientX, e.clientY);
-      }
-    }
-
-    lastPosRef.current = { x: currentX, y: currentY };
-    pointerPositionsRef.current.set(e.pointerId, { x: currentX, y: currentY });
-  };
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    pointerPositionsRef.current.delete(e.pointerId);
-    setPointersCount(pointerPositionsRef.current.size);
-
-    if (pointerPositionsRef.current.size === 0) {
-      setIsRubbing(false);
-      lastPosRef.current = null;
-    }
-  };
-
-  // Particle convergence effect on rubbing
-  const absorbParticlesNear = (screenX: number, screenY: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const localX = screenX - rect.left;
-    const localY = screenY - rect.top;
-
-    particlesRef.current.forEach((p) => {
-      const dx = localX - p.x;
-      const dy = localY - p.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-
-      if (dist < 45) {
-        p.vx += (dx / dist) * 2;
-        p.vy += (dy / dist) * 2;
-        p.alpha = Math.max(0.1, p.alpha - 0.05);
-      }
-    });
-  };
-
-  const handleComplete = () => {
-    setIsFinished(true);
-    audioService.playChimeShockwave();
-    setTimeout(() => {
-      onComplete();
-    }, SOMATIC_CONFIG.COMPLETION_DELAY_MS);
-  };
-
   return (
     <div className={styles.container}>
-      {/* Top Protocol Status with Cozy Pill */}
-      <div className={styles.statusPill}>
-        <div className={styles.tempIndicator}>
-          <Flame className="w-4 h-4 animate-pulse text-[#F9A000]" />
-          <span className="font-semibold text-slate-800">
-            {strings.fingertipHeat}{' '}
-            <span className={styles.tempValue}>{handTemp.toFixed(1)}°C</span>
-          </span>
-        </div>
-        <span className={styles.tempStatus}>
-          {pointersCount > 1 ? (
-            <span className={styles.tempActive}>
-              <SparklesIcon />
-              <span>{strings.dualThumbActive}</span>
-            </span>
-          ) : handTemp < SOMATIC_CONFIG.TEMP_THRESHOLD ? (
-            <span className={styles.tempCool}>
-              <WindIcon />
-              <span>{strings.coolNerves}</span>
-            </span>
-          ) : (
-            <span className={styles.tempWarm}>
-              <FlameIcon />
-              <span>{strings.restoredWarmth}</span>
-            </span>
-          )}
-        </span>
-      </div>
-
-      {/* Mooca Companion Guidance */}
-      <div className={styles.mascotSection}>
+      {/* 1. Mascot Guidance View */}
+      <div className={styles.mascotWrapper}>
         <MoocaMascot
-          mood={isFinished ? 'celebrating' : 'praying'}
-          size="xs"
-          speakingBubble={
-            isFinished
-              ? strings.mascotDone
-              : strings.mascotRubbing
-          }
+          mood={isFinished ? 'celebrating' : 'comforting'}
+          size="sm"
+          speakingBubble={isFinished ? strings.mascotDone : strings.mascotRubbing}
         />
       </div>
 
-      {/* Somatic Ritual Instruction & Whisper Trigger */}
-      <div className={styles.instructionSection}>
-        <div className={styles.instructionHeader}>
-          <span className={styles.ritualTitle}>
-            <Shield />
-            {strings.ritualTitle}
-          </span>
-          <button
-            type="button"
-            onClick={playBlessingVoice}
-            className={styles.whisperBtn}
-            title={strings.whisperTitle}
-          >
-            <Volume2 />
-            <span>{strings.whisperBtn}</span>
-          </button>
-        </div>
-        <p className={styles.instructionText}>
-          {strings.instruction}
-        </p>
-      </div>
+      {/* 2. Instruction Badge with Info Tip Button */}
+      <button
+        type="button"
+        onClick={() => {
+          audioService.triggerHaptic('selection');
+          setIsGuideOpen(true);
+        }}
+        className={styles.instructionPill}
+        style={{
+          backgroundColor: theme.badgeBg,
+          borderColor: theme.badgeBorder,
+        }}
+      >
+        <span className={styles.pillIconBadge}>
+          {isFinished ? (
+            <Check size={13} color="#FFFFFF" strokeWidth={2.8} />
+          ) : (
+            <Sparkles size={13} color={theme.badgeIconColor} strokeWidth={2.4} />
+          )}
+        </span>
 
-      {/* Interactive Friction Charging Zone */}
-      <div className={styles.interactiveZone}>
+        <span className={styles.instructionText} style={{ color: theme.badgeText }}>
+          {isFinished ? strings.heroFinished : strings.instruction}
+        </span>
+
+        <span className={styles.helpIconSlot}>
+          <Hand size={12} color={theme.badgeIconColor} />
+        </span>
+      </button>
+
+      {/* 3. Hero Centerpiece: Celestial Sigil Circle */}
+      <div className={styles.circleContainer}>
+        {/* Soft Ambient Sun Aura SVG */}
+        <div className={styles.sunAuraSvgWrapper}>
+          <svg
+            width={CIRCLE_SIZE + 96}
+            height={CIRCLE_SIZE + 96}
+            viewBox={`0 0 ${CIRCLE_SIZE + 96} ${CIRCLE_SIZE + 96}`}
+            className={styles.auraSvg}
+          >
+            <defs>
+              <radialGradient id="sigilSunAuraWeb" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor={theme.glowCore} stopOpacity="0.45" />
+                <stop offset="42%" stopColor={theme.glowMid} stopOpacity="0.22" />
+                <stop offset="72%" stopColor={theme.glowOuter} stopOpacity="0.08" />
+                <stop offset="100%" stopColor={theme.glowOuter} stopOpacity="0" />
+              </radialGradient>
+            </defs>
+            <circle
+              cx={(CIRCLE_SIZE + 96) / 2}
+              cy={(CIRCLE_SIZE + 96) / 2}
+              r={(CIRCLE_SIZE + 96) / 2}
+              fill="url(#sigilSunAuraWeb)"
+            />
+          </svg>
+        </div>
+
+        {/* Outer Circle (Touch / Pointer zone) */}
         <div
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          className={styles.circleZone}
+          className={classNames(styles.outerCircle, {
+            [styles.rubbingActive]: isRubbing,
+          })}
+          style={{
+            width: CIRCLE_SIZE,
+            height: CIRCLE_SIZE,
+            borderRadius: CIRCLE_SIZE / 2,
+            borderColor: theme.outerBorder,
+            backgroundColor: theme.circleBg,
+          }}
         >
-          {/* Canvas Ember Layer */}
-          <canvas ref={canvasRef} className={styles.canvas} />
-
-          {/* Inner Rotating Sigil Ring */}
+          {/* Middle Dashed Ring */}
           <div
-            className={cn(styles.sigilRing, { [styles.spinning]: isRubbing })}
-          >
-            <div className={styles.sigilCore}>
-              <Sparkles className={isFinished ? styles.sigilIconFinished : styles.sigilIconActive} />
+            className={styles.middleCircle}
+            style={{
+              width: CIRCLE_SIZE * 0.76,
+              height: CIRCLE_SIZE * 0.76,
+              borderRadius: (CIRCLE_SIZE * 0.76) / 2,
+              borderColor: theme.middleBorder,
+            }}
+          />
+
+          {/* Inner Solid Ring */}
+          <div
+            className={styles.innerCircle}
+            style={{
+              width: CIRCLE_SIZE * 0.52,
+              height: CIRCLE_SIZE * 0.52,
+              borderRadius: (CIRCLE_SIZE * 0.52) / 2,
+              borderColor: theme.innerBorder,
+            }}
+          />
+
+          {/* Constellation Stardust Embers */}
+          {celestialParticles.map((p, idx) => (
+            <div
+              key={idx}
+              className={styles.particle}
+              style={{
+                left: CIRCLE_SIZE / 2 + p.x - p.size / 2,
+                top: CIRCLE_SIZE / 2 + p.y - p.size / 2,
+                width: p.size,
+                height: p.size,
+                borderRadius: p.size / 2,
+                backgroundColor: theme.dots[p.colorIndex],
+                opacity: p.opacity,
+                boxShadow: `0 0 4px ${theme.dots[p.colorIndex]}`,
+              }}
+            />
+          ))}
+
+          {/* Center Content: Sun for day, Sparkles for sunset, Star for night */}
+          <div className={styles.centerContent}>
+            <div
+              className={styles.starBackground}
+              style={{ transform: `rotate(${starRotation}deg)` }}
+            >
+              {skyPeriod === 'day' ? (
+                <Sun size={76} color={theme.starColor} strokeWidth={1.8} />
+              ) : skyPeriod === 'sunset' ? (
+                <Sparkles size={74} color={theme.starColor} strokeWidth={1.8} />
+              ) : (
+                <Star size={76} color={theme.starColor} strokeWidth={1.8} />
+              )}
             </div>
-          </div>
 
-          {/* Central Instruction / Shockwave Message */}
-          <div className={styles.centralMessage}>
-            {isFinished ? (
-              <div>
-                <span className={styles.finishedHero}>
-                  {strings.heroFinished}
-                </span>
-                <span className={styles.finishedSub}>
-                  {strings.subFinished}
-                </span>
-              </div>
-            ) : (
-              <div className={styles.centralContent}>
-                <div className={styles.progressSubtitle}>
-                  {isRubbing ? strings.rubbingProgress : strings.idlePrompt}
-                </div>
-                <div className={styles.progressValue}>
-                  {Math.round(rubProgress)}%
-                </div>
-              </div>
-            )}
+            <span className={styles.percentNumber} style={{ color: theme.textColor }}>
+              {Math.round(rubProgress)}%
+            </span>
           </div>
         </div>
       </div>
 
-      <DevActivityControl onComplete={onComplete} />
-
-      {/* Progress & Physiology Bar */}
-      <div className={styles.progressBarContainer}>
-        <div className={styles.progressBarTrack}>
-          <div
-            className={cn(styles.progressBarFill, { [styles.finished]: isFinished })}
-            style={{ width: `${rubProgress}%` }}
-          />
-        </div>
-
-        <p className={styles.captionText}>
-          {strings.caption}
-        </p>
-      </div>
-
-      {/* Manual Proceed button */}
-      {isFinished && (
-        <div className={styles.buttonContainer}>
-          <Button
+      {/* 4. Bottom Progress Bar OR Proceed Button */}
+      {isFinished ? (
+        <div className={styles.actionSection}>
+          <MarshmallowButton
             variant="primary"
-            colorTheme="turquoise"
             size="lg"
-            fullWidth
-            onClick={onComplete}
-            label={strings.proceedBtn}
+            onPress={onComplete}
+            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
+            title={strings.proceedBtn}
           />
+        </div>
+      ) : (
+        <div className={styles.bottomSection}>
+          <div
+            className={styles.progressBarTrack}
+            style={{ backgroundColor: theme.progressTrack }}
+          >
+            <div
+              className={styles.progressBarFill}
+              style={{
+                width: `${rubProgress}%`,
+                backgroundColor: theme.progressFill,
+              }}
+            />
+          </div>
+
+          <p className={styles.bottomCaption} style={{ color: theme.captionColor }}>
+            {strings.caption}
+          </p>
+        </div>
+      )}
+
+      {/* 5. Educational Coaching Modal */}
+      {isGuideOpen && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modalCard}>
+            <button
+              type="button"
+              onClick={() => setIsGuideOpen(false)}
+              className={styles.modalCloseBtn}
+            >
+              <X size={18} color="#64748B" />
+            </button>
+
+            <div className={styles.guideIconWrapper}>
+              <Hand size={32} color="#00C4B3" strokeWidth={2.4} />
+            </div>
+
+            <h3 className={styles.guideTitle}>{strings.guideTitle}</h3>
+
+            <div className={styles.guideStepsBox}>
+              <div className={styles.guideStepRow}>
+                <div className={styles.stepNumBadge}>
+                  <span className={styles.stepNumText}>1</span>
+                </div>
+                <span className={styles.guideStepText}>{strings.guideStep1Desc}</span>
+              </div>
+
+              <div className={styles.guideStepRow}>
+                <div className={styles.stepNumBadge}>
+                  <span className={styles.stepNumText}>2</span>
+                </div>
+                <span className={styles.guideStepText}>{strings.guideStep2Desc}</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                audioService.triggerHaptic('success');
+                setIsGuideOpen(false);
+              }}
+              className={styles.guideConfirmBtn}
+            >
+              <Check size={16} color="#FFFFFF" strokeWidth={2.6} />
+              <span className={styles.guideConfirmText}>{strings.guideConfirm}</span>
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -342,5 +420,3 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 };
 
 export default SomaticAbsorption;
-export * from './constants';
-export * from './types';

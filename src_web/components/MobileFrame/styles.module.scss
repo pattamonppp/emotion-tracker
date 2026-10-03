@@ -2,322 +2,245 @@
 
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, $color-brand-pale 0%, #FFFDF9 50%, #E0F7F5 100%);
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  color: $color-slate-800;
+  position: relative;
+  overflow-x: hidden;
   font-family: $font-sans;
+  background-color: transparent;
 
   @include above($bp-sm) {
-    padding: 16px;
+    height: 100vh;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 }
 
-.desktopHelperBar {
-  display: none;
+// Computer and Mobile Responsive Shell
+.appShell {
+  width: 100%;
+  max-width: 440px;
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: transparent;
+  flex: 1;
+
+  @include above($bp-sm) {
+    max-width: 420px;
+    height: min(94vh, 880px);
+    min-height: min(94vh, 880px);
+    max-height: 880px;
+    margin: auto;
+    border-radius: 36px;
+    box-shadow: 0 25px 65px -12px rgba(0, 77, 64, 0.35), 0 0 0 8px rgba(255, 255, 255, 0.85), 0 0 0 9.5px rgba(0, 196, 179, 0.25);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    flex: initial;
+  }
+}
+
+// Top Bar (Wordmark, Language Actions, Profile Avatar) - Matching Mobile src/App.tsx
+.topBar {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  max-width: 420px;
-  margin-bottom: 8px;
-  padding: 6px 14px;
-  border-radius: 16px;
-  @include glass(12px, rgba(255, 255, 255, 0.85));
-  border: 1px solid rgba(0, 196, 179, 0.25);
-  font-size: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 10px 16px;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 196, 179, 0.25);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 
   @include above($bp-sm) {
-    display: flex;
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
   }
 }
 
-.helperIndicator {
+.logoRow {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.actionsRow {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 8px;
 }
 
-.pulseDot {
-  width: 10px;
-  height: 10px;
+.langBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: $radius-pill;
+  background-color: #F0FDFB;
+  border: 1.5px solid #BFEFEB;
+  gap: 4px;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: #E6F9F7;
+  }
+}
+
+.langText {
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 11px;
+  color: $color-brand-contrast;
+  line-height: 1;
+}
+
+.soundBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-pill;
+  background-color: #F0FDFB;
+  border: 1.5px solid #BFEFEB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all $transition-fast;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    background-color: #E6F9F7;
+  }
+}
+
+.soundBtnActive {
+  background-color: #E6F9F7;
+  border-color: rgba(0, 196, 179, 0.4);
+}
+
+.avatarWrapper {
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 196, 179, 0.25);
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  transition: transform $transition-fast;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.avatarGradient {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $color-brand-primary 0%, #1F77DF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarText {
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 13px;
+  color: $color-white;
+  line-height: 1;
+}
+
+// Dynamic Island Session Pill with Countdown & Sky Atmosphere Switcher - Matching Mobile
+.dynamicIslandContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0 12px;
+  background-color: transparent;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.dynamicIslandRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.dynamicPill {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #E6F9F7;
+  padding: 3px 4px 3px 10px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(0, 196, 179, 0.35);
+  gap: 8px;
+}
+
+.pingDot {
+  width: 6px;
+  height: 6px;
   border-radius: $radius-circle;
   background-color: $color-brand-primary;
   animation: pulse 2s infinite ease-in-out;
 }
 
-.helperTitle {
-  font-weight: 800;
-  color: $color-brand-text;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.phaseLabelText {
+  font-family: $font-sans;
+  font-weight: 600;
+  font-size: 11px;
+  color: $color-brand-contrast;
+  line-height: 1;
 }
 
-.helperBadge {
-  font-size: 10px;
-  color: $color-accent-marigo-1;
-  font-weight: 500;
-}
-
-.toggleFrameBtn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 10px;
+.timerChip {
   background-color: $color-white;
-  border: 1px solid $color-slate-200;
-  color: $color-slate-600;
-  font-size: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all $transition-base;
-
-  &:hover {
-    background-color: $color-brand-pale;
-    color: $color-brand-text;
-  }
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.shell {
-  width: 100%;
+.timerChipText {
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 10px;
+  color: $color-brand-contrast;
+  line-height: 1;
+}
+
+// Main Viewport
+.viewport {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  background-color: $color-white;
-  position: relative;
-  transition: all $transition-smooth;
-}
-
-.framed {
-  @include above($bp-sm) {
-    width: 390px;
-    height: 844px;
-    max-height: 94vh;
-    border-radius: 48px;
-    border: 8px solid $color-white;
-    box-shadow: 0 20px 50px rgba(0, 196, 179, 0.25);
-    outline: 1px solid rgba(0, 196, 179, 0.2);
-  }
-}
-
-.fullView {
-  width: 100%;
-  min-height: 100vh;
-  max-width: 512px;
-}
-
-.statusBar {
-  height: 44px;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: $color-slate-700;
-  flex-shrink: 0;
-  background-color: rgba(255, 255, 255, 0.95);
-  user-select: none;
-  border-bottom: 1px solid $color-slate-100;
-}
-
-.statusTime {
-  font-family: $font-mono;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: $color-brand-text;
-}
-
-.dynamicIslandPill {
-  height: 20px;
-  width: 96px;
-  border-radius: $radius-pill;
-  background-color: $color-brand-pale;
-  border: 1px solid rgba(0, 196, 179, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 0 8px;
-}
-
-.islandPing {
-  width: 6px;
-  height: 6px;
-  border-radius: $radius-circle;
-  background-color: $color-brand-primary;
-  animation: ping 1.5s infinite;
-}
-
-.islandText {
-  font-size: 10px;
-  font-family: $font-mono;
-  font-weight: 800;
-  color: $color-brand-text;
-}
-
-.statusIcons {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: $color-slate-500;
-}
-
-.header {
-  height: 52px;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(0, 196, 179, 0.15);
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  flex-shrink: 0;
-}
-
-.brandZone {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.brandBadge {
-  font-size: 9px;
-  font-family: $font-mono;
-  font-weight: 700;
-  color: $color-brand-text;
-  background-color: $color-brand-pale;
-  padding: 2px 6px;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 196, 179, 0.3);
-}
-
-.storyBtn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background-color: $color-brand-pale;
-  border: 1px solid rgba(0, 196, 179, 0.3);
-  padding: 4px 10px;
-  border-radius: $radius-pill;
-  color: $color-brand-text;
-  font-weight: 700;
-  font-size: 10px;
-  cursor: pointer;
-  transition: all $transition-fast;
-
-  &:hover {
-    background-color: rgba(51, 208, 194, 0.2);
-  }
-}
-
-.actionsZone {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.iconBtn {
-  width: 28px;
-  height: 28px;
-  border-radius: $radius-circle;
-  background-color: $color-slate-50;
-  border: 1px solid $color-slate-200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $color-brand-primary;
-  cursor: pointer;
-  transition: background-color $transition-fast;
-
-  &:hover {
-    background-color: $color-brand-pale;
-  }
-}
-
-.langBtn {
-  height: 28px;
-  padding: 0 8px;
-  border-radius: $radius-pill;
-  background-color: $color-slate-50;
-  border: 1px solid $color-slate-200;
-  font-size: 10px;
-  font-weight: 700;
-  color: $color-slate-700;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: background-color $transition-fast;
-
-  &:hover {
-    background-color: $color-brand-pale;
-  }
-}
-
-.profileAvatar {
-  width: 28px;
-  height: 28px;
-  border-radius: $radius-circle;
-  background: linear-gradient(135deg, $color-brand-primary, $color-accent-blue-300);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $color-white;
-  font-weight: 800;
-  font-size: 12px;
-  border: none;
-  cursor: pointer;
-  transition: transform $transition-fast;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-}
-
-.viewportBody {
-  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
   position: relative;
-  background: linear-gradient(180deg, rgba(230, 249, 247, 0.5) 0%, #FFFDF9 50%, #F8FDFD 100%);
-}
-
-.homeIndicatorBar {
-  height: 20px;
-  background-color: $color-white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border-top: 1px solid $color-slate-50;
-}
-
-.homePill {
-  width: 128px;
-  height: 4px;
-  border-radius: $radius-pill;
-  background-color: $color-slate-300;
+  z-index: 5;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-@keyframes ping {
-  0% { transform: scale(1); opacity: 0.8; }
-  75%, 100% { transform: scale(2); opacity: 0; }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
 }

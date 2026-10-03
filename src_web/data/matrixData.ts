@@ -3,43 +3,93 @@ import { EmotionTag, GoalType, MBTIType, InterventionOption, InterventionOptionM
 export const EMOTION_TAGS: EmotionTag[] = [
   {
     id: 'shaking',
-    labelTh: 'ตื่นเต้นจนตัวสั่น',
-    labelEn: 'Trembling with Nerves',
-    color: '#FA8C3D', // Sunshade warning
-    weightDescription: 'Adrenaline surge in extremities',
+    labelTh: 'ตื่นเต้น',
+    labelEn: 'Nervous',
+    emoji: '',
+    color: '#FA8C3D', // Sunshade warm accent
+    weightDescription: '',
     recommendedOption: 'A', // The Somatic Absorption (rubbing warms cold shaking hands)
   },
   {
     id: 'forgetting',
-    labelTh: 'กลัวลืมสิ่งที่อ่านมา',
-    labelEn: 'Fear of Blanking Out',
+    labelTh: 'ว่างเปล่า',
+    labelEn: 'Empty',
+    emoji: '',
     color: '#F26E6E', // Flamingo
-    weightDescription: 'Prefrontal amygdala hijack',
+    weightDescription: '',
     recommendedOption: 'A', // Somatic Absorption / Blessing Sigil
   },
   {
     id: 'pressure',
-    labelTh: 'กดดันจนหายใจไม่ทั่วท้อง',
-    labelEn: 'Crushed by Pressure',
+    labelTh: 'กดดัน',
+    labelEn: 'Pressure',
+    emoji: '',
     color: '#3B82F6', // Accent Blue
-    weightDescription: 'Sympathetic tension & rapid pulse',
+    weightDescription: '',
     recommendedOption: 'B', // The Victory Sip (Vagal Maneuver)
   },
   {
     id: 'freeze',
-    labelTh: 'สมองช็อต ตื้อตัน คิดไม่ออก',
-    labelEn: 'Cognitive Freeze',
-    color: '#93C5FD',
-    weightDescription: 'Mental deadlock & physical freeze',
+    labelTh: 'สมองตื้อ',
+    labelEn: 'Freeze',
+    emoji: '',
+    color: '#60A5FA',
+    weightDescription: '',
     recommendedOption: 'C', // Kinetic Tension Shaker (discharge)
   },
   {
     id: 'burnout',
-    labelTh: 'ล้าสะสม พลังงานหมดเกลี้ยง',
-    labelEn: 'Chronic Drain & Burnout',
+    labelTh: 'หมดไฟ',
+    labelEn: 'Burnout',
+    emoji: '',
     color: '#00C4B3', // Brand turquoise
-    weightDescription: 'Neural depletion & sensory overload',
+    weightDescription: '',
     recommendedOption: 'G', // Pre-Generated Studio Audio Matrix
+  },
+  {
+    id: 'anxious',
+    labelTh: 'กังวล',
+    labelEn: 'Anxious',
+    emoji: '',
+    color: '#F59E0B', // Warm Amber
+    weightDescription: '',
+    recommendedOption: 'E', // Somatic Breathwork Pacer (Box 4-4-4-4)
+  },
+  {
+    id: 'overthinking',
+    labelTh: 'คิดมาก',
+    labelEn: 'Overthinking',
+    emoji: '',
+    color: '#0EA5E9', // Ocean Cyan
+    weightDescription: '',
+    recommendedOption: 'B',
+  },
+  {
+    id: 'lonely',
+    labelTh: 'โดดเดี่ยว',
+    labelEn: 'Lonely',
+    emoji: '',
+    color: '#0284C7', // Gentle Sky Blue
+    weightDescription: '',
+    recommendedOption: 'G', // Audio Matrix Sanctuary
+  },
+  {
+    id: 'confused',
+    labelTh: 'สับสน',
+    labelEn: 'Confused',
+    emoji: '',
+    color: '#10B981', // Mint Emerald
+    weightDescription: '',
+    recommendedOption: 'D', // Vertical Grounding / Jump
+  },
+  {
+    id: 'custom',
+    labelTh: 'บอก Mooca',
+    labelEn: 'Tell Mooca',
+    emoji: '',
+    color: '#EC4899', // Soft Rose Heart
+    weightDescription: 'Personal heart message directly to Mooca',
+    recommendedOption: 'A',
   },
 ];
 
@@ -109,6 +159,9 @@ export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOption
   },
 };
 
+/**
+ * Fast lookup map from keyword string to InterventionOption ('A' - 'G')
+ */
 export const INTERVENTION_KEYWORD_MAP: Record<string, InterventionOption> = Object.entries(
   INTERVENTION_DATASET
 ).reduce((acc, [option, meta]) => {
@@ -121,6 +174,9 @@ export const INTERVENTION_KEYWORD_MAP: Record<string, InterventionOption> = Obje
   return acc;
 }, {} as Record<string, InterventionOption>);
 
+/**
+ * Matches input text against keyword dataset (Thai & English, case-insensitive)
+ */
 export const matchOptionFromKeywords = (
   text: string,
   defaultOption: InterventionOption = 'A'
@@ -128,10 +184,12 @@ export const matchOptionFromKeywords = (
   if (!text) return defaultOption;
   const normalized = text.trim().toLowerCase();
 
+  // 1. Exact match
   if (INTERVENTION_KEYWORD_MAP[normalized]) {
     return INTERVENTION_KEYWORD_MAP[normalized];
   }
 
+  // 2. Substring containment match
   for (const [kw, opt] of Object.entries(INTERVENTION_KEYWORD_MAP)) {
     if (normalized.includes(kw)) {
       return opt;

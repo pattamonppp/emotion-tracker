@@ -24,14 +24,52 @@ class AudioMatrixService {
     }
   }
 
-  // Trigger safe haptic vibration (on mobile phones supporting Vibration API)
-  public triggerHaptic(pattern: number | number[] = 15) {
+  // Trigger tactile feedback on supported mobile browsers.
+  public async triggerHaptic(
+    style:
+      | 'light'
+      | 'medium'
+      | 'heavy'
+      | 'selection'
+      | 'success'
+      | 'warning'
+      | number
+      | number[] = 'medium',
+  ): Promise<void> {
     try {
-      if (typeof window !== 'undefined' && 'vibrate' in navigator) {
-        navigator.vibrate(pattern);
+      if (
+        typeof window === 'undefined' ||
+        !('vibrate' in navigator)
+      ) {
+        return;
       }
+
+      if (typeof style === 'number' || Array.isArray(style)) {
+        navigator.vibrate(style);
+        return;
+      }
+
+      const patterns: Record<
+        'light' | 'medium' | 'heavy' | 'selection' | 'success' | 'warning',
+        number | number[]
+      > = {
+        light: 10,
+        medium: 20,
+        heavy: 35,
+
+        // Short single pulse for selection/tap.
+        selection: 8,
+
+        // Short double pulse.
+        success: [15, 30, 15],
+
+        // Slightly stronger double pulse.
+        warning: [25, 40, 25],
+      };
+
+      navigator.vibrate(patterns[style]);
     } catch {
-      // Ignore vibration errors if unsupported
+      // Vibration may not be supported or permitted.
     }
   }
 
@@ -39,7 +77,7 @@ class AudioMatrixService {
   public playJarDrop() {
     this.initContext();
     if (!this.ctx) return;
-    this.triggerHaptic([30, 20, 40]);
+    // this.triggerHaptic([30, 20, 40]);
 
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
@@ -64,7 +102,7 @@ class AudioMatrixService {
   public playFrictionTick(intensity = 0.5) {
     this.initContext();
     if (!this.ctx) return;
-    this.triggerHaptic(Math.round(8 + intensity * 20));
+    // this.triggerHaptic(Math.round(8 + intensity * 20));
 
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
@@ -93,7 +131,7 @@ class AudioMatrixService {
   public playChimeShockwave() {
     this.initContext();
     if (!this.ctx) return;
-    this.triggerHaptic([60, 40, 80, 50, 100]);
+    // this.triggerHaptic([60, 40, 80, 50, 100]);
 
     const freqs = [528, 660, 792, 1056]; // 528Hz Solfeggio "Transformation & Miracles"
     freqs.forEach((freq, idx) => {
@@ -120,7 +158,7 @@ class AudioMatrixService {
   public playLiquidSip(sipNumber = 1) {
     this.initContext();
     if (!this.ctx) return;
-    this.triggerHaptic([40, 60, 50]);
+    // this.triggerHaptic([40, 60, 50]);
 
     const now = this.ctx.currentTime;
     // Water drop & swallow resonance
@@ -147,7 +185,7 @@ class AudioMatrixService {
   public playShakerClick(remaining: number) {
     this.initContext();
     if (!this.ctx) return;
-    this.triggerHaptic(25);
+    // this.triggerHaptic(25);
 
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
@@ -283,6 +321,92 @@ class AudioMatrixService {
     } catch {
       // ignore
     }
+  }
+
+  private isBgmPlaying = false;
+  private bgmListeners: Array<(isPlaying: boolean) => void> = [];
+  private bgmGain: GainNode | null = null;
+  private bgmOscs: OscillatorNode[] = [];
+
+  public startBackgroundMusic() {
+    if (this.isBgmPlaying) return;
+    this.initContext();
+    if (!this.ctx) {
+      this.isBgmPlaying = true;
+      this.notifyBgmListeners();
+      return;
+    }
+
+    try {
+      const now = this.ctx.currentTime;
+      this.bgmGain = this.ctx.createGain();
+      this.bgmGain.gain.setValueAtTime(0.001, now);
+      this.bgmGain.gain.linearRampToValueAtTime(0.08, now + 1.5);
+      this.bgmGain.connect(this.ctx.destination);
+
+      // Soothing warm ambient chords (Cmaj9: C3, G3, B3, D4, E4)
+      const freqs = [130.81, 196.0, 246.94, 293.66, 329.63];
+      this.bgmOscs = freqs.map((f, i) => {
+        const osc = this.ctx!.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f + (i % 2 === 0 ? 0.3 : -0.3), now);
+        osc.connect(this.bgmGain!);
+        osc.start(now);
+        return osc;
+      });
+
+      this.isBgmPlaying = true;
+      this.notifyBgmListeners();
+    } catch {
+      this.isBgmPlaying = true;
+      this.notifyBgmListeners();
+    }
+  }
+
+  public stopBackgroundMusic() {
+    if (!this.isBgmPlaying) return;
+    if (this.ctx && this.bgmGain) {
+      const now = this.ctx.currentTime;
+      this.bgmGain.gain.linearRampToValueAtTime(0.001, now + 0.6);
+      setTimeout(() => {
+        this.bgmOscs.forEach((osc) => {
+          try {
+            osc.stop();
+            osc.disconnect();
+          } catch {
+            // ignore
+          }
+        });
+        this.bgmOscs = [];
+      }, 700);
+    }
+    this.isBgmPlaying = false;
+    this.notifyBgmListeners();
+  }
+
+  public toggleBackgroundMusic() {
+    this.triggerHaptic('selection');
+    if (this.isBgmPlaying) {
+      this.stopBackgroundMusic();
+    } else {
+      this.startBackgroundMusic();
+    }
+  }
+
+  public getIsBgmPlaying(): boolean {
+    return this.isBgmPlaying;
+  }
+
+  public subscribeBgm(listener: (isPlaying: boolean) => void) {
+    this.bgmListeners.push(listener);
+    listener(this.isBgmPlaying);
+    return () => {
+      this.bgmListeners = this.bgmListeners.filter((l) => l !== listener);
+    };
+  }
+
+  private notifyBgmListeners() {
+    this.bgmListeners.forEach((l) => l(this.isBgmPlaying));
   }
 
   public stopAllVoice() {

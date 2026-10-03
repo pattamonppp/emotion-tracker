@@ -1,0 +1,196 @@
+@use 'abstracts' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 8px 16px;
+  user-select: none;
+  font-family: $font-sans;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.mascotWrapper {
+  width: 100%;
+  height: 145px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+}
+
+.orbSection {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.ambientAura {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  border-radius: $radius-circle;
+  background-color: rgba(0, 196, 179, 0.22);
+  filter: blur(14px);
+  pointer-events: none;
+  transition: transform 3.8s ease-in-out, background-color 800ms ease;
+
+  &.auraFinished {
+    background-color: rgba(16, 185, 129, 0.28);
+  }
+
+  &.auraExhale {
+    background-color: rgba(0, 196, 179, 0.35);
+  }
+}
+
+.orbBody {
+  width: 220px;
+  height: 220px;
+  border-radius: $radius-circle;
+  background-color: #FFFFFF;
+  border: 4px solid #00C4B3;
+  box-shadow: 0 4px 20px rgba(0, 196, 179, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+
+  &.orbFinished {
+    border-color: #10B981;
+  }
+}
+
+.svgRing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.orbContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  text-align: center;
+}
+
+.startOrbContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.startOrbTitle {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: $color-brand-contrast;
+  margin-top: 4px;
+}
+
+.startOrbSub {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: $color-turquoise-1;
+}
+
+.finishedContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+}
+
+.finishedTitle {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #047857;
+  line-height: 1.4;
+}
+
+.secondsText {
+  font-family: $font-mono;
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: $color-brand-contrast;
+  line-height: 1;
+}
+
+.phaseLabelText {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: $color-brand-contrast;
+  margin-top: 4px;
+}
+
+.cycleCounterText {
+  font-size: 0.65625rem;
+  font-weight: 700;
+  color: $color-turquoise-1;
+  margin-top: 4px;
+}
+
+// -------------------------------------------------------------
+// Bottom Guidance & Action Button
+// -------------------------------------------------------------
+.bottomSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.organicInstructionText {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $color-brand-contrast;
+  text-align: center;
+  line-height: 1.4;
+
+  &.textNight {
+    color: #F8FAFC;
+  }
+}
+
+.pulseIndicatorRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pulseIndicatorText {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: $color-slate-500;
+
+  &.textNight {
+    color: #94A3B8;
+  }
+}
+
+.actionBtnWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 48px;
+}
+
+.actionBtnPlaceholder {
+  height: 48px;
+}

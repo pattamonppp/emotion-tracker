@@ -4,23 +4,23 @@
   display: inline-flex;
   align-items: center;
   user-select: none;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  font-family: $font-display;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  font-family: $font-display, $font-sans;
 
   &.sizeSm {
     height: 24px;
-    font-size: 0.875rem;
+    font-size: 16px;
   }
 
   &.sizeMd {
     height: 28px;
-    font-size: 1.125rem;
+    font-size: 19px;
   }
 
   &.sizeLg {
     height: 40px;
-    font-size: 1.5rem;
+    font-size: 24px;
   }
 }
 
@@ -32,10 +32,10 @@
 }
 
 .heartDot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   position: absolute;
-  top: -10px;
+  top: -5px;
 }
 
 .letterUWrapper {
@@ -47,7 +47,7 @@
 
 .smileCurve {
   width: 14px;
-  height: 8px;
+  height: 6px;
   position: absolute;
-  bottom: -4px;
+  bottom: -3px;
 }

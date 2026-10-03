@@ -1,331 +1,307 @@
-@use 'abstracts' as *;
-
 .container {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  padding: 12px;
+  padding: 6px 12px 10px 12px;
   user-select: none;
-  font-family: $font-sans;
-  background: $gradient-bg-extended;
+  -webkit-user-select: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.statusPill {
-  width: 100%;
+.mascotWrapper {
+  height: 135px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  padding: 6px 14px;
-  background-color: rgba(255, 255, 255, 0.92);
-  border-radius: $radius-actionable-lg;
-  border: 1px solid $color-border-default;
-  box-shadow: $elevation-1;
-}
-
-.tempIndicator {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: $color-marigo-1;
-}
-
-.tempValue {
-  font-family: $font-mono;
-  color: $color-turquoise-text;
-  font-weight: 700;
-}
-
-.tempStatus {
-  font-size: 11px;
-  font-weight: 500;
-  color: $color-slate-500;
-}
-
-.tempActive {
-  color: $color-turquoise-text;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-
-  svg {
-    width: 14px;
-    height: 14px;
-    color: #F59E0B;
-  }
-}
-
-.tempCool {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #0EA5E9;
-  font-weight: 600;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-}
-
-.tempWarm {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #F97316;
-  font-weight: 600;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-}
-
-.guidanceSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   margin-top: 4px;
 }
 
-.instructionSection {
-  width: 100%;
-  max-width: 320px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.instructionHeader {
-  display: flex;
+.instructionPill {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.ritualTitle {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #334155;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  svg {
-    width: 14px;
-    height: 14px;
-    color: #00C4B3;
-  }
-}
-
-.whisperBtn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #009688;
-  background-color: #E6F9F7;
-  padding: 2px 10px;
-  border-radius: 20px;
-  border: 1px solid rgba(0, 196, 179, 0.3);
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  border-width: 1.2px;
+  border-style: solid;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: all 150ms ease;
+  margin-bottom: 6px;
+  font-family: inherit;
+  transition: transform 120ms ease;
 
   &:hover {
-    color: #004D40;
-    background-color: #DBF0EE;
+    transform: scale(1.02);
   }
+}
 
-  svg {
-    width: 12px;
-    height: 12px;
-    color: #00C4B3;
-  }
+.pillIconBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .instructionText {
-  font-size: 0.75rem;
-  color: #475569;
-  font-weight: 500;
-  margin: 0;
-  line-height: 1.4;
-}
-
-.interactiveZone {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto 0;
-}
-
-.centralContent {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.sigilIconFinished {
-  width: 40px;
-  height: 40px;
-  color: #00C4B3;
-}
-
-.sigilIconActive {
-  width: 40px;
-  height: 40px;
-  color: #F9A000;
-}
-
-.circleZone {
-  position: relative;
-  width: 256px;
-  height: 256px;
-  border-radius: $radius-circle;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  touch-action: none;
-  cursor: grab;
-  transition: all $transition-smooth;
-  box-shadow: $elevation-3;
-  border: 2px solid rgba(0, 196, 179, 0.25);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(221, 248, 245, 0.7) 100%);
-
-  &:active {
-    cursor: grabbing;
-  }
-}
-
-.canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.sigilRing {
-  width: 160px;
-  height: 160px;
-  border-radius: $radius-circle;
-  border: 1.5px dashed rgba(249, 160, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all $transition-smooth;
-
-  &.spinning {
-    animation: sigilSpin 6s linear infinite;
-  }
-}
-
-.sigilCore {
-  width: 112px;
-  height: 112px;
-  border-radius: $radius-circle;
-  border: 1px solid rgba(248, 228, 179, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
-.centralMessage {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  padding: 12px;
-  z-index: 10;
-}
-
-.progressValue {
-  font-family: $font-mono;
-  font-size: 2rem;
-  font-weight: 800;
-  color: $color-slate-800;
-}
-
-.progressSubtitle {
   font-size: 11px;
   font-weight: 700;
-  color: $color-marigo-1;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  line-height: 1.2;
 }
 
-.finishedHero {
-  font-size: 1.5rem;
+.helpIconSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.circleContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}
+
+.sunAuraSvgWrapper {
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auraSvg {
+  overflow: visible;
+}
+
+.outerCircle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-width: 1.5px;
+  border-style: solid;
+  cursor: grab;
+  touch-action: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+
+  &:active,
+  &.rubbingActive {
+    cursor: grabbing;
+    transform: scale(0.98);
+  }
+}
+
+.middleCircle {
+  position: absolute;
+  border-width: 1px;
+  border-style: dashed;
+  pointer-events: none;
+}
+
+.innerCircle {
+  position: absolute;
+  border-width: 1.2px;
+  border-style: solid;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  transition: opacity 200ms ease;
+}
+
+.centerContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.starBackground {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 80ms linear;
+}
+
+.percentNumber {
+  position: relative;
+  font-size: 26px;
   font-weight: 800;
-  color: $color-turquoise-text;
-  letter-spacing: 0.02em;
-  display: block;
+  letter-spacing: -0.02em;
+  z-index: 2;
 }
 
-.finishedSub {
-  font-size: 12px;
-  font-weight: 600;
-  color: $color-brand-contrast;
-  margin-top: 4px;
-  display: block;
-}
-
-.progressBarContainer {
+.bottomSection {
   width: 100%;
   max-width: 320px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
 }
 
 .progressBarTrack {
   width: 100%;
-  background-color: $color-black-gray-2;
-  border-radius: $radius-pill;
-  height: 12px;
+  height: 6px;
+  border-radius: 9999px;
   overflow: hidden;
-  padding: 2px;
-  border: 1px solid $color-border-default;
 }
 
 .progressBarFill {
   height: 100%;
-  border-radius: $radius-pill;
-  transition: width 100ms ease-out;
-  background: linear-gradient(90deg, $color-marigo-1 0%, $color-turquoise-1 100%);
-
-  &.finished {
-    background: $color-turquoise-1;
-  }
+  border-radius: 9999px;
+  transition: width 100ms ease;
 }
 
-.captionText {
+.bottomCaption {
   font-size: 11px;
-  color: $color-slate-500;
-  font-weight: 500;
+  font-weight: 600;
+  margin: 0;
 }
 
-.buttonContainer {
+.actionSection {
   width: 100%;
-  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
 }
 
-@keyframes sigilSpin {
-  from {
-    transform: rotate(0deg);
-  }
+// -------------------------------------------------------------
+// Coaching Modal
+// -------------------------------------------------------------
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 26, 43, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+  animation: fadeIn 150ms ease-out;
+}
 
-  to {
-    transform: rotate(360deg);
+.modalCard {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.modalCloseBtn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.guideIconWrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #E6F9F7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.guideTitle {
+  font-size: 15px;
+  font-weight: 800;
+  color: #00695C;
+  margin: 0 0 14px 0;
+}
+
+.guideStepsBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.guideStepRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.stepNumBadge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #E6F9F7;
+  border: 1px solid #00C4B3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepNumText {
+  font-size: 11px;
+  font-weight: 800;
+  color: #00897B;
+}
+
+.guideStepText {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.35;
+}
+
+.guideConfirmBtn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 14px;
+  background: #00C4B3;
+  border: 0;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 80ms ease;
+
+  &:active {
+    transform: scale(0.97);
   }
+}
+
+.guideConfirmText {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
