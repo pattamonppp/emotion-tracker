@@ -5,7 +5,15 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   user-select: none;
+}
+
+.mascotAnchor {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tapHeartEffect {
@@ -65,7 +73,7 @@
 .speakingBubble {
   font-family: $font-th;
   margin-bottom: 8px;
-  max-width: 260px;
+  max-width: 200px;
   padding: 8px 14px;
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.95);
@@ -99,28 +107,113 @@
   transform: translateX(-50%) rotate(45deg);
   width: 12px;
   height: 12px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-right: 2px solid rgba(0, 196, 179, 0.35);
   border-bottom: 2px solid rgba(0, 196, 179, 0.35);
 }
+
+/* Speech bubble used by MoocaMascot */
+
+.bubblePositioner {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 320px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.bubblePositionerHidden {
+  visibility: hidden;
+}
+
+.bubbleContainer {
+  position: relative;
+  min-width: 100px;
+  max-width: 280px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 1.2px solid $color-turquoise-1;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 107, 99, 0.08);
+  animation: bubblePop 300ms ease;
+}
+
+.bubbleText {
+  font-family: $font-th;
+  font-size: 11.5px;
+  line-height: 18px;
+  color: $color-brand-contrast;
+  font-weight: 700;
+  text-align: center;
+}
+
+.bubbleTail {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid $color-turquoise-1;
+}
+
+/* Mascot */
 
 .vectorWrapper {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transition:
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
 
-  &.interactive {
-    cursor: pointer;
+.vectorWrapper.interactive {
+  cursor: pointer;
 
-    &:hover {
-      transform: scale(1.05);
-    }
+  &:hover {
+    transform: scale(1.05);
+  }
 
-    &:active {
-      transform: scale(0.95);
-    }
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.vectorWrapper.petting {
+  animation: mascotPet 290ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes mascotPet {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  20% {
+    transform: scale(0.92) rotate(-6deg);
+  }
+
+  55% {
+    transform: scale(1.08) rotate(6deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -129,4 +222,111 @@
   height: 100%;
   filter: drop-shadow(0 6px 14px rgba(0, 196, 179, 0.15));
   overflow: visible;
+  display: block;
+}
+
+/* Floating hearts */
+
+.floatingHeartsContainer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  z-index: 99;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: heartsFloat 950ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.floatingHearts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.floatingHeart {
+  animation: heartPulse 950ms ease-out forwards;
+}
+
+.floatingHeartLarge {
+  animation: heartPulseLarge 950ms ease-out forwards;
+}
+
+.floatingSparkle {
+  animation: sparkleFloat 950ms ease-out forwards;
+}
+
+@keyframes heartsFloat {
+  from {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translate(-50%, -32px);
+    opacity: 0;
+  }
+}
+
+@keyframes heartPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(0.85);
+  }
+}
+
+@keyframes heartPulseLarge {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes sparkleFloat {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  30% {
+    transform: scale(1.2) rotate(15deg);
+  }
+
+  100% {
+    transform: scale(0.8) rotate(30deg);
+  }
+}
+
+/* Sunny */
+
+.sunnyContainer {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  z-index: 10;
+  animation: sunnySpin 9s linear infinite;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+@keyframes sunnySpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

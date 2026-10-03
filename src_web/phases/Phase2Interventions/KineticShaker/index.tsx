@@ -3,13 +3,12 @@ import classNames from 'classnames';
 import { audioService } from '../../../services/audioService';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../../components/MoocaMascot';
-import { useSky } from '../../../components/DynamicSkyEngine';
-import { Zap, Activity, ArrowRight, Sparkles, Star, CheckCircle2 } from 'lucide-react';
-import { DESIGN_TOKENS } from '../../../design-system/tokens';
+import { Sparkles, Star, CheckCircle2 } from 'lucide-react';
 import { getTranslation } from '../../../locales';
 import { KINETIC_SHAKER_CONFIG } from './constants';
 import type { KineticShakerProps } from './types';
 import styles from './styles.module.scss';
+import { useSkyTheme } from '@/hooks/useSkyTheme';
 
 export const KineticShaker: React.FC<KineticShakerProps> = ({
   onComplete,
@@ -18,7 +17,6 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.kineticShaker;
-  const { activePeriod } = useSky();
   const [mode, setMode] = useState<'shake' | 'bounce'>(activityType === 'jump' ? 'bounce' : 'shake');
   const [shakesLeft, setShakesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_SHAKES);
   const [bouncesLeft, setBouncesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_JUMPS);
@@ -34,43 +32,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
   const progressPercent = Math.round(((maxCount - currentCount) / maxCount) * 100);
   const fluidHeightPercent = isFinished ? 0 : Math.round((currentCount / maxCount) * 100);
 
-  const skyTheme = useMemo(() => {
-    switch (activePeriod) {
-      case 'sunset':
-        return {
-          countColor: '#ffffff',
-          labelColor: '#fffafb',
-          hintColor: '#5f0019',
-          progressTrack: 'rgba(255, 255, 255, 0.45)',
-          progressFill: 'linear-gradient(90deg, #ffa8bb, #fff6b4)',
-        };
-      case 'night':
-        return {
-          countColor: '#F8FAFC',
-          labelColor: '#E2E8F0',
-          hintColor: '#94A3B8',
-          progressTrack: 'rgba(255, 255, 255, 0.25)',
-          progressFill: 'linear-gradient(90deg, #38BDF8, #818CF8)',
-        };
-      case 'dawn':
-        return {
-          countColor: '#78350F',
-          labelColor: '#92400E',
-          hintColor: '#B45309',
-          progressTrack: 'rgba(255, 255, 255, 0.65)',
-          progressFill: 'linear-gradient(90deg, #F59E0B, #FBBF24)',
-        };
-      case 'day':
-      default:
-        return {
-          countColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          labelColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          hintColor: DESIGN_TOKENS.color.gray.muted,
-          progressTrack: 'rgba(0, 196, 179, 0.15)',
-          progressFill: 'linear-gradient(90deg, #00C4B3, #38BDF8)',
-        };
-    }
-  }, [activePeriod]);
+  const skyTheme = useSkyTheme();
 
   const handleFlaskInteraction = () => {
     if (isFinished) return;

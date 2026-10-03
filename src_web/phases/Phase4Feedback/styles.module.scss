@@ -35,12 +35,13 @@
 
 .mascotWrapper {
   width: 100%;
-  height: 145px;
+  height: 135px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   padding-bottom: 4px;
   margin-bottom: 6px;
+  margin-top: 32px;
 }
 
 .title {
@@ -68,12 +69,6 @@
   box-shadow: $elevation-1;
   margin-bottom: 14px;
   box-sizing: border-box;
-
-  &.bpmCardNight {
-    background-color: rgba(30, 41, 59, 0.85);
-    border-color: rgba(56, 189, 248, 0.4);
-    color: #F8FAFC;
-  }
 }
 
 .bpmHeader {
@@ -209,19 +204,6 @@
     transform: scale(0.98);
   }
 
-  &.stampBtnNight {
-    background-color: rgba(30, 41, 59, 0.7);
-    border-color: rgba(56, 189, 248, 0.25);
-
-    .stampMainLabel {
-      color: #F8FAFC;
-    }
-
-    .stampSubLabel {
-      color: #94A3B8;
-    }
-  }
-
   &.stampBtnActiveAmber {
     border-color: #F59E0B;
     background-color: #FFFBEB;
@@ -300,7 +282,5 @@
   width: 100%;
   box-sizing: border-box;
   flex-shrink: 0;
-  border-top: 1px solid rgba(226, 232, 240, 0.6);
-  background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(8px);
 }

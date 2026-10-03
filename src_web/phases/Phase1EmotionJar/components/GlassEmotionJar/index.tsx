@@ -361,7 +361,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           </div>
 
           {/* Interactive Mooca */}
-          <div className={styles.moocaMascotWrapper}>
+          <div className={styles.mascotWrapper}>
             <MoocaMascot
               mood={
                 selectedEmotions.length > 0

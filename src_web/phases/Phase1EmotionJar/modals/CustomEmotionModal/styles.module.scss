@@ -29,7 +29,7 @@
   z-index: 1;
 
   width: 100%;
-  max-width: 340px;
+  max-width: min(520px, 90vw);
   padding: 18px;
 
   background: #fff;

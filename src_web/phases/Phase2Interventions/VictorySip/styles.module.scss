@@ -18,11 +18,14 @@
 }
 
 .mascotWrapper {
+  width: 100%;
   height: 135px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 4px;
+  overflow: visible;
+  box-sizing: border-box;
+  margin-top: 32px;
 }
 
 .instructionPill {

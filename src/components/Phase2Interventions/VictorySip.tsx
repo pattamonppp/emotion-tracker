@@ -278,9 +278,9 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         ]}
       >
         {isFinished ? (
-          <Sparkles size={14} color="#10B981" strokeWidth={2.4} />
+          <Sparkles size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
         ) : isTiltingToDrink ? (
-          <Sparkles size={14} color="#3B82F6" strokeWidth={2.4} />
+          <Sparkles size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
         ) : (
           <GlassWater size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
         )}

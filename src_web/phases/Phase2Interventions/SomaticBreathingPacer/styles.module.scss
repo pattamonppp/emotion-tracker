@@ -18,11 +18,13 @@
 
 .mascotWrapper {
   width: 100%;
-  height: 145px;
+  height: 135px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding-bottom: 4px;
+  overflow: visible;
+  box-sizing: border-box;
+  margin-top: 32px;
 }
 
 .orbSection {
@@ -54,106 +56,120 @@
 }
 
 .orbBody {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background-color: #FFFFFF;
-  border: 4px solid #00C4B3;
-  box-shadow: 0 4px 16px rgba(0, 196, 179, 0.12);
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  cursor: pointer;
-  padding: 0;
-  border-style: solid;
-  outline: none;
-  box-sizing: border-box;
 
-  &.orbFinished {
-    border-color: #10B981;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background: #fff;
+  border-style: solid;
+  border-width: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  * {
+    cursor: pointer;
   }
 }
 
 .svgRing {
   position: absolute;
-  top: 0;
-  left: 0;
-  transform: rotate(-90deg);
+  top: 50%;
+  left: 50%;
+
+  width: 220px;
+  height: 220px;
+
+  transform: translate(-50%, -50%) rotate(-90deg);
+
   pointer-events: none;
 }
 
 .orbContent {
+  position: relative;
+  z-index: 5;
+
   display: flex;
   flex-direction: column;
+  gap: 4px;
   align-items: center;
   justify-content: center;
-  z-index: 5;
-  text-align: center;
+
+  width: 90%;
+  height: 90%;
+
+  pointer-events: none;
 }
 
 .startOrbContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 4px;
-}
 
-.startOrbTitle {
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  color: #004D40;
-  margin-top: 4px;
-}
-
-.startOrbSub {
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 600;
-  color: #00C4B3;
+  text-align: center;
 }
 
 .finishedContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 0 16px;
+  justify-content: center;
+  gap: 8px;
+
+  text-align: center;
+  font-size: 12px;
+  max-width: 75%;
 }
 
-.finishedTitle {
-  font-family: inherit;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #004D40;
-  line-height: 1.4;
+.startOrbTitle {
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.startOrbSub {
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .secondsText {
+  display: block;
+
   font-family: inherit;
   font-size: 38px;
   font-weight: 800;
-  color: #004D40;
-  letter-spacing: -1px;
   line-height: 1;
+  letter-spacing: -1px;
 }
 
 .phaseLabelText {
-  font-family: inherit;
+  display: block;
+
+  margin-top: -2px;
+
   font-size: 12px;
   font-weight: 700;
-  color: #004D40;
+  line-height: 1.2;
   letter-spacing: 1px;
-  margin-top: -2px;
 }
 
 .cycleCounterText {
-  font-family: inherit;
+  display: block;
+
+  margin-top: 4px;
+
   font-size: 10px;
   font-weight: 500;
-  color: #64748B;
-  margin-top: 4px;
+  line-height: 1.2;
 }
 
 // -------------------------------------------------------------

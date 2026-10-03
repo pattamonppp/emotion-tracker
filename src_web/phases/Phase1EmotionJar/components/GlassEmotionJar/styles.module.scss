@@ -69,7 +69,7 @@
 .moocaSpeechBubble {
   position: relative;
 
-  max-width: 232px;
+  max-width: 225px;
 
   margin-bottom: 4px;
   padding: 4.5px 11px;
@@ -87,7 +87,7 @@
     transform 380ms ease;
 }
 
-.speechVisible {
+เซนเซอร์วัดชีพจรชีววิทยา .speechVisible {
   opacity: 1;
   transform: scale(1);
 }
@@ -121,7 +121,7 @@
 
   color: #004D40;
 
-  text-align: center;
+  text-align: left;
 }
 
 .moocaBubbleTail {
@@ -140,7 +140,7 @@
   border-top: 5px solid rgba(0, 196, 179, 0.35);
 }
 
-.moocaMascotWrapper {
+.mascotWrapper {
   display: flex;
   align-items: center;
 
@@ -693,6 +693,7 @@
   height: 34px;
 
   margin-top: 26px;
+  z-index: 1;
 }
 
 .clearBtn {

@@ -1,303 +1,287 @@
-@use 'abstracts' as *;
-
 .container {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
   display: flex;
   flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
+
   align-items: center;
-  padding: 8px 16px 8px 16px;
-  user-select: none;
-  font-family: $font-sans;
+  justify-content: space-between;
+
   box-sizing: border-box;
+
+  padding: 12px 20px 8px;
+
   overflow: hidden;
-  flex: 1;
 }
 
 .mascotWrapper {
   width: 100%;
-  height: 145px;
+  height: 135px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding-bottom: 4px;
+  overflow: visible;
+  box-sizing: border-box;
+  margin-top: 32px;
 }
 
-// -----------------------------------------------------------------------------
-// Acoustic Badge
-// -----------------------------------------------------------------------------
 .mbtiBadge {
   display: inline-flex;
+
+  flex-direction: row;
+
   align-items: center;
+  justify-content: center;
+
+  padding: 6px 14px;
+
+  border: 1.2px solid transparent;
+  border-radius: 9999px;
+
   gap: 6px;
-  padding: 5px 14px;
-  border-radius: $radius-pill;
-  background-color: #E6FAF8;
-  border: 1.2px solid rgba(0, 196, 179, 0.4);
-  color: $color-brand-contrast;
-  box-shadow: $elevation-1;
 
-  svg {
-    color: $color-brand-contrast;
-  }
+  box-sizing: border-box;
 
-  &.badgeNight {
-    background-color: rgba(15, 23, 42, 0.85);
-    border-color: rgba(56, 189, 248, 0.4);
-    color: #7DD3FC;
-
-    svg {
-      color: #7DD3FC;
-    }
-  }
-
-  &.badgeSunset {
-    background-color: #FFF1F2;
-    border-color: #FECDD3;
-    color: #BE123C;
-
-    svg {
-      color: #BE123C;
-    }
-  }
-
-  &.badgeDawn {
-    background-color: #FFFBEB;
-    border-color: #FDE68A;
-    color: #B45309;
-
-    svg {
-      color: #B45309;
-    }
-  }
+  flex-shrink: 0;
 }
 
 .mbtiBadgeText {
-  font-size: 0.6875rem;
-  font-weight: 800;
+  margin: 0;
+
+  font-family: 'Prompt', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+
+  line-height: normal;
 }
 
-// -----------------------------------------------------------------------------
-// Center Stage & Voice Waves
-// -----------------------------------------------------------------------------
 .centerStage {
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
+  margin: 8px 0;
+
   gap: 8px;
-  margin: 4px 0;
-  flex: 1;
+
+  flex-shrink: 0;
 }
 
 .waveformContainer {
+  height: 68px;
+
   display: flex;
+
+  flex-direction: row;
+
   align-items: center;
   justify-content: center;
+
   gap: 8px;
-  height: 68px;
+
+  flex-shrink: 0;
+}
+
+.wavePill,
+.wavePillPaused {
+  width: 6px;
+
+  flex: 0 0 6px;
+
+  border-radius: 3px;
+
+  opacity: 0.9;
+
+  transform-origin: center;
+
+  box-sizing: border-box;
 }
 
 .wavePill {
-  width: 6px;
-  border-radius: 3px;
-  background-color: $color-turquoise-1;
-  opacity: 0.9;
-  transition: transform 80ms ease-out;
+  animation-name: audio-wave;
+  animation-duration: calc(var(--wave-duration) * 2.15);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
 
-  &.waveNight {
-    background-color: #38BDF8;
+.wavePillPaused {
+  transform: scaleY(0.2);
+  transition: transform 250ms ease;
+}
+
+@keyframes audio-wave {
+  0% {
+    transform: scaleY(var(--wave-low));
   }
 
-  &.waveSunset {
-    background-color: #E11D48;
-  }
-
-  &.waveDawn {
-    background-color: #F59E0B;
+  100% {
+    transform: scaleY(var(--wave-high));
   }
 }
 
 .controlsRow {
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   gap: 14px;
 }
 
-.playPauseBtn {
+.playPauseBtn,
+.replayBtn {
+  appearance: none;
+  -webkit-appearance: none;
+
   width: 32px;
   height: 32px;
-  border-radius: $radius-circle;
-  background-color: $color-turquoise-1;
+
+  min-width: 32px;
+  min-height: 32px;
+
+  padding: 0;
+  margin: 0;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
-  border: none;
+
+  border-radius: 50%;
+
+  box-sizing: border-box;
+
   cursor: pointer;
-  box-shadow: $elevation-1;
-  transition: all 150ms ease;
 
-  &:hover {
-    transform: scale(1.08);
-  }
+  font: inherit;
 
-  &:active {
-    transform: scale(0.94);
-  }
+  outline: none;
+
+  flex-shrink: 0;
+}
+
+.playPauseBtn {
+  border: 0;
+
+  background: #00c4b3;
+
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.08),
+    0 1px 3px rgba(15, 23, 42, 0.06);
 }
 
 .replayBtn {
-  width: 32px;
-  height: 32px;
-  border-radius: $radius-circle;
-  background-color: #FFFFFF;
-  border: 1.2px solid rgba(0, 196, 179, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: $elevation-1;
-  transition: all 150ms ease;
+  border-width: 1.2px;
+  border-style: solid;
 
-  &:hover {
-    transform: scale(1.08);
-  }
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.08),
+    0 1px 3px rgba(15, 23, 42, 0.06);
+}
 
-  &:active {
-    transform: scale(0.94);
-  }
-
-  &.btnNight {
-    background-color: rgba(30, 41, 59, 0.85);
-    border-color: rgba(56, 189, 248, 0.4);
-  }
+.playPauseBtn:active,
+.replayBtn:active {
+  transform: scale(0.96);
 }
 
 .audioStatusHint {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: $color-slate-500;
-  text-align: center;
+  margin: 0;
 
-  &.hintNight {
-    color: #94A3B8;
-  }
+  font-family: 'Prompt', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+
+  line-height: normal;
+
+  text-align: center;
 }
 
-// -----------------------------------------------------------------------------
-// Script Affirmation Box
-// -----------------------------------------------------------------------------
 .scriptCard {
   width: 100%;
   max-width: 340px;
-  border-radius: 18px;
-  padding: 12px 14px;
-  border: 1.2px solid rgba(0, 196, 179, 0.35);
-  background-color: rgba(255, 255, 255, 0.92);
-  box-shadow: $elevation-1;
+
+  padding: 14px 16px;
+
   box-sizing: border-box;
 
-  &.cardNight {
-    background-color: rgba(30, 41, 59, 0.92);
-    border-color: rgba(56, 189, 248, 0.4);
+  border-width: 1.2px;
+  border-style: solid;
 
-    .scriptCategory {
-      color: #38BDF8;
-    }
+  border-radius: 18px;
 
-    .scriptText {
-      color: #F8FAFC;
-    }
-
-    svg {
-      color: #38BDF8;
-    }
-  }
-
-  &.cardSunset {
-    background-color: rgba(255, 255, 255, 0.92);
-    border-color: #FECDD3;
-
-    .scriptCategory {
-      color: #9F1239;
-    }
-
-    .scriptText {
-      color: #881337;
-    }
-
-    svg {
-      color: #9F1239;
-    }
-  }
-
-  &.cardDawn {
-    background-color: rgba(255, 255, 255, 0.92);
-    border-color: #FDE68A;
-
-    .scriptCategory {
-      color: #92400E;
-    }
-
-    .scriptText {
-      color: #78350F;
-    }
-
-    svg {
-      color: #92400E;
-    }
-  }
+  flex-shrink: 0;
 }
 
 .scriptHeader {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
 
-  svg {
-    color: #FA8C3D;
-  }
+  align-items: center;
+
+  gap: 6px;
+
+  margin-bottom: 6px;
 }
 
 .scriptCategory {
-  font-size: 0.65625rem;
-  font-weight: 800;
+  margin: 0;
+
+  font-family: 'Prompt', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+
+  line-height: normal;
+
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #FA8C3D;
+
+  letter-spacing: 0.5px;
 }
 
 .scriptText {
-  font-size: 0.75rem;
-  line-height: 1.45;
-  font-weight: 600;
-  color: $color-slate-800;
   margin: 0;
+
+  font-family: 'Prompt', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+
+  line-height: 20px;
+
   text-align: left;
 }
 
-// -----------------------------------------------------------------------------
-// Action Section
-// -----------------------------------------------------------------------------
 .actionSection {
   width: 100%;
+
   min-height: 52px;
+  height: 52px;
+
+  flex: 0 0 52px;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   padding-bottom: 6px;
+
   box-sizing: border-box;
 }
 
 .organicSensorHint {
-  font-size: 0.71875rem;
-  font-weight: 600;
-  color: $color-slate-600;
-  text-align: center;
+  margin: 0;
 
-  &.hintNight {
-    color: #94A3B8;
-  }
+  font-family: 'Prompt', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+
+  line-height: normal;
+
+  text-align: center;
 }

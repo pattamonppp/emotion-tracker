@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { audioService } from '../../../services/audioService';
 import { MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../../components/MoocaMascot';
 import { useSky } from '../../../components/DynamicSkyEngine';
 import { Check, GlassWater, ArrowRight, X, Sparkles, Heart, HelpCircle } from 'lucide-react';
-import { DESIGN_TOKENS } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 import type { VictorySipProps } from './types';
 import styles from './styles.module.scss';
+import { useSkyTheme } from '@/hooks/useSkyTheme';
 
 export const VictorySip: React.FC<VictorySipProps> = ({
   onComplete,
@@ -25,59 +25,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
   const readyForNextSip = useRef(true);
   const tiltTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const skyTheme = useMemo(() => {
-    switch (activePeriod) {
-      case 'sunset':
-        return {
-          countColor: '#ffffff',
-          labelColor: '#fffafb',
-          hintColor: '#5f0019',
-          progressTrack: 'rgba(255, 255, 255, 0.45)',
-          progressFill: 'linear-gradient(90deg, #ffa8bb, #fff6b4)',
-          badgeBg: 'rgba(255, 255, 255, 0.90)',
-          badgeBorder: 'rgba(244, 114, 182, 0.40)',
-          badgeTextColor: '#a81642',
-          badgeIconColor: '#F43F5E',
-        };
-      case 'night':
-        return {
-          countColor: '#F8FAFC',
-          labelColor: '#E2E8F0',
-          hintColor: '#94A3B8',
-          progressTrack: 'rgba(255, 255, 255, 0.25)',
-          progressFill: 'linear-gradient(90deg, #38BDF8, #818CF8)',
-          badgeBg: 'rgba(15, 23, 42, 0.92)',
-          badgeBorder: 'rgba(56, 189, 248, 0.40)',
-          badgeTextColor: '#E0F2FE',
-          badgeIconColor: '#38BDF8',
-        };
-      case 'dawn':
-        return {
-          countColor: '#78350F',
-          labelColor: '#92400E',
-          hintColor: '#B45309',
-          progressTrack: 'rgba(255, 255, 255, 0.65)',
-          progressFill: 'linear-gradient(90deg, #F59E0B, #FBBF24)',
-          badgeBg: 'rgba(255, 255, 255, 0.90)',
-          badgeBorder: 'rgba(245, 158, 11, 0.40)',
-          badgeTextColor: '#92400E',
-          badgeIconColor: '#F59E0B',
-        };
-      case 'day':
-      default:
-        return {
-          countColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          labelColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          hintColor: DESIGN_TOKENS.color.gray.muted,
-          progressTrack: 'rgba(0, 196, 179, 0.15)',
-          progressFill: 'linear-gradient(90deg, #00C4B3, #38BDF8)',
-          badgeBg: 'rgba(255, 255, 255, 0.90)',
-          badgeBorder: 'rgba(0, 196, 179, 0.35)',
-          badgeTextColor: DESIGN_TOKENS.color.brand.turquoise.text,
-          badgeIconColor: DESIGN_TOKENS.color.brand.turquoise.primary,
-        };
-    }
-  }, [activePeriod]);
+  const skyTheme = useSkyTheme();
 
   const triggerSip = () => {
     const nextSip = sipCount + 1;
@@ -138,9 +86,9 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         }}
       >
         {isFinished ? (
-          <Sparkles size={14} color="#10B981" strokeWidth={2.4} />
+          <Sparkles size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
         ) : isTiltingToDrink ? (
-          <Sparkles size={14} color="#3B82F6" strokeWidth={2.4} />
+          <Sparkles size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
         ) : (
           <GlassWater size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
         )}

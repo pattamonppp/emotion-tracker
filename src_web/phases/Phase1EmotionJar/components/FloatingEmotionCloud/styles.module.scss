@@ -16,22 +16,13 @@
 
   cursor: grab;
 
-  box-shadow:
-    0 1.5px 3px rgba(0, 0, 0, 0.08);
-
   transform:
-    translate3d(
-      var(--drag-x),
+    translate3d(var(--drag-x),
       var(--drag-y),
-      0
-    );
+      0);
 
   animation:
-    floatingCloud
-    var(--float-duration)
-    var(--float-delay)
-    ease-in-out
-    infinite;
+    floatingCloud var(--float-duration) var(--float-delay) ease-in-out infinite;
 
   transition:
     transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -48,12 +39,9 @@
   cursor: grabbing;
 
   transform:
-    translate3d(
-      var(--drag-x),
+    translate3d(var(--drag-x),
       var(--drag-y),
-      0
-    )
-    scale(1.08);
+      0) scale(1.08);
 
   transition: none;
 
@@ -65,12 +53,9 @@
   animation-play-state: paused;
 
   transform:
-    translate3d(
-      var(--drag-x),
+    translate3d(var(--drag-x),
       var(--drag-y),
-      0
-    )
-    scale(0.92);
+      0) scale(0.92);
 
   transition: transform 70ms ease;
 }
@@ -79,12 +64,9 @@
   animation: none;
 
   transform:
-    translate3d(
-      var(--drag-x),
+    translate3d(var(--drag-x),
       180px,
-      0
-    )
-    scale(0.25);
+      0) scale(0.25);
 
   opacity: 0;
 
@@ -309,34 +291,27 @@
   border-bottom-color: #ec4899;
 
   background:
-    linear-gradient(
-      135deg,
+    linear-gradient(135deg,
       #ffffff 0%,
       #fdf2f8 55%,
-      #fce7f3 100%
-    );
+      #fce7f3 100%);
 }
 
 @keyframes floatingCloud {
+
   0%,
   100% {
     transform:
-      translate3d(
-        var(--drag-x),
+      translate3d(var(--drag-x),
         var(--drag-y),
-        0
-      );
+        0);
   }
 
   50% {
     transform:
-      translate3d(
-        var(--drag-x),
-        calc(
-          var(--drag-y) + var(--float-amplitude)
-        ),
-        0
-      );
+      translate3d(var(--drag-x),
+        calc(var(--drag-y) + var(--float-amplitude)),
+        0);
   }
 }
 

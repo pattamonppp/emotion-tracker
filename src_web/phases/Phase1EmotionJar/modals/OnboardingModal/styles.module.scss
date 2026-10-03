@@ -102,6 +102,7 @@
   border-radius: 14px;
   height: 44px;
   gap: 8px;
+  padding-left: 12px;
   transition: border-color $transition-fast;
 
   &:focus-within {
