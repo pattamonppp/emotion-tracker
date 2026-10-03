@@ -1,21 +1,26 @@
+
 import React, { useState } from 'react';
-import { UserProfile, ShiftFeedback, Feedback } from '../../../../types';
+import {
+  UserProfile,
+  ShiftFeedback,
+  Feedback,
+} from '../../../../types';
 import { Button } from '../../../../components/Button';
 import { audioService } from '../../../../services/audioService';
 import { getTranslation, getTagLabel } from '../../../../locales';
 import {
   CloseIcon,
-  SparklesIcon,
   StarIcon,
   CheckCircleIcon,
   CopyIcon,
   CheckIcon,
   MessageHeartIcon,
-  PenLineIcon,
-  CelebrationIcon,
-  TargetIcon,
 } from '../../../../icons';
-import { FEEDBACK_ASPECTS, ACCURACY_OPTIONS, RATING_LEVELS } from './constants';
+import {
+  FEEDBACK_ASPECTS,
+  ACCURACY_OPTIONS,
+  RATING_LEVELS,
+} from './constants';
 import styles from './styles.module.scss';
 
 export interface AiFeedbackModalProps {
@@ -26,6 +31,17 @@ export interface AiFeedbackModalProps {
   lang: 'th' | 'en';
 }
 
+const STAR_COLORS = [
+  '#F43F5E',
+  '#F97316',
+  '#F59E0B',
+  '#84CC16',
+  '#10B981',
+];
+
+const getStyle = (className: string): string =>
+  (styles as Record<string, string>)[className] || '';
+
 export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
   isOpen,
   onClose,
@@ -34,12 +50,16 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
   lang,
 }) => {
   const strings = getTranslation(lang).feedback;
+
   const [rating, setRating] = useState<number>(5);
-  const [accuracy, setAccuracy] = useState<'spot_on' | 'helpful' | 'needs_work'>('spot_on');
+  const [accuracy, setAccuracy] =
+    useState<'spot_on' | 'helpful' | 'needs_work'>('spot_on');
+
   const [selectedAspects, setSelectedAspects] = useState<string[]>([
     'audio_binaural',
     'cognitive_reframe',
   ]);
+
   const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -50,13 +70,31 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
 
   const toggleAspect = (id: string) => {
     setSelectedAspects((prev) =>
-      prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
+      prev.includes(id)
+        ? prev.filter((item) => item !== id)
+        : [...prev, id],
     );
+
+    audioService.triggerHaptic('selection');
+  };
+
+  const handleRatingChange = (value: number) => {
+    setRating(value);
+    audioService.triggerHaptic('selection');
+  };
+
+  const handleAccuracyChange = (
+    value: 'spot_on' | 'helpful' | 'needs_work',
+  ) => {
+    setAccuracy(value);
+    audioService.triggerHaptic('selection');
   };
 
   const handleSubmit = () => {
     const record: Feedback = {
-      id: `feedback-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      id: `feedback-${Date.now()}-${Math.random()
+        .toString(36)
+        .substring(2, 7)}`,
       timestamp: new Date().toISOString(),
       rating,
       accuracy,
@@ -66,262 +104,346 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
         mbti: profile.mbti,
         goal: profile.goal,
         shiftResult: feedback?.shiftResult || 'grounded',
-        deltaBpm: feedback ? feedback.preHeartRate - feedback.postHeartRate : 22,
+        deltaBpm: feedback
+          ? feedback.preHeartRate - feedback.postHeartRate
+          : 22,
       },
     };
 
     try {
       const existing = localStorage.getItem('mooca_feedback_dataset');
-      const list = existing ? JSON.parse(existing) : [];
+      const list: Feedback[] = existing ? JSON.parse(existing) : [];
+
       list.push(record);
-      localStorage.setItem('mooca_feedback_dataset', JSON.stringify(list, null, 2));
+
+      localStorage.setItem(
+        'mooca_feedback_dataset',
+        JSON.stringify(list, null, 2),
+      );
     } catch {
-      // quota
+      // Ignore localStorage errors.
     }
 
     setSavedRecord(record);
     setSubmitted(true);
-    audioService.triggerHaptic([40, 80]);
+
+    audioService.triggerHaptic('success');
     audioService.playJarDrop();
   };
 
-  const handleCopyJson = () => {
+  const handleCopyJson = async () => {
     if (!savedRecord) return;
-    navigator.clipboard.writeText(JSON.stringify(savedRecord, null, 2));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+
+    try {
+      await navigator.clipboard.writeText(
+        JSON.stringify(savedRecord, null, 2),
+      );
+
+      setCopied(true);
+
+      window.setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch {
+      // Ignore clipboard errors.
+    }
   };
 
-  const currentRatingInfo = RATING_LEVELS[rating] || RATING_LEVELS[5];
+  const handleClose = () => {
+    setSubmitted(false);
+    setCopied(false);
+    setShowJson(false);
+    onClose();
+  };
+
+  const currentRatingInfo =
+    RATING_LEVELS[rating] || RATING_LEVELS[5];
+
   const RatingIcon = currentRatingInfo.Icon;
+  const ratingColor = STAR_COLORS[rating - 1];
 
   return (
     <div className={styles.backdrop}>
-      <div className={styles.modalCard}>
-        {/* Header */}
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>
-            <div className={styles.iconBox}>
-              <MessageHeartIcon />
-            </div>
-            <div className={styles.headerTitleGroup}>
+      <div
+        className={styles.modal}
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className={styles.safeArea}>
+          <div className={styles.headerBar}>
+            <div className={styles.headerTitleRow}>
+              <MessageHeartIcon className={styles.headerIcon} />
+
               <h3 className={styles.headerTitle}>
                 {strings.modalTitle}
               </h3>
-              <p className={styles.headerSubtitle}>
-                {strings.modalSubtitle}
-              </p>
             </div>
+
+            <button
+              type="button"
+              onClick={handleClose}
+              className={styles.closeBtn}
+              aria-label="Close"
+            >
+              <CloseIcon />
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className={styles.closeBtn}
-            aria-label="Close"
-          >
-            <CloseIcon />
-          </button>
-        </div>
-
-        {/* Scroll Content */}
-        <div className={styles.scrollContent}>
-          {!submitted ? (
-            <>
-              {/* 1. Star Rating with Distinct Contextual Icon per Star */}
-              <div className={styles.section}>
-                <label className={styles.sectionLabel}>
-                  <span className={styles.sectionLabelIcon}>
-                    <SparklesIcon />
-                  </span>
-                  <span>
+          <div className={styles.scrollContent}>
+            {!submitted ? (
+              <>
+                <div className={styles.section}>
+                  <div className={styles.sectionLabel}>
                     {strings.ratingQuestion}
-                  </span>
-                </label>
+                  </div>
 
-                <div className={styles.starsContainer}>
                   <div className={styles.starsRow}>
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => setRating(s)}
-                        className={`${styles.starBtn} ${rating >= s ? styles.filled : styles.unfilled}`}
-                      >
-                        <StarIcon />
-                      </button>
-                    ))}
+                    {[1, 2, 3, 4, 5].map((star) => {
+                      const isSelected = rating >= star;
+                      const starColor = STAR_COLORS[star - 1];
+
+                      return (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => handleRatingChange(star)}
+                          className={styles.starTouch}
+                          aria-label={`Rating ${star}`}
+                        >
+                          <StarIcon
+                            style={{
+                              width: 32,
+                              height: 32,
+                              color: isSelected
+                                ? starColor
+                                : '#CBD5E1',
+                              fill: isSelected
+                                ? starColor
+                                : 'transparent',
+                              strokeWidth: 2.2,
+                            }}
+                          />
+                        </button>
+                      );
+                    })}
                   </div>
 
-                  {/* Contextual description badge with unique icon per level */}
-                  <div className={`${styles.ratingBadge} ${styles[currentRatingInfo.themeClass]}`}>
-                    <RatingIcon />
-                    <span>{getTagLabel(currentRatingInfo, lang)}</span>
+                  <div
+                    className={styles.starDescBadge}
+                    style={{
+                      backgroundColor: `${ratingColor}14`,
+                      borderColor: `${ratingColor}55`,
+                    }}
+                  >
+                    <RatingIcon
+                      style={{
+                        width: 14,
+                        height: 14,
+                        marginRight: 4,
+                        color: ratingColor,
+                        strokeWidth: 2.3,
+                      }}
+                    />
+
+                    <span
+                      className={styles.starDescText}
+                      style={{ color: ratingColor }}
+                    >
+                      {getTagLabel(currentRatingInfo, lang)}
+                    </span>
                   </div>
                 </div>
-              </div>
 
-              {/* 2. Accuracy Evaluation with Colorful Cards */}
-              <div className={styles.section}>
-                <label className={styles.sectionLabel}>
-                  <span className={styles.sectionLabelIcon}>
-                    <TargetIcon />
-                  </span>
-                  <span>
+                <div className={styles.section}>
+                  <div className={styles.sectionLabel}>
                     {strings.accuracyQuestion}
-                  </span>
-                </label>
+                  </div>
 
-                <div className={styles.accuracyGrid}>
-                  {ACCURACY_OPTIONS.map((opt) => {
-                    const IconComponent = opt.Icon;
-                    const isSelected = accuracy === opt.id;
-                    const themeClass = isSelected ? styles[`accuracy_${opt.colorTheme}`] : '';
+                  <div className={styles.accuracyRow}>
+                    {ACCURACY_OPTIONS.map((option) => {
+                      const isSelected = accuracy === option.id;
+                      const IconComponent = option.Icon;
 
-                    return (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        onClick={() => setAccuracy(opt.id)}
-                        className={`${styles.accuracyBtn} ${themeClass}`}
-                      >
-                        <span className={styles.accuracyIcon}>
-                          <IconComponent />
-                        </span>
-                        <span className={styles.accuracyText}>
-                          {getTagLabel(opt, lang)}
-                        </span>
-                      </button>
-                    );
-                  })}
+                      return (
+                        <button
+                          key={option.id}
+                          type="button"
+                          onClick={() =>
+                            handleAccuracyChange(option.id)
+                          }
+                          className={`${styles.accuracyCard} ${isSelected
+                            ? getStyle(
+                              `accuracy_${option.id}`,
+                            )
+                            : ''
+                            }`}
+                        >
+                          <IconComponent
+                            style={{
+                              width: 18,
+                              height: 18,
+                              marginBottom: 4,
+                              color: isSelected
+                                ? option.colorTheme
+                                : '#64748B',
+                              strokeWidth: 2.3,
+                            }}
+                          />
+
+                          <span
+                            className={`${styles.accuracyText} ${isSelected
+                              ? styles.accuracyTextSelected
+                              : ''
+                              }`}
+                          >
+                            {getTagLabel(option, lang)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
 
-              {/* 3. Feature Tuning Aspects with Playful Pastel Chips */}
-              <div className={styles.section}>
-                <label className={styles.sectionLabel}>
-                  <span className={styles.sectionLabelIcon}>
-                    <MessageHeartIcon />
-                  </span>
-                  <span>
+                <div className={styles.section}>
+                  <div className={styles.sectionLabel}>
                     {strings.aspectsQuestion}
-                  </span>
-                </label>
+                  </div>
 
-                <div className={styles.chipsList}>
-                  {FEEDBACK_ASPECTS.map((aspect) => {
-                    const isSelected = selectedAspects.includes(aspect.id);
-                    const AspectIcon = aspect.Icon;
-                    const activeTheme = isSelected ? styles[`theme_${aspect.colorTheme}`] : '';
+                  <div className={styles.chipsWrap}>
+                    {FEEDBACK_ASPECTS.map((aspect) => {
+                      const isSelected =
+                        selectedAspects.includes(aspect.id);
 
-                    return (
-                      <button
-                        key={aspect.id}
-                        type="button"
-                        onClick={() => toggleAspect(aspect.id)}
-                        className={`${styles.chipBtn} ${activeTheme}`}
-                      >
-                        <AspectIcon />
-                        <span>{getTagLabel(aspect, lang)}</span>
-                      </button>
-                    );
-                  })}
+                      const AspectIcon = aspect.Icon;
+
+                      return (
+                        <button
+                          key={aspect.id}
+                          type="button"
+                          onClick={() =>
+                            toggleAspect(aspect.id)
+                          }
+                          className={`${styles.chip} ${isSelected
+                            ? styles.chipActive
+                            : ''
+                            }`}
+                        >
+                          <AspectIcon
+                            style={{
+                              width: 14,
+                              height: 14,
+                              marginRight: 6,
+                              color: isSelected
+                                ? '#00695C'
+                                : '#64748B',
+                            }}
+                          />
+
+                          <span
+                            className={`${styles.chipText} ${isSelected
+                              ? styles.chipTextActive
+                              : ''
+                              }`}
+                          >
+                            {getTagLabel(aspect, lang)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
 
-              {/* 4. Qualitative Comments with Applied App Font & Generous Height */}
-              <div className={styles.section}>
-                <label className={styles.sectionLabel}>
-                  <span className={styles.sectionLabelIcon}>
-                    <PenLineIcon />
-                  </span>
-                  <span>
+                <div className={styles.section}>
+                  <div className={styles.sectionLabel}>
                     {strings.commentQuestion}
-                  </span>
-                </label>
+                  </div>
 
-                <textarea
-                  rows={4}
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder={strings.commentPlaceholder}
-                  className={styles.textarea}
-                />
+                  <textarea
+                    rows={3}
+                    value={comment}
+                    onChange={(event) =>
+                      setComment(event.target.value)
+                    }
+                    placeholder={strings.commentPlaceholder}
+                    className={styles.textInput}
+                  />
+                </div>
+
+                <div className={styles.submitWrap}>
+                  <Button
+                    variant="primary"
+                    colorTheme="turquoise"
+                    size="md"
+                    onClick={handleSubmit}
+                    leadingIcon={<CheckCircleIcon />}
+                    label={strings.submitButton}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className={styles.successCard}>
+                <div className={styles.successIconCircle}>
+                  <CheckCircleIcon />
+                </div>
+
+                <h4 className={styles.successTitle}>
+                  {strings.successTitle}
+                </h4>
+
+                <p className={styles.successDesc}>
+                  {strings.successDesc}
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowJson((prev) => !prev)
+                  }
+                  className={styles.jsonToggleBtn}
+                >
+                  {showJson
+                    ? strings.hideJson
+                    : strings.inspectJson}
+                </button>
+
+                {showJson && savedRecord && (
+                  <pre className={styles.jsonPreviewBox}>
+                    {JSON.stringify(savedRecord, null, 2)}
+                  </pre>
+                )}
+
+                <div className={styles.successButtonWrap}>
+                  <Button
+                    variant="primary"
+                    colorTheme="turquoise"
+                    size="md"
+                    onClick={handleClose}
+                    label={strings.doneButton}
+                  />
+                </div>
+
+                {savedRecord && (
+                  <button
+                    type="button"
+                    onClick={handleCopyJson}
+                    className={styles.copyJsonBtn}
+                  >
+                    {copied ? (
+                      <CheckIcon />
+                    ) : (
+                      <CopyIcon />
+                    )}
+
+                    <span>
+                      {copied
+                        ? strings.copiedJson
+                        : strings.copyJson}
+                    </span>
+                  </button>
+                )}
               </div>
-            </>
-          ) : (
-            /* Success Feedback View */
-            <div className={styles.successBox}>
-              <div className={styles.successIconBox}>
-                <CelebrationIcon />
-              </div>
-              <h4 className={styles.successTitle}>
-                {strings.successTitle}
-              </h4>
-              <p className={styles.successDesc}>
-                {strings.successDesc}
-              </p>
-
-              <button
-                type="button"
-                onClick={() => setShowJson(!showJson)}
-                className={styles.jsonToggleBtn}
-              >
-                {showJson
-                  ? strings.hideJson
-                  : strings.inspectJson}
-              </button>
-
-              {showJson && savedRecord && (
-                <pre className={styles.jsonPreviewBox}>
-                  {JSON.stringify(savedRecord, null, 2)}
-                </pre>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Footer Actions */}
-        <div className={styles.footerArea}>
-          {!submitted ? (
-            <>
-              <Button
-                variant="ghost"
-                colorTheme="turquoise"
-                size="sm"
-                onClick={onClose}
-                label={strings.skipButton}
-              />
-
-              <Button
-                variant="primary"
-                colorTheme="turquoise"
-                size="sm"
-                onClick={handleSubmit}
-                leadingIcon={<CheckCircleIcon />}
-                label={strings.submitButton}
-              />
-            </>
-          ) : (
-            <>
-              <Button
-                variant="secondary"
-                colorTheme="blue"
-                size="sm"
-                onClick={handleCopyJson}
-                leadingIcon={copied ? <CheckIcon /> : <CopyIcon />}
-                label={copied ? strings.copiedJson : strings.copyJson}
-              />
-
-              <Button
-                variant="primary"
-                colorTheme="turquoise"
-                size="sm"
-                onClick={onClose}
-                label={strings.doneButton}
-              />
-            </>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

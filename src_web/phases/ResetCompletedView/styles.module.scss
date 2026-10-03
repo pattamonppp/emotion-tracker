@@ -72,23 +72,6 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   margin-bottom: 12px;
   box-sizing: border-box;
-
-  &.polaroidFrameNight {
-    background-color: rgba(30, 41, 59, 0.95);
-    border-color: rgba(56, 189, 248, 0.35);
-
-    .handwrittenCaption {
-      color: #F8FAFC;
-    }
-
-    .chinDateText {
-      color: #94A3B8;
-    }
-
-    .chinFooterRow {
-      border-top-color: rgba(255, 255, 255, 0.1);
-    }
-  }
 }
 
 .photoViewport {
@@ -257,23 +240,6 @@
   border: 1.5px solid rgba(0, 196, 179, 0.35);
   margin-bottom: 14px;
   box-sizing: border-box;
-
-  &.metricsSummaryNight {
-    background-color: rgba(30, 41, 59, 0.85);
-    border-color: rgba(56, 189, 248, 0.35);
-
-    .metricLabel {
-      color: #94A3B8;
-    }
-
-    .metricVal {
-      color: #F8FAFC;
-    }
-
-    .metricDivider {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
 }
 
 .metricItem {

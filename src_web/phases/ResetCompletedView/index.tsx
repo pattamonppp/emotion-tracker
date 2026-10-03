@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { UserProfile, ShiftFeedback } from '../../types';
 import { MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../components/MoocaMascot';
-import { AiFeedbackModal } from './modals/AiFeedbackModal';
 import { useSky } from '../../components/DynamicSkyEngine';
 import { audioService } from '../../services/audioService';
 import {
@@ -29,6 +28,7 @@ export interface ResetCompletedViewProps {
   onOpenProfile?: () => void;
   onOpenHistory: () => void;
   onOpenStory?: () => void;
+  onOpenFeedback: () => void;
 }
 
 export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
@@ -36,18 +36,22 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
   feedback,
   onRestart,
   onOpenHistory,
+  onOpenFeedback,
 }) => {
   const { activePeriod } = useSky();
   const isNight = activePeriod === 'night';
+
   const lang = profile.language;
   const t = getTranslation(lang);
   const c = t.phases.completed;
 
-  const bpmDrop = feedback ? feedback.preHeartRate - feedback.postHeartRate : 18;
-  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const bpmDrop = feedback
+    ? feedback.preHeartRate - feedback.postHeartRate
+    : 18;
 
   const handleShareKeepsake = async () => {
     audioService.triggerHaptic('medium');
+
     const shareMessage = c.shareKeepsakeTemplate
       .replace('{name}', profile.name)
       .replace('{bpm}', String(bpmDrop));
@@ -60,17 +64,25 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           url: window.location.href,
         });
       } catch {
-        // user cancelled share
+        // User cancelled share.
       }
     } else {
       navigator.clipboard.writeText(shareMessage);
-      alert(lang === 'th' ? 'คัดลอกข้อความแชร์แล้ว!' : 'Copied keepsake text!');
+      alert(
+        lang === 'th'
+          ? 'คัดลอกข้อความแชร์แล้ว!'
+          : 'Copied keepsake text!',
+      );
     }
   };
 
   const currentDate = new Date().toLocaleDateString(
     lang === 'th' ? 'th-TH' : 'en-US',
-    { day: 'numeric', month: 'short', year: 'numeric' }
+    {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    },
   );
 
   return (
@@ -79,34 +91,65 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         {/* Top Completion Header Badge */}
         <div className={styles.topBadge}>
           <Award size={15} color="#D97706" />
-          <span className={styles.topBadgeText}>{c.somaticResetComplete}</span>
+          <span className={styles.topBadgeText}>
+            {c.somaticResetComplete}
+          </span>
         </div>
 
-        <h2 className={classNames(styles.headline, { [styles.headlineNight]: isNight })}>
+        <h2
+          className={classNames(styles.headline, {
+            [styles.headlineNight]: isNight,
+          })}
+        >
           {c.congratsTitle.replace('{name}', profile.name)}
         </h2>
 
         {/* Polaroid Keepsake Card */}
-        <div className={classNames(styles.polaroidFrame, { [styles.polaroidFrameNight]: isNight })}>
+        <div className={styles.polaroidFrame}>
           {/* Photo Viewport with Rainbow Celebration */}
           <div className={styles.photoViewport}>
-            <div className={classNames(styles.sparkleItem, styles.sparkleTopLeft)}>
+            <div
+              className={classNames(
+                styles.sparkleItem,
+                styles.sparkleTopLeft,
+              )}
+            >
               <Sparkles size={16} color="#F59E0B" fill="#FDE047" />
             </div>
-            <div className={classNames(styles.sparkleItem, styles.sparkleTopRight)}>
+
+            <div
+              className={classNames(
+                styles.sparkleItem,
+                styles.sparkleTopRight,
+              )}
+            >
               <PartyPopper size={16} color="#EC4899" />
             </div>
-            <div className={classNames(styles.sparkleItem, styles.sparkleBottomLeft)}>
+
+            <div
+              className={classNames(
+                styles.sparkleItem,
+                styles.sparkleBottomLeft,
+              )}
+            >
               <Star size={15} color="#F59E0B" fill="#FDE047" />
             </div>
-            <div className={classNames(styles.sparkleItem, styles.sparkleBottomRight)}>
+
+            <div
+              className={classNames(
+                styles.sparkleItem,
+                styles.sparkleBottomRight,
+              )}
+            >
               <Heart size={16} color="#F43F5E" fill="#F43F5E" />
             </div>
 
             {/* Rainbow Arc Badge */}
             <div className={styles.rainbowArcPill}>
               <Sparkles size={13} color="#D97706" />
-              <span className={styles.rainbowText}>{c.rainbowCelebration}</span>
+              <span className={styles.rainbowText}>
+                {c.rainbowCelebration}
+              </span>
             </div>
 
             {/* Mascot in Celebration Mode */}
@@ -123,8 +166,11 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             <div className={styles.goldMedalContainer}>
               <div className={styles.goldMedal}>
                 <Award size={16} color="#78350F" />
-                <span className={styles.goldMedalText}>{c.goldMedalTitle}</span>
+                <span className={styles.goldMedalText}>
+                  {c.goldMedalTitle}
+                </span>
               </div>
+
               <div className={styles.ribbonTailLeft} />
               <div className={styles.ribbonTailRight} />
             </div>
@@ -132,14 +178,22 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
           {/* Polaroid Wide Bottom Chin */}
           <div className={styles.polaroidChin}>
-            <div className={styles.handwrittenCaption}>{c.caption}</div>
+            <div className={styles.handwrittenCaption}>
+              {c.caption}
+            </div>
 
             <div className={styles.chinFooterRow}>
               <span className={styles.chinDateText}>
                 {currentDate} • {c.resetDurationLabel}
               </span>
+
               <div className={styles.chinBpmDrop}>
-                <Leaf size={11} color="#00C4B3" style={{ marginRight: 2 }} />
+                <Leaf
+                  size={11}
+                  color="#00C4B3"
+                  style={{ marginRight: 2 }}
+                />
+
                 <span className={styles.chinBpmText}>
                   {`-${bpmDrop}\u00A0BPM`}
                 </span>
@@ -149,24 +203,47 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         </div>
 
         {/* Metrics Mini Summary */}
-        <div className={classNames(styles.metricsSummary, { [styles.metricsSummaryNight]: isNight })}>
+        <div className={styles.metricsSummary}>
           <div className={styles.metricItem}>
-            <span className={styles.metricLabel}>{c.preLabel}</span>
+            <span className={styles.metricLabel}>
+              {c.preLabel}
+            </span>
+
             <span className={styles.metricVal}>
               {`${feedback?.preHeartRate || 105}\u00A0BPM`}
             </span>
           </div>
+
           <div className={styles.metricDivider} />
+
           <div className={styles.metricItem}>
-            <span className={styles.metricLabel}>{c.nowLabel}</span>
-            <span className={classNames(styles.metricVal, styles.metricValTeal)}>
+            <span className={styles.metricLabel}>
+              {c.nowLabel}
+            </span>
+
+            <span
+              className={classNames(
+                styles.metricVal,
+                styles.metricValTeal,
+              )}
+            >
               {`${feedback?.postHeartRate || 87}\u00A0BPM`}
             </span>
           </div>
+
           <div className={styles.metricDivider} />
+
           <div className={styles.metricItem}>
-            <span className={styles.metricLabel}>{c.calmShift}</span>
-            <span className={classNames(styles.metricVal, styles.metricValOrange)}>
+            <span className={styles.metricLabel}>
+              {c.calmShift}
+            </span>
+
+            <span
+              className={classNames(
+                styles.metricVal,
+                styles.metricValOrange,
+              )}
+            >
               {`-${bpmDrop}\u00A0BPM`}
             </span>
           </div>
@@ -178,8 +255,13 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           <MarshmallowButton
             variant="mint"
             size="md"
-            onPress={() => setIsFeedbackModalOpen(true)}
-            icon={<MessageSquareHeart size={18} color="#004D40" />}
+            onPress={onOpenFeedback}
+            icon={
+              <MessageSquareHeart
+                size={18}
+                color="#004D40"
+              />
+            }
             title={c.feedbackBtn}
           />
 
@@ -188,7 +270,12 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             variant="secondary"
             size="md"
             onPress={handleShareKeepsake}
-            icon={<Share2 size={16} color="#FFFFFF" />}
+            icon={
+              <Share2
+                size={16}
+                color="#FFFFFF"
+              />
+            }
             title={c.sharePolaroidBtn}
           />
 
@@ -197,7 +284,12 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             variant="primary"
             size="md"
             onPress={onRestart}
-            icon={<RotateCcw size={18} color="#FFFFFF" />}
+            icon={
+              <RotateCcw
+                size={18}
+                color="#FFFFFF"
+              />
+            }
             title={c.restartSessionBtn}
           />
 
@@ -206,24 +298,21 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             variant="softCream"
             size="md"
             onPress={onOpenHistory}
-            icon={<History size={16} color="#004D40" />}
+            icon={
+              <History
+                size={16}
+                color="#004D40"
+              />
+            }
             title={c.viewHistoryBtn}
           />
         </div>
       </div>
-
-      {/* AI Feedback Modal */}
-      <AiFeedbackModal
-        isOpen={isFeedbackModalOpen}
-        onClose={() => setIsFeedbackModalOpen(false)}
-        profile={profile}
-        feedback={feedback}
-        lang={lang}
-      />
     </div>
   );
 };
 
 export default ResetCompletedView;
+
 export * from './modals/ResetHistoryModal';
 export * from './modals/AiFeedbackModal';

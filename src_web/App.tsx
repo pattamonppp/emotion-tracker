@@ -20,7 +20,7 @@ import { SomaticBreathingPacer } from './phases/Phase2Interventions/SomaticBreat
 import { AudioMatrixSanctuary } from './phases/Phase2Interventions/AudioMatrixSanctuary';
 import { Phase3CognitiveReframing } from './phases/Phase3CognitiveReframing';
 import { Phase4Feedback } from './phases/Phase4Feedback';
-import { ResetCompletedView } from './phases/ResetCompletedView';
+import { AiFeedbackModal, ResetCompletedView } from './phases/ResetCompletedView';
 import { ResetHistoryModal } from './phases/ResetCompletedView/modals/ResetHistoryModal';
 import { DesignSystemDrawer } from './design-system/DesignSystemDrawer';
 import { audioService } from './services/audioService';
@@ -74,6 +74,7 @@ export default function App() {
   const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
   const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
   const [skyPeriod, setSkyPeriod] = useState<SkyTimePeriod>('day');
 
@@ -95,6 +96,11 @@ export default function App() {
     setProfile(updated);
     setStorageJSON(STORAGE_KEYS.PROFILE, updated);
     audioService.triggerHaptic('selection');
+  };
+
+  const handleOpenFeedback = () => {
+    console.log('OPEN FEEDBACK');
+    setIsFeedbackModalOpen(true);
   };
 
   // Timer lifecycle for 120-second architecture
@@ -262,6 +268,7 @@ export default function App() {
             onOpenProfile={() => setIsOnboardingOpen(true)}
             onOpenHistory={() => setIsHistoryOpen(true)}
             onOpenStory={() => setIsStoryModalOpen(true)}
+            onOpenFeedback={handleOpenFeedback}
           />
         )}
       </MobileFrame>
@@ -300,6 +307,14 @@ export default function App() {
         onClose={() => setIsHistoryOpen(false)}
         profile={profile}
         history={history}
+        lang={profile.language}
+      />
+
+      <AiFeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        profile={profile}
+        feedback={feedback}
         lang={profile.language}
       />
     </>
