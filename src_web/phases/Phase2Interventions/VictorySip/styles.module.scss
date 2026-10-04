@@ -72,11 +72,17 @@
 .cupAuraHalo {
   position: absolute;
   top: 20px;
-  width: 140px;
-  height: 160px;
-  border-radius: 70px;
-  background-color: rgba(0, 196, 179, 0.22);
-  box-shadow: 0 0 28px rgba(0, 196, 179, 0.35);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 196, 179, 0.58) 0%,
+    rgba(0, 196, 179, 0.32) 42%,
+    rgba(0, 196, 179, 0.12) 65%,
+    transparent 85%
+  );
+  filter: blur(16px);
   pointer-events: none;
 }
 
@@ -119,18 +125,18 @@
 }
 
 .cupBody {
-  width: 96px;
-  height: 124px;
-  background-color: rgba(224, 248, 246, 0.65);
-  border-bottom-left-radius: 28px;
-  border-bottom-right-radius: 28px;
+  width: 98px;
+  height: 126px;
+  background-color: rgba(226, 250, 248, 0.72);
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
   border: 2.5px solid #00C4B3;
   overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  box-shadow: 0 4px 16px rgba(0, 196, 179, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 196, 179, 0.18), inset 0 0 10px rgba(255, 255, 255, 0.55);
   box-sizing: border-box;
   transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
@@ -147,6 +153,18 @@
   height: 80px;
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 2px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.glassReflectionSecondary {
+  position: absolute;
+  right: 6px;
+  top: 12px;
+  width: 3px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.45);
+  border-radius: 1.5px;
   z-index: 5;
   pointer-events: none;
 }
@@ -214,24 +232,17 @@
 
 .pearl {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background-color: #355956;
+  width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  background: radial-gradient(circle at 35% 30%, #365F5B 0%, #204541 65%, #14302D 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #009688;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  border: 1.5px solid #38B2A3;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
   box-sizing: border-box;
-}
-
-.pearlFace {
-  font-size: 9px;
-  color: #B3EDE8;
-  font-weight: 700;
-  line-height: 1;
-  user-select: none;
+  overflow: hidden;
 }
 
 .floatingBubble {
@@ -241,30 +252,18 @@
 
 .cupFaceContainer {
   position: absolute;
-  top: 40px;
+  top: 36px;
   left: 0;
   right: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 4;
   pointer-events: none;
 }
 
-.cupEyes {
-  font-size: 10px;
-  color: rgba(53, 89, 86, 0.65);
-  letter-spacing: 8px;
-  font-weight: 700;
-  margin-left: 8px;
-}
-
-.cupMouth {
-  font-size: 10px;
-  color: rgba(53, 89, 86, 0.65);
-  margin-top: -4px;
-  font-weight: 700;
+.cupFaceSvg {
+  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.6));
 }
 
 .organicCountSection {

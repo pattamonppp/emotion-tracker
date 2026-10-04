@@ -37,6 +37,13 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
   const skyTheme = useSkyTheme();
 
+  const getFluidGradient = () => {
+    if (isFinished) {
+      return 'linear-gradient(180deg, #8AD866 0%, #00C4B3 100%)';
+    }
+    return `linear-gradient(180deg, ${skyTheme.fluidColors.join(', ')})`;
+  };
+
   const handleFlaskInteraction = () => {
     if (isFinished) return;
 
@@ -121,7 +128,10 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             {/* Liquid Fill */}
             <div
               className={styles.fluidFill}
-              style={{ height: `${fluidHeightPercent}%` }}
+              style={{
+                height: `${fluidHeightPercent}%`,
+                background: getFluidGradient(),
+              }}
             />
 
             {/* Bubbling Energy Particles */}

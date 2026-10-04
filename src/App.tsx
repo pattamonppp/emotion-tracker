@@ -274,9 +274,24 @@ export default function App() {
               <View style={styles.dynamicIslandRow}>
                 <View style={styles.dynamicPill}>
                   <View style={styles.pingDot} />
-                  <Text style={styles.phaseLabelText}>{getPhaseName()}</Text>
+                  <Text
+                    style={[
+                      styles.phaseLabelText,
+                      profile.language === LANG.EN && { fontFamily: typography.fontGothamBold },
+                    ]}
+                    numberOfLines={1}
+                  >
+                    {getPhaseName()}
+                  </Text>
                   <View style={styles.timerChip}>
-                    <Text style={styles.timerChipText}>{formatSeconds(elapsedSeconds)}</Text>
+                    <Text
+                      style={[
+                        styles.timerChipText,
+                        profile.language === LANG.EN && { fontFamily: typography.fontGothamBold },
+                      ]}
+                    >
+                      {formatSeconds(elapsedSeconds)}
+                    </Text>
                   </View>
                 </View>
 
@@ -515,6 +530,8 @@ const styles = StyleSheet.create({
   dynamicPill: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: 185,
+    minWidth: 185,
     backgroundColor: '#E6F9F7',
     paddingLeft: 10,
     paddingRight: 4,
@@ -534,17 +551,25 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontPromptSemiBold,
     fontSize: 11,
     color: colors.primaryDark,
+    minWidth: 100,
+    flex: 1,
+    textAlign: 'center',
   },
   timerChip: {
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: radii.full,
+    minWidth: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   timerChipText: {
     fontFamily: typography.fontPromptBold,
     fontSize: 10,
     color: colors.primaryDark,
+    textAlign: 'center',
+    fontVariant: ['tabular-nums'],
   },
   viewport: {
     flex: 1,

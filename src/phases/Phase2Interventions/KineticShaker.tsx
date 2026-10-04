@@ -5,12 +5,14 @@ import {
   StyleSheet,
   Animated,
   Easing,
+  TouchableOpacity,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Accelerometer } from 'expo-sensors';
 import { audioService, HAPTIC_STYLE } from '../../services/audioService';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
+import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCircle } from 'react-native-svg';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { CheckCircle2, Star, Sparkles } from 'lucide-react-native';
 import { colors, typography } from '../../design-system/tokens';
@@ -38,6 +40,46 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
   const shakeAnim = useRef(new Animated.Value(0)).current;
   const jumpAnim = useRef(new Animated.Value(0)).current;
   const starBurstAnim = useRef(new Animated.Value(0)).current;
+
+  // Continuous bubbling particles inside the liquid
+  const bubbleAnim1 = useRef(new Animated.Value(0)).current;
+  const bubbleAnim2 = useRef(new Animated.Value(0)).current;
+  const bubbleAnim3 = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const createBubbleLoop = (anim: Animated.Value, duration: number, delay: number) => {
+      return Animated.loop(
+        Animated.sequence([
+          Animated.delay(delay),
+          Animated.timing(anim, {
+            toValue: 1,
+            duration,
+            easing: Easing.in(Easing.quad),
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim, {
+            toValue: 0,
+            duration: 0,
+            useNativeDriver: true,
+          }),
+        ])
+      );
+    };
+
+    const loop1 = createBubbleLoop(bubbleAnim1, 1800, 0);
+    const loop2 = createBubbleLoop(bubbleAnim2, 1800, 500);
+    const loop3 = createBubbleLoop(bubbleAnim3, 1800, 1000);
+
+    loop1.start();
+    loop2.start();
+    loop3.start();
+
+    return () => {
+      loop1.stop();
+      loop2.stop();
+      loop3.stop();
+    };
+  }, []);
 
   // Sync mode if activityType changes
   useEffect(() => {
@@ -186,8 +228,29 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
 
       {/* 2. Hero Centerpiece: Centered Fantasy Apothecary Tension Vial */}
       <View style={styles.centerStage}>
-        {/* Soft Ambient Radiating Halo behind the centered vial */}
-        <View style={styles.capsuleAuraHalo} pointerEvents="none" />
+        {/* Soft Ambient Radiating Halo behind the centered vial (feathered, zero hard edges) */}
+        <View style={styles.capsuleAuraHalo} pointerEvents="none">
+          <Svg width={200} height={230}>
+            <Defs>
+              <SvgRadialGradient
+                id="capsuleAuraGrad"
+                cx="50%"
+                cy="50%"
+                rx="50%"
+                ry="50%"
+                fx="50%"
+                fy="50%"
+              >
+                <Stop offset="0%" stopColor="#2DD4BF" stopOpacity={0.62} />
+                <Stop offset="42%" stopColor="#00C4B3" stopOpacity={0.35} />
+                <Stop offset="65%" stopColor="#00C4B3" stopOpacity={0.14} />
+                <Stop offset="85%" stopColor="#00C4B3" stopOpacity={0} />
+                <Stop offset="100%" stopColor="#00C4B3" stopOpacity={0} />
+              </SvgRadialGradient>
+            </Defs>
+            <SvgCircle cx={100} cy={115} r={95} fill="url(#capsuleAuraGrad)" />
+          </Svg>
+        </View>
 
         {/* Star Burst Particles overlay on shake */}
         <Animated.View
@@ -206,58 +269,160 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           <View style={styles.burstStar4}><Sparkles size={16} color="#F9A000" fill="#F8E4B3" /></View>
         </Animated.View>
 
-        {/* Centered Enchanted Apothecary Vial */}
+        {/* Centered Enchanted Apothecary Bottle */}
         <Animated.View
           style={[
             styles.capsuleWrapper,
             { transform: [{ translateX: shakeAnim }, { translateY: jumpAnim }] },
           ]}
         >
-          {/* Top Wooden / Runic Cork Cap with Golden Star Seal */}
-          <View style={styles.capsuleCorkTop}>
-            <Star size={10} color="#F8E4B3" fill="#F9A000" />
-          </View>
-
-          {/* Transparent Fantasy Glass Cylinder */}
-          <View style={styles.capsuleGlass}>
-            {/* Specular Highlight Curved Streak */}
-            <View style={styles.capsuleGlassReflection} />
-
-            {/* Ancient Alchemical Scale Ticks */}
-            <View style={styles.capsuleTicks}>
-              <View style={[styles.capsuleTickLine, { top: '25%' }]} />
-              <View style={[styles.capsuleTickLine, { top: '50%' }]} />
-              <View style={[styles.capsuleTickLine, { top: '75%' }]} />
+          <TouchableOpacity
+            activeOpacity={0.92}
+            onPress={handleCycle}
+            style={styles.flaskTouchable}
+          >
+            {/* Top Wooden / Runic Cork Cap with Golden Star Seal */}
+            <View style={styles.capsuleCorkTop}>
+              <Star size={10} color="#F8E4B3" fill="#F9A000" />
             </View>
 
-            {/* Glowing Discharging Celestial Fluid strictly decreasing with shake count */}
-            <View style={styles.fluidContainer}>
-              <LinearGradient
-                colors={getFluidColors()}
-                style={[styles.fluidFill, { height: `${fluidHeightPercent}%` }]}
-              />
-            </View>
+            {/* Bottle Glass Body */}
+            <View style={styles.capsuleGlass}>
+              {/* Specular Highlight Curved Streak */}
+              <View style={styles.capsuleGlassReflection} />
 
-            {/* Floating Magical Starlight Sparkles Inside Potion */}
-            <View style={styles.fluidStarParticle1} pointerEvents="none">
-              <Sparkles size={11} color="rgba(255,255,255,0.9)" />
-            </View>
-            <View style={styles.fluidStarParticle2} pointerEvents="none">
-              <Star size={9} color="rgba(255,255,255,0.85)" fill="#FFFFFF" />
-            </View>
+              {/* Ancient Alchemical Scale Ticks */}
+              <View style={styles.capsuleTicks}>
+                <View style={[styles.capsuleTickLine, { top: '25%' }]} />
+                <View style={[styles.capsuleTickLine, { top: '50%' }]} />
+                <View style={[styles.capsuleTickLine, { top: '75%' }]} />
+              </View>
 
-            {/* Center Star Emblem */}
-            <View style={styles.capsuleCenterIcon}>
-              {isFinished ? (
-                <Star size={24} color="#F9A000" fill="#F8E4B3" />
-              ) : (
-                <Sparkles size={20} color="rgba(255,255,255,0.95)" />
+              {/* Glowing Discharging Celestial Fluid strictly decreasing with shake count */}
+              <View style={styles.fluidContainer}>
+                <LinearGradient
+                  colors={getFluidColors()}
+                  style={[styles.fluidFill, { height: `${fluidHeightPercent}%` }]}
+                />
+              </View>
+
+              {/* Bubbling Energy Particles */}
+              {!isFinished && (
+                <>
+                  <Animated.View
+                    style={[
+                      styles.energyBubble,
+                      {
+                        bottom: 10,
+                        left: 24,
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        opacity: bubbleAnim1.interpolate({
+                          inputRange: [0, 0.2, 0.8, 1],
+                          outputRange: [0, 0.8, 0.8, 0],
+                        }),
+                        transform: [
+                          {
+                            translateY: bubbleAnim1.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0, -70],
+                            }),
+                          },
+                          {
+                            scale: bubbleAnim1.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0.7, 1.1],
+                            }),
+                          },
+                        ],
+                      },
+                    ]}
+                    pointerEvents="none"
+                  />
+                  <Animated.View
+                    style={[
+                      styles.energyBubble,
+                      {
+                        bottom: 20,
+                        right: 30,
+                        width: 12,
+                        height: 12,
+                        borderRadius: 6,
+                        opacity: bubbleAnim2.interpolate({
+                          inputRange: [0, 0.2, 0.8, 1],
+                          outputRange: [0, 0.8, 0.8, 0],
+                        }),
+                        transform: [
+                          {
+                            translateY: bubbleAnim2.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0, -70],
+                            }),
+                          },
+                          {
+                            scale: bubbleAnim2.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0.7, 1.1],
+                            }),
+                          },
+                        ],
+                      },
+                    ]}
+                    pointerEvents="none"
+                  />
+                  <Animated.View
+                    style={[
+                      styles.energyBubble,
+                      {
+                        bottom: 14,
+                        left: 55,
+                        width: 10,
+                        height: 10,
+                        borderRadius: 5,
+                        opacity: bubbleAnim3.interpolate({
+                          inputRange: [0, 0.2, 0.8, 1],
+                          outputRange: [0, 0.8, 0.8, 0],
+                        }),
+                        transform: [
+                          {
+                            translateY: bubbleAnim3.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0, -70],
+                            }),
+                          },
+                          {
+                            scale: bubbleAnim3.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0.7, 1.1],
+                            }),
+                          },
+                        ],
+                      },
+                    ]}
+                    pointerEvents="none"
+                  />
+                </>
               )}
-            </View>
-          </View>
 
-          {/* Bottom Cork Base */}
-          <View style={styles.capsuleCorkBottom} />
+              {/* Floating Magical Starlight Sparkles Inside Potion */}
+              <View style={styles.fluidStarParticle1} pointerEvents="none">
+                <Sparkles size={11} color="rgba(255,255,255,0.9)" />
+              </View>
+              <View style={styles.fluidStarParticle2} pointerEvents="none">
+                <Star size={9} color="rgba(255,255,255,0.85)" fill="#FFFFFF" />
+              </View>
+
+              {/* Center Star Emblem */}
+              <View style={styles.capsuleCenterIcon}>
+                {isFinished ? (
+                  <Star size={24} color="#F9A000" fill="#F8E4B3" />
+                ) : (
+                  <Sparkles size={20} color="rgba(255,255,255,0.95)" />
+                )}
+              </View>
+            </View>
+          </TouchableOpacity>
         </Animated.View>
 
         {/* 3. Organic Count Display (NO block, NO badge!) */}
@@ -331,15 +496,11 @@ const styles = StyleSheet.create({
   },
   capsuleAuraHalo: {
     position: 'absolute',
-    top: 10,
-    width: 140,
-    height: 180,
-    borderRadius: 70,
-    backgroundColor: 'rgba(0, 196, 179, 0.14)',
-    shadowColor: '#00C4B3',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.45,
-    shadowRadius: 28,
+    top: 25,
+    width: 200,
+    height: 230,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   starBurstOverlay: {
     position: 'absolute',
@@ -356,17 +517,26 @@ const styles = StyleSheet.create({
   burstStar4: { position: 'absolute', bottom: 15, right: 25, fontSize: 16 },
   capsuleWrapper: {
     alignItems: 'center',
-    width: 90,
+    width: 120,
+    height: 272,
     zIndex: 2,
   },
+  flaskTouchable: {
+    width: 120,
+    height: 272,
+    alignItems: 'center',
+    position: 'relative',
+  },
   capsuleCorkTop: {
-    width: 44,
+    position: 'absolute',
+    top: 0,
+    width: 52,
     height: 18,
     backgroundColor: '#DF8900',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    borderBottomLeftRadius: 2,
-    borderBottomRightRadius: 2,
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 3,
     borderWidth: 1.5,
     borderColor: '#F9A000',
     alignItems: 'center',
@@ -379,14 +549,18 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   capsuleGlass: {
-    width: 80,
-    height: 172,
-    borderRadius: 40,
+    position: 'absolute',
+    bottom: 0,
+    width: 120,
+    height: 255,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    borderBottomLeftRadius: 44,
+    borderBottomRightRadius: 44,
     backgroundColor: 'rgba(255, 255, 255, 0.82)',
     borderWidth: 2.5,
     borderColor: '#80E2D9',
     overflow: 'hidden',
-    position: 'relative',
     justifyContent: 'flex-end',
     alignItems: 'center',
     shadowColor: '#0284C7',
@@ -397,10 +571,10 @@ const styles = StyleSheet.create({
   },
   capsuleGlassReflection: {
     position: 'absolute',
-    top: 10,
+    top: 8,
     left: 8,
-    width: 6.5,
-    bottom: 14,
+    width: 5,
+    height: 90,
     borderRadius: 3,
     backgroundColor: 'rgba(255, 255, 255, 0.72)',
     zIndex: 6,
@@ -410,14 +584,14 @@ const styles = StyleSheet.create({
     right: 8,
     top: 0,
     bottom: 0,
-    width: 10,
+    width: 14,
     zIndex: 5,
   },
   capsuleTickLine: {
     position: 'absolute',
     right: 0,
-    width: 10,
-    height: 2,
+    width: 8,
+    height: 1.5,
     borderRadius: 1,
     backgroundColor: '#8FBBEF',
   },
@@ -431,19 +605,24 @@ const styles = StyleSheet.create({
   },
   fluidFill: {
     width: '100%',
-    borderBottomLeftRadius: 38,
-    borderBottomRightRadius: 38,
+    borderBottomLeftRadius: 44,
+    borderBottomRightRadius: 44,
+  },
+  energyBubble: {
+    position: 'absolute',
+    backgroundColor: 'rgba(255, 255, 255, 0.65)',
+    zIndex: 5,
   },
   fluidStarParticle1: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 24,
     left: 18,
     zIndex: 4,
   },
   fluidStarParticle2: {
     position: 'absolute',
-    bottom: 60,
-    right: 18,
+    bottom: 40,
+    right: 22,
     zIndex: 4,
   },
   capsuleCenterIcon: {
@@ -451,19 +630,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     top: '42%',
     zIndex: 7,
-  },
-  capsuleCorkBottom: {
-    width: 44,
-    height: 12,
-    backgroundColor: '#DF8900',
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    borderWidth: 1.5,
-    borderColor: '#F9A000',
-    marginTop: -3,
-    zIndex: 3,
   },
   organicCountSection: {
     alignItems: 'center',

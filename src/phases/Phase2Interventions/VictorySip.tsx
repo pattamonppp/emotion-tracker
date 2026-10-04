@@ -11,6 +11,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Accelerometer } from 'expo-sensors';
 import { audioService, HAPTIC_STYLE } from '../../services/audioService';
+import Svg, { Path, Circle, Ellipse, Defs, RadialGradient as SvgRadialGradient, Stop } from 'react-native-svg';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
@@ -240,8 +241,29 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
       {/* 3. Hero Centerpiece: Fantasy Crystal Potion Tumbler */}
       <View style={styles.cupContainer}>
-        {/* Soft Ambient Radiating Halo behind the tumbler */}
-        <View style={styles.cupAuraHalo} pointerEvents="none" />
+        {/* Soft Ambient Radiating Halo behind the tumbler (feathered, zero hard edges) */}
+        <View style={styles.cupAuraHalo} pointerEvents="none">
+          <Svg width={200} height={200}>
+            <Defs>
+              <SvgRadialGradient
+                id="cupAuraGrad"
+                cx="50%"
+                cy="50%"
+                rx="50%"
+                ry="50%"
+                fx="50%"
+                fy="50%"
+              >
+                <Stop offset="0%" stopColor="#00C4B3" stopOpacity={0.58} />
+                <Stop offset="42%" stopColor="#00C4B3" stopOpacity={0.32} />
+                <Stop offset="65%" stopColor="#00C4B3" stopOpacity={0.12} />
+                <Stop offset="85%" stopColor="#00C4B3" stopOpacity={0} />
+                <Stop offset="100%" stopColor="#00C4B3" stopOpacity={0} />
+              </SvgRadialGradient>
+            </Defs>
+            <Circle cx={100} cy={100} r={95} fill="url(#cupAuraGrad)" />
+          </Svg>
+        </View>
 
         {/* Straw Top Star Topper */}
         <View style={styles.strawStarTopper}>
@@ -276,8 +298,9 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             },
           ]}
         >
-          {/* Glass Highlight */}
+          {/* Glass Highlights */}
           <View style={styles.glassReflection} />
+          <View style={styles.glassReflectionSecondary} />
 
           {/* Realistic Gravity-Aligned Liquid Fluid */}
           <Animated.View
@@ -316,17 +339,41 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               { transform: [{ translateY: bobbingAnim }] },
             ]}
           >
-            {/* Pearl 1 */}
+            {/* Pearl 1: Cute happy face */}
             <View style={[styles.pearl, { left: 14, bottom: 8 }]}>
-              <Text style={styles.pearlFace}>•‿•</Text>
+              <Svg width={22} height={22} viewBox="0 0 22 22">
+                <Circle cx="15.5" cy="5.5" r="1.2" fill="rgba(255, 255, 255, 0.65)" />
+                <Circle cx="7" cy="9.5" r="1.4" fill="#B3EDE8" />
+                <Circle cx="15" cy="9.5" r="1.4" fill="#B3EDE8" />
+                <Ellipse cx="5.5" cy="12.5" rx="1.3" ry="0.8" fill="#FFA5A5" opacity={0.9} />
+                <Ellipse cx="16.5" cy="12.5" rx="1.3" ry="0.8" fill="#FFA5A5" opacity={0.9} />
+                <Path d="M 9 12 Q 11 14.5 13 12" stroke="#B3EDE8" strokeWidth={1.1} strokeLinecap="round" fill="none" />
+              </Svg>
             </View>
-            {/* Pearl 2 */}
+            {/* Pearl 2: Sparkle open face */}
             <View style={[styles.pearl, { left: 40, bottom: 12 }]}>
-              <Text style={styles.pearlFace}>◕‿◕</Text>
+              <Svg width={22} height={22} viewBox="0 0 22 22">
+                <Circle cx="15.5" cy="5.5" r="1.2" fill="rgba(255, 255, 255, 0.65)" />
+                <Circle cx="7" cy="9" r="1.6" fill="#B3EDE8" />
+                <Circle cx="6.5" cy="8.4" r="0.6" fill="#FFFFFF" />
+                <Circle cx="15" cy="9" r="1.6" fill="#B3EDE8" />
+                <Circle cx="14.5" cy="8.4" r="0.6" fill="#FFFFFF" />
+                <Ellipse cx="5.5" cy="12.2" rx="1.3" ry="0.8" fill="#FFA5A5" opacity={0.9} />
+                <Ellipse cx="16.5" cy="12.2" rx="1.3" ry="0.8" fill="#FFA5A5" opacity={0.9} />
+                <Path d="M 9.2 12 Q 11 14.8 12.8 12 Z" fill="#FFA5A5" stroke="#B3EDE8" strokeWidth={0.8} />
+              </Svg>
             </View>
-            {/* Pearl 3 */}
+            {/* Pearl 3: Winking playful face */}
             <View style={[styles.pearl, { right: 14, bottom: 8 }]}>
-              <Text style={styles.pearlFace}>^‿^</Text>
+              <Svg width={22} height={22} viewBox="0 0 22 22">
+                <Circle cx="15.5" cy="5.5" r="1.2" fill="rgba(255, 255, 255, 0.65)" />
+                <Circle cx="7" cy="9.5" r="1.4" fill="#B3EDE8" />
+                <Circle cx="6.5" cy="9" r="0.5" fill="#FFFFFF" />
+                <Path d="M 13.5 10 Q 15 8.2 16.5 10" stroke="#B3EDE8" strokeWidth={1.2} strokeLinecap="round" fill="none" />
+                <Ellipse cx="5.5" cy="12.5" rx="1.3" ry="0.8" fill="#FFA5A5" opacity={0.9} />
+                <Ellipse cx="16.5" cy="12.5" rx="1.3" ry="0.8" fill="#FFA5A5" opacity={0.9} />
+                <Path d="M 9.5 12 Q 11 14 12.5 12" stroke="#B3EDE8" strokeWidth={1.1} strokeLinecap="round" fill="none" />
+              </Svg>
             </View>
             {/* Floating Bubble 4 */}
             <View style={[styles.floatingBubble, { left: 24, bottom: 38 }]}>
@@ -338,10 +385,58 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             </View>
           </Animated.View>
 
-          {/* Cup Front Smiling Face */}
+          {/* Cup Front Kawaii Smiling Face */}
           <View style={styles.cupFaceContainer}>
-            <Text style={styles.cupEyes}>◕   ◕</Text>
-            <Text style={styles.cupMouth}>‿</Text>
+            <Svg width={54} height={32} viewBox="0 0 54 32">
+              {/* Rosy Blushing Cheeks */}
+              <Ellipse
+                cx="10"
+                cy="20"
+                rx="4.5"
+                ry="2.6"
+                fill={isTiltingToDrink ? '#FF787D' : '#FFA4A4'}
+                opacity={isTiltingToDrink ? 0.95 : 0.85}
+              />
+              <Ellipse
+                cx="44"
+                cy="20"
+                rx="4.5"
+                ry="2.6"
+                fill={isTiltingToDrink ? '#FF787D' : '#FFA4A4'}
+                opacity={isTiltingToDrink ? 0.95 : 0.85}
+              />
+
+              {isTiltingToDrink ? (
+                <>
+                  {/* Happy Curved Sips Eyes */}
+                  <Path d="M 10 13 Q 15 7 20 13" stroke="#164E48" strokeWidth={2.4} strokeLinecap="round" fill="none" />
+                  <Path d="M 34 13 Q 39 7 44 13" stroke="#164E48" strokeWidth={2.4} strokeLinecap="round" fill="none" />
+                  {/* Cute Sipping Mouth */}
+                  <Ellipse cx="27" cy="18" rx="3.4" ry="4" fill="#164E48" />
+                  <Ellipse cx="27" cy="18.5" rx="1.8" ry="2.2" fill="#FF8585" />
+                </>
+              ) : (
+                <>
+                  {/* Shiny Big Kawaii Eyes with Sparkle Glints */}
+                  <Circle cx="15" cy="13" r="4.8" fill="#164E48" />
+                  <Circle cx="13.5" cy="11.2" r="1.8" fill="#FFFFFF" />
+                  <Circle cx="16.6" cy="14.8" r="0.9" fill="#FFFFFF" />
+
+                  <Circle cx="39" cy="13" r="4.8" fill="#164E48" />
+                  <Circle cx="37.5" cy="11.2" r="1.8" fill="#FFFFFF" />
+                  <Circle cx="40.6" cy="14.8" r="0.9" fill="#FFFFFF" />
+
+                  {/* Sweet Happy Open Mouth */}
+                  <Path
+                    d="M 23 17 Q 27 23 31 17 Z"
+                    fill="#FF8585"
+                    stroke="#164E48"
+                    strokeWidth={1.8}
+                    strokeLinejoin="round"
+                  />
+                </>
+              )}
+            </Svg>
           </View>
         </Animated.View>
 
@@ -505,14 +600,10 @@ const styles = StyleSheet.create({
   cupAuraHalo: {
     position: 'absolute',
     top: 20,
-    width: 140,
-    height: 160,
-    borderRadius: 70,
-    backgroundColor: 'rgba(94, 234, 212, 0.22)',
-    shadowColor: '#2DD4BF',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.45,
-    shadowRadius: 28,
+    width: 200,
+    height: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   strawStarTopper: {
     marginBottom: -8,
@@ -546,11 +637,11 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   cupBody: {
-    width: 96,
-    height: 124,
-    backgroundColor: 'rgba(224, 248, 246, 0.65)',
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28,
+    width: 98,
+    height: 126,
+    backgroundColor: 'rgba(226, 250, 248, 0.72)',
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
     borderWidth: 2.5,
     borderColor: colors.primary,
     overflow: 'hidden',
@@ -566,6 +657,16 @@ const styles = StyleSheet.create({
     height: 80,
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 2,
+    zIndex: 5,
+  },
+  glassReflectionSecondary: {
+    position: 'absolute',
+    right: 6,
+    top: 12,
+    width: 3,
+    height: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
+    borderRadius: 1.5,
     zIndex: 5,
   },
   liquidContainer: {
@@ -598,45 +699,29 @@ const styles = StyleSheet.create({
   },
   pearl: {
     position: 'absolute',
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#355956',
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#204541',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    borderColor: '#009688',
+    borderColor: '#38B2A3',
     ...shadows.card,
-  },
-  pearlFace: {
-    fontSize: 9,
-    color: '#B3EDE8',
-    fontWeight: 'bold',
+    overflow: 'hidden',
   },
   floatingBubble: {
     position: 'absolute',
   },
   cupFaceContainer: {
     position: 'absolute',
-    top: 40,
+    top: 36,
     left: 0,
     right: 0,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 4,
     pointerEvents: 'none',
-  },
-  cupEyes: {
-    fontSize: 10,
-    color: 'rgba(0, 77, 64, 0.65)',
-    letterSpacing: 8,
-    fontWeight: 'bold',
-  },
-  cupMouth: {
-    fontSize: 10,
-    color: 'rgba(0, 77, 64, 0.65)',
-    marginTop: -4,
-    fontWeight: 'bold',
   },
   organicCountSection: {
     alignItems: 'center',

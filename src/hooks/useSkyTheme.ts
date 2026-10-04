@@ -56,8 +56,9 @@ export interface SkyThemeTokens {
   dots: string | string[];
 }
 
-export const useSkyTheme = (): SkyThemeTokens => {
-  const { activePeriod } = useSky();
+export const useSkyTheme = (periodOverride?: SkyTimePeriod): SkyThemeTokens => {
+  const { activePeriod: contextPeriod } = useSky();
+  const activePeriod = periodOverride || contextPeriod || SKY.DAY;
 
   return useMemo(() => {
     const oocaCIOrb = {
@@ -78,16 +79,16 @@ export const useSkyTheme = (): SkyThemeTokens => {
           // Somatic Breathing
           instructionColor: '#FFFFFF',
           pulseColor: '#FFFFFF',
-          heartColor: '#EF7773',
+          heartColor: '#FFFFFF',
 
           // Progress / counters
           countColor: '#FFFFFF',
           labelColor: '#FDEFEE',
           hintColor: '#E44743',
           progressTrack: 'rgba(255, 255, 255, 0.45)',
-          progressFill: ['#EF7773', '#FF8F4B'] as const,
+          progressFill: ['#ffc9c7ff', '#ffdbc4ff'] as const,
           progressFillColor: '#EF7773',
-          progressFillBar: 'linear-gradient(90deg, #EF7773, #FF8F4B)',
+          progressFillBar: 'linear-gradient(90deg, #ffc9c7ff, #ffdbc4ff)',
           fluidColors: ['#00C4B3', '#EF7773', '#FF8F4B'] as const,
 
           // Badges
@@ -107,13 +108,13 @@ export const useSkyTheme = (): SkyThemeTokens => {
 
           // Somatic Absorption
           glowCore: 'rgba(255, 255, 255, 0.45)',
-          glowMid: 'rgba(254, 214, 213, 0.22)',
-          glowOuter: 'rgba(239, 119, 115, 0.08)',
+          glowMid: 'rgba(254, 214, 213, 0.2)',
+          glowOuter: 'rgba(239, 119, 115, 0.16)',
           outerBorder: 'rgba(239, 119, 115, 0.45)',
           middleBorder: 'rgba(255, 255, 255, 0.55)',
           innerBorder: 'rgba(255, 255, 255, 0.75)',
-          circleBg: 'rgba(255, 255, 255, 0.18)',
-          starColor: '#FAD6D5',
+          circleBg: 'rgba(255, 255, 255, 0.09)',
+          starColor: '#fff0f0ff',
           textColor: '#FFFFFF',
           captionColor: '#FAD6D5',
           dots: ['#EF7773', '#FF8F4B', '#E44743', '#00C4B3'],
@@ -155,9 +156,9 @@ export const useSkyTheme = (): SkyThemeTokens => {
           hintText: '#79ADA9',
 
           // Somatic Absorption
-          glowCore: 'rgba(143, 187, 239, 0.22)',
-          glowMid: 'rgba(31, 119, 223, 0.12)',
-          glowOuter: 'rgba(10, 71, 202, 0.06)',
+          glowCore: 'rgba(143, 187, 239, 0.45)',
+          glowMid: 'rgba(31, 119, 223, 0.26)',
+          glowOuter: 'rgba(10, 71, 202, 0.12)',
           outerBorder: 'rgba(143, 187, 239, 0.35)',
           middleBorder: 'rgba(98, 160, 233, 0.30)',
           innerBorder: 'rgba(199, 221, 247, 0.25)',
@@ -204,9 +205,9 @@ export const useSkyTheme = (): SkyThemeTokens => {
           hintText: '#D97800',
 
           // Somatic Absorption
-          glowCore: 'rgba(252, 244, 224, 0.45)',
-          glowMid: 'rgba(244, 210, 128, 0.20)',
-          glowOuter: 'rgba(249, 160, 0, 0.08)',
+          glowCore: 'rgba(255, 248, 224, 0.65)',
+          glowMid: 'rgba(244, 210, 128, 0.5)',
+          glowOuter: 'rgba(249, 160, 0, 0.16)',
           outerBorder: 'rgba(249, 160, 0, 0.40)',
           middleBorder: 'rgba(240, 191, 77, 0.45)',
           innerBorder: 'rgba(255, 255, 255, 0.65)',
@@ -254,9 +255,9 @@ export const useSkyTheme = (): SkyThemeTokens => {
           hintText: colors.turquoiseGray4,
 
           // Somatic Absorption
-          glowCore: 'rgba(0, 196, 179, 0.32)',
-          glowMid: 'rgba(98, 160, 233, 0.16)',
-          glowOuter: 'rgba(0, 196, 179, 0.06)',
+          glowCore: 'rgba(0, 196, 179, 0.55)',
+          glowMid: 'rgba(98, 160, 233, 0.32)',
+          glowOuter: 'rgba(0, 196, 179, 0.14)',
           outerBorder: 'rgba(0, 196, 179, 0.35)',
           middleBorder: 'rgba(98, 160, 233, 0.30)',
           innerBorder: 'rgba(0, 196, 179, 0.22)',

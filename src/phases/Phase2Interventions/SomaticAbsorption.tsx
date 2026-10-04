@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { audioService, HAPTIC_STYLE } from '../../services/audioService';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
@@ -29,6 +30,48 @@ interface SomaticAbsorptionProps {
 const { width: SCREEN_W } = Dimensions.get('window');
 const CIRCLE_SIZE = Math.min(SCREEN_W * 0.72, 268);
 
+const getSigilAuraTheme = (period: SkyTimePeriod) => {
+  switch (period) {
+    case SKY.SUNSET:
+      return {
+        core: '#FFFFFF',
+        coreOpacity: 0.45,
+        mid: '#FED6D5',
+        midOpacity: 0.20,
+        outer: '#EF7773',
+        outerOpacity: 0.16,
+      };
+    case SKY.NIGHT:
+      return {
+        core: '#8FBBEF',
+        coreOpacity: 0.50,
+        mid: '#1F77DF',
+        midOpacity: 0.30,
+        outer: '#0A47CA',
+        outerOpacity: 0.14,
+      };
+    case SKY.DAWN:
+      return {
+        core: '#FCF4E0',
+        coreOpacity: 0.68,
+        mid: '#F4D280',
+        midOpacity: 0.40,
+        outer: '#F9A000',
+        outerOpacity: 0.18,
+      };
+    case SKY.DAY:
+    default:
+      return {
+        core: '#00C4B3',
+        coreOpacity: 0.58,
+        mid: '#62A0E9',
+        midOpacity: 0.34,
+        outer: '#00C4B3',
+        outerOpacity: 0.16,
+      };
+  }
+};
+
 export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
   onComplete,
   lang,
@@ -36,8 +79,10 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.somaticAbsorption;
-  const theme = useSkyTheme();
+  const theme = useSkyTheme(propSkyPeriod);
   const skyPeriod = propSkyPeriod || theme.period;
+  const sigilAura = useMemo(() => getSigilAuraTheme(skyPeriod), [skyPeriod]);
+  const haloCanvasSize = CIRCLE_SIZE + 140;
 
 
 
@@ -236,19 +281,19 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 
       {/* 3. Pure Ethereal Concentric Grounding Wheel */}
       <View style={styles.wheelSection}>
-        {/* Soft Sun-like Diffused Radial Glow Aura (Feathered seamlessly to 0% opacity) */}
+        {/* Soft Sun-like Diffused Radial Glow Aura (Feathered seamlessly to 0% opacity, no cut edge lines) */}
         <Animated.View
           style={[
             styles.sigilAuraHalo,
             {
-              width: CIRCLE_SIZE + 96,
-              height: CIRCLE_SIZE + 96,
+              width: haloCanvasSize,
+              height: haloCanvasSize,
               transform: [{ scale: pulseAnim }],
             },
           ]}
           pointerEvents="none"
         >
-          <Svg width={CIRCLE_SIZE + 96} height={CIRCLE_SIZE + 96}>
+          <Svg width={haloCanvasSize} height={haloCanvasSize}>
             <Defs>
               <SvgRadialGradient
                 id="sigilSunAura"
@@ -259,16 +304,17 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                 fx="50%"
                 fy="50%"
               >
-                <Stop offset="0%" stopColor={theme.glowCore} stopOpacity="0.45" />
-                <Stop offset="42%" stopColor={theme.glowMid} stopOpacity="0.22" />
-                <Stop offset="72%" stopColor={theme.glowOuter} stopOpacity="0.08" />
-                <Stop offset="100%" stopColor={theme.glowOuter} stopOpacity="0" />
+                <Stop offset="0%" stopColor={sigilAura.core} stopOpacity={sigilAura.coreOpacity} />
+                <Stop offset="38%" stopColor={sigilAura.mid} stopOpacity={sigilAura.midOpacity} />
+                <Stop offset="68%" stopColor={sigilAura.outer} stopOpacity={sigilAura.outerOpacity} />
+                <Stop offset="88%" stopColor={sigilAura.outer} stopOpacity={0} />
+                <Stop offset="100%" stopColor={sigilAura.outer} stopOpacity={0} />
               </SvgRadialGradient>
             </Defs>
             <SvgCircle
-              cx={(CIRCLE_SIZE + 96) / 2}
-              cy={(CIRCLE_SIZE + 96) / 2}
-              r={(CIRCLE_SIZE + 96) / 2}
+              cx={haloCanvasSize / 2}
+              cy={haloCanvasSize / 2}
+              r={haloCanvasSize / 2}
               fill="url(#sigilSunAura)"
             />
           </Svg>
@@ -381,10 +427,17 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                 styles.progressBarFill,
                 {
                   width: progressWidth,
-                  backgroundColor: theme.progressFillColor || theme.progressFill[0],
+                  overflow: 'hidden',
                 },
               ]}
-            />
+            >
+              <LinearGradient
+                colors={theme.progressFill}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={StyleSheet.absoluteFill}
+              />
+            </Animated.View>
           </View>
 
           <Text style={[styles.bottomCaption, { color: theme.captionColor }]}>
@@ -538,6 +591,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
+    opacity: 0.35,
   },
   percentNumber: {
     fontFamily: typography.fontPromptExtraBold,

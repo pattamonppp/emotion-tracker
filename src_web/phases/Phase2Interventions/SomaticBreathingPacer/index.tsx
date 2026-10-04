@@ -11,6 +11,7 @@ import { useSkyTheme } from '../../../hooks/useSkyTheme';
 import { Language } from '../../../types';
 
 import styles from './styles.module.scss';
+import { DESIGN_TOKENS } from '@/design-system/tokens';
 
 export const BREATH_PATTERN = {
   BOX: 'box',
@@ -189,14 +190,17 @@ export const SomaticBreathingPacer: React.FC<
 
   const orbBorderColor = isFinished
     ? '#10B981'
-    : phase === BREATH_PHASE.EXHALE
-      ? skyTheme.progressFill
-      : skyTheme.badgeIconColor;
+    : !isStarted
+      ? skyTheme.orbBorder
+      : phase === BREATH_PHASE.EXHALE
+        ? DESIGN_TOKENS.color.brand.turquoise.primary
+        : skyTheme.ringProgress;
 
-  const progressColor =
-    phase === BREATH_PHASE.EXHALE
-      ? skyTheme.progressFill
-      : skyTheme.badgeIconColor;
+  const progressColor = isStarted
+    ? phase === BREATH_PHASE.EXHALE
+      ? DESIGN_TOKENS.color.brand.turquoise.primary
+      : skyTheme.ringProgress
+    : skyTheme.ringProgress;
 
   return (
     <div className={styles.container}>
@@ -282,7 +286,7 @@ export const SomaticBreathingPacer: React.FC<
               cx={ORB_SIZE / 2}
               cy={ORB_SIZE / 2}
               r={SVG_R}
-              stroke={skyTheme.progressTrack}
+              stroke={skyTheme.ringTrack}
               strokeWidth={5}
               fill="none"
             />
@@ -308,7 +312,7 @@ export const SomaticBreathingPacer: React.FC<
               <div className={styles.startOrbContainer}>
                 <Wind
                   size={36}
-                  color={skyTheme.badgeIconColor}
+                  color={skyTheme.orbBorder}
                   strokeWidth={2.4}
                 />
 

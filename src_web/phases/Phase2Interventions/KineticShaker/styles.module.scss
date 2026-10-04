@@ -101,12 +101,18 @@
 
 .capsuleAuraHalo {
   position: absolute;
-  top: 10px;
-  width: 150px;
-  height: 180px;
-  border-radius: 75px;
-  background-color: rgba(94, 234, 212, 0.22);
-  box-shadow: 0 0 28px rgba(45, 212, 191, 0.45);
+  top: 25px;
+  width: 200px;
+  height: 230px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(45, 212, 191, 0.62) 0%,
+    rgba(0, 196, 179, 0.35) 42%,
+    rgba(0, 196, 179, 0.14) 65%,
+    transparent 85%
+  );
+  filter: blur(16px);
   pointer-events: none;
 }
 
@@ -166,11 +172,11 @@
   left: 0;
   right: 0;
   height: 255px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 2.5px solid rgba(0, 196, 179, 0.45);
+  background: rgba(255, 255, 255, 0.82);
+  border: 2.5px solid #80E2D9;
   border-radius: 28px 28px 44px 44px;
   overflow: hidden;
-  box-shadow: 0 10px 24px rgba(0, 196, 179, 0.15);
+  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.16);
   backdrop-filter: blur(8px);
 }
 
@@ -201,7 +207,7 @@
   right: 0;
   width: 8px;
   height: 1.5px;
-  background: rgba(0, 196, 179, 0.4);
+  background: #8FBBEF;
   border-radius: 1px;
 }
 
@@ -238,9 +244,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(180deg, #80E2D9 0%, #00C4B3 60%, #009688 100%);
   transition: height 250ms ease-out;
-  border-radius: 0 0 40px 40px;
+  border-radius: 0 0 44px 44px;
 }
 
 .energyBubble {

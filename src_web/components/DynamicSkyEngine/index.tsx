@@ -208,10 +208,37 @@ const LONG_PRESS_MS = 450;
 export const SkyPeriodSwitcher: React.FC = () => {
   const { activePeriod, skyMode, setSkyMode, lang } = useSky();
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const longPressTimer = useRef<number | null>(null);
   const didLongPress = useRef(false);
   const t = getTranslation(lang);
   const skyLabels = t.common.sky;
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   const getPeriodLabel = () => {
     switch (activePeriod) {
@@ -280,7 +307,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
   const isNightPill = activePeriod === SKY.NIGHT;
 
   return (
-    <div className={styles.switcherContainer}>
+    <div ref={containerRef} className={styles.switcherContainer}>
       <div
         role="button"
         tabIndex={0}
@@ -328,31 +355,40 @@ export const SkyPeriodSwitcher: React.FC = () => {
       </div>
 
       {isOpen && (
-        <div className={styles.optionsPopup}>
-          {options.map(({ mode, label }) => {
-            const active = skyMode === mode;
-            return (
-              <button
-                key={mode}
-                type="button"
-                onClick={() => {
-                  setSkyMode(mode);
-                  setIsOpen(false);
-                }}
-                className={classNames(styles.optionBtn, { [styles.optionBtnActive]: active })}
-              >
-                {mode === AUTO_SKY ? (
-                  <Clock size={12} color={active ? colors.white : colors.primaryDark} strokeWidth={2.2} />
-                ) : (
-                  getPeriodIcon(mode, 12, active)
-                )}
-                <span className={classNames(styles.optionText, { [styles.optionTextActive]: active })}>
-                  {label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <>
+          <div
+            className={styles.backdrop}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen(false);
+            }}
+          />
+          <div className={styles.optionsPopup}>
+            {options.map(({ mode, label }) => {
+              const active = skyMode === mode;
+              return (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => {
+                    setSkyMode(mode);
+                    setIsOpen(false);
+                  }}
+                  className={classNames(styles.optionBtn, { [styles.optionBtnActive]: active })}
+                >
+                  {mode === AUTO_SKY ? (
+                    <Clock size={12} color={active ? colors.white : colors.primaryDark} strokeWidth={2.2} />
+                  ) : (
+                    getPeriodIcon(mode, 12, active)
+                  )}
+                  <span className={classNames(styles.optionText, { [styles.optionTextActive]: active })}>
+                    {label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </>
       )}
     </div>
   );

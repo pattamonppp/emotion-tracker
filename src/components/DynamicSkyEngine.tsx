@@ -1065,7 +1065,13 @@ export const SkyPeriodSwitcher: React.FC = () => {
 
       {/* Expanded Tactile Icon Palette (NO EMOJI - ALWAYS PURE ICONS) */}
       {isOpen && (
-        <View style={styles.optionsPopup}>
+        <>
+          <TouchableOpacity
+            style={styles.backdrop}
+            activeOpacity={1}
+            onPress={() => setIsOpen(false)}
+          />
+          <View style={styles.optionsPopup}>
           {/* Option: Auto Real-Time Clock */}
           <TouchableOpacity
             onPress={() => {
@@ -1136,6 +1142,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
             </Text>
           </TouchableOpacity>
         </View>
+        </>
       )}
     </View>
   );
@@ -1380,6 +1387,14 @@ const styles = StyleSheet.create({
   expandArrowBtn: {
     paddingLeft: 1,
     paddingRight: 1,
+  },
+  backdrop: {
+    position: 'absolute',
+    top: -2000,
+    bottom: -2000,
+    left: -2000,
+    right: -2000,
+    zIndex: 9998,
   },
   optionsPopup: {
     position: 'absolute',

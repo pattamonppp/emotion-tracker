@@ -180,6 +180,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 199px;
+  min-width: 199px;
+  box-sizing: border-box;
   background-color: #E6F9F7;
   padding: 3px 4px 3px 10px;
   border-radius: $radius-pill;
@@ -190,6 +193,7 @@
 .pingDot {
   width: 6px;
   height: 6px;
+  flex-shrink: 0;
   border-radius: $radius-circle;
   background-color: $color-brand-primary;
   animation: pulse 2s infinite ease-in-out;
@@ -201,23 +205,41 @@
   font-size: 11px;
   color: $color-brand-contrast;
   line-height: 1;
+  min-width: 117px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+
+  :global([data-lang="en"]) & {
+    font-family: $font-en;
+  }
 }
 
 .timerChip {
   background-color: $color-white;
-  padding: 2px 8px;
+  padding: 2px 6px;
   border-radius: $radius-pill;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 44px;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .timerChipText {
-  font-family: $font-sans;
+  font-family: $font-en;
   font-weight: 700;
   font-size: 10px;
   color: $color-brand-contrast;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: 0.3px;
+  text-align: center;
+  display: inline-block;
 }
 
 // Main Viewport - Responsively sized on wide desktop screens

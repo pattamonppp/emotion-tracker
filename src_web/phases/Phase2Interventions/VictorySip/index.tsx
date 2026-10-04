@@ -131,6 +131,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
         >
           {/* Glass Highlight */}
           <div className={styles.glassReflection} />
+          <div className={styles.glassReflectionSecondary} />
 
           {/* Realistic Gravity-Aligned Liquid Fluid */}
           <div
@@ -146,17 +147,41 @@ export const VictorySip: React.FC<VictorySipProps> = ({
 
           {/* Smiling Boba Pearls inside Cup */}
           <div className={styles.pearlsContainer}>
-            {/* Pearl 1 */}
+            {/* Pearl 1: Cute happy face */}
             <div className={styles.pearl} style={{ left: 14, bottom: 8 }}>
-              <span className={styles.pearlFace}>•‿•</span>
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="15.5" cy="5.5" r="1.2" fill="rgba(255, 255, 255, 0.65)" />
+                <circle cx="7" cy="9.5" r="1.4" fill="#B3EDE8" />
+                <circle cx="15" cy="9.5" r="1.4" fill="#B3EDE8" />
+                <ellipse cx="5.5" cy="12.5" rx="1.3" ry="0.8" fill="#FFA5A5" opacity="0.9" />
+                <ellipse cx="16.5" cy="12.5" rx="1.3" ry="0.8" fill="#FFA5A5" opacity="0.9" />
+                <path d="M 9 12 Q 11 14.5 13 12" stroke="#B3EDE8" strokeWidth="1.1" strokeLinecap="round" />
+              </svg>
             </div>
-            {/* Pearl 2 */}
+            {/* Pearl 2: Cheerful sparkle face */}
             <div className={styles.pearl} style={{ left: 40, bottom: 12 }}>
-              <span className={styles.pearlFace}>◕‿◕</span>
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="15.5" cy="5.5" r="1.2" fill="rgba(255, 255, 255, 0.65)" />
+                <circle cx="7" cy="9" r="1.6" fill="#B3EDE8" />
+                <circle cx="6.5" cy="8.4" r="0.6" fill="#FFFFFF" />
+                <circle cx="15" cy="9" r="1.6" fill="#B3EDE8" />
+                <circle cx="14.5" cy="8.4" r="0.6" fill="#FFFFFF" />
+                <ellipse cx="5.5" cy="12.2" rx="1.3" ry="0.8" fill="#FFA5A5" opacity="0.9" />
+                <ellipse cx="16.5" cy="12.2" rx="1.3" ry="0.8" fill="#FFA5A5" opacity="0.9" />
+                <path d="M 9.2 12 Q 11 14.8 12.8 12 Z" fill="#FFA5A5" stroke="#B3EDE8" strokeWidth="0.8" />
+              </svg>
             </div>
-            {/* Pearl 3 */}
+            {/* Pearl 3: Winking playful face */}
             <div className={styles.pearl} style={{ right: 14, bottom: 8 }}>
-              <span className={styles.pearlFace}>^‿^</span>
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="15.5" cy="5.5" r="1.2" fill="rgba(255, 255, 255, 0.65)" />
+                <circle cx="7" cy="9.5" r="1.4" fill="#B3EDE8" />
+                <circle cx="6.5" cy="9" r="0.5" fill="#FFFFFF" />
+                <path d="M 13.5 10 Q 15 8.2 16.5 10" stroke="#B3EDE8" strokeWidth="1.2" strokeLinecap="round" />
+                <ellipse cx="5.5" cy="12.5" rx="1.3" ry="0.8" fill="#FFA5A5" opacity="0.9" />
+                <ellipse cx="16.5" cy="12.5" rx="1.3" ry="0.8" fill="#FFA5A5" opacity="0.9" />
+                <path d="M 9.5 12 Q 11 14 12.5 12" stroke="#B3EDE8" strokeWidth="1.1" strokeLinecap="round" />
+              </svg>
             </div>
             {/* Floating Bubble 4 */}
             <div className={styles.floatingBubble} style={{ left: 24, bottom: 38 }}>
@@ -168,10 +193,65 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             </div>
           </div>
 
-          {/* Cup Front Smiling Face */}
+          {/* Cup Front Kawaii Smiling Face */}
           <div className={styles.cupFaceContainer}>
-            <span className={styles.cupEyes}>{isTiltingToDrink ? '˘   ³' : '◕   ◕'}</span>
-            <span className={styles.cupMouth}>‿</span>
+            <svg
+              width="54"
+              height="32"
+              viewBox="0 0 54 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className={styles.cupFaceSvg}
+            >
+              {/* Rosy Blushing Cheeks */}
+              <ellipse
+                cx="10"
+                cy="20"
+                rx="4.5"
+                ry="2.6"
+                fill={isTiltingToDrink ? '#FF787D' : '#FFA4A4'}
+                opacity={isTiltingToDrink ? '0.95' : '0.85'}
+              />
+              <ellipse
+                cx="44"
+                cy="20"
+                rx="4.5"
+                ry="2.6"
+                fill={isTiltingToDrink ? '#FF787D' : '#FFA4A4'}
+                opacity={isTiltingToDrink ? '0.95' : '0.85'}
+              />
+
+              {isTiltingToDrink ? (
+                <>
+                  {/* Happy Curved Sips Eyes */}
+                  <path d="M 10 13 Q 15 7 20 13" stroke="#164E48" strokeWidth="2.4" strokeLinecap="round" />
+                  <path d="M 34 13 Q 39 7 44 13" stroke="#164E48" strokeWidth="2.4" strokeLinecap="round" />
+                  {/* Cute Sipping Mouth */}
+                  <ellipse cx="27" cy="18" rx="3.4" ry="4" fill="#164E48" />
+                  <ellipse cx="27" cy="18.5" rx="1.8" ry="2.2" fill="#FF8585" />
+                </>
+              ) : (
+                <>
+                  {/* Shiny Big Kawaii Eyes with Sparkle Glints */}
+                  <circle cx="15" cy="13" r="4.8" fill="#164E48" />
+                  <circle cx="13.5" cy="11.2" r="1.8" fill="#FFFFFF" />
+                  <circle cx="16.6" cy="14.8" r="0.9" fill="#FFFFFF" />
+
+                  <circle cx="39" cy="13" r="4.8" fill="#164E48" />
+                  <circle cx="37.5" cy="11.2" r="1.8" fill="#FFFFFF" />
+                  <circle cx="40.6" cy="14.8" r="0.9" fill="#FFFFFF" />
+
+                  {/* Sweet Happy Open Mouth */}
+                  <path
+                    d="M 23 17 Q 27 23 31 17 Z"
+                    fill="#FF8585"
+                    stroke="#164E48"
+                    strokeWidth="1.8"
+                    strokeLinejoin="round"
+                  />
+                </>
+              )}
+            </svg>
           </div>
         </div>
 
@@ -215,7 +295,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             title={strings.proceedBtn}
           />
         ) : (
-          <span className={styles.organicSensorHint} style={{ color: skyTheme.hintColor }}>
+          <span className={styles.organicSensorHint} style={{ color: skyTheme.hintText }}>
             {isTiltingToDrink
               ? strings.sippingHold
               : strings.tiltPhoneHint}

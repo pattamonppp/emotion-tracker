@@ -34,7 +34,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.somaticAbsorption;
-  const theme = useSkyTheme();
+  const theme = useSkyTheme(propSkyPeriod);
   const skyPeriod = propSkyPeriod || theme.period;
 
   const [circleSize, setCircleSize] = useState(getCircleSize);
@@ -333,13 +333,14 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             [styles.rubbing]: isRubbing,
           })}
           style={{
-            width: circleSize + 96,
-            height: circleSize + 96,
+            width: circleSize + 140,
+            height: circleSize + 140,
             background: `radial-gradient(
-              circle,
+              circle closest-side,
               ${theme.glowCore} 0%,
-              ${theme.glowMid} 42%,
-              ${theme.glowOuter} 72%,
+              ${theme.glowMid} 38%,
+              ${theme.glowOuter} 68%,
+              transparent 88%,
               transparent 100%
             )`,
           }}
@@ -468,7 +469,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               className={styles.progressBarFill}
               style={{
                 width: `${rubProgress}%`,
-                backgroundColor: theme.progressFillBar,
+                background: theme.progressFillBar,
               }}
             />
           </div>
