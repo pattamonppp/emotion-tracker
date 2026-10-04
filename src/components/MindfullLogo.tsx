@@ -1,25 +1,29 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
-import { colors } from '../design-system/tokens';
+import Svg, { Path, Circle } from 'react-native-svg';
+import { colors, typography } from '../design-system/tokens';
 
 interface MindfullLogoProps {
   variant?: 'color' | 'white' | 'dark';
   size?: 'sm' | 'md' | 'lg';
+  fontSize?: number;
 }
 
 export const MindfullLogo: React.FC<MindfullLogoProps> = ({
   variant = 'color',
-  size = 'md',
+  size = 'sm',
+  fontSize: customFontSize,
 }) => {
   const textColor = variant === 'white' ? colors.white : colors.primary;
   const heartColor = variant === 'white' ? colors.white : colors.accentBlue;
   const smileColor = variant === 'white' ? colors.white : colors.accentBlue;
 
-  const fontSize = size === 'sm' ? 16 : size === 'lg' ? 24 : 19;
-  const heartSize = size === 'sm' ? 8 : size === 'lg' ? 12 : 10;
-  const smileWidth = size === 'sm' ? 14 : size === 'lg' ? 20 : 16;
-  const smileHeight = size === 'sm' ? 6 : size === 'lg' ? 9 : 8;
+  const fontSize = customFontSize ?? (size === 'sm' ? 24 : size === 'lg' ? 34 : 28);
+  const ratio = fontSize / 24;
+  const heartSize = 11 * ratio;
+  const heartTop = -1.2 * ratio;
+  const smileyWidth = 22 * ratio;
+  const smileyHeight = 17.5 * ratio;
 
   return (
     <View style={styles.container}>
@@ -31,32 +35,32 @@ export const MindfullLogo: React.FC<MindfullLogoProps> = ({
           width={heartSize}
           height={heartSize}
           viewBox="0 0 16 16"
-          style={styles.heart}
+          style={[styles.heart, { top: heartTop }]}
         >
           <Path
-            d="M8 14s-6-3.8-6-7.5A3.5 3.5 0 0 1 8 3.8a3.5 3.5 0 0 1 6 2.7C14 10.2 8 14 8 14z"
+            d="M 8 13.5 C 7.5 13 2 9.2 2 5.5 C 2 3.5 3.5 2 5.5 2 C 6.8 2 7.5 2.7 8 3.4 C 8.5 2.7 9.2 2 10.5 2 C 12.5 2 14 3.5 14 5.5 C 14 9.2 8.5 13 8 13.5 Z"
             fill={heartColor}
           />
         </Svg>
-        <Text style={[styles.letter, { color: textColor, fontSize }]}>i</Text>
+        <Text style={[styles.letter, { color: textColor, fontSize }]}>ı</Text>
       </View>
 
       <Text style={[styles.letter, { color: textColor, fontSize }]}>ndf</Text>
 
-      {/* 'u' with smiling curve */}
-      <View style={styles.uWrapper}>
-        <Text style={[styles.letter, { color: textColor, fontSize }]}>u</Text>
+      {/* Smiley face replacing 'u' */}
+      <View style={[styles.smileyWrapper, { width: smileyWidth, height: smileyHeight }]}>
         <Svg
-          width={smileWidth}
-          height={smileHeight}
-          viewBox="0 0 24 12"
-          style={styles.smile}
+          width={smileyWidth}
+          height={smileyHeight}
+          viewBox="0 0 20 16"
         >
+          <Circle cx="5" cy="4.5" r="2" fill={smileColor} />
+          <Circle cx="15" cy="4.5" r="2" fill={smileColor} />
           <Path
-            d="M 3 2 Q 12 11 21 2"
+            d="M 5 9.5 Q 10 15 15 9.5"
             fill="none"
             stroke={smileColor}
-            strokeWidth={3}
+            strokeWidth={2.4}
             strokeLinecap="round"
           />
         </Svg>
@@ -73,8 +77,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   letter: {
-    fontWeight: '900',
-    letterSpacing: -0.5,
+    fontFamily: typography.fontPromptBold,
+    fontWeight: '800',
+    letterSpacing: -0.4,
   },
   iWrapper: {
     alignItems: 'center',
@@ -82,14 +87,10 @@ const styles = StyleSheet.create({
   },
   heart: {
     position: 'absolute',
-    top: -4,
   },
-  uWrapper: {
+  smileyWrapper: {
     alignItems: 'center',
-    position: 'relative',
-  },
-  smile: {
-    position: 'absolute',
-    bottom: -3,
+    justifyContent: 'center',
+    marginHorizontal: 1,
   },
 });

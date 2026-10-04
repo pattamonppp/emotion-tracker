@@ -4,23 +4,57 @@
   display: inline-flex;
   align-items: center;
   user-select: none;
-  font-weight: 900;
-  letter-spacing: -0.5px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
   font-family: $font-display, $font-sans;
+  line-height: 1;
 
   &.sizeSm {
-    height: 24px;
-    font-size: 16px;
+    height: 32px;
+    font-size: 24px;
+
+    .heartDot {
+      width: 11px;
+      height: 11px;
+      top: -4px;
+    }
+
+    .smileyIcon {
+      width: 22px;
+      height: 17.5px;
+    }
   }
 
   &.sizeMd {
-    height: 28px;
-    font-size: 19px;
+    height: 36px;
+    font-size: 28px;
+
+    .heartDot {
+      width: 13px;
+      height: 13px;
+      top: -1.5px;
+    }
+
+    .smileyIcon {
+      width: 25.5px;
+      height: 20px;
+    }
   }
 
   &.sizeLg {
-    height: 40px;
-    font-size: 24px;
+    height: 44px;
+    font-size: 34px;
+
+    .heartDot {
+      width: 15.5px;
+      height: 15.5px;
+      top: -2px;
+    }
+
+    .smileyIcon {
+      width: 31px;
+      height: 24.5px;
+    }
   }
 }
 
@@ -32,22 +66,17 @@
 }
 
 .heartDot {
-  width: 8px;
-  height: 8px;
   position: absolute;
-  top: -5px;
 }
 
-.letterUWrapper {
-  position: relative;
+.smileyWrapper {
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  margin: 0 1px;
+  line-height: 0;
 }
 
-.smileCurve {
-  width: 14px;
-  height: 6px;
-  position: absolute;
-  bottom: -3px;
+.smileyIcon {
+  display: block;
 }
