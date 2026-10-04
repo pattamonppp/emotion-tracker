@@ -158,7 +158,10 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
 
           {/* Add Message Cloud Body with sweet dashed border */}
           <LinearGradient
-            colors={['#FFFFFF', '#FDF2F8', '#FCE7F3']}
+            colors={['#FFFFFF', '#FDEFEE', '#FAD6D5']}
+            locations={[0, 0.55, 1]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={[styles.cloudBody, styles.addCloudBody]}
           >
             <View style={[styles.iconBubble, { backgroundColor: '#EC489920' }]}>
@@ -499,8 +502,8 @@ const styles = StyleSheet.create({
   },
   addCloudBody: {
     borderStyle: 'dashed',
-    borderColor: '#F4A09D',
-    borderBottomColor: '#EF7773',
-    backgroundColor: '#FDEFEE',
+    borderWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#EF7773',
   },
 });
