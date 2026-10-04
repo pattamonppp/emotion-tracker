@@ -572,6 +572,7 @@ const styles = StyleSheet.create({
     borderColor: colors.borderSubtle,
     alignItems: 'center',
     justifyContent: 'center',
+    minWidth: 58.5,
   },
   optionBtnActive: {
     backgroundColor: colors.primary,

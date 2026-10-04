@@ -582,17 +582,29 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   padding: 4.5px 6px;
   border-radius: 9999px;
-  border: 0;
+  border: 1px solid transparent;
   background-color: #F8FAFC;
   gap: 3px;
   cursor: pointer;
   font-family: inherit;
+  min-width: 58.5px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #DBF0EE;
+  }
 }
 
 .optionBtnActive {
   background-color: #00C4B3;
+
+  &:hover {
+    border-color: #009688;
+    background-color: #009688;
+  }
 }
 
 .optionText {
