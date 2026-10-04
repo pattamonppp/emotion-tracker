@@ -76,8 +76,7 @@
   align-items: center;
   justify-content: center;
   height: 32px;
-  min-width: 55px;
-  padding: 0 10px;
+  width: 58px;
   border-radius: $radius-pill;
   background-color: #F0FDFB;
   border: 1.5px solid #BFEFEB;
@@ -91,11 +90,13 @@
 }
 
 .langText {
-  font-family: $font-en;
-  font-weight: 500;
+  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
+  font-weight: 700;
   font-size: 11px;
   color: $color-brand-contrast;
   line-height: 1;
+  width: 18px;
+  text-align: center;
 }
 
 .soundBtn {

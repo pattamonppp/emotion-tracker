@@ -451,10 +451,9 @@ const styles = StyleSheet.create({
   langBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 32,
-    minWidth: 55,
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    height: 32,
+    width: 58,
     borderRadius: radii.full,
     backgroundColor: '#F0FDFB',
     borderWidth: 1.5,
@@ -465,6 +464,8 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontGothamBold,
     fontSize: 11,
     color: colors.primaryDark,
+    width: 18,
+    textAlign: 'center',
   },
   soundBtn: {
     width: 32,
