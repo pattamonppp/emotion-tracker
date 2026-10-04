@@ -12,6 +12,7 @@ import {
   INTERVENTION,
   SKY,
   ACTIVITY_TYPE,
+  GOAL,
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { MobileFrame } from './components/MobileFrame';
@@ -134,9 +135,9 @@ export default function App() {
   };
 
   const locationText =
-    profile.goal === 'exam'
+    profile.goal === GOAL.EXAM
       ? (profile.language === LANG.TH ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
-      : profile.goal === 'stage'
+      : profile.goal === GOAL.STAGE
         ? (profile.language === LANG.TH ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
         : (profile.language === LANG.TH ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation');
 

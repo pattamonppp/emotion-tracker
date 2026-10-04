@@ -1,4 +1,4 @@
-import { EmotionTag, GoalType, MBTIType, InterventionOption, InterventionOptionMeta, INTERVENTION, EMOTION_TAG_ID } from '../types';
+import { EmotionTag, GoalType, MBTIType, InterventionOption, InterventionOptionMeta, INTERVENTION, EMOTION_TAG_ID, GOAL } from '../types';
 
 export const EMOTION_TAGS: EmotionTag[] = [
   {
@@ -200,10 +200,10 @@ export const matchOptionFromKeywords = (
 };
 
 export const CONTEXT_LOCATIONS = [
-  { id: 'exam', labelTh: 'สนามสอบ / ห้องเรียน', labelEn: 'Exam Hall / School', icon: 'GraduationCap' },
-  { id: 'office', labelTh: 'ออฟฟิศ / หน้าคอมพิวเตอร์', labelEn: 'Office / Workstation', icon: 'Briefcase' },
-  { id: 'stage', labelTh: 'หลังเวที / ก่อนพรีเซนต์', labelEn: 'Backstage / Presentation', icon: 'Mic' },
-  { id: 'transit', labelTh: 'ระหว่างเดินทาง / รถไฟฟ้า', labelEn: 'Transit / Commute', icon: 'Navigation' },
+  { id: GOAL.EXAM, labelTh: 'สนามสอบ / ห้องเรียน', labelEn: 'Exam Hall / School', icon: 'GraduationCap' },
+  { id: GOAL.WORK, labelTh: 'ออฟฟิศ / หน้าคอมพิวเตอร์', labelEn: 'Office / Workstation', icon: 'Briefcase' },
+  { id: GOAL.STAGE, labelTh: 'หลังเวที / ก่อนพรีเซนต์', labelEn: 'Backstage / Presentation', icon: 'Mic' },
+  { id: GOAL.BURNOUT, labelTh: 'ระหว่างเดินทาง / รถไฟฟ้า', labelEn: 'Transit / Commute', icon: 'Navigation' },
 ];
 
 export interface ReframingInsight {

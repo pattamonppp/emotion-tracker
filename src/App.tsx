@@ -22,7 +22,8 @@ import {
   PHASE,
   INTERVENTION,
   SKY,
-  ACTIVITY_TYPE
+  ACTIVITY_TYPE,
+  GOAL
 } from './types';
 import { EMOTION_TAGS } from './data/matrixData';
 import { storageService } from './services/storageService';
@@ -283,9 +284,9 @@ export default function App() {
               {currentPhase === PHASE.PHASE1_JAR && (
                 <Phase1EmotionJar
                   currentLocation={
-                    profile.goal === 'exam'
+                    profile.goal === GOAL.EXAM
                       ? (profile.language === LANG.TH ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
-                      : profile.goal === 'stage'
+                      : profile.goal === GOAL.STAGE
                         ? (profile.language === LANG.TH ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
                         : (profile.language === LANG.TH ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation')
                   }
