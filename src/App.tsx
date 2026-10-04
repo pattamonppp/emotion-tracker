@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -70,6 +71,11 @@ export default function App() {
     Prompt_600SemiBold,
     Prompt_700Bold,
     Prompt_800ExtraBold,
+    'GothamRounded-Bold': require('../assets/fonts/gothamrnd_bold.otf'),
+    'GothamRounded-Medium': require('../assets/fonts/gothamrnd_medium.otf'),
+    'GothamRounded-Book': require('../assets/fonts/gothamrnd_book.otf'),
+    'GothamRounded-Light': require('../assets/fonts/gothamrnd_light.otf'),
+    'Gotham Rounded': require('../assets/fonts/gothamrnd_bold.otf'),
   });
   const [currentPhase, setCurrentPhase] = useState<ResetPhase>(
     DEV_MODE ? DEV_START.phase : PHASE.PHASE1_JAR
@@ -446,6 +452,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 32,
+    minWidth: 55,
+    justifyContent: 'center',
     paddingHorizontal: 10,
     borderRadius: radii.full,
     backgroundColor: '#F0FDFB',
@@ -454,7 +462,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   langText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 11,
     color: colors.primaryDark,
   },
@@ -489,7 +497,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   avatarText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 13,
     color: '#FFFFFF',
   },

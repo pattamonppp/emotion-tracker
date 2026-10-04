@@ -74,7 +74,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   height: 32px;
+  min-width: 55px;
   padding: 0 10px;
   border-radius: $radius-pill;
   background-color: #F0FDFB;
@@ -89,8 +91,8 @@
 }
 
 .langText {
-  font-family: $font-sans;
-  font-weight: 700;
+  font-family: $font-en;
+  font-weight: 500;
   font-size: 11px;
   color: $color-brand-contrast;
   line-height: 1;
@@ -147,7 +149,7 @@
 }
 
 .avatarText {
-  font-family: $font-sans;
+  font-family: 'Prompt', $font-sans;
   font-weight: 700;
   font-size: 13px;
   color: $color-white;

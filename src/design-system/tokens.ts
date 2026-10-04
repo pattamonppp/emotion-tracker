@@ -90,6 +90,11 @@ export const typography = {
   fontPromptExtraBold: 'Prompt_800ExtraBold',
   fontDefault: 'Prompt_400Regular',
 
+  // Gotham Rounded for English CI
+  fontGotham: 'GothamRounded-Medium',
+  fontGothamBold: 'GothamRounded-Bold',
+  fontEn: 'GothamRounded-Bold',
+
   light: {
     fontFamily: 'Prompt_300Light',
     ...(Platform.OS !== 'android' ? { fontWeight: '300' as const } : {}),
