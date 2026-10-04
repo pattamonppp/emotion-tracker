@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { safeStorage as AsyncStorage } from '../services/safeStorage';
 import { Language, LocaleTranslations, getTranslation } from '../locales';
 import { LANG } from '../types';
 

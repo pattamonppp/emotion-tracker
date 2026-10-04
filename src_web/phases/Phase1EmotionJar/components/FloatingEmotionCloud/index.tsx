@@ -232,7 +232,7 @@ export const FloatingEmotionCloud: React.FC<
     const handlePointerDown = (
       event: React.PointerEvent<HTMLDivElement>,
     ) => {
-      if (isFlying || isJarFull) return;
+      if (isFlying || (isJarFull && !isSelected)) return;
 
       pointerId.current = event.pointerId;
 

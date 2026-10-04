@@ -69,7 +69,7 @@
 .moocaSpeechBubble {
   position: relative;
 
-  max-width: 225px;
+  max-width: 250px;
 
   margin-bottom: 4px;
   padding: 4.5px 11px;
@@ -87,7 +87,7 @@
     transform 380ms ease;
 }
 
-เซนเซอร์วัดชีพจรชีววิทยา .speechVisible {
+.speechVisible {
   opacity: 1;
   transform: scale(1);
 }
@@ -116,9 +116,10 @@
 
 .moocaSpeechText {
   font-weight: 600;
-  font-family: var(--font-prompt-semibold, sans-serif);
+  font-family: 'Prompt', sans-serif;
   font-size: 9.5px;
   line-height: 13px;
+  white-space: nowrap;
 
   color: #009688;
 
@@ -473,7 +474,7 @@
 
 .emptyBadgeTitle {
   font-weight: 700;
-  font-family: var(--font-prompt-bold, sans-serif);
+  font-family: 'Prompt', sans-serif;
   font-size: 11.5px;
 
   color: #009688;
@@ -485,7 +486,7 @@
   font-weight: 500;
   margin-top: 1px;
 
-  font-family: var(--font-prompt-medium, sans-serif);
+  font-family: 'Prompt', sans-serif;
   font-size: 9px;
 
   color: #566d80;
@@ -633,7 +634,7 @@
   overflow: hidden;
 
   font-weight: 600;
-  font-family: var(--font-prompt-bold, sans-serif);
+  font-family: 'Prompt', sans-serif;
   font-size: 10.5px;
 
   color: var(--color-primary-dark, #009688);
@@ -727,7 +728,7 @@
 
 .clearBtnText {
   font-weight: 600;
-  font-family: var(--font-prompt-semibold, sans-serif);
+  font-family: 'Prompt', sans-serif;
   font-size: 9.5px;
 
   color: var(--color-primary-dark, #009688);

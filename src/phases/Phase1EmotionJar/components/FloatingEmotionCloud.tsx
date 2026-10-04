@@ -96,6 +96,8 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
   const isDragging = useRef(false);
+  const isDisabledRef = useRef(false);
+  isDisabledRef.current = isJarFull && !isSelected;
 
   // Configure unique floating physics per cloud index
   useEffect(() => {
@@ -211,7 +213,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   // PanResponder for drag-and-drop into jar
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponder: () => !isDisabledRef.current,
       onMoveShouldSetPanResponder: (_evt, gestureState) => {
         return Math.abs(gestureState.dx) > 3 || Math.abs(gestureState.dy) > 3;
       },
@@ -283,6 +285,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
 
   return (
     <Animated.View
+      pointerEvents={isJarFull && !isSelected ? 'none' : 'auto'}
       style={[
         styles.cloudWrapper,
         {

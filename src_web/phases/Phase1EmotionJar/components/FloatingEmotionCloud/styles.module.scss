@@ -80,6 +80,8 @@
 
 .cloudWrapper.isJarFull:not(.isSelected) {
   opacity: 0.62;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 .cloudScallopsTop {
@@ -192,7 +194,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  font-family: var(--font-prompt-semibold, sans-serif);
+  font-family: 'Prompt', sans-serif;
   font-size: 9.8px;
   font-weight: 600;
   line-height: 1.2;
