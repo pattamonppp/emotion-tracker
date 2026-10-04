@@ -446,9 +446,12 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   finishedTitle: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 13.5,
-    color: colors.primaryDark,
+    fontFamily: typography.fontPromptMedium,
+    fontSize: 11,
+    color: '#637B91',
+    textAlign: 'center',
+    lineHeight: 18,
+    marginTop: 10,
   },
   bottomSection: {
     width: '100%',
@@ -471,9 +474,10 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingHorizontal: 12,
     paddingVertical: 3,
+    marginTop: 6,
   },
   pulseIndicatorText: {
-    fontFamily: typography.fontPromptMedium,
+    fontFamily: typography.fontPromptRegular,
     fontSize: 11,
     color: colors.textMuted,
   },

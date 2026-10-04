@@ -128,7 +128,18 @@
 
   text-align: center;
   font-size: 12px;
-  max-width: 75%;
+  max-width: 85%;
+}
+
+.finishedTitle {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #637B91;
+  text-align: center;
+  white-space: pre-line;
+  margin-top: 6px;
 }
 
 .startOrbTitle {
@@ -204,12 +215,13 @@
   align-items: center;
   gap: 5px;
   padding: 3px 12px;
+  margin-top: 6px;
 }
 
 .pulseIndicatorText {
   font-family: inherit;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 400;
   color: #79ADA9;
 
   &.textNight {
