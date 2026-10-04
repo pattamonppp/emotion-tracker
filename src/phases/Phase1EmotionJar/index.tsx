@@ -13,7 +13,7 @@ import { FloatingEmotionCloud } from './components/FloatingEmotionCloud';
 import { GlassEmotionJar } from './components/GlassEmotionJar';
 import { CustomEmotionModal } from './modals/CustomEmotionModal';
 import { MapPin, Activity, ArrowRight } from 'lucide-react-native';
-import { colors, radii, shadows } from '../../design-system/tokens';
+import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 import { PHASE1_CONFIG } from '../../constants';
 
@@ -359,6 +359,7 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   badgeText: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 10,
     fontWeight: '700',
     color: colors.primaryDark,
@@ -376,6 +377,7 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   pulseText: {
+    fontFamily: typography.fontPromptExtraBold,
     fontSize: 10,
     fontWeight: '800',
     color: colors.secondary,

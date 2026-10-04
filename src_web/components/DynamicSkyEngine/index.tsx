@@ -4,6 +4,7 @@ import { audioService, HAPTIC_STYLE } from '../../services/audioService';
 import { Sun, Moon, Sunrise, Sunset, Clock, ChevronDown } from 'lucide-react';
 import { getTranslation } from '../../locales';
 import { SKY, SKY_PERIOD, type SkyTimePeriod, type SkyMode, type Language, LANG, AUTO_SKY } from '../../types';
+import { colors, OOCA_TOKENS } from '@/design-system/tokens';
 import styles from './styles.module.scss';
 
 export { SKY, SKY_PERIOD };
@@ -228,17 +229,17 @@ export const SkyPeriodSwitcher: React.FC = () => {
   const getPeriodIcon = (period: SkyTimePeriod, size = 13, isActive = false) => {
     switch (period) {
       case SKY.DAWN:
-        return <Sunrise size={size} color={isActive ? '#FFFFFF' : '#D97706'} strokeWidth={2.4} />;
+        return <Sunrise size={size} color={isActive ? colors.white : OOCA_TOKENS.color.palette.marigo[800]} strokeWidth={2.4} />;
       case SKY.DAY:
-        return <Sun size={size} color={isActive ? '#FFFFFF' : '#0284C7'} strokeWidth={2.4} />;
+        return <Sun size={size} color={isActive ? colors.white : colors.accentBlue} strokeWidth={2.4} />;
       case SKY.SUNSET:
-        return <Sunset size={size} color={isActive ? '#FFFFFF' : '#DB2777'} strokeWidth={2.4} />;
+        return <Sunset size={size} color={isActive ? colors.white : colors.accentPink} strokeWidth={2.4} />;
       case SKY.NIGHT:
         return (
           <Moon
             size={size}
-            color={isActive ? '#FFFFFF' : '#FDE047'}
-            fill={isActive ? '#FFFFFF' : '#FDE047'}
+            color={isActive ? colors.white : OOCA_TOKENS.color.palette.marigo[200]}
+            fill={isActive ? colors.white : OOCA_TOKENS.color.palette.marigo[200]}
             strokeWidth={2.4}
           />
         );
@@ -303,7 +304,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
 
         {skyMode === AUTO_SKY ? (
           <span className={styles.autoTag}>
-            <Clock size={8.5} color="#00C4B3" strokeWidth={2.5} />
+            <Clock size={8.5} color={colors.primary} strokeWidth={2.5} />
             <span className={styles.autoTagText}>Auto</span>
           </span>
         ) : (
@@ -322,7 +323,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           }}
           className={styles.expandArrowBtn}
         >
-          <ChevronDown size={11} color={isNightPill ? '#CBD5E1' : '#64748B'} strokeWidth={2.4} />
+          <ChevronDown size={11} color={isNightPill ? colors.borderSubtle : colors.textMuted} strokeWidth={2.4} />
         </button>
       </div>
 
@@ -341,7 +342,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
                 className={classNames(styles.optionBtn, { [styles.optionBtnActive]: active })}
               >
                 {mode === AUTO_SKY ? (
-                  <Clock size={12} color={active ? '#FFFFFF' : '#009688'} strokeWidth={2.2} />
+                  <Clock size={12} color={active ? colors.white : colors.primaryDark} strokeWidth={2.2} />
                 ) : (
                   getPeriodIcon(mode, 12, active)
                 )}

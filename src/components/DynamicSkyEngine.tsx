@@ -19,7 +19,7 @@ import Svg, {
 } from 'react-native-svg';
 import { audioService, HAPTIC_STYLE } from '../services/audioService';
 import { Sun, Moon, Sunrise, Sunset, Clock, ChevronDown } from 'lucide-react-native';
-import { colors, radii, shadows, typography } from '../design-system/tokens';
+import { colors, OOCA_TOKENS, radii, shadows, typography } from '../design-system/tokens';
 import { getTranslation } from '../locales';
 import { SKY, SKY_PERIOD, type SkyTimePeriod, type SkyMode, type Language, LANG, AUTO_SKY } from '../types';
 
@@ -965,13 +965,20 @@ export const SkyPeriodSwitcher: React.FC = () => {
   const getPeriodIcon = (period: SkyTimePeriod, size = 13, isActive = false) => {
     switch (period) {
       case SKY.DAWN:
-        return <Sunrise size={size} color={isActive ? '#FFFFFF' : '#D97706'} strokeWidth={2.4} />;
+        return <Sunrise size={size} color={isActive ? colors.white : OOCA_TOKENS.color.palette.marigo[800]} strokeWidth={2.4} />;
       case SKY.DAY:
-        return <Sun size={size} color={isActive ? '#FFFFFF' : '#0284C7'} strokeWidth={2.4} />;
+        return <Sun size={size} color={isActive ? colors.white : colors.accentBlue} strokeWidth={2.4} />;
       case SKY.SUNSET:
-        return <Sunset size={size} color={isActive ? '#FFFFFF' : '#DB2777'} strokeWidth={2.4} />;
+        return <Sunset size={size} color={isActive ? colors.white : colors.accentPink} strokeWidth={2.4} />;
       case SKY.NIGHT:
-        return <Moon size={size} color={isActive ? '#FFFFFF' : '#FDE047'} fill={isActive ? '#FFFFFF' : '#FDE047'} strokeWidth={2.4} />;
+        return (
+          <Moon
+            size={size}
+            color={isActive ? colors.white : OOCA_TOKENS.color.palette.marigo[200]}
+            fill={isActive ? colors.white : OOCA_TOKENS.color.palette.marigo[200]}
+            strokeWidth={2.4}
+          />
+        );
     }
   };
 
@@ -1049,7 +1056,7 @@ export const SkyPeriodSwitcher: React.FC = () => {
           >
             <ChevronDown
               size={11}
-              color={activePeriod === SKY.NIGHT ? '#CBD5E1' : '#64748B'}
+              color={activePeriod === SKY.NIGHT ? colors.borderSubtle : colors.textMuted}
               strokeWidth={2.4}
             />
           </TouchableOpacity>
@@ -1317,15 +1324,16 @@ const styles = StyleSheet.create({
     zIndex: 999,
   },
   pillBtn: {
+    width: 130,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: 'rgba(255, 255, 255, 0.96)',
-    paddingHorizontal: 9,
+    paddingHorizontal: 7,
     paddingVertical: 4,
     borderRadius: radii.full,
     borderWidth: 1.3,
     borderColor: 'rgba(0, 196, 179, 0.3)',
-    gap: 4,
     ...shadows.card,
   },
   pillBtnNight: {
@@ -1333,15 +1341,19 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(253, 224, 71, 0.4)',
   },
   pillText: {
+    width: 34,
+    textAlign: 'center',
     fontFamily: typography.fontPromptSemiBold,
     fontSize: 9.5,
     color: colors.primaryDark,
   },
   autoTag: {
+    width: 37.5,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#E6F9F7',
-    paddingHorizontal: 4.5,
+    paddingHorizontal: 2,
     paddingVertical: 1,
     borderRadius: 5,
     gap: 2,
@@ -1352,8 +1364,11 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
   },
   customTag: {
+    width: 37.5,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#FEF3C7',
-    paddingHorizontal: 4.5,
+    paddingHorizontal: 2,
     paddingVertical: 1,
     borderRadius: 5,
   },

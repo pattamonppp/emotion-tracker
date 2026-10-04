@@ -474,11 +474,13 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  width: 130px;
+  box-sizing: border-box;
   background-color: rgba(255, 255, 255, 0.96);
-  padding: 4px 9px;
+  padding: 4px 7px;
   border-radius: 9999px;
   border: 1.3px solid rgba(0, 196, 179, 0.3);
-  gap: 4px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   font-family: inherit;
@@ -495,6 +497,12 @@
 }
 
 .pillText {
+  width: 34px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
   font-size: 9.5px;
   font-weight: 600;
   color: #009688;
@@ -506,11 +514,15 @@
 }
 
 .autoTag {
+  width: 37.5px;
+  box-sizing: border-box;
+  flex-shrink: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   background-color: #E6F9F7;
-  padding: 1px 4.5px;
+  padding: 1px 2px;
   border-radius: 5px;
   gap: 2px;
 }
@@ -519,21 +531,26 @@
   font-size: 7.5px;
   font-weight: 700;
   color: #009688;
+  line-height: 1;
 }
 
 .customTag {
+  width: 37.5px;
+  box-sizing: border-box;
+  flex-shrink: 0;
   background-color: #FEF3C7;
-  padding: 1px 4.5px;
+  padding: 1px 2px;
   border-radius: 5px;
-  flex-direction: row;
-  flex-wrap: nowrap;
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .customTagText {
   font-size: 7.5px;
   font-weight: 700;
   color: #92400E;
+  line-height: 1;
 }
 
 .expandArrowBtn {

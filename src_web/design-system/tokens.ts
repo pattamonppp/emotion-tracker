@@ -502,3 +502,47 @@ export const getPeriodFromHour = (hour: number): SkyTimePeriod => {
 export const getSkyTheme = (period: SkyTimePeriod) => {
   return SKY_THEMES[period] || SKY_THEMES.day;
 };
+
+export const colors = {
+  primary: OOCA_TOKENS.color.brand.turquoise.primary, // #00C4B3
+  primaryDark: OOCA_TOKENS.color.brand.turquoise.text, // #009688
+  primaryLight: OOCA_TOKENS.color.brand.turquoise.pale, // #DBF0EE
+  primaryPale: OOCA_TOKENS.color.brand.turquoise.pale, // #DBF0EE
+  primaryLight2: OOCA_TOKENS.color.brand.turquoise.light, // #B3EDE8
+  primaryMuted: OOCA_TOKENS.color.brand.turquoise.light, // #B3EDE8
+  ringTrack: OOCA_TOKENS.color.brand.turquoise.ringTrack,
+
+  secondary: OOCA_TOKENS.color.system.warning[500], // #FF8F4B
+  secondaryLight: OOCA_TOKENS.color.system.warning[100], // #FFDDC9
+
+  accentPink: OOCA_TOKENS.color.system.error[500], // #EF7773
+  accentPinkLight: OOCA_TOKENS.color.system.error[100], // #FAD6D5
+
+  accentOrange: OOCA_TOKENS.color.accent.orange[500], // #F9A000
+  accentOrangeLight: OOCA_TOKENS.color.accent.orange[100], // #F8E4B3
+
+  accentBlue: OOCA_TOKENS.color.accent.blue[500], // #1F77DF
+  accentBlueLight: OOCA_TOKENS.color.accent.blue[50], // #E4EFFB
+
+  bgLight: OOCA_TOKENS.color.gradient.background, // #DBF0EE
+  cardBg: OOCA_TOKENS.color.gray.white,
+  white: OOCA_TOKENS.color.gray.white,
+  black: OOCA_TOKENS.color.gray.black,
+
+  textPrimary: OOCA_TOKENS.color.gray.darkText, // #26313c
+  textSecondary: OOCA_TOKENS.color.palette.coolGray[600], // #566d80
+  textMuted: OOCA_TOKENS.color.gray.muted, // #637b91
+  darkText: OOCA_TOKENS.color.gray.darkText,
+
+  borderSubtle: OOCA_TOKENS.color.gray.border, // #cdd8e1
+  borderTeal: OOCA_TOKENS.color.brand.turquoise.border,
+
+  success: OOCA_TOKENS.color.system.success[500], // #8AD866
+  guava: OOCA_TOKENS.color.system.success[500], // #8AD866
+  warning: OOCA_TOKENS.color.system.warning[500], // #FF8F4B
+
+  turquoiseGray1: OOCA_TOKENS.color.turquoiseGray[1], // #355956
+  turquoiseGray2: OOCA_TOKENS.color.turquoiseGray[2], // #3F6866
+  turquoiseGray3: OOCA_TOKENS.color.turquoiseGray[3], // #528984
+  turquoiseGray4: OOCA_TOKENS.color.turquoiseGray[4], // #79ADA9
+};

@@ -9,6 +9,7 @@ import { type UserProfile, type ResetPhase, type SkyTimePeriod, PHASE, LANG } fr
 import { MindfullLogo } from '../MindfullLogo';
 import { DynamicSkyEngine, SkyPeriodSwitcher } from '../DynamicSkyEngine';
 import { audioService, HAPTIC_STYLE } from '@/services/audioService';
+import { colors } from '@/design-system/tokens';
 import styles from './styles.module.scss';
 
 export interface MobileFrameProps {
@@ -86,7 +87,7 @@ export function MobileFrame({
                   className={styles.langBtn}
                   title="Toggle TH / EN"
                 >
-                  <Languages size={13} color="#00C4B3" />
+                  <Languages size={13} color={colors.primary} />
                   <span className={styles.langText}>{profile.language.toUpperCase()}</span>
                 </button>
 
@@ -103,9 +104,9 @@ export function MobileFrame({
                   title="Toggle Background Music"
                 >
                   {isMusicPlaying ? (
-                    <Volume2 size={13} color="#004D40" />
+                    <Volume2 size={13} color={colors.primaryDark} />
                   ) : (
-                    <VolumeX size={13} color="#64748B" />
+                    <VolumeX size={13} color={colors.textMuted} />
                   )}
                 </button>
 
