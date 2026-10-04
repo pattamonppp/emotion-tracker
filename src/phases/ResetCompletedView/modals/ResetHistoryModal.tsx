@@ -50,11 +50,12 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
   return (
     <Modal
       visible={isOpen}
+      transparent
       animationType="slide"
-      presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.backdrop}>
+        <SafeAreaView style={styles.modalCard}>
         <View style={styles.headerBar}>
           <View style={styles.headerTitleRow}>
             <Award size={18} color={colors.secondary} />
@@ -106,15 +107,28 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
             );
           })}
         </ScrollView>
-      </SafeAreaView>
+        </SafeAreaView>
+      </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
+  backdrop: {
     flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  modalCard: {
+    width: '100%',
+    maxWidth: 520,
+    maxHeight: '90%',
     backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    overflow: 'hidden',
+    ...shadows.soft,
   },
   headerBar: {
     flexDirection: 'row',
@@ -136,7 +150,11 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
   },
   closeBtn: {
-    padding: 6,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     paddingHorizontal: 20,

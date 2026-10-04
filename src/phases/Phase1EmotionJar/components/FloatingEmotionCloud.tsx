@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { EmotionTag, Language } from '../../../types';
+import { EMOTION_TAG_ID, EmotionTag, Language } from '../../../types';
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import {
   Check,
@@ -32,29 +32,29 @@ import { colors, radii, typography } from '../../../design-system/tokens';
 import { getTranslation, getTagLabel } from '../../../locales';
 
 export const getEmotionIcon = (tagId: string, color: string, size = 18) => {
-  if (tagId.startsWith('custom')) {
+  if (tagId.startsWith(EMOTION_TAG_ID.CUSTOM)) {
     return <Heart size={size} color={color} strokeWidth={2.4} />;
   }
   switch (tagId) {
-    case 'shaking':
+    case EMOTION_TAG_ID.SHAKING:
       return <Activity size={size} color={color} strokeWidth={2.4} />;
-    case 'forgetting':
+    case EMOTION_TAG_ID.FORGETTING:
       return <CircleDashed size={size} color={color} strokeWidth={2.4} />;
-    case 'pressure':
+    case EMOTION_TAG_ID.PRESSURE:
       return <Anchor size={size} color={color} strokeWidth={2.4} />;
-    case 'freeze':
+    case EMOTION_TAG_ID.FREEZE:
       return <Snowflake size={size} color={color} strokeWidth={2.4} />;
-    case 'burnout':
+    case EMOTION_TAG_ID.BURNOUT:
       return <BatteryLow size={size} color={color} strokeWidth={2.4} />;
-    case 'anxious':
+    case EMOTION_TAG_ID.ANXIOUS:
       return <Wind size={size} color={color} strokeWidth={2.4} />;
-    case 'overthinking':
+    case EMOTION_TAG_ID.OVERTHINKING:
       return <Brain size={size} color={color} strokeWidth={2.4} />;
-    case 'lonely':
+    case EMOTION_TAG_ID.LONELY:
       return <CloudRain size={size} color={color} strokeWidth={2.4} />;
-    case 'confused':
+    case EMOTION_TAG_ID.CONFUSED:
       return <Shuffle size={size} color={color} strokeWidth={2.4} />;
-    case 'custom':
+    case EMOTION_TAG_ID.CUSTOM:
       return <Heart size={size} color={color} strokeWidth={2.4} />;
     default:
       return <Sparkles size={size} color={color} strokeWidth={2.4} />;
@@ -86,7 +86,7 @@ export const FloatingEmotionCloud: React.FC<FloatingEmotionCloudProps> = ({
   onEditCustom,
   isAddButton = false,
 }) => {
-  const isCustom = tag.id.startsWith('custom') || Boolean(customText);
+  const isCustom = tag.id.startsWith(EMOTION_TAG_ID.CUSTOM) || Boolean(customText);
   const t = getTranslation(lang);
   const p1 = t.phases.phase1;
 

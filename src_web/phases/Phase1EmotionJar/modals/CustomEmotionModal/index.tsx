@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import classNames from 'classnames';
 import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
-import { MoocaMascot } from '../../../../components/MoocaMascot';
+import { MOOCA_MOOD, MoocaMascot } from '../../../../components/MoocaMascot';
 import { DESIGN_TOKENS } from '../../../../design-system/tokens';
 import { getTranslation } from '../../../../locales';
 import { MODAL_CONFIG } from '../../../../constants';
@@ -153,7 +153,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
           <div className={styles.mascot}>
             <MoocaMascot
               size="xs"
-              mood="comforting"
+              mood={MOOCA_MOOD.COMFORTING}
               interactive={false}
             />
           </div>

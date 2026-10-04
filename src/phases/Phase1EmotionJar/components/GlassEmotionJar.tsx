@@ -8,7 +8,7 @@ import {
   Easing,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { EmotionTagId, INTERVENTION, Language, SKY, SkyTimePeriod, SPEECH_ICON } from '../../../types';
+import { EMOTION_TAG_ID, EmotionTagId, INTERVENTION, Language, SKY, SkyTimePeriod, SPEECH_ICON } from '../../../types';
 import { EMOTION_TAGS, matchOptionFromKeywords } from '../../../data/matrixData';
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import {
@@ -22,7 +22,7 @@ import {
   RotateCcw,
 } from 'lucide-react-native';
 import { getEmotionIcon } from './FloatingEmotionCloud';
-import { MoocaMascot } from '../../../components/MoocaMascot';
+import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCircle } from 'react-native-svg';
 import { colors, radii, shadows, typography } from '../../../design-system/tokens';
 import { getTranslation, getTagLabel } from '../../../locales';
@@ -93,13 +93,13 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
       ];
     }
     if (selectedEmotions.length > 0) {
-      const hasCustom = selectedEmotions.some((id) => id.startsWith('custom'));
+      const hasCustom = selectedEmotions.some((id) => id.startsWith(EMOTION_TAG_ID.CUSTOM));
       const customMsg: SpeechMessage[] = hasCustom
-        ? [{ text: js.customHug, iconType: 'heart' }]
+        ? [{ text: js.customHug, iconType: SPEECH_ICON.HEART }]
         : [];
       return [
         ...customMsg,
-        { text: js.holdingCount.replace('{count}', String(selectedEmotions.length)), iconType: 'shield' },
+        { text: js.holdingCount.replace('{count}', String(selectedEmotions.length)), iconType: SPEECH_ICON.SHIELD },
         { text: js.braveToFace, iconType: SPEECH_ICON.SMILE },
         { text: js.safeInJar, iconType: SPEECH_ICON.SPARKLES },
       ];
@@ -314,7 +314,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   };
 
   const firstId = selectedEmotions[0];
-  const isFirstCustom = firstId?.startsWith('custom');
+  const isFirstCustom = firstId?.startsWith(EMOTION_TAG_ID.CUSTOM);
   const firstTag = selectedEmotions.length > 0
     ? (isFirstCustom ? { color: '#EC4899' } : EMOTION_TAGS.find((t) => t.id === firstId))
     : null;
@@ -398,7 +398,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           {/* Interactive Mooca Mascot */}
           <View style={styles.moocaMascotWrapper}>
             <MoocaMascot
-              mood={selectedEmotions.length > 0 ? 'comforting' : 'happy'}
+              mood={selectedEmotions.length > 0 ? MOOCA_MOOD.COMFORTING : MOOCA_MOOD.HAPPY}
               size="xs"
               interactive={true}
               onHug={onMoocaHug}
@@ -513,7 +513,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                   ]}
                 >
                   {selectedEmotions.map((id) => {
-                    const isCustom = id.startsWith('custom');
+                    const isCustom = id.startsWith(EMOTION_TAG_ID.CUSTOM);
                     const customItem = customMessages?.find((m) => m.id === id);
                     const tag = isCustom
                       ? {
@@ -573,7 +573,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                               { backgroundColor: tag.color + '1A' },
                             ]}
                           >
-                            {getEmotionIcon(isCustom ? 'custom' : tag.id, tag.color, 11)}
+                            {getEmotionIcon(isCustom ? EMOTION_TAG_ID.CUSTOM : tag.id, tag.color, 11)}
                           </View>
                           <Text
                             style={[

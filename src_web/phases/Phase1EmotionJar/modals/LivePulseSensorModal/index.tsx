@@ -116,7 +116,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             const calculatedBpm = Math.floor(76 + Math.random() * 8);
             setMeasuredBpm(calculatedBpm);
             onUpdateBpm(calculatedBpm);
-            audioService.playJarDrop();
+            audioService.playPulseComplete();
           }
           return next;
         });

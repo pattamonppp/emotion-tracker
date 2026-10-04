@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Sparkles, X, ArrowDown, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
-import { MoocaMascot } from '../../../components/MoocaMascot';
+import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import { colors, shadows, typography } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 import { MODAL_CONFIG } from '../../../constants';
@@ -126,7 +126,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
           {/* Mooca Mascot Speaking */}
           <View style={styles.mascotSpeechRow}>
             <View style={{ width: 54, height: 54, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <MoocaMascot size="xs" mood="comforting" interactive={false} />
+              <MoocaMascot size="xs" mood={MOOCA_MOOD.COMFORTING} interactive={false} />
             </View>
             <View style={styles.mascotBubble}>
               <Text style={styles.mascotBubbleText}>
@@ -288,7 +288,11 @@ const styles = StyleSheet.create({
     ...(Platform.OS !== 'android' ? { fontWeight: '500' } : {}),
   },
   closeBtn: {
-    padding: 4,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   mascotSpeechRow: {
     flexDirection: 'row',

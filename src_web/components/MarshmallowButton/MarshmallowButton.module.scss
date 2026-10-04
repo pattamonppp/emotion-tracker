@@ -1,5 +1,6 @@
 .buttonWrapper {
   display: flex;
+  width: 100%;
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
@@ -16,18 +17,15 @@
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(53, 89, 86, 0.08);
   transition: transform 80ms ease, opacity 80ms ease, box-shadow 80ms ease;
   -webkit-tap-highlight-color: transparent;
-
-  &:hover:not(:disabled) {
-    filter: brightness(1.03);
-  }
+  font-family: 'Prompt', sans-serif;
+  letter-spacing: 0;
 
   &:active:not(:disabled),
   &.isPressed:not(:disabled) {
     transform: translateY(2.5px) scale(0.96);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   }
 
   &:disabled {
@@ -37,8 +35,8 @@
 }
 
 .text {
+  font-family: 'Prompt', sans-serif;
   text-align: center;
-  line-height: 1.2;
   white-space: nowrap;
 }
 
@@ -66,6 +64,7 @@
 
 .variant_softCream {
   background-color: #FFF2E9;
+  border: 1.5px solid #FFDDC9;
   color: var(--color-primary-dark, #009688);
 
   .text {
@@ -75,6 +74,7 @@
 
 .variant_mint {
   background-color: #E0F8F6;
+  border: 1.5px solid #B3EDE8;
   color: var(--color-primary-dark, #009688);
 
   .text {
@@ -94,7 +94,7 @@
 
 .variant_outline {
   background-color: #FFFFFF;
-  border: 1.5px solid var(--color-primary, #00C4B3);
+  border: 2px solid var(--color-primary, #00C4B3);
   color: var(--color-primary, #00C4B3);
 
   .text {
@@ -119,29 +119,21 @@
 .size_sm {
   padding: 7px 14px;
   border-radius: 12px;
-  border-bottom-width: 2.5px;
-
-  &.variant_ghost {
-    border-bottom-width: 0;
-  }
 
   .text {
     font-size: 12px;
+    line-height: 14.4px;
     font-weight: 600;
   }
 }
 
 .size_md {
   padding: 11px 20px;
-  border-radius: 16px;
-  border-bottom-width: 3.5px;
-
-  &.variant_ghost {
-    border-bottom-width: 0;
-  }
+  border-radius: 18px;
 
   .text {
     font-size: 14px;
+    line-height: 16.8px;
     font-weight: 700;
   }
 }
@@ -149,14 +141,10 @@
 .size_lg {
   padding: 14px 28px;
   border-radius: 24px;
-  border-bottom-width: 4px;
-
-  &.variant_ghost {
-    border-bottom-width: 0;
-  }
 
   .text {
     font-size: 16px;
+    line-height: 19.2px;
     font-weight: 700;
   }
 }

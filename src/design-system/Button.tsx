@@ -11,11 +11,28 @@ import {
 import { colors, radii, shadows } from './tokens';
 import { audioService, HAPTIC_STYLE } from '../services/audioService';
 
+export const BUTTON_VARIANT = {
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
+  OUTLINE: 'outline',
+  GHOST: 'ghost',
+  AMBER: 'amber',
+} as const;
+
+export const BUTTON_SIZE = {
+  SM: 'sm',
+  MD: 'md',
+  LG: 'lg',
+} as const;
+
+export type ButtonVariant = typeof BUTTON_VARIANT[keyof typeof BUTTON_VARIANT];
+export type ButtonSize = typeof BUTTON_SIZE[keyof typeof BUTTON_SIZE];
+
 interface ButtonProps {
   children: React.ReactNode;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'amber';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   fullWidth?: boolean;
   disabled?: boolean;
   loading?: boolean;
@@ -26,8 +43,8 @@ interface ButtonProps {
 export const Button: React.FC<ButtonProps> = ({
   children,
   onPress,
-  variant = 'primary',
-  size = 'md',
+  variant = BUTTON_VARIANT.PRIMARY,
+  size = BUTTON_SIZE.MD,
   fullWidth = false,
   disabled = false,
   loading = false,
@@ -44,25 +61,25 @@ export const Button: React.FC<ButtonProps> = ({
     const list: ViewStyle[] = [styles.base];
 
     // Size
-    if (size === 'sm') list.push(styles.sizeSm);
-    else if (size === 'lg') list.push(styles.sizeLg);
+    if (size === BUTTON_SIZE.SM) list.push(styles.sizeSm);
+    else if (size === BUTTON_SIZE.LG) list.push(styles.sizeLg);
     else list.push(styles.sizeMd);
 
     // Variant
     switch (variant) {
-      case 'secondary':
+      case BUTTON_VARIANT.SECONDARY:
         list.push(styles.secondary);
         break;
-      case 'outline':
+      case BUTTON_VARIANT.OUTLINE:
         list.push(styles.outline);
         break;
-      case 'ghost':
+      case BUTTON_VARIANT.GHOST:
         list.push(styles.ghost);
         break;
-      case 'amber':
+      case BUTTON_VARIANT.AMBER:
         list.push(styles.amber);
         break;
-      case 'primary':
+      case BUTTON_VARIANT.PRIMARY:
       default:
         list.push(styles.primary);
         break;
@@ -78,20 +95,20 @@ export const Button: React.FC<ButtonProps> = ({
   const getTextStyle = (): TextStyle[] => {
     const list: TextStyle[] = [styles.text];
 
-    if (size === 'sm') list.push(styles.textSm);
-    else if (size === 'lg') list.push(styles.textLg);
+    if (size === BUTTON_SIZE.SM) list.push(styles.textSm);
+    else if (size === BUTTON_SIZE.LG) list.push(styles.textLg);
     else list.push(styles.textMd);
 
     switch (variant) {
-      case 'secondary':
+      case BUTTON_VARIANT.SECONDARY:
         list.push(styles.textSecondary);
         break;
-      case 'outline':
-      case 'ghost':
+      case BUTTON_VARIANT.OUTLINE:
+      case BUTTON_VARIANT.GHOST:
         list.push(styles.textOutline);
         break;
-      case 'amber':
-      case 'primary':
+      case BUTTON_VARIANT.AMBER:
+      case BUTTON_VARIANT.PRIMARY:
       default:
         list.push(styles.textPrimary);
         break;
@@ -110,7 +127,7 @@ export const Button: React.FC<ButtonProps> = ({
       style={getContainerStyle()}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'outline' || variant === 'ghost' ? colors.primary : '#FFFFFF'} />
+        <ActivityIndicator color={variant === BUTTON_VARIANT.OUTLINE || variant === BUTTON_VARIANT.GHOST ? colors.primary : '#FFFFFF'} />
       ) : (
         <View style={styles.contentRow}>
           {icon && <View style={styles.iconWrapper}>{icon}</View>}

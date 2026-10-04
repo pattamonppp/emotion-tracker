@@ -6,6 +6,7 @@
  */
 
 import { LANG, Language } from "@/types";
+import dreamscapeUrl from '../../assets/audio/dreamscape.wav';
 
 class AudioMatrixService {
   private ctx: AudioContext | null = null;
@@ -29,15 +30,7 @@ class AudioMatrixService {
 
   // Trigger tactile feedback on supported mobile browsers.
   public async triggerHaptic(
-    style:
-      | 'light'
-      | 'medium'
-      | 'heavy'
-      | 'selection'
-      | 'success'
-      | 'warning'
-      | number
-      | number[] = 'medium',
+    style: HapticStyle | number | number[] = HAPTIC_STYLE.MEDIUM,
   ): Promise<void> {
     try {
       if (
@@ -52,10 +45,7 @@ class AudioMatrixService {
         return;
       }
 
-      const patterns: Record<
-        'light' | 'medium' | 'heavy' | 'selection' | 'success' | 'warning',
-        number | number[]
-      > = {
+      const patterns: Record<HapticStyle, number | number[]> = {
         light: 10,
         medium: 20,
         heavy: 35,
@@ -76,29 +66,76 @@ class AudioMatrixService {
     }
   }
 
-  // Tactile Glass Clink (for dropping emotion clouds into glass jar)
-  public playJarDrop() {
+  private jarDropIndex = 0;
+
+  // Gentle Crystal-Glass Chime & Warm Waterdrop (for dropping emotion clouds into glass jar)
+  public playJarDrop(index?: number) {
     this.initContext();
     if (!this.ctx) return;
-    // this.triggerHaptic([30, 20, 40]);
 
     const now = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
+    const noteIdx = typeof index === 'number' ? index % 3 : this.jarDropIndex++ % 3;
 
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, now);
-    osc.frequency.exponentialRampToValueAtTime(1760, now + 0.08);
-    osc.frequency.exponentialRampToValueAtTime(440, now + 0.35);
+    // Soothing pentatonic notes: C6 (1046.5Hz), E6 (1318.5Hz), G6 (1568Hz)
+    const basePitches = [1046.5, 1318.51, 1567.98];
+    const dropPitches = [523.25, 659.25, 783.99];
+    const chimeFreq = basePitches[noteIdx];
+    const dropFreq = dropPitches[noteIdx];
 
-    gain.gain.setValueAtTime(0.35, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    // Master filter to keep sound warm and rounded (no harsh digital edges)
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(2600, now);
 
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
+    // 1. Crystal Glass Chime Layer (delicate bell fundamental)
+    const oscChime = this.ctx.createOscillator();
+    const gainChime = this.ctx.createGain();
+    oscChime.type = 'sine';
+    oscChime.frequency.setValueAtTime(chimeFreq, now);
 
-    osc.start(now);
-    osc.stop(now + 0.36);
+    gainChime.gain.setValueAtTime(0.001, now);
+    gainChime.gain.linearRampToValueAtTime(0.09, now + 0.014);
+    gainChime.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+
+    oscChime.connect(gainChime);
+    gainChime.connect(filter);
+
+    // 2. Glass Harmonic Overtone (Fifth)
+    const oscFifth = this.ctx.createOscillator();
+    const gainFifth = this.ctx.createGain();
+    oscFifth.type = 'sine';
+    oscFifth.frequency.setValueAtTime(chimeFreq * 1.5, now);
+
+    gainFifth.gain.setValueAtTime(0.001, now);
+    gainFifth.gain.linearRampToValueAtTime(0.022, now + 0.012);
+    gainFifth.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+
+    oscFifth.connect(gainFifth);
+    gainFifth.connect(filter);
+
+    // 3. Warm Droplet Body (soft subtle scoop into jar)
+    const oscDrop = this.ctx.createOscillator();
+    const gainDrop = this.ctx.createGain();
+    oscDrop.type = 'sine';
+    oscDrop.frequency.setValueAtTime(dropFreq * 1.15, now);
+    oscDrop.frequency.exponentialRampToValueAtTime(dropFreq, now + 0.12);
+
+    gainDrop.gain.setValueAtTime(0.001, now);
+    gainDrop.gain.linearRampToValueAtTime(0.065, now + 0.012);
+    gainDrop.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+
+    oscDrop.connect(gainDrop);
+    gainDrop.connect(filter);
+
+    filter.connect(this.ctx.destination);
+
+    oscChime.start(now);
+    oscFifth.start(now);
+    oscDrop.start(now);
+
+    oscChime.stop(now + 0.7);
+    oscFifth.stop(now + 0.45);
+    oscDrop.stop(now + 0.35);
   }
 
   // Friction rub sound for Option A (The Somatic Absorption)
@@ -154,6 +191,33 @@ class AudioMatrixService {
 
       osc.start(now);
       osc.stop(now + 2.6);
+    });
+  }
+
+  // Gentle warm harmonic chime for completing pulse calibration
+  public playPulseComplete() {
+    this.initContext();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const freqs = [528, 660, 792]; // Peaceful warm triad
+    freqs.forEach((freq, idx) => {
+      if (!this.ctx) return;
+      const t = now + idx * 0.07;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(0.12 / (idx + 1), t + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(t);
+      osc.stop(t + 1.25);
     });
   }
 
@@ -328,60 +392,59 @@ class AudioMatrixService {
 
   private isBgmPlaying = false;
   private bgmListeners: Array<(isPlaying: boolean) => void> = [];
-  private bgmGain: GainNode | null = null;
-  private bgmOscs: OscillatorNode[] = [];
+  private bgmAudio: HTMLAudioElement | null = null;
+  private hasAddedAutoplayUnlock = false;
+
+  private initBgmAudio() {
+    if (!this.bgmAudio && typeof Audio !== 'undefined') {
+      try {
+        this.bgmAudio = new Audio(dreamscapeUrl);
+        this.bgmAudio.loop = true;
+        this.bgmAudio.volume = 0.35;
+      } catch {
+        // audio element fallback
+      }
+    }
+  }
+
+  private setupAutoplayUnlock() {
+    if (this.hasAddedAutoplayUnlock || typeof window === 'undefined') return;
+    this.hasAddedAutoplayUnlock = true;
+
+    const unlock = () => {
+      if (this.bgmAudio && this.isBgmPlaying && this.bgmAudio.paused) {
+        this.bgmAudio.play().catch(() => {});
+      }
+      window.removeEventListener('click', unlock);
+      window.removeEventListener('keydown', unlock);
+      window.removeEventListener('touchstart', unlock);
+    };
+
+    window.addEventListener('click', unlock, { once: true });
+    window.addEventListener('keydown', unlock, { once: true });
+    window.addEventListener('touchstart', unlock, { once: true });
+  }
 
   public startBackgroundMusic() {
-    if (this.isBgmPlaying) return;
-    this.initContext();
-    if (!this.ctx) {
-      this.isBgmPlaying = true;
-      this.notifyBgmListeners();
-      return;
-    }
+    this.initBgmAudio();
+    this.isBgmPlaying = true;
+    this.notifyBgmListeners();
 
-    try {
-      const now = this.ctx.currentTime;
-      this.bgmGain = this.ctx.createGain();
-      this.bgmGain.gain.setValueAtTime(0.001, now);
-      this.bgmGain.gain.linearRampToValueAtTime(0.08, now + 1.5);
-      this.bgmGain.connect(this.ctx.destination);
-
-      // Soothing warm ambient chords (Cmaj9: C3, G3, B3, D4, E4)
-      const freqs = [130.81, 196.0, 246.94, 293.66, 329.63];
-      this.bgmOscs = freqs.map((f, i) => {
-        const osc = this.ctx!.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(f + (i % 2 === 0 ? 0.3 : -0.3), now);
-        osc.connect(this.bgmGain!);
-        osc.start(now);
-        return osc;
+    if (this.bgmAudio) {
+      this.bgmAudio.play().catch(() => {
+        // Browser autoplay restriction; will unlock on first user gesture
+        this.setupAutoplayUnlock();
       });
-
-      this.isBgmPlaying = true;
-      this.notifyBgmListeners();
-    } catch {
-      this.isBgmPlaying = true;
-      this.notifyBgmListeners();
     }
   }
 
   public stopBackgroundMusic() {
-    if (!this.isBgmPlaying) return;
-    if (this.ctx && this.bgmGain) {
-      const now = this.ctx.currentTime;
-      this.bgmGain.gain.linearRampToValueAtTime(0.001, now + 0.6);
-      setTimeout(() => {
-        this.bgmOscs.forEach((osc) => {
-          try {
-            osc.stop();
-            osc.disconnect();
-          } catch {
-            // ignore
-          }
-        });
-        this.bgmOscs = [];
-      }, 700);
+    if (this.bgmAudio) {
+      try {
+        this.bgmAudio.pause();
+      } catch {
+        // ignore
+      }
     }
     this.isBgmPlaying = false;
     this.notifyBgmListeners();
@@ -393,6 +456,9 @@ class AudioMatrixService {
       this.stopBackgroundMusic();
     } else {
       this.startBackgroundMusic();
+      if (this.bgmAudio && this.bgmAudio.paused) {
+        this.bgmAudio.play().catch(() => {});
+      }
     }
   }
 

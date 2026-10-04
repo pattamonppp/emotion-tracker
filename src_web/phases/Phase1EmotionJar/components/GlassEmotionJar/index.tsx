@@ -11,14 +11,14 @@ import {
 } from 'lucide-react';
 import classNames from 'classnames';
 
-import { EmotionTagId, SPEECH_ICON, SpeechMessage, Language, SkyTimePeriod, INTERVENTION, SKY } from '../../../../types';
+import { EmotionTagId, SPEECH_ICON, SpeechMessage, Language, SkyTimePeriod, INTERVENTION, SKY, EMOTION_TAG_ID } from '../../../../types';
 import {
   EMOTION_TAGS,
   matchOptionFromKeywords,
 } from '../../../../data/matrixData';
 import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
 import { getEmotionIcon } from '../FloatingEmotionCloud';
-import { MoocaMascot } from '../../../../components/MoocaMascot';
+import { MOOCA_MOOD, MoocaMascot } from '../../../../components/MoocaMascot';
 import { DESIGN_TOKENS } from '../../../../design-system/tokens';
 import { getTranslation, getTagLabel } from '../../../../locales';
 import { PHASE1_CONFIG } from '../../config';
@@ -123,20 +123,20 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
       PHASE1_CONFIG.maxSelectedEmotions
     ) {
       return [
-        { text: js.full1, iconType: 'cloud' },
-        { text: js.full2, iconType: 'sparkles' },
-        { text: js.full3, iconType: 'wind' },
-        { text: js.full4, iconType: 'heart' },
+        { text: js.full1, iconType: SPEECH_ICON.CLOUD },
+        { text: js.full2, iconType: SPEECH_ICON.SPARKLES },
+        { text: js.full3, iconType: SPEECH_ICON.WIND },
+        { text: js.full4, iconType: SPEECH_ICON.HEART },
       ];
     }
 
     if (selectedEmotions.length > 0) {
       const hasCustom = selectedEmotions.some((id) =>
-        id.startsWith('custom'),
+        id.startsWith(EMOTION_TAG_ID.CUSTOM),
       );
 
       const customMsg: SpeechMessage[] = hasCustom
-        ? [{ text: js.customHug, iconType: 'heart' }]
+        ? [{ text: js.customHug, iconType: SPEECH_ICON.HEART }]
         : [];
 
       return [
@@ -146,15 +146,15 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
             '{count}',
             String(selectedEmotions.length),
           ),
-          iconType: 'shield',
+          iconType: SPEECH_ICON.SHIELD,
         },
         {
           text: js.braveToFace,
-          iconType: 'smile',
+          iconType: SPEECH_ICON.SMILE,
         },
         {
           text: js.safeInJar,
-          iconType: 'sparkles',
+          iconType: SPEECH_ICON.SPARKLES,
         },
       ];
     }
@@ -162,19 +162,19 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
     return [
       {
         text: js.restWorries,
-        iconType: 'cloud',
+        iconType: SPEECH_ICON.CLOUD,
       },
       {
         text: js.full1,
-        iconType: 'cloud',
+        iconType: SPEECH_ICON.CLOUD,
       },
       {
         text: js.tapOrDrag,
-        iconType: 'sparkles',
+        iconType: SPEECH_ICON.SPARKLES,
       },
       {
         text: js.howIsHeart,
-        iconType: 'heart',
+        iconType: SPEECH_ICON.HEART,
       },
     ];
   };
@@ -268,7 +268,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
   };
 
   const firstId = selectedEmotions[0];
-  const isFirstCustom = firstId?.startsWith('custom');
+  const isFirstCustom = firstId?.startsWith(EMOTION_TAG_ID.CUSTOM);
 
   const firstTag =
     selectedEmotions.length > 0
@@ -365,8 +365,8 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
             <MoocaMascot
               mood={
                 selectedEmotions.length > 0
-                  ? 'comforting'
-                  : 'happy'
+                  ? MOOCA_MOOD.COMFORTING
+                  : MOOCA_MOOD.HAPPY
               }
               size="xs"
               interactive={true}
@@ -486,7 +486,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
 
                   {selectedEmotions.map((id) => {
                     const isCustom =
-                      id.startsWith('custom');
+                      id.startsWith(EMOTION_TAG_ID.CUSTOM);
 
                     const customItem =
                       customMessages?.find(
@@ -595,7 +595,7 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
                           >
                             {getEmotionIcon(
                               isCustom
-                                ? 'custom'
+                                ? EMOTION_TAG_ID.CUSTOM
                                 : tag.id,
                               tag.color,
                               11,

@@ -29,6 +29,7 @@ import {
 } from 'lucide-react-native';
 import {
   colors,
+  shadows,
   typography,
 } from '../../../design-system/tokens';
 import {
@@ -197,421 +198,435 @@ export const FeedbackModal: React.FC<
     return (
       <Modal
         visible={isOpen}
+        transparent
         animationType="slide"
-        presentationStyle="pageSheet"
         onRequestClose={handleClose}
       >
-        <SafeAreaView
-          style={styles.safeArea}
-        >
-          {/* Header */}
-          <View style={styles.headerBar}>
-            <View
-              style={
-                styles.headerTitleRow
-              }
-            >
-              <MessageSquareHeart
-                size={20}
-                color={colors.primary}
-              />
-
-              <Text
-                style={styles.headerTitle}
+        <View style={styles.backdrop}>
+          <SafeAreaView
+            style={styles.modalCard}
+          >
+            {/* Header */}
+            <View style={styles.headerBar}>
+              <View
+                style={
+                  styles.headerTitleRow
+                }
               >
-                {fb.modalTitle}
-              </Text>
+                <MessageSquareHeart
+                  size={20}
+                  color={colors.primary}
+                />
+
+                <Text
+                  style={styles.headerTitle}
+                >
+                  {fb.modalTitle}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={handleClose}
+                style={styles.closeBtn}
+                hitSlop={{
+                  top: 10,
+                  bottom: 10,
+                  left: 10,
+                  right: 10,
+                }}
+              >
+                <X
+                  size={18}
+                  color="#64748B"
+                />
+              </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-              onPress={handleClose}
-              style={styles.closeBtn}
-              hitSlop={{
-                top: 10,
-                bottom: 10,
-                left: 10,
-                right: 10,
-              }}
+            <ScrollView
+              contentContainerStyle={
+                styles.scrollContent
+              }
+              showsVerticalScrollIndicator={
+                false
+              }
             >
-              <X
-                size={18}
-                color="#64748B"
-              />
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView
-            contentContainerStyle={
-              styles.scrollContent
-            }
-            showsVerticalScrollIndicator={
-              false
-            }
-          >
-            {!submitted ? (
-              <>
-                {/* Rating */}
-                <View style={styles.section}>
-                  <Text
-                    style={
-                      styles.sectionLabel
-                    }
-                  >
-                    {fb.ratingQuestion}
-                  </Text>
-
-                  <View
-                    style={styles.starsRow}
-                  >
-                    {[1, 2, 3, 4, 5].map(
-                      (star) => {
-                        const isSelected =
-                          rating >= star;
-
-                        const starColor =
-                          STAR_COLORS[
-                          star - 1
-                          ];
-
-                        return (
-                          <TouchableOpacity
-                            key={star}
-                            onPress={() => {
-                              setRating(
-                                star,
-                              );
-
-                              audioService.triggerHaptic(
-                                HAPTIC_STYLE.SELECTION,
-                              );
-                            }}
-                            activeOpacity={0.8}
-                            style={
-                              styles.starTouch
-                            }
-                          >
-                            <Star
-                              size={32}
-                              color={
-                                isSelected
-                                  ? starColor
-                                  : '#CBD5E1'
-                              }
-                              fill={
-                                isSelected
-                                  ? starColor
-                                  : 'transparent'
-                              }
-                              strokeWidth={
-                                2.2
-                              }
-                            />
-                          </TouchableOpacity>
-                        );
-                      },
-                    )}
-                  </View>
-
-                  <View
-                    style={[
-                      styles.starDescBadge,
-                      {
-                        backgroundColor:
-                          `${STAR_COLORS[rating - 1]}14`,
-                        borderColor:
-                          `${STAR_COLORS[rating - 1]}55`,
-                      },
-                    ]}
-                  >
-                    <RatingIcon
-                      size={14}
-                      color={
-                        STAR_COLORS[
-                        rating - 1
-                        ]
-                      }
-                      strokeWidth={2.3}
-                      style={{
-                        marginRight: 4,
-                      }}
-                    />
-
+              {!submitted ? (
+                <>
+                  {/* Rating */}
+                  <View style={styles.section}>
                     <Text
-                      style={[
-                        styles.starDescText,
-                        {
-                          color:
+                      style={
+                        styles.sectionLabel
+                      }
+                    >
+                      {fb.ratingQuestion}
+                    </Text>
+
+                    <View
+                      style={styles.starsRow}
+                    >
+                      {[1, 2, 3, 4, 5].map(
+                        (star) => {
+                          const isSelected =
+                            rating >= star;
+
+                          const starColor =
                             STAR_COLORS[
-                            rating - 1
-                            ],
+                            star - 1
+                            ];
+
+                          return (
+                            <TouchableOpacity
+                              key={star}
+                              onPress={() => {
+                                setRating(
+                                  star,
+                                );
+
+                                audioService.triggerHaptic(
+                                  HAPTIC_STYLE.SELECTION,
+                                );
+                              }}
+                              activeOpacity={0.8}
+                              style={
+                                styles.starTouch
+                              }
+                            >
+                              <Star
+                                size={32}
+                                color={
+                                  isSelected
+                                    ? starColor
+                                    : '#CBD5E1'
+                                }
+                                fill={
+                                  isSelected
+                                    ? starColor
+                                    : 'transparent'
+                                }
+                                strokeWidth={
+                                  2.2
+                                }
+                              />
+                            </TouchableOpacity>
+                          );
+                        },
+                      )}
+                    </View>
+
+                    <View
+                      style={[
+                        styles.starDescBadge,
+                        {
+                          backgroundColor:
+                            `${STAR_COLORS[rating - 1]}14`,
+                          borderColor:
+                            `${STAR_COLORS[rating - 1]}55`,
                         },
                       ]}
                     >
-                      {getRatingText()}
-                    </Text>
+                      <RatingIcon
+                        size={14}
+                        color={
+                          STAR_COLORS[
+                          rating - 1
+                          ]
+                        }
+                        strokeWidth={2.3}
+                        style={{
+                          marginRight: 4,
+                        }}
+                      />
+
+                      <Text
+                        style={[
+                          styles.starDescText,
+                          {
+                            color:
+                              STAR_COLORS[
+                              rating - 1
+                              ],
+                          },
+                        ]}
+                      >
+                        {getRatingText()}
+                      </Text>
+                    </View>
                   </View>
-                </View>
 
-                {/* Accuracy */}
-                <View style={styles.section}>
-                  <Text
-                    style={
-                      styles.sectionLabel
-                    }
-                  >
-                    {fb.accuracyQuestion}
-                  </Text>
+                  {/* Accuracy */}
+                  <View style={styles.section}>
+                    <Text
+                      style={
+                        styles.sectionLabel
+                      }
+                    >
+                      {fb.accuracyQuestion}
+                    </Text>
 
-                  <View
-                    style={styles.accuracyRow}
-                  >
-                    {ACCURACY.map(
-                      (option) => {
-                        const isSelected =
-                          accuracy ===
-                          option.id;
+                    <View
+                      style={styles.accuracyRow}
+                    >
+                      {ACCURACY.map(
+                        (option) => {
+                          const isSelected =
+                            accuracy ===
+                            option.id;
 
-                        const IconComp =
-                          option.icon;
+                          const IconComp =
+                            option.icon;
 
-                        return (
-                          <TouchableOpacity
-                            key={option.id}
-                            activeOpacity={0.8}
-                            onPress={() => {
-                              setAccuracy(
-                                option.id,
-                              );
+                          return (
+                            <TouchableOpacity
+                              key={option.id}
+                              activeOpacity={0.8}
+                              onPress={() => {
+                                setAccuracy(
+                                  option.id,
+                                );
 
-                              audioService.triggerHaptic(
-                                HAPTIC_STYLE.SELECTION,
-                              );
-                            }}
-                            style={[
-                              styles.accuracyCard,
-                              isSelected && {
-                                backgroundColor:
-                                  option.bg,
-                                borderColor:
-                                  option.border,
-                              },
-                            ]}
-                          >
-                            <IconComp
-                              size={18}
-                              color={
-                                isSelected
-                                  ? option.color
-                                  : '#64748B'
-                              }
-                              strokeWidth={
-                                2.3
-                              }
-                              style={{
-                                marginBottom: 4,
+                                audioService.triggerHaptic(
+                                  HAPTIC_STYLE.SELECTION,
+                                );
                               }}
-                            />
-
-                            <Text
                               style={[
-                                styles.accuracyText,
+                                styles.accuracyCard,
                                 isSelected && {
-                                  color:
-                                    option.text,
-                                  fontWeight:
-                                    '800',
+                                  backgroundColor:
+                                    option.bg,
+                                  borderColor:
+                                    option.border,
                                 },
                               ]}
                             >
-                              {option.label}
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      },
-                    )}
-                  </View>
-                </View>
+                              <IconComp
+                                size={18}
+                                color={
+                                  isSelected
+                                    ? option.color
+                                    : '#64748B'
+                                }
+                                strokeWidth={
+                                  2.3
+                                }
+                                style={{
+                                  marginBottom: 4,
+                                }}
+                              />
 
-                {/* Aspects */}
-                <View style={styles.section}>
-                  <Text
+                              <Text
+                                style={[
+                                  styles.accuracyText,
+                                  isSelected && {
+                                    color:
+                                      option.text,
+                                    fontWeight:
+                                      '800',
+                                  },
+                                ]}
+                              >
+                                {option.label}
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        },
+                      )}
+                    </View>
+                  </View>
+
+                  {/* Aspects */}
+                  <View style={styles.section}>
+                    <Text
+                      style={
+                        styles.sectionLabel
+                      }
+                    >
+                      {fb.aspectsQuestion}
+                    </Text>
+
+                    <View
+                      style={styles.chipsWrap}
+                    >
+                      {ASPECTS.map(
+                        (aspect) => {
+                          const isSelected =
+                            selectedAspects.includes(
+                              aspect.id,
+                            );
+
+                          const AspectIcon =
+                            aspect.icon;
+
+                          return (
+                            <TouchableOpacity
+                              key={aspect.id}
+                              activeOpacity={0.8}
+                              onPress={() => {
+                                toggleAspect(
+                                  aspect.id,
+                                );
+
+                                audioService.triggerHaptic(
+                                  HAPTIC_STYLE.SELECTION,
+                                );
+                              }}
+                              style={[
+                                styles.chip,
+                                isSelected &&
+                                styles.chipActive,
+                              ]}
+                            >
+                              <AspectIcon
+                                size={14}
+                                color={
+                                  isSelected
+                                    ? colors.primaryDark
+                                    : '#64748B'
+                                }
+                                style={{
+                                  marginRight: 6,
+                                }}
+                              />
+
+                              <Text
+                                style={[
+                                  styles.chipText,
+                                  isSelected &&
+                                  styles.chipTextActive,
+                                ]}
+                              >
+                                {
+                                  aspect.label
+                                }
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        },
+                      )}
+                    </View>
+                  </View>
+
+                  {/* Comment */}
+                  <View style={styles.section}>
+                    <Text
+                      style={
+                        styles.sectionLabel
+                      }
+                    >
+                      {fb.commentQuestion}
+                    </Text>
+
+                    <TextInput
+                      style={styles.textInput}
+                      multiline
+                      numberOfLines={3}
+                      value={comment}
+                      onChangeText={
+                        setComment
+                      }
+                      placeholder={
+                        fb.commentPlaceholder
+                      }
+                      placeholderTextColor="#94A3B8"
+                    />
+                  </View>
+
+                  {/* Submit */}
+                  <View
+                    style={styles.submitWrap}
+                  >
+                    <MarshmallowButton
+                      variant={MARSHMALLOW_VARIANT.PRIMARY}
+                      size={MARSHMALLOW_SIZE.MD}
+                      onPress={
+                        handleSubmit
+                      }
+                      icon={
+                        <CheckCircle2
+                          size={16}
+                          color="#FFFFFF"
+                        />
+                      }
+                      title={
+                        fb.submitButton
+                      }
+                    />
+                  </View>
+                </>
+              ) : (
+                <View
+                  style={
+                    styles.successCard
+                  }
+                >
+                  <View
                     style={
-                      styles.sectionLabel
+                      styles.successIconCircle
                     }
                   >
-                    {fb.aspectsQuestion}
+                    <CheckCircle2
+                      size={40}
+                      color={colors.primary}
+                    />
+                  </View>
+
+                  <Text
+                    style={
+                      styles.successTitle
+                    }
+                  >
+                    {fb.successTitle}
+                  </Text>
+
+                  <Text
+                    style={
+                      styles.successDesc
+                    }
+                  >
+                    {fb.successDesc}
                   </Text>
 
                   <View
-                    style={styles.chipsWrap}
+                    style={
+                      styles.successButtonWrap
+                    }
                   >
-                    {ASPECTS.map(
-                      (aspect) => {
-                        const isSelected =
-                          selectedAspects.includes(
-                            aspect.id,
-                          );
-
-                        const AspectIcon =
-                          aspect.icon;
-
-                        return (
-                          <TouchableOpacity
-                            key={aspect.id}
-                            activeOpacity={0.8}
-                            onPress={() => {
-                              toggleAspect(
-                                aspect.id,
-                              );
-
-                              audioService.triggerHaptic(
-                                HAPTIC_STYLE.SELECTION,
-                              );
-                            }}
-                            style={[
-                              styles.chip,
-                              isSelected &&
-                              styles.chipActive,
-                            ]}
-                          >
-                            <AspectIcon
-                              size={14}
-                              color={
-                                isSelected
-                                  ? colors.primaryDark
-                                  : '#64748B'
-                              }
-                              style={{
-                                marginRight: 6,
-                              }}
-                            />
-
-                            <Text
-                              style={[
-                                styles.chipText,
-                                isSelected &&
-                                styles.chipTextActive,
-                              ]}
-                            >
-                              {
-                                aspect.label
-                              }
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      },
-                    )}
+                    <MarshmallowButton
+                      variant={MARSHMALLOW_VARIANT.PRIMARY}
+                      size={MARSHMALLOW_SIZE.MD}
+                      onPress={
+                        handleClose
+                      }
+                      title={
+                        fb.doneButton
+                      }
+                    />
                   </View>
                 </View>
-
-                {/* Comment */}
-                <View style={styles.section}>
-                  <Text
-                    style={
-                      styles.sectionLabel
-                    }
-                  >
-                    {fb.commentQuestion}
-                  </Text>
-
-                  <TextInput
-                    style={styles.textInput}
-                    multiline
-                    numberOfLines={3}
-                    value={comment}
-                    onChangeText={
-                      setComment
-                    }
-                    placeholder={
-                      fb.commentPlaceholder
-                    }
-                    placeholderTextColor="#94A3B8"
-                  />
-                </View>
-
-                {/* Submit */}
-                <View
-                  style={styles.submitWrap}
-                >
-                  <MarshmallowButton
-                    variant={MARSHMALLOW_VARIANT.PRIMARY}
-                    size={MARSHMALLOW_SIZE.MD}
-                    onPress={
-                      handleSubmit
-                    }
-                    icon={
-                      <CheckCircle2
-                        size={16}
-                        color="#FFFFFF"
-                      />
-                    }
-                    title={
-                      fb.submitButton
-                    }
-                  />
-                </View>
-              </>
-            ) : (
-              <View
-                style={
-                  styles.successCard
-                }
-              >
-                <View
-                  style={
-                    styles.successIconCircle
-                  }
-                >
-                  <CheckCircle2
-                    size={40}
-                    color={colors.primary}
-                  />
-                </View>
-
-                <Text
-                  style={
-                    styles.successTitle
-                  }
-                >
-                  {fb.successTitle}
-                </Text>
-
-                <Text
-                  style={
-                    styles.successDesc
-                  }
-                >
-                  {fb.successDesc}
-                </Text>
-
-                <View
-                  style={
-                    styles.successButtonWrap
-                  }
-                >
-                  <MarshmallowButton
-                    variant={MARSHMALLOW_VARIANT.PRIMARY}
-                    size={MARSHMALLOW_SIZE.MD}
-                    onPress={
-                      handleClose
-                    }
-                    title={
-                      fb.doneButton
-                    }
-                  />
-                </View>
-              </View>
-            )}
-          </ScrollView>
-        </SafeAreaView>
+              )}
+            </ScrollView>
+          </SafeAreaView>
+        </View>
       </Modal>
     );
   };
 
 const styles = StyleSheet.create({
-  safeArea: {
+  backdrop: {
     flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  modalCard: {
+    width: '100%',
+    maxWidth: 520,
+    maxHeight: '92%',
     backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    overflow: 'hidden',
+    ...shadows.soft,
   },
 
   headerBar: {
@@ -645,7 +660,11 @@ const styles = StyleSheet.create({
   },
 
   closeBtn: {
-    padding: 4,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   scrollContent: {

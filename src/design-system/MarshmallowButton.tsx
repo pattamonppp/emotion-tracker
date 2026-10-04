@@ -9,7 +9,7 @@ import {
   StyleProp,
 } from 'react-native';
 import { audioService, HAPTIC_STYLE } from '../services/audioService';
-import { colors, radii, shadows } from './tokens';
+import { colors, radii, shadows, typography } from './tokens';
 
 export const MARSHMALLOW_VARIANT = {
   PRIMARY: 'primary',
@@ -183,7 +183,8 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           },
           text: {
             fontSize: 12,
-            fontWeight: '600',
+            lineHeight: 14.4,
+            fontFamily: typography.fontPromptSemiBold,
           },
         };
       case 'lg':
@@ -195,7 +196,8 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           },
           text: {
             fontSize: 16,
-            fontWeight: '700',
+            lineHeight: 19.2,
+            fontFamily: typography.fontPromptBold,
           },
         };
       case 'md':
@@ -208,7 +210,8 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           },
           text: {
             fontSize: 14,
-            fontWeight: '700',
+            lineHeight: 16.8,
+            fontFamily: typography.fontPromptBold,
           },
         };
     }

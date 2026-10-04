@@ -4,6 +4,7 @@ export const GOAL = {
   STAGE: 'stage',
   BURNOUT: 'burnout',
 } as const;
+
 export type GoalType = typeof GOAL[keyof typeof GOAL];
 
 export const MBTI = {
@@ -123,6 +124,14 @@ export const FEEDBACK_ACCURACY = {
 } as const;
 
 export type FeedbackAccuracy = typeof FEEDBACK_ACCURACY[keyof typeof FEEDBACK_ACCURACY];
+
+export const FEEDBACK_ACCURACY_THEME = {
+  SPOT_ON: 'spotOn',
+  HELPFUL: 'helpful',
+  NEEDS_WORK: 'needsWork',
+} as const;
+
+export type FeedbackAccuracyTheme = typeof FEEDBACK_ACCURACY_THEME[keyof typeof FEEDBACK_ACCURACY_THEME];
 
 export interface Feedback {
   id: string;

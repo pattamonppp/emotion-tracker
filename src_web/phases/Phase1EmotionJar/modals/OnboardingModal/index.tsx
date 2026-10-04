@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { UserProfile, GoalType } from '../../../../types';
-import { Button } from '../../../../components/Button';
-import { MoocaMascot } from '../../../../components/MoocaMascot';
+import { UserProfile, GoalType, GOAL } from '../../../../types';
+import { Button, BUTTON_VARIANT } from '../../../../components/Button';
+import { MOOCA_MOOD, MoocaMascot } from '../../../../components/MoocaMascot';
 import {
   GraduationCap,
   Mic,
@@ -38,25 +38,25 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
   const GOALS: { id: GoalType; label: string; icon: any; color: string }[] = [
     {
-      id: 'exam',
+      id: GOAL.EXAM,
       label: o.goalExam,
       icon: GraduationCap,
       color: '#00C4B3',
     },
     {
-      id: 'stage',
+      id: GOAL.STAGE,
       label: o.goalStage,
       icon: Mic,
       color: '#FF8F4B',
     },
     {
-      id: 'work',
+      id: GOAL.WORK,
       label: o.goalWork,
       icon: Briefcase,
       color: '#1F77DF',
     },
     {
-      id: 'burnout',
+      id: GOAL.BURNOUT,
       label: o.goalBurnout,
       icon: BatteryCharging,
       color: '#8AD866',
@@ -85,7 +85,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {/* Mascot Greeting */}
           <div className={styles.mascotBox}>
             <MoocaMascot
-              mood="happy"
+              mood={MOOCA_MOOD.HAPPY}
               size="sm"
               speakingBubble={o.tailoredBubble}
               interactive={true}
@@ -173,7 +173,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {/* Save Button */}
           <div className={styles.saveSection}>
             <Button
-              variant="primary"
+              variant={BUTTON_VARIANT.PRIMARY}
               size="lg"
               fullWidth
               onClick={handleSave}

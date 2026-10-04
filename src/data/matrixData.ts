@@ -1,8 +1,8 @@
-import { EmotionTag, GoalType, MBTIType, InterventionOption, InterventionOptionMeta, INTERVENTION } from '../types';
+import { EmotionTag, GoalType, MBTIType, InterventionOption, InterventionOptionMeta, INTERVENTION, EMOTION_TAG_ID } from '../types';
 
 export const EMOTION_TAGS: EmotionTag[] = [
   {
-    id: 'shaking',
+    id: EMOTION_TAG_ID.SHAKING,
     labelTh: 'ตื่นเต้น',
     labelEn: 'Nervous',
     emoji: '',
@@ -11,7 +11,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.A, // The Somatic Absorption (rubbing warms cold shaking hands)
   },
   {
-    id: 'forgetting',
+    id: EMOTION_TAG_ID.FORGETTING,
     labelTh: 'ว่างเปล่า',
     labelEn: 'Empty',
     emoji: '',
@@ -20,7 +20,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.A, // Somatic Absorption / Blessing Sigil
   },
   {
-    id: 'pressure',
+    id: EMOTION_TAG_ID.PRESSURE,
     labelTh: 'กดดัน',
     labelEn: 'Pressure',
     emoji: '',
@@ -29,7 +29,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.B, // The Victory Sip (Vagal Maneuver)
   },
   {
-    id: 'freeze',
+    id: EMOTION_TAG_ID.FREEZE,
     labelTh: 'สมองตื้อ',
     labelEn: 'Freeze',
     emoji: '',
@@ -38,7 +38,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.C, // Kinetic Tension Shaker (discharge)
   },
   {
-    id: 'burnout',
+    id: EMOTION_TAG_ID.BURNOUT,
     labelTh: 'หมดไฟ',
     labelEn: 'Burnout',
     emoji: '',
@@ -47,7 +47,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.G, // Pre-Generated Studio Audio Matrix
   },
   {
-    id: 'anxious',
+    id: EMOTION_TAG_ID.ANXIOUS,
     labelTh: 'กังวล',
     labelEn: 'Anxious',
     emoji: '',
@@ -56,7 +56,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.E, // Somatic Breathwork Pacer (Box 4-4-4-4)
   },
   {
-    id: 'overthinking',
+    id: EMOTION_TAG_ID.OVERTHINKING,
     labelTh: 'คิดมาก',
     labelEn: 'Overthinking',
     emoji: '',
@@ -65,7 +65,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.B,
   },
   {
-    id: 'lonely',
+    id: EMOTION_TAG_ID.LONELY,
     labelTh: 'โดดเดี่ยว',
     labelEn: 'Lonely',
     emoji: '',
@@ -74,7 +74,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.G, // Audio Matrix Sanctuary
   },
   {
-    id: 'confused',
+    id: EMOTION_TAG_ID.CONFUSED,
     labelTh: 'สับสน',
     labelEn: 'Confused',
     emoji: '',
@@ -83,7 +83,7 @@ export const EMOTION_TAGS: EmotionTag[] = [
     recommendedOption: INTERVENTION.D, // Vertical Grounding / Jump
   },
   {
-    id: 'custom',
+    id: EMOTION_TAG_ID.CUSTOM,
     labelTh: 'บอก Mooca',
     labelEn: 'Tell Mooca',
     emoji: '',

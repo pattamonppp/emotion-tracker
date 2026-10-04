@@ -1,4 +1,4 @@
-import { MBTIType, GoalType } from '../types';
+import { MBTIType, GoalType, MBTI, GOAL } from '../types';
 
 export const PHASE1_CONFIG = {
   maxSelectedEmotions: 3,
@@ -48,11 +48,6 @@ export const MODAL_CONFIG = {
     maxLength: 35,
     maxAllowedCustomInSky: 3,
   },
-  mbtiOptions: [
-    'INTJ', 'INTP', 'ENTJ', 'ENTP',
-    'INFJ', 'INFP', 'ENFJ', 'ENFP',
-    'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
-    'ISTP', 'ISFP', 'ESTP', 'ESFP',
-  ] as MBTIType[],
-  goalTypes: ['exam', 'stage', 'work', 'burnout'] as GoalType[],
+  mbtiOptions: Object.values(MBTI),
+  goalTypes: Object.values(GOAL),
 } as const;

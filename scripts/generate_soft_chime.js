@@ -1,38 +1,42 @@
 const fs = require('fs');
 const path = require('path');
 
-// Generate an ultra-soft, warm, cozy marshmallow drop sound (16-bit 44.1kHz stereo PCM WAV)
+// Generate an ultra-soft, pleasant crystal-glass chime & warm marshmallow drop sound (16-bit 44.1kHz stereo PCM WAV)
 const sampleRate = 44100;
-const durationSec = 0.55;
+const durationSec = 0.65;
 const totalSamples = Math.floor(sampleRate * durationSec);
 
 const leftChannel = new Float32Array(totalSamples);
 const rightChannel = new Float32Array(totalSamples);
 
+const chimeFreq = 1046.5; // C6 crystal bell
+const fifthFreq = 1567.98; // G6 overtone
+
 for (let i = 0; i < totalSamples; i++) {
   const t = i / sampleRate;
 
-  // Pitch envelope: starts at ~620 Hz and gently glides down to ~440 Hz (soft warm waterdrop/marshmallow curve)
-  const pitchGlide = Math.exp(-t * 9.0);
-  const freq = 440 + 180 * pitchGlide;
+  // Smooth anti-pop attack (14ms)
+  const attack = Math.min(1, t / 0.014);
 
-  // Soft rounded attack (18ms) to completely eliminate any click/harshness, followed by gentle warm exponential decay
-  const attack = Math.min(1, t / 0.018);
-  const decay = Math.exp(-t * 5.2);
-  const env = attack * decay;
+  // 1. Crystal Glass Chime layer (delicate bell ring)
+  const chimeEnv = attack * Math.exp(-t * 4.6);
+  const chime1 = Math.sin(2 * Math.PI * chimeFreq * t);
+  const chime2 = 0.22 * Math.sin(2 * Math.PI * (chimeFreq * 2) * t) * Math.exp(-t * 8.0);
+  const chime5th = 0.16 * Math.sin(2 * Math.PI * fifthFreq * t) * Math.exp(-t * 6.5);
+  const glassChime = (chime1 + chime2 + chime5th) * chimeEnv * 0.28;
 
-  // Harmonics: pure warm sine fundamental + gentle soft octave overtone
-  const f1 = Math.sin(2 * Math.PI * freq * t);
-  const f2 = 0.28 * Math.sin(2 * Math.PI * (freq * 1.99) * t) * Math.exp(-t * 8.0);
-  const f3 = 0.12 * Math.sin(2 * Math.PI * (freq * 2.98) * t) * Math.exp(-t * 12.0);
+  // 2. Warm Marshmallow / Waterdrop body (gentle 520Hz -> 440Hz glide)
+  const dropFreq = 440 + 80 * Math.exp(-t * 12.0);
+  const dropEnv = attack * Math.exp(-t * 6.8);
+  const drop = 0.32 * Math.sin(2 * Math.PI * dropFreq * t) * dropEnv;
 
-  // Soft low warm sub body
-  const sub = 0.22 * Math.sin(2 * Math.PI * (freq * 0.5) * t) * Math.exp(-t * 6.5);
+  // 3. Ultra-soft sub warmth
+  const sub = 0.15 * Math.sin(2 * Math.PI * 261.63 * t) * Math.exp(-t * 5.0) * attack;
 
-  const sampleVal = (f1 + f2 + f3 + sub) * env * 0.55;
+  const sampleVal = (glassChime + drop + sub) * 0.7;
 
-  leftChannel[i] = sampleVal * 0.95;
-  rightChannel[i] = sampleVal * 1.05;
+  leftChannel[i] = sampleVal * 0.96;
+  rightChannel[i] = sampleVal * 1.04;
 }
 
 // Build 16-bit PCM WAV

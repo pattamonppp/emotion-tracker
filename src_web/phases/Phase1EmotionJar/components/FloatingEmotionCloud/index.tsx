@@ -18,7 +18,7 @@ import {
   Heart,
 } from 'lucide-react';
 
-import { EmotionTag, Language } from '../../../../types';
+import { EMOTION_TAG_ID, EmotionTag, Language } from '../../../../types';
 import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
 import { getTranslation, getTagLabel } from '../../../../locales';
 
@@ -35,30 +35,30 @@ export const getEmotionIcon = (
     strokeWidth: 2.4,
   };
 
-  if (tagId.startsWith('custom')) {
+  if (tagId.startsWith(EMOTION_TAG_ID.CUSTOM)) {
     return <Heart {...props} />;
   }
 
   switch (tagId) {
-    case 'shaking':
+    case EMOTION_TAG_ID.SHAKING:
       return <Activity {...props} />;
-    case 'forgetting':
+    case EMOTION_TAG_ID.FORGETTING:
       return <CircleDashed {...props} />;
-    case 'pressure':
+    case EMOTION_TAG_ID.PRESSURE:
       return <Anchor {...props} />;
-    case 'freeze':
+    case EMOTION_TAG_ID.FREEZE:
       return <Snowflake {...props} />;
-    case 'burnout':
+    case EMOTION_TAG_ID.BURNOUT:
       return <BatteryLow {...props} />;
-    case 'anxious':
+    case EMOTION_TAG_ID.ANXIOUS:
       return <Wind {...props} />;
-    case 'overthinking':
+    case EMOTION_TAG_ID.OVERTHINKING:
       return <Brain {...props} />;
-    case 'lonely':
+    case EMOTION_TAG_ID.LONELY:
       return <CloudRain {...props} />;
-    case 'confused':
+    case EMOTION_TAG_ID.CONFUSED:
       return <Shuffle {...props} />;
-    case 'custom':
+    case EMOTION_TAG_ID.CUSTOM:
       return <Heart {...props} />;
     default:
       return <Sparkles {...props} />;
@@ -103,7 +103,7 @@ export const FloatingEmotionCloud: React.FC<
   jarRef,
 }) => {
     const isCustom =
-      tag.id.startsWith('custom') || Boolean(customText);
+      tag.id.startsWith(EMOTION_TAG_ID.CUSTOM) || Boolean(customText);
 
     const t = getTranslation(lang);
     const p1 = t.phases.phase1;

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { EmotionTag, EmotionTagId, CustomMessageItem, Language, LANG, SkyTimePeriod, INTERVENTION } from '../../types';
+import { EmotionTag, EmotionTagId, CustomMessageItem, Language, LANG, SkyTimePeriod, INTERVENTION, EMOTION_TAG_ID } from '../../types';
 import { EMOTION_TAGS, matchOptionFromKeywords } from '../../data/matrixData';
 import { audioService, HAPTIC_STYLE } from '../../services/audioService';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
@@ -120,7 +120,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
 
   // 1) Preset emotions not yet in jar (exclude placeholder 'custom')
   const presetsInSky = EMOTION_TAGS.filter(
-    (tag) => tag.id !== 'custom' && !selectedEmotions.includes(tag.id)
+    (tag) => tag.id !== EMOTION_TAG_ID.CUSTOM && !selectedEmotions.includes(tag.id)
   );
 
   // 2) Custom messages not yet in jar
@@ -159,9 +159,9 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
       ...(showAddButton
         ? [
           {
-            id: 'btn_add_custom',
+            id: EMOTION_TAG_ID.CUSTOM,
             tag: {
-              id: 'custom',
+              id: EMOTION_TAG_ID.CUSTOM,
               labelTh: p1.tellMoocaPlaceholder,
               labelEn: p1.tellMoocaPlaceholder,
               emoji: '',

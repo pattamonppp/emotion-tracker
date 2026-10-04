@@ -203,6 +203,11 @@ class NativeAudioMatrixService {
     }
   }
 
+  // Gentle pulse completion chime / tactile confirmation
+  public async playPulseComplete() {
+    await this.triggerHaptic(HAPTIC_STYLE.SUCCESS);
+  }
+
   // Friction rub sound / tactile feedback for Option A (The Somatic Absorption)
   public async playFrictionTick(_intensity = 0.5) {
     await this.triggerHaptic(HAPTIC_STYLE.LIGHT);

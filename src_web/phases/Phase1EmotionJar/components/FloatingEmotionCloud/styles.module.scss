@@ -289,9 +289,10 @@
 
 .addCloudBody {
   border-style: dashed;
+  border-width: 1px;
+  border-bottom-width: 1px;
 
-  border-color: #F4A09D;
-  border-bottom-color: #EF7773;
+  border-color: #EF7773;
 
   background:
     linear-gradient(135deg,

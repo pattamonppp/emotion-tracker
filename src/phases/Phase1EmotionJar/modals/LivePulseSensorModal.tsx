@@ -232,7 +232,7 @@ export const LivePulseSensorModal: React.FC<
         HAPTIC_STYLE.SUCCESS,
       );
 
-      audioService.playJarDrop();
+      audioService.playPulseComplete();
 
       setTimeout(() => {
         onUpdateBpm(bpm);
@@ -725,15 +725,15 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#cdd8e1',
 
-    shadowColor: '#000000',
+    shadowColor: '#355956',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
     shadowOpacity: 0.08,
-    shadowRadius: 10,
+    shadowRadius: 8,
 
-    elevation: 4,
+    elevation: 1.5,
 
     overflow: 'hidden',
   },
@@ -817,7 +817,7 @@ const styles = StyleSheet.create({
 
     textAlign: 'center',
 
-    color: '#637b91',
+    color: '#79ADA9',
   },
 
   /* Metrics */
@@ -918,7 +918,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 999,
 
-    backgroundColor: '#F1FAED',
+    backgroundColor: '#DCF3D1',
   },
 
   stateTagParasympatheticText: {
@@ -928,7 +928,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '700',
 
-    color: '#8AD866',
+    color: '#047857',
   },
 
   stateTagSympathetic: {

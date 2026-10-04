@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserProfile, GoalType } from '../../../types';
 import { Button } from '../../../design-system/Button';
-import { MoocaMascot } from '../../../components/MoocaMascot';
+import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import {
   GraduationCap,
   Mic,
@@ -22,10 +22,11 @@ import {
   X,
   User,
 } from 'lucide-react-native';
-import { colors, radii, typography } from '../../../design-system/tokens';
+import { colors, radii, shadows, typography } from '../../../design-system/tokens';
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { getTranslation } from '../../../locales';
 import { MODAL_CONFIG } from '../../../constants';
+import { GOAL } from '../../../../src_web/types';
 
 export interface OnboardingModalProps {
   initialProfile: UserProfile;
@@ -47,25 +48,25 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
   const GOALS: { id: GoalType; label: string; icon: any; color: string }[] = [
     {
-      id: 'exam',
+      id: GOAL.EXAM,
       label: o.goalExam,
       icon: GraduationCap,
       color: colors.primary,
     },
     {
-      id: 'stage',
+      id: GOAL.STAGE,
       label: o.goalStage,
       icon: Mic,
       color: colors.secondary,
     },
     {
-      id: 'work',
+      id: GOAL.WORK,
       label: o.goalWork,
       icon: Briefcase,
       color: colors.accentBlue,
     },
     {
-      id: 'burnout',
+      id: GOAL.BURNOUT,
       label: o.goalBurnout,
       icon: BatteryCharging,
       color: colors.success,
@@ -80,136 +81,150 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   return (
     <Modal
       visible={isOpen}
+      transparent
       animationType="slide"
-      presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerBar}>
-          <Text style={styles.headerTitle}>
-            {o.profileTitle}
-          </Text>
-          {onClose && (
-            <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <X size={18} color={colors.textSecondary} />
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          {/* Mascot Greeting */}
-          <View style={styles.mascotBox}>
-            <MoocaMascot
-              mood="happy"
-              size="sm"
-              speakingBubble={o.tailoredBubble}
-            />
+      <View style={styles.backdrop}>
+        <SafeAreaView style={styles.modalCard}>
+          <View style={styles.headerBar}>
+            <Text style={styles.headerTitle}>
+              {o.profileTitle}
+            </Text>
+            {onClose && (
+              <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+                <X size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            )}
           </View>
 
-          {/* Name Field */}
-          <View style={styles.fieldSection}>
-            <Text style={styles.fieldLabel}>
-              {o.yourName}
-            </Text>
-            <View style={styles.inputRow}>
-              <User size={16} color={colors.primary} style={{ marginLeft: 12 }} />
-              <TextInput
-                value={profile.name}
-                onChangeText={(text) => setProfile({ ...profile, name: text })}
-                placeholder={o.namePlaceholder}
-                style={styles.textInput}
+          <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+            {/* Mascot Greeting */}
+            <View style={styles.mascotBox}>
+              <MoocaMascot
+                mood={MOOCA_MOOD.HAPPY}
+                size="sm"
+                speakingBubble={o.tailoredBubble}
               />
             </View>
-          </View>
 
-          {/* Goal Selector */}
-          <View style={styles.fieldSection}>
-            <Text style={styles.fieldLabel}>
-              {o.primaryContext}
-            </Text>
-            <View style={styles.goalsGrid}>
-              {GOALS.map((g) => {
-                const isSelected = profile.goal === g.id;
-                const IconComponent = g.icon;
-                return (
-                  <TouchableOpacity
-                    key={g.id}
-                    onPress={() => {
-                      audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
-                      setProfile({ ...profile, goal: g.id });
-                    }}
-                    style={[
-                      styles.goalCard,
-                      isSelected && { borderColor: g.color, backgroundColor: g.color + '15' },
-                    ]}
-                  >
-                    <IconComponent size={20} color={g.color} />
-                    <Text style={[styles.goalLabel, isSelected && { color: colors.primaryDark, fontWeight: '800' }]}>
-                      {g.label}
-                    </Text>
-                    {isSelected && <Check size={14} color={g.color} strokeWidth={3} />}
-                  </TouchableOpacity>
-                );
-              })}
+            {/* Name Field */}
+            <View style={styles.fieldSection}>
+              <Text style={styles.fieldLabel}>
+                {o.yourName}
+              </Text>
+              <View style={styles.inputRow}>
+                <User size={16} color={colors.primary} style={{ marginLeft: 12 }} />
+                <TextInput
+                  value={profile.name}
+                  onChangeText={(text) => setProfile({ ...profile, name: text })}
+                  placeholder={o.namePlaceholder}
+                  style={styles.textInput}
+                />
+              </View>
             </View>
-          </View>
 
-          {/* MBTI Selector */}
-          <View style={styles.fieldSection}>
-            <Text style={styles.fieldLabel}>
-              {o.mbtiSpecific}
-            </Text>
-            <View style={styles.mbtiGrid}>
-              {MODAL_CONFIG.mbtiOptions.map((m) => {
-                const isSelected = profile.mbti === m;
-                return (
-                  <TouchableOpacity
-                    key={m}
-                    onPress={() => {
-                      audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
-                      setProfile({ ...profile, mbti: m });
-                    }}
-                    style={[
-                      styles.mbtiChip,
-                      isSelected && styles.mbtiChipActive,
-                    ]}
-                  >
-                    <Text
+            {/* Goal Selector */}
+            <View style={styles.fieldSection}>
+              <Text style={styles.fieldLabel}>
+                {o.primaryContext}
+              </Text>
+              <View style={styles.goalsGrid}>
+                {GOALS.map((g) => {
+                  const isSelected = profile.goal === g.id;
+                  const IconComponent = g.icon;
+                  return (
+                    <TouchableOpacity
+                      key={g.id}
+                      onPress={() => {
+                        audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
+                        setProfile({ ...profile, goal: g.id });
+                      }}
                       style={[
-                        styles.mbtiChipText,
-                        isSelected && styles.mbtiChipTextActive,
+                        styles.goalCard,
+                        isSelected && { borderColor: g.color, backgroundColor: g.color + '15' },
                       ]}
                     >
-                      {m}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+                      <IconComponent size={20} color={g.color} />
+                      <Text style={[styles.goalLabel, isSelected && { color: colors.primaryDark, fontWeight: '800' }]}>
+                        {g.label}
+                      </Text>
+                      {isSelected && <Check size={14} color={g.color} strokeWidth={3} />}
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
             </View>
-          </View>
 
-          {/* Save Button */}
-          <View style={styles.saveSection}>
-            <Button
-              variant="primary"
-              size="lg"
-              fullWidth
-              onPress={handleSave}
-              icon={<Check size={18} color="#FFFFFF" />}
-            >
-              {o.saveSettings}
-            </Button>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+            {/* MBTI Selector */}
+            <View style={styles.fieldSection}>
+              <Text style={styles.fieldLabel}>
+                {o.mbtiSpecific}
+              </Text>
+              <View style={styles.mbtiGrid}>
+                {MODAL_CONFIG.mbtiOptions.map((m) => {
+                  const isSelected = profile.mbti === m;
+                  return (
+                    <TouchableOpacity
+                      key={m}
+                      onPress={() => {
+                        audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
+                        setProfile({ ...profile, mbti: m });
+                      }}
+                      style={[
+                        styles.mbtiChip,
+                        isSelected && styles.mbtiChipActive,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.mbtiChipText,
+                          isSelected && styles.mbtiChipTextActive,
+                        ]}
+                      >
+                        {m}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+
+            {/* Save Button */}
+            <View style={styles.saveSection}>
+              <Button
+                variant="primary"
+                size="lg"
+                fullWidth
+                onPress={handleSave}
+                icon={<Check size={18} color="#FFFFFF" />}
+              >
+                {o.saveSettings}
+              </Button>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
+  backdrop: {
     flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  modalCard: {
+    width: '100%',
+    maxWidth: 520,
+    maxHeight: '90%',
     backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    overflow: 'hidden',
+    ...shadows.soft,
   },
   headerBar: {
     flexDirection: 'row',
@@ -227,7 +242,11 @@ const styles = StyleSheet.create({
     ...(Platform.OS !== 'android' ? { fontWeight: '800' } : {}),
   },
   closeBtn: {
-    padding: 6,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     paddingHorizontal: 20,
