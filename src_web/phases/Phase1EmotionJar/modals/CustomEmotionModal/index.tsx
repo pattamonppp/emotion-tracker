@@ -3,6 +3,7 @@ import {
   Sparkles,
   X,
   ArrowDown,
+  Check,
   MessageCircleHeart,
   RotateCcw,
 } from 'lucide-react';
@@ -98,21 +99,18 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
 
   return (
     <div className={styles.modal}>
-      <button
-        type="button"
-        className={styles.backdrop}
-        onClick={onClose}
-      />
+      <div className={styles.backdrop} />
 
       <div
         className={styles.card}
         role="dialog"
         aria-modal="true"
       >
-        {/* Header */}
-        <div className={styles.header}>
-          <div className={styles.headerTitleRow}>
-            <div className={styles.iconCircle}>
+        <div className={styles.container}>
+          {/* Header */}
+          <div className={styles.header}>
+            <div className={styles.headerTitleRow}>
+              <div className={styles.iconCircle}>
               <MessageCircleHeart
                 size={16}
                 color="#EC4899"
@@ -237,10 +235,11 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
               size={MARSHMALLOW_SIZE.MD}
               disabled={isEmpty}
               onPress={handleSaveToJar}
-              icon={<ArrowDown size={14} strokeWidth={2.6} />}
+              icon={isJarFull ? <Check size={16} strokeWidth={2.4} /> : <ArrowDown size={14} strokeWidth={2.6} />}
               title={isJarFull ? ce.saveCloud : ce.dropIntoJar}
             />
           </div>
+        </div>
         </div>
       </div>
     </div>

@@ -72,6 +72,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   return (
     <div className={styles.backdrop}>
       <div className={styles.modalCard}>
+        <div className={styles.container}>
         {/* Header Bar */}
         <div className={styles.headerBar}>
           <div className={styles.headerTitleRow}>
@@ -188,6 +189,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
           />
+        </div>
         </div>
       </div>
     </div>

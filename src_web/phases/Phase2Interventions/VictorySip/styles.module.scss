@@ -40,10 +40,10 @@
   cursor: pointer;
   margin-bottom: 6px;
   font-family: inherit;
-  transition: transform 120ms ease;
+  transition: box-shadow 120ms ease;
 
   &:hover {
-    transform: scale(1.02);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -336,11 +336,21 @@
   max-width: 360px;
   background: #FFFFFF;
   border-radius: 16px;
-  padding: 16px;
+  padding: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.guideContainer {
+  padding: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 .modalCloseBtn {

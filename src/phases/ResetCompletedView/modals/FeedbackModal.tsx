@@ -211,35 +211,38 @@ export const FeedbackModal: React.FC<
           <SafeAreaView
             style={styles.modalCard}
           >
+            <View style={styles.container}>
             {/* Header */}
-            <View style={styles.headerBar}>
-              <View style={styles.headerTitleRow}>
-                <View style={styles.iconCircle}>
-                  <MessageSquareHeart size={16} color="#00C4B3" strokeWidth={2.4} />
+            {!submitted && (
+              <View style={styles.headerBar}>
+                <View style={styles.headerTitleRow}>
+                  <View style={styles.iconCircle}>
+                    <MessageSquareHeart size={16} color="#00C4B3" strokeWidth={2.4} />
+                  </View>
+                  <View>
+                    <Text style={styles.headerTitle}>
+                      {renderBilingualNodes(fb.modalTitle, typography.fontPromptBold, typography.fontGothamBold)}
+                    </Text>
+                    <Text style={styles.headerSubtitle}>
+                      {renderBilingualNodes(fb.modalSubtitle, typography.fontPromptRegular, typography.fontGothamBook)}
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.headerTitle}>
-                    {renderBilingualNodes(fb.modalTitle, typography.fontPromptBold, typography.fontGothamBold)}
-                  </Text>
-                  <Text style={styles.headerSubtitle}>
-                    {renderBilingualNodes(fb.modalSubtitle, typography.fontPromptRegular, typography.fontGothamBook)}
-                  </Text>
-                </View>
-              </View>
 
-              <TouchableOpacity
-                onPress={handleClose}
-                style={styles.closeBtn}
-                hitSlop={{
-                  top: 10,
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
-                }}
-              >
-                <X size={18} color="#79ADA9" strokeWidth={2.4} />
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  onPress={handleClose}
+                  style={styles.closeBtn}
+                  hitSlop={{
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10,
+                  }}
+                >
+                  <X size={18} color="#79ADA9" strokeWidth={2.4} />
+                </TouchableOpacity>
+              </View>
+            )}
 
             <ScrollView
               contentContainerStyle={
@@ -610,6 +613,7 @@ export const FeedbackModal: React.FC<
                 </View>
               )}
             </ScrollView>
+            </View>
           </SafeAreaView>
         </View>
       </Modal>
@@ -631,8 +635,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     overflow: 'hidden',
-    padding: 16,
+    padding: 0,
     ...shadows.soft,
+  },
+  container: {
+    padding: 16,
+    width: '100%',
+    height: '100%',
   },
 
   headerBar: {

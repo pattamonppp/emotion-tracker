@@ -57,12 +57,9 @@
   -webkit-appearance: none;
 
   transition:
-    transform 120ms ease,
     box-shadow 120ms ease;
 
   &:hover {
-    transform: translateY(-1px);
-
     box-shadow:
       0 3px 8px rgba(15, 23, 42, 0.08),
       0 1px 2px rgba(15, 23, 42, 0.04);
@@ -278,11 +275,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
+  padding: 0;
+  overflow: hidden;
   box-sizing: border-box;
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.guideContainer {
+  padding: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 .modalCloseBtn {

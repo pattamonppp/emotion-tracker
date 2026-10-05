@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import cn from 'classnames';
 import { audioService } from '../../../../services/audioService';
 import { Button, BUTTON_THEME } from '../../../../components/Button';
-import { Activity, X, Heart } from 'lucide-react';
+import { Activity, X, Heart, Check } from 'lucide-react';
 import { LeafIcon, ZapIcon } from '../../../../icons';
 import { getTranslation } from '../../../../locales';
 import { Language } from '../../../../types';
@@ -132,6 +132,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
   return (
     <div className={styles.backdrop}>
       <div className={styles.modalCard}>
+        <div className={styles.container}>
         {/* Header */}
         <div className={styles.header}>
           <div className={styles.headerLeft}>
@@ -223,8 +224,10 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             title={strings.confirmBtn}
+            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
             onPress={onClose}
           />
+        </div>
         </div>
       </div>
     </div>

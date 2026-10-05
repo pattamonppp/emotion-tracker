@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
   },
   actionSection: {
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 360,
     minHeight: 52, // Preserves exact height for proceed button!
     alignItems: 'center',
     justifyContent: 'center',

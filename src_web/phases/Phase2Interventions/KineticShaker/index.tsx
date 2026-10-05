@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
-import { Sparkles, Star, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Star, CheckCircle2, Check, X } from 'lucide-react';
+import { renderBilingual } from '@/components/BilingualText';
 import { getTranslation } from '../../../locales';
 import { ACTIVITY_TYPE } from '../../../types';
 import { KINETIC_SHAKER_CONFIG } from './constants';
@@ -25,6 +26,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
   const [bouncesLeft, setBouncesLeft] = useState<number>(KINETIC_SHAKER_CONFIG.REQUIRED_JUMPS);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [isShakingAnim, setIsShakingAnim] = useState<boolean>(false);
+  const [isGuideOpen, setIsGuideOpen] = useState<boolean>(true);
 
   useEffect(() => {
     setMode(activityType === ACTIVITY_TYPE.JUMP ? ACTIVITY_TYPE.BOUNCE : ACTIVITY_TYPE.SHAKE);
@@ -96,6 +98,28 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           }
         />
       </div>
+
+      {/* Guide Instruction Pill */}
+      <button
+        type="button"
+        onClick={() => {
+          audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
+          setIsGuideOpen(true);
+        }}
+        className={styles.instructionPill}
+        style={{
+          backgroundColor: skyTheme.badgeBg,
+          borderColor: skyTheme.badgeBorder,
+        }}
+      >
+        <Sparkles size={14} color={skyTheme.badgeIconColor} />
+        <span
+          className={styles.instructionPillText}
+          style={{ color: skyTheme.badgeTextColor }}
+        >
+          {renderBilingual(strings.guideTitle)}
+        </span>
+      </button>
 
       {/* 2. Hero Centerpiece: Centered Fantasy Apothecary Tension Vial */}
       <div className={styles.centerStage}>
@@ -207,6 +231,57 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
           </span>
         )}
       </div>
+
+      {/* 5. Instruction Modal */}
+      {isGuideOpen && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modalCard}>
+            <div className={styles.guideContainer}>
+              <button
+                type="button"
+                onClick={() => setIsGuideOpen(false)}
+                className={styles.modalCloseBtn}
+              >
+                <X size={18} color="#637b91" />
+              </button>
+
+              <div className={styles.guideIconWrapper}>
+                <Sparkles size={28} color="#00C4B3" strokeWidth={2.4} />
+              </div>
+
+              <h3 className={styles.guideTitle}>{renderBilingual(strings.guideTitle)}</h3>
+
+              <div className={styles.guideStepsBox}>
+                <div className={styles.guideStepRow}>
+                  <div className={styles.stepNumBadge}>
+                    <span className={styles.stepNumText}>1</span>
+                  </div>
+                  <span className={styles.guideStepText}>{renderBilingual(strings.guideStep1Desc)}</span>
+                </div>
+
+                <div className={styles.guideStepRow}>
+                  <div className={styles.stepNumBadge}>
+                    <span className={styles.stepNumText}>2</span>
+                  </div>
+                  <span className={styles.guideStepText}>{renderBilingual(strings.guideStep2Desc)}</span>
+                </div>
+              </div>
+
+              <MarshmallowButton
+                variant={MARSHMALLOW_VARIANT.PRIMARY}
+                size={MARSHMALLOW_SIZE.MD}
+                title={strings.guideConfirm}
+                icon={<Check size={16} color="#FFFFFF" strokeWidth={2.6} />}
+                onPress={() => {
+                  audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
+                  setIsGuideOpen(false);
+                }}
+                style={{ width: '100%' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

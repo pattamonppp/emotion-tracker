@@ -10,7 +10,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { Sparkles, X, ArrowDown, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
+import { Sparkles, X, ArrowDown, Check, MessageCircleHeart, RotateCcw } from 'lucide-react-native';
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import { colors, shadows, typography } from '../../../design-system/tokens';
@@ -95,13 +95,10 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.modalOverlay}
       >
-        <TouchableOpacity
-          style={StyleSheet.absoluteFill}
-          activeOpacity={1}
-          onPress={onClose}
-        />
+        <View style={StyleSheet.absoluteFill} />
 
         <View style={styles.cardContainer}>
+          <View style={styles.cardContent}>
           {/* Header Bar */}
           <View style={styles.headerBar}>
             <View style={styles.headerTitleRow}>
@@ -227,12 +224,13 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
                 variant={MARSHMALLOW_VARIANT.PRIMARY}
                 size={MARSHMALLOW_SIZE.MD}
                 title={isJarFull ? ce.saveCloud : ce.dropIntoJar}
-                icon={<ArrowDown size={14} color="#FFFFFF" strokeWidth={2.6} />}
+                icon={isJarFull ? <Check size={16} color="#FFFFFF" strokeWidth={2.4} /> : <ArrowDown size={14} color="#FFFFFF" strokeWidth={2.6} />}
                 disabled={!inputText.trim()}
                 style={{ width: '100%' }}
                 onPress={handleSaveToJar}
               />
             </View>
+          </View>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -246,18 +244,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(15, 23, 42, 0.55)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: 0,
   },
   cardContainer: {
-    width: '100%',
+    width: '90%',
     maxWidth: 360,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    padding: 16,
+    padding: 0,
+    overflow: 'hidden',
     borderWidth: 1.5,
     borderColor: 'rgba(239, 119, 115, 0.3)',
     ...shadows.card,
     zIndex: 10,
+  },
+  cardContent: {
+    width: '100%',
+    padding: 16,
   },
   headerBar: {
     flexDirection: 'row',

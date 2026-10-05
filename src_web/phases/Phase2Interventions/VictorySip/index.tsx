@@ -308,6 +308,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       {isGuideOpen && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modalCard}>
+            <div className={styles.guideContainer}>
             <button
               type="button"
               onClick={() => setIsGuideOpen(false)}
@@ -356,6 +357,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               }}
               style={{ width: '100%' }}
             />
+            </div>
           </div>
         </div>
       )}

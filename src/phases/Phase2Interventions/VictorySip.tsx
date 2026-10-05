@@ -508,6 +508,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       >
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
+            <View style={styles.guideContainer}>
             <TouchableOpacity
               onPress={() => setIsGuideOpen(false)}
               style={styles.modalCloseBtn}
@@ -563,6 +564,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               }}
               style={{ width: '100%' }}
             />
+            </View>
           </View>
         </View>
       </Modal>
@@ -782,12 +784,18 @@ const styles = StyleSheet.create({
   modalCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    padding: 16,
+    padding: 0,
+    overflow: 'hidden',
     alignItems: 'center',
     position: 'relative',
     width: '100%',
     maxWidth: 360,
     ...shadows.card,
+  },
+  guideContainer: {
+    padding: 16,
+    width: '100%',
+    alignItems: 'center',
   },
   modalCloseBtn: {
     position: 'absolute',

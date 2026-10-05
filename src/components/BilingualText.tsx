@@ -17,6 +17,7 @@ export const renderBilingualNodes = (
   const hasEnglish = /[a-zA-Z0-9]/.test(text);
   const hasThai = /[\u0E00-\u0E7F]/.test(text);
 
+  // When text contains both languages, split and style each segment appropriately
   if (hasEnglish && hasThai) {
     const parts = text.split(/([a-zA-Z0-9.,!?'"#%&+-]+)/g);
     return parts.map((part, index) => {
@@ -35,11 +36,7 @@ export const renderBilingualNodes = (
     });
   }
 
-  if (hasEnglish && !hasThai) {
-    return <Text style={{ fontFamily: fontGotham }}>{text}</Text>;
-  }
-
-  return <Text style={{ fontFamily: fontPrompt }}>{text}</Text>;
+  return text;
 };
 
 export const BilingualText: React.FC<BilingualTextProps> = ({
@@ -50,9 +47,21 @@ export const BilingualText: React.FC<BilingualTextProps> = ({
   ...rest
 }) => {
   if (typeof children === 'string') {
+    const hasEnglish = /[a-zA-Z0-9]/.test(children);
+    const hasThai = /[\u0E00-\u0E7F]/.test(children);
+
+    if (hasEnglish && hasThai) {
+      return (
+        <Text style={style} {...rest}>
+          {renderBilingualNodes(children, fontPrompt, fontGotham)}
+        </Text>
+      );
+    }
+
+    const defaultFont = hasEnglish ? fontGotham : fontPrompt;
     return (
-      <Text style={style} {...rest}>
-        {renderBilingualNodes(children, fontPrompt, fontGotham)}
+      <Text style={[{ fontFamily: defaultFont }, style]} {...rest}>
+        {children}
       </Text>
     );
   }

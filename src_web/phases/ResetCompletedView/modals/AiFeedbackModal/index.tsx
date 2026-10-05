@@ -153,29 +153,31 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
         aria-modal="true"
       >
         <div className={styles.safeArea}>
-          <div className={styles.headerBar}>
-            <div className={styles.headerTitleRow}>
-              <div className={styles.iconCircle}>
-                <MessageHeartIcon className={styles.headerIcon} />
+          {!submitted && (
+            <div className={styles.headerBar}>
+              <div className={styles.headerTitleRow}>
+                <div className={styles.iconCircle}>
+                  <MessageHeartIcon className={styles.headerIcon} />
+                </div>
+                <div>
+                  <h3 className={styles.headerTitle}>
+                    {strings.modalTitle}
+                  </h3>
+                  <p className={styles.headerSubtitle}>
+                    {strings.modalSubtitle}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className={styles.headerTitle}>
-                  {strings.modalTitle}
-                </h3>
-                <p className={styles.headerSubtitle}>
-                  {strings.modalSubtitle}
-                </p>
-              </div>
-            </div>
 
-            <button
-              type="button"
-              onClick={handleClose}
-              className={styles.closeBtn}
-            >
-              <CloseIcon />
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={handleClose}
+                className={styles.closeBtn}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+          )}
 
           <div className={styles.scrollContent}>
             {!submitted ? (

@@ -90,6 +90,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
     >
       <View style={styles.backdrop}>
         <SafeAreaView style={styles.modalCard}>
+          <View style={styles.container}>
           <View style={styles.headerBar}>
             <View style={styles.headerTitleRow}>
               <View style={styles.iconCircle}>
@@ -216,6 +217,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               size={MARSHMALLOW_SIZE.MD}
             />
           </View>
+          </View>
         </SafeAreaView>
       </View>
     </Modal>
@@ -237,8 +239,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     overflow: 'hidden',
-    padding: 16,
+    padding: 0,
     ...shadows.soft,
+  },
+  container: {
+    padding: 16,
+    width: '100%',
   },
   headerBar: {
     flexDirection: 'row',

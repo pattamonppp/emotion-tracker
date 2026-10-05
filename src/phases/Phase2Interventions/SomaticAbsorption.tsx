@@ -468,7 +468,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             </TouchableOpacity>
 
             <View style={styles.guideIconWrapper}>
-              <Hand size={32} color={colors.primary} strokeWidth={2.4} />
+              <Hand size={28} color={colors.primary} strokeWidth={2.4} />
             </View>
 
             <Text style={styles.guideTitle}>
@@ -604,7 +604,7 @@ const styles = StyleSheet.create({
   },
   actionSection: {
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 360,
     alignItems: 'center',
     paddingBottom: 6,
   },
@@ -643,7 +643,7 @@ const styles = StyleSheet.create({
   },
   modalCard: {
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 360,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,

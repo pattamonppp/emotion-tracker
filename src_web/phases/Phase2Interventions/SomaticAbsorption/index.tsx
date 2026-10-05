@@ -487,16 +487,13 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
       )}
 
       {isGuideOpen && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setIsGuideOpen(false)}
-        >
+        <div className={styles.modalBackdrop}>
           <div
             className={styles.modalCard}
             role="dialog"
             aria-modal="true"
-            onClick={(event) => event.stopPropagation()}
           >
+            <div className={styles.guideContainer}>
             <button
               type="button"
               className={styles.modalCloseBtn}
@@ -571,6 +568,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               }}
               style={{ width: '100%' }}
             />
+            </div>
           </div>
         </div>
       )}

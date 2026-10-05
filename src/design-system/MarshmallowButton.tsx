@@ -3,6 +3,7 @@ import {
   Animated,
   TouchableOpacity,
   Text,
+  View,
   StyleSheet,
   ViewStyle,
   TextStyle,
@@ -184,7 +185,6 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           },
           text: {
             fontSize: 12,
-            lineHeight: 14.4,
             fontFamily: typography.fontPromptSemiBold,
           },
         };
@@ -197,7 +197,6 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           },
           text: {
             fontSize: 16,
-            lineHeight: 19.2,
             fontFamily: typography.fontPromptBold,
           },
         };
@@ -211,7 +210,6 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           },
           text: {
             fontSize: 13,
-            lineHeight: 16,
             fontFamily: typography.fontPromptBold,
           },
         };
@@ -265,7 +263,11 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           style,
         ]}
       >
-        {icon ? icon : null}
+        {icon ? (
+          <View style={styles.iconWrapper}>
+            {icon}
+          </View>
+        ) : null}
         {title ? (
           <Text
             numberOfLines={1}
@@ -307,8 +309,15 @@ const styles = StyleSheet.create({
     gap: 8,
     ...shadows.soft,
   },
+  iconWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    display: 'flex',
+  },
   text: {
     textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
   },
   disabled: {
     opacity: 0.5,

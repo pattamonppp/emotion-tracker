@@ -19,6 +19,7 @@ import {
   Heart,
   Leaf,
   Zap,
+  Check,
 } from 'lucide-react-native';
 
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
@@ -243,6 +244,7 @@ export const LivePulseSensorModal: React.FC<
       >
         <View style={styles.backdrop}>
           <SafeAreaView style={styles.modalCard}>
+            <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.headerLeft}>
@@ -488,8 +490,10 @@ export const LivePulseSensorModal: React.FC<
                 variant={MARSHMALLOW_VARIANT.PRIMARY}
                 size={MARSHMALLOW_SIZE.MD}
                 title={strings.confirmBtn}
+                icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
                 onPress={handleClose}
               />
+            </View>
             </View>
           </SafeAreaView>
         </View>
@@ -522,7 +526,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 16,
 
-    padding: 16,
+    padding: 0,
 
     overflow: 'hidden',
 
@@ -535,6 +539,11 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
 
     elevation: 10,
+  },
+
+  container: {
+    padding: 16,
+    width: '100%',
   },
 
   /* Header */
@@ -761,8 +770,8 @@ const styles = StyleSheet.create({
 
     borderRadius: 16,
 
-    borderWidth: 1,
-    borderColor: '#f1f1f1',
+    borderWidth: 1.5,
+    borderColor: '#cdd8e1',
 
     overflow: 'hidden',
   },
@@ -782,12 +791,12 @@ const styles = StyleSheet.create({
   },
 
   metricDivider: {
-    width: 1,
+    width: 1.5,
     height: '100%',
 
     alignSelf: 'center',
 
-    backgroundColor: '#f1f1f1',
+    backgroundColor: '#cdd8e1',
   },
 
   metricBoxLabel: {
