@@ -21,6 +21,7 @@
 
   background: #ffffff;
   border-radius: 16px;
+  padding: 16px;
 
   overflow: hidden;
 
@@ -42,26 +43,37 @@
 .headerBar {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 
   flex-shrink: 0;
 
-  padding: 14px 20px;
-
-  border-bottom: 1px solid #f1f1f1;
+  margin-bottom: 18px;
 }
 
 .headerTitleRow {
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 12px;
+}
+
+.iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+
+  background: #E0F8F6;
+  border-radius: 50%;
 }
 
 .headerIcon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 
   flex-shrink: 0;
 
@@ -71,12 +83,23 @@
 .headerTitle {
   margin: 0;
 
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
+  font-family: inherit;
   font-size: 16px;
   font-weight: 700;
-  line-height: normal;
+  line-height: 24px;
 
-  color: #355956;
+  color: #009688;
+}
+
+.headerSubtitle {
+  margin: 0;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+
+  color: #637B91;
 }
 
 .closeBtn {
@@ -119,7 +142,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 
-  padding: 16px 20px;
+  padding: 12px 0;
 
   gap: 20px;
 
@@ -138,12 +161,12 @@
 }
 
 .sectionLabel {
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
-  font-size: 13px;
+  font-family: inherit;
+  font-size: 11px;
   font-weight: 700;
   line-height: normal;
 
-  color: #355956;
+  color: #566D80;
 }
 
 .starsRow {
@@ -396,9 +419,6 @@
 
 .submitWrap {
   display: flex;
-
-  margin-top: 8px;
-  padding-bottom: 24px;
   flex: 1;
 
   >button {
@@ -412,7 +432,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: 40px 20px;
+  padding: 20px 20px;
 }
 
 .successIconCircle {
@@ -463,6 +483,8 @@
   color: #79ADA9;
 
   text-align: center;
+  max-width: 80%;
+  white-space: pre-wrap;
 }
 
 .successButtonWrap {
@@ -511,32 +533,4 @@
   color: #475569;
 
   text-align: left;
-}
-
-.copyJsonBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 6px;
-
-  margin-top: 12px;
-
-  padding: 4px 0;
-
-  border: 0;
-  background: transparent;
-
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-
-  color: #64748b;
-
-  cursor: pointer;
-}
-
-.copyJsonBtn svg {
-  width: 14px;
-  height: 14px;
 }

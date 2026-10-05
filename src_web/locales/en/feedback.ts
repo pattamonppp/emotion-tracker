@@ -21,11 +21,7 @@ export const feedback = {
   commentPlaceholder: 'e.g. Loved the ocean soundscape, would like a slightly slower breath pace...',
   submitButton: 'Submit Feedback',
   successTitle: 'Feedback Saved!',
-  successDesc: 'Thank you so much! Your thoughts help make Mooca gentler, warmer, and more supportive for everyone.',
-  inspectJson: 'Inspect Data Structure (JSON)',
-  hideJson: 'Hide JSON',
+  successDesc: 'Thank you so much! Your thoughts help make Mooca gentler,\nwarmer, and more supportive for everyone.',
   skipButton: 'Skip',
   doneButton: 'Done',
-  copyJson: 'Copy JSON',
-  copiedJson: 'Copied!',
 };

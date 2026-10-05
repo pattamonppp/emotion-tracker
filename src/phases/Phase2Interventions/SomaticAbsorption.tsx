@@ -19,6 +19,7 @@ import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCirc
 import { Star, Sun, Hand, Sparkles, HelpCircle, Check, X } from 'lucide-react-native';
 import { typography, radii, shadows, colors } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
+import { renderBilingualNodes } from '../../components/BilingualText';
 import { Language, SKY, SkyTimePeriod } from '../../types';
 
 interface SomaticAbsorptionProps {
@@ -270,11 +271,15 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           <Hand size={14} color={theme.badgeIconColor} strokeWidth={2.4} />
         )}
         <Text style={[styles.instructionPillText, { color: theme.badgeText }]}>
-          {touchCount >= 2
-            ? strings.fingerActive2
-            : touchCount === 1
-              ? strings.fingerWarning1
-              : strings.fingerPrompt}
+          {renderBilingualNodes(
+            touchCount >= 2
+              ? strings.fingerActive2
+              : touchCount === 1
+                ? strings.fingerWarning1
+                : strings.fingerPrompt,
+            typography.fontPromptBold,
+            typography.fontGothamBold
+          )}
         </Text>
         <HelpCircle size={13} color={theme.badgeIconColor} strokeWidth={2} />
       </TouchableOpacity>
@@ -441,7 +446,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
           </View>
 
           <Text style={[styles.bottomCaption, { color: theme.captionColor }]}>
-            {strings.caption}
+            {renderBilingualNodes(strings.caption, typography.fontPromptRegular, typography.fontGotham)}
           </Text>
         </View>
       )}
@@ -459,7 +464,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               onPress={() => setIsGuideOpen(false)}
               style={styles.modalCloseBtn}
             >
-              <X size={18} color="#64748B" />
+              <X size={18} color="#637b91" />
             </TouchableOpacity>
 
             <View style={styles.guideIconWrapper}>
@@ -467,7 +472,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             </View>
 
             <Text style={styles.guideTitle}>
-              {strings.guideTitle}
+              {renderBilingualNodes(strings.guideTitle, typography.fontPromptBold, typography.fontGothamBold)}
             </Text>
 
             <View style={styles.guideStepsBox}>
@@ -476,7 +481,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                   <Text style={styles.stepNumText}>1</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {strings.guideStep1Desc}
+                  {renderBilingualNodes(strings.guideStep1Desc, typography.fontPromptRegular, typography.fontGothamBook)}
                 </Text>
               </View>
 
@@ -485,7 +490,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                   <Text style={styles.stepNumText}>2</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {strings.guideStep2Desc}
+                  {renderBilingualNodes(strings.guideStep2Desc, typography.fontPromptRegular, typography.fontGothamBook)}
                 </Text>
               </View>
 
@@ -494,24 +499,22 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                   <Text style={styles.stepNumText}>3</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {strings.guideStep3Desc}
+                  {renderBilingualNodes(strings.guideStep3Desc, typography.fontPromptRegular, typography.fontGothamBook)}
                 </Text>
               </View>
             </View>
 
-            <TouchableOpacity
+            <MarshmallowButton
+              variant={MARSHMALLOW_VARIANT.PRIMARY}
+              size={MARSHMALLOW_SIZE.MD}
+              title={strings.guideConfirm}
+              icon={<Check size={16} color="#FFFFFF" strokeWidth={2.6} />}
               onPress={() => {
                 audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
                 setIsGuideOpen(false);
               }}
-              activeOpacity={0.85}
-              style={styles.guideConfirmBtn}
-            >
-              <Check size={16} color="#FFFFFF" strokeWidth={2.6} />
-              <Text style={styles.guideConfirmText}>
-                {strings.guideConfirm}
-              </Text>
-            </TouchableOpacity>
+              style={{ width: '100%' }}
+            />
           </View>
         </View>
       </Modal>
@@ -633,17 +636,17 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.65)',
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
   },
   modalCard: {
     width: '100%',
     maxWidth: 340,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    padding: 24,
+    padding: 16,
     alignItems: 'center',
     position: 'relative',
     ...shadows.card,
@@ -653,34 +656,35 @@ const styles = StyleSheet.create({
     top: 16,
     right: 16,
     padding: 6,
+    zIndex: 10,
   },
   guideIconWrapper: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#E6F9F7',
+    backgroundColor: '#E0F8F6',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
     borderWidth: 2,
-    borderColor: '#99F6E4',
+    borderColor: '#B3EDE8',
   },
   guideTitle: {
     fontFamily: typography.fontPromptBold,
     fontSize: 16,
-    color: colors.textPrimary,
+    color: colors.primaryDark,
     textAlign: 'center',
     marginBottom: 16,
   },
   guideStepsBox: {
     width: '100%',
-    backgroundColor: colors.bgLight,
-    borderRadius: radii.lg,
+    backgroundColor: '#fbfbfb',
+    borderRadius: 16,
     padding: 14,
     gap: 12,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: colors.borderSubtle,
+    borderColor: '#f1f1f1',
   },
   guideStepRow: {
     flexDirection: 'row',
@@ -690,15 +694,16 @@ const styles = StyleSheet.create({
   stepNumBadge: {
     width: 22,
     height: 22,
-    borderRadius: radii.full,
+    borderRadius: 11,
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 1,
   },
   stepNumText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 11,
+    fontWeight: '700',
     color: colors.white,
   },
   guideStepText: {
@@ -707,21 +712,5 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     color: colors.textSecondary,
     lineHeight: 18,
-  },
-  guideConfirmBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: radii.full,
-    gap: 8,
-    width: '100%',
-  },
-  guideConfirmText: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 13.5,
-    color: colors.white,
   },
 });

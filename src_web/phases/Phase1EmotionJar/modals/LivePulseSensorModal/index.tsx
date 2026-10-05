@@ -8,6 +8,7 @@ import { getTranslation } from '../../../../locales';
 import { Language } from '../../../../types';
 import styles from './styles.module.scss';
 import MarshmallowButton, { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT } from '@/components/MarshmallowButton';
+import { renderBilingual } from '@/components/BilingualText';
 
 export interface LivePulseSensorModalProps {
   isOpen: boolean;
@@ -139,10 +140,10 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             </div>
             <div className={styles.headerTextCol}>
               <h3 className={styles.headerTitle}>
-                {strings.liveCalibrationTitle}
+                {renderBilingual(strings.liveCalibrationTitle)}
               </h3>
               <p className={styles.headerSubtitle}>
-                {strings.headerSubtitle}
+                {renderBilingual(strings.headerSubtitle)}
               </p>
             </div>
           </div>
@@ -170,35 +171,47 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             <span className={styles.touchpadProgress}>
               {isFingerOnSensor
                 ? `${scanProgress}%`
-                : strings.holdFinger}
+                : renderBilingual(strings.holdFinger)}
             </span>
           </div>
           <span className={styles.touchpadInstruction}>
-            {strings.touchInstruction}
+            {renderBilingual(strings.touchInstruction)}
           </span>
         </div>
 
         {/* Measured Metrics */}
         <div className={styles.metricsGrid}>
           <div className={styles.metricBox}>
-            <span className={styles.metricBoxLabel}>{strings.heartRate}</span>
+            <span className={styles.metricBoxLabel}>
+              {renderBilingual(strings.heartRate)}
+            </span>
             <div className={styles.metricBoxValue}>
-              {measuredBpm} <span>bpm</span>
+              {measuredBpm}
+              <span className={styles.metricBoxUnit}> bpm</span>
             </div>
           </div>
+
+          <div className={styles.metricDivider} />
+
           <div className={styles.metricBox}>
-            <span className={styles.metricBoxLabel}>{strings.autonomicState}</span>
+            <span className={styles.metricBoxLabel}>
+              {renderBilingual(strings.autonomicState)}
+            </span>
             <div className={styles.stateBoxValue}>
               {measuredBpm < 85 ? (
-                <span className={styles.stateTagParasympathetic}>
+                <div className={styles.stateTagParasympathetic}>
                   <LeafIcon />
-                  <span>{strings.parasympathetic}</span>
-                </span>
+                  <span className={styles.stateTagParasympatheticText}>
+                    {renderBilingual(strings.parasympathetic)}
+                  </span>
+                </div>
               ) : (
-                <span className={styles.stateTagSympathetic}>
+                <div className={styles.stateTagSympathetic}>
                   <ZapIcon />
-                  <span>{strings.sympathetic}</span>
-                </span>
+                  <span className={styles.stateTagSympatheticText}>
+                    {renderBilingual(strings.sympathetic)}
+                  </span>
+                </div>
               )}
             </div>
           </div>

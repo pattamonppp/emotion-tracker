@@ -15,6 +15,7 @@ import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { DESIGN_TOKENS } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
+import { renderBilingual } from '../../../components/BilingualText';
 
 import type { SomaticAbsorptionProps } from './types';
 import styles from './styles.module.scss';
@@ -503,7 +504,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             >
               <X
                 size={18}
-                color="#64748B"
+                color="#637b91"
               />
             </button>
 
@@ -518,7 +519,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             </div>
 
             <h2 className={styles.guideTitle}>
-              {strings.guideTitle}
+              {renderBilingual(strings.guideTitle)}
             </h2>
 
             <div className={styles.guideStepsBox}>
@@ -530,7 +531,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                 </div>
 
                 <span className={styles.guideStepText}>
-                  {strings.guideStep1Desc}
+                  {renderBilingual(strings.guideStep1Desc)}
                 </span>
               </div>
 
@@ -542,7 +543,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                 </div>
 
                 <span className={styles.guideStepText}>
-                  {strings.guideStep2Desc}
+                  {renderBilingual(strings.guideStep2Desc)}
                 </span>
               </div>
 
@@ -554,29 +555,22 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
                 </div>
 
                 <span className={styles.guideStepText}>
-                  {strings.guideStep3Desc}
+                  {renderBilingual(strings.guideStep3Desc)}
                 </span>
               </div>
             </div>
 
-            <button
-              type="button"
-              className={styles.guideConfirmBtn}
-              onClick={() => {
+            <MarshmallowButton
+              variant={MARSHMALLOW_VARIANT.PRIMARY}
+              size={MARSHMALLOW_SIZE.MD}
+              title={strings.guideConfirm}
+              icon={<Check size={16} color="#FFFFFF" strokeWidth={2.6} />}
+              onPress={() => {
                 audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
                 setIsGuideOpen(false);
               }}
-            >
-              <Check
-                size={16}
-                color="#FFFFFF"
-                strokeWidth={2.6}
-              />
-
-              <span className={styles.guideConfirmText}>
-                {strings.guideConfirm}
-              </span>
-            </button>
+              style={{ width: '100%' }}
+            />
           </div>
         </div>
       )}

@@ -645,7 +645,6 @@ export const FloatingEmotionCloud: React.FC<
 
                 onEditCustom();
               }}
-              aria-label="Edit emotion"
             >
               <span
                 className={styles.downArrowPill}

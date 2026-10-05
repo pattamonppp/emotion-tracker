@@ -27,9 +27,9 @@ export interface FeedbackAspect {
 export const FEEDBACK_ASPECTS: FeedbackAspect[] = [
   { id: 'audio_binaural', labelTh: 'คลื่นเสียงบำบัดตรงจุด', labelEn: 'Binaural Audio', Icon: HeadphonesIcon, colorTheme: 'mint' },
   { id: 'cognitive_reframe', labelTh: 'คำพูดรีเฟรมความคิดโดนใจ', labelEn: 'Cognitive Reframing', Icon: MessageHeartIcon, colorTheme: 'peach' },
-  { id: 'haptic_kinetics', labelTh: 'แรงสั่นและกิจกรรมสะบัดมือ', labelEn: 'Haptic & Movement', Icon: ActivityIcon, colorTheme: 'violet' },
   { id: 'sip_pacing', labelTh: 'จังหวะการจิบน้ำผ่อนคลาย', labelEn: 'Sip Breathing Rhythm', Icon: GlassWaterIcon, colorTheme: 'sky' },
   { id: 'mbti_matching', labelTh: 'เข้าใจลักษณะนิสัย', labelEn: 'Personality Resonance', Icon: HeartIcon, colorTheme: 'rose' },
+  { id: 'haptic_kinetics', labelTh: 'แรงสั่นและกิจกรรมสะบัดมือ', labelEn: 'Haptic & Movement', Icon: ActivityIcon, colorTheme: 'violet' },
 ];
 
 export interface AccuracyOption {

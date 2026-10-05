@@ -21,11 +21,7 @@ export const feedback = {
   commentPlaceholder: 'เช่น ชอบเสียงคลื่นทะเลมาก, อยากให้มีจังหวะหายใจช้าลงอีกนิด...',
   submitButton: 'ส่งความรู้สึก',
   successTitle: 'บันทึกความคิดเห็นสำเร็จ!',
-  successDesc: 'ขอบคุณมากนะ! ความคิดเห็นของเธอช่วยให้ Mooca เข้าใจและปลอบประโลมใจทุกคนได้ดียิ่งขึ้น',
-  inspectJson: 'ดูโครงสร้างข้อมูล (JSON)',
-  hideJson: 'ซ่อน JSON',
+  successDesc: 'ขอบคุณมากนะ! ความคิดเห็นของเธอช่วยให้ Mooca เข้าใจ\nและปลอบประโลมใจทุกคนได้ดียิ่งขึ้น',
   skipButton: 'ข้าม',
   doneButton: 'เสร็จสิ้น',
-  copyJson: 'คัดลอก JSON',
-  copiedJson: 'คัดลอกแล้ว!',
 };

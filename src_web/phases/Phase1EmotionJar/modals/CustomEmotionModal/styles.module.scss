@@ -32,7 +32,7 @@
 
   width: 100%;
   max-width: min(520px, 90vw);
-  padding: 18px;
+  padding: 16px;
 
   background: #ffffff;
   border: 1.5px solid rgba(239, 119, 115, 0.3);
@@ -48,13 +48,13 @@
   align-items: flex-start;
   justify-content: space-between;
 
-  margin-bottom: 12px;
+  margin-bottom: 18px;
 }
 
 .headerTitleRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 
   flex: 1;
 }
@@ -76,8 +76,9 @@
   margin: 0;
 
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
   color: #009688;
 }
 
@@ -86,7 +87,8 @@
 
   font-family: inherit;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 400;
+  line-height: 16px;
   color: #637b91;
 }
 
@@ -187,7 +189,9 @@
 }
 
 .textInput:focus {
-  border-color: #EF7773;
+  border-color: #00c4b3;
+  box-shadow: 0 0 0 3px rgba(0, 196, 179, 0.15);
+  background: #ffffff;
 }
 
 .charCount {
@@ -242,7 +246,7 @@
 
   font-family: inherit;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 400;
   color: #566d80;
 
   cursor: pointer;
@@ -256,7 +260,6 @@
   background: #FDEFEE;
   border-color: #EF7773;
 
-  font-weight: 700;
   color: #EB6460;
 }
 
@@ -266,65 +269,16 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
 }
 
-.delete {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-
-  flex-shrink: 0;
-
-  padding: 10px;
-
-  background: #FAD6D5;
-  border: 0;
-  border-radius: 14px;
-
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 700;
-  color: #EF7773;
-
-  cursor: pointer;
+.deleteWrapper {
+  flex: 0 0 auto;
 }
 
-.saveSky,
-.saveJar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-
+.actionBtn {
   flex: 1;
-
-  padding: 11px;
-
-  border-radius: 14px;
-
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-.saveSky {
-  background: #E0F8F6;
-  border: 1.5px solid #B3EDE8;
-  color: #009688;
-}
-
-.saveJar {
-  background: #00C4B3;
-  border: 1.5px solid #00C4B3;
-  color: #ffffff;
-}
-
-.buttonDisabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+  min-width: 0;
 }
 
 /* Mobile */

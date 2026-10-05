@@ -156,7 +156,6 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
           }}
           onClick={handlePetting}
           disabled={!interactive}
-          aria-label="Mooca mascot"
         >
           <svg
             className={styles.svgRoot}

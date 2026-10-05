@@ -92,6 +92,8 @@ export const typography = {
   fontDefault: 'Prompt_400Regular',
 
   // Gotham Rounded for English CI
+  fontGothamLight: 'GothamRounded-Light',
+  fontGothamBook: 'GothamRounded-Book',
   fontGotham: 'GothamRounded-Medium',
   fontGothamBold: 'GothamRounded-Bold',
   fontEn: 'GothamRounded-Bold',

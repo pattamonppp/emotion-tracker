@@ -27,6 +27,7 @@ import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { getTranslation } from '../../../locales';
 import { MODAL_CONFIG } from '../../../constants';
 import { GOAL } from '../../../../src_web/types';
+import { renderBilingualNodes } from '../../../components/BilingualText';
 import { MarshmallowButton, MARSHMALLOW_VARIANT, MARSHMALLOW_SIZE } from '../../../design-system/MarshmallowButton';
 
 export interface OnboardingModalProps {
@@ -89,12 +90,22 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       <View style={styles.backdrop}>
         <SafeAreaView style={styles.modalCard}>
           <View style={styles.headerBar}>
-            <Text style={styles.headerTitle}>
-              {o.profileTitle}
-            </Text>
+            <View style={styles.headerTitleRow}>
+              <View style={styles.iconCircle}>
+                <User size={16} color="#00C4B3" strokeWidth={2.4} />
+              </View>
+              <View>
+                <Text style={styles.headerTitle}>
+                  {renderBilingualNodes(o.profileTitle, typography.fontPromptBold, typography.fontGothamBold)}
+                </Text>
+                <Text style={styles.headerSubtitle}>
+                  {renderBilingualNodes(o.subtitle, typography.fontPromptRegular, typography.fontGothamBook)}
+                </Text>
+              </View>
+            </View>
             {onClose && (
               <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-                <X size={18} color={colors.textSecondary} />
+                <X size={18} color={colors.textMuted} strokeWidth={2.4} />
               </TouchableOpacity>
             )}
           </View>
@@ -112,7 +123,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             {/* Name Field */}
             <View style={styles.fieldSection}>
               <Text style={styles.fieldLabel}>
-                {o.yourName}
+                {renderBilingualNodes(o.yourName)}
               </Text>
               <View style={styles.inputRow}>
                 <User size={16} color={colors.primary} style={{ marginLeft: 12 }} />
@@ -128,7 +139,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             {/* Goal Selector */}
             <View style={styles.fieldSection}>
               <Text style={styles.fieldLabel}>
-                {o.primaryContext}
+                {renderBilingualNodes(o.primaryContext)}
               </Text>
               <View style={styles.goalsGrid}>
                 {GOALS.map((g) => {
@@ -148,7 +159,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     >
                       <IconComponent size={20} color={g.color} />
                       <Text style={[styles.goalLabel, isSelected && { color: colors.primaryDark }]}>
-                        {g.label}
+                        {renderBilingualNodes(g.label)}
                       </Text>
                       {isSelected && <Check size={14} color={g.color} strokeWidth={3} />}
                     </TouchableOpacity>
@@ -160,7 +171,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             {/* MBTI Selector */}
             <View style={styles.fieldSection}>
               <Text style={styles.fieldLabel}>
-                {o.mbtiSpecific}
+                {renderBilingualNodes(o.mbtiSpecific)}
               </Text>
               <View style={styles.mbtiGrid}>
                 {MODAL_CONFIG.mbtiOptions.map((m) => {
@@ -223,22 +234,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     overflow: 'hidden',
+    padding: 16,
     ...shadows.soft,
   },
   headerBar: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderSubtle,
+    marginBottom: 18,
+  },
+  headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  iconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#E0F8F6',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerTitle: {
-    fontFamily: typography.fontPromptExtraBold,
+    fontFamily: typography.fontPromptBold,
     fontSize: 16,
+    lineHeight: 24,
     color: colors.primaryDark,
-    ...(Platform.OS !== 'android' ? { fontWeight: '800' } : {}),
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
+  },
+  headerSubtitle: {
+    fontFamily: typography.fontPromptRegular,
+    fontSize: 11,
+    lineHeight: 16,
+    color: '#637b91',
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
   closeBtn: {
     width: 32,
@@ -248,15 +279,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   content: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 0,
+    paddingVertical: 4,
     gap: 16,
   },
   mascotBox: {
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    height: 145,
+    height: 135,
     paddingBottom: 4,
     marginVertical: 4,
     overflow: 'visible',
@@ -266,7 +297,7 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     fontFamily: typography.fontPromptBold,
-    fontSize: 12,
+    fontSize: 11,
     color: colors.textSecondary,
     marginLeft: 2,
     ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
@@ -331,16 +362,17 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   mbtiChipText: {
+    fontFamily: typography.fontGothamBook,
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: '400',
     color: colors.textSecondary,
   },
   mbtiChipTextActive: {
+    fontFamily: typography.fontGothamBook,
     color: colors.primaryDark,
-    fontWeight: '800',
+    fontWeight: '500',
   },
   saveSection: {
     marginTop: 8,
-    paddingBottom: 24,
   },
 });

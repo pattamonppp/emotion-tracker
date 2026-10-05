@@ -24,8 +24,9 @@ import {
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { Button } from '../../../design-system/Button';
 import { getTranslation } from '../../../locales';
-import { typography } from '../../../design-system/tokens';
+import { colors, typography } from '../../../design-system/tokens';
 import { Language } from '../../../types';
+import { renderBilingualNodes } from '../../../components/BilingualText';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
 
 export interface LivePulseSensorModalProps {
@@ -67,15 +68,6 @@ export const LivePulseSensorModal: React.FC<
       new Animated.Value(1),
     ).current;
 
-    const pulseScale = useRef(
-      new Animated.Value(1),
-    ).current;
-
-    const pulseAnimationRef =
-      useRef<Animated.CompositeAnimation | null>(
-        null,
-      );
-
     useEffect(() => {
       scanProgressRef.current =
         scanProgress;
@@ -93,66 +85,10 @@ export const LivePulseSensorModal: React.FC<
 
         pressScale.stopAnimation();
         pressScale.setValue(1);
-
-        pulseScale.stopAnimation();
-        pulseScale.setValue(1);
-
-        pulseAnimationRef.current?.stop();
       }
     }, [
       isOpen,
       pressScale,
-      pulseScale,
-    ]);
-
-    /* Active ring animation */
-
-    useEffect(() => {
-      pulseAnimationRef.current?.stop();
-
-      if (!isFingerOnSensor) {
-        Animated.spring(pulseScale, {
-          toValue: 1,
-          useNativeDriver: true,
-          friction: 8,
-          tension: 80,
-        }).start();
-
-        return;
-      }
-
-      const animation = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseScale, {
-            toValue: 1.03,
-            duration: 700,
-            easing: Easing.inOut(
-              Easing.ease,
-            ),
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseScale, {
-            toValue: 1,
-            duration: 700,
-            easing: Easing.inOut(
-              Easing.ease,
-            ),
-            useNativeDriver: true,
-          }),
-        ]),
-      );
-
-      pulseAnimationRef.current =
-        animation;
-
-      animation.start();
-
-      return () => {
-        animation.stop();
-      };
-    }, [
-      isFingerOnSensor,
-      pulseScale,
     ]);
 
     /* Scan */
@@ -291,11 +227,6 @@ export const LivePulseSensorModal: React.FC<
       pressScale.stopAnimation();
       pressScale.setValue(1);
 
-      pulseScale.stopAnimation();
-      pulseScale.setValue(1);
-
-      pulseAnimationRef.current?.stop();
-
       onClose();
     };
 
@@ -337,7 +268,7 @@ export const LivePulseSensorModal: React.FC<
                     }
                   >
                     {
-                      strings.liveCalibrationTitle
+                      renderBilingualNodes(strings.liveCalibrationTitle)
                     }
                   </Text>
 
@@ -346,7 +277,7 @@ export const LivePulseSensorModal: React.FC<
                       styles.headerSubtitle
                     }
                   >
-                    {strings.headerSubtitle}
+                    {renderBilingualNodes(strings.headerSubtitle, typography.fontPromptRegular, typography.fontGothamBook)}
                   </Text>
                 </View>
               </View>
@@ -358,92 +289,88 @@ export const LivePulseSensorModal: React.FC<
               >
                 <X
                   size={18}
-                  color="#64748B"
+                  color={colors.textMuted}
+                  strokeWidth={2.4}
                 />
               </Pressable>
             </View>
 
             {/* Sensor */}
             <View style={styles.touchpadZone}>
-              <Animated.View
-                style={[
-                  styles.touchpadPad,
-                  isFingerOnSensor &&
-                  styles.touchpadPadSensing,
-                  {
-                    transform: [
-                      {
-                        scale: pressScale,
-                      },
-                    ],
-                  },
-                ]}
-                onStartShouldSetResponder={() =>
-                  true
-                }
-                onResponderGrant={
-                  handlePressIn
-                }
-                onResponderRelease={
-                  handlePressOut
-                }
-                onResponderTerminate={
-                  handlePressOut
-                }
-                onResponderTerminationRequest={() =>
-                  false
-                }
+              <Pressable
+                onPressIn={handlePressIn}
+                onPressOut={handlePressOut}
               >
-                {/* Web ::before equivalent */}
                 <Animated.View
-                  pointerEvents="none"
                   style={[
-                    styles.touchpadRing,
+                    styles.touchpadPad,
                     isFingerOnSensor &&
-                    styles.touchpadRingSensing,
+                    styles.touchpadPadSensing,
                     {
                       transform: [
                         {
-                          scale: pulseScale,
+                          scale: pressScale,
                         },
                       ],
                     },
                   ]}
-                />
-
-                <Heart
-                  size={44}
-                  color={
-                    isFingerOnSensor
-                      ? '#EF7773'
-                      : '#00C4B3'
-                  }
-                  fill={
-                    isFingerOnSensor
-                      ? '#EF7773'
-                      : 'transparent'
-                  }
-                />
-
-                <Text
-                  style={
-                    styles.touchpadProgress
-                  }
                 >
-                  {isFingerOnSensor
-                    ? `${scanProgress}%`
-                    : isScanComplete
-                      ? strings.calibrated
-                      : strings.holdFinger}
-                </Text>
-              </Animated.View>
+                  {/* Web 0 0 0 6px rgba(239, 119, 115, 0.15) outer halo */}
+                  {isFingerOnSensor && (
+                    <View
+                      pointerEvents="none"
+                      style={styles.touchpadOuterHalo}
+                    />
+                  )}
+
+                  {/* Web ::before equivalent (170x170px) */}
+                  <View
+                    pointerEvents="none"
+                    style={[
+                      styles.touchpadRing,
+                      isFingerOnSensor &&
+                      styles.touchpadRingSensing,
+                    ]}
+                  />
+
+                  <Heart
+                    size={44}
+                    color={
+                      isFingerOnSensor
+                        ? '#EF7773'
+                        : '#00C4B3'
+                    }
+                    fill={
+                      isFingerOnSensor
+                        ? '#EF7773'
+                        : 'transparent'
+                    }
+                  />
+
+                  <Text
+                    style={
+                      styles.touchpadProgress
+                    }
+                  >
+                    {renderBilingualNodes(
+                      isFingerOnSensor
+                        ? `${scanProgress}%`
+                        : isScanComplete
+                          ? strings.calibrated
+                          : strings.holdFinger,
+                      typography.fontPromptMedium,
+                      typography.fontGotham
+                    )}
+                  </Text>
+                </Animated.View>
+              </Pressable>
 
               <Text
                 style={
                   styles.touchpadInstruction
                 }
               >
-                {strings.touchInstruction}
+                {renderBilingualNodes(strings.touchInstruction)}
               </Text>
             </View>
 
@@ -461,7 +388,7 @@ export const LivePulseSensorModal: React.FC<
                     styles.metricBoxLabel
                   }
                 >
-                  {strings.heartRate}
+                  {renderBilingualNodes(strings.heartRate)}
                 </Text>
 
                 <Text
@@ -496,7 +423,7 @@ export const LivePulseSensorModal: React.FC<
                     styles.metricBoxLabel
                   }
                 >
-                  {strings.autonomicState}
+                  {renderBilingualNodes(strings.autonomicState)}
                 </Text>
 
                 <View
@@ -521,7 +448,7 @@ export const LivePulseSensorModal: React.FC<
                         }
                       >
                         {
-                          strings.parasympathetic
+                          renderBilingualNodes(strings.parasympathetic, typography.fontPromptMedium, typography.fontGotham)
                         }
                       </Text>
                     </View>
@@ -533,7 +460,7 @@ export const LivePulseSensorModal: React.FC<
                     >
                       <Zap
                         size={13}
-                        color="#BE123C"
+                        color="#E44743"
                       />
 
                       <Text
@@ -542,7 +469,7 @@ export const LivePulseSensorModal: React.FC<
                         }
                       >
                         {
-                          strings.sympathetic
+                          renderBilingualNodes(strings.sympathetic, typography.fontPromptMedium, typography.fontGotham)
                         }
                       </Text>
                     </View>
@@ -577,10 +504,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
 
-    padding: 20,
+    padding: 16,
 
     backgroundColor:
-      'rgba(15, 23, 42, 0.38)',
+      'rgba(15, 23, 42, 0.55)',
   },
 
   modalCard: {
@@ -594,6 +521,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
 
     borderRadius: 16,
+
+    padding: 16,
 
     overflow: 'hidden',
 
@@ -611,17 +540,10 @@ const styles = StyleSheet.create({
   /* Header */
 
   header: {
-    minHeight: 56,
-
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-
-    borderBottomWidth: 1,
-    borderBottomColor: '#cdd8e1',
+    marginBottom: 18,
   },
 
   headerLeft: {
@@ -630,7 +552,7 @@ const styles = StyleSheet.create({
 
     flex: 1,
 
-    gap: 10,
+    gap: 12,
   },
 
   activityIconBox: {
@@ -640,7 +562,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
 
-    borderRadius: 9,
+    borderRadius: 16,
 
     backgroundColor: '#E0F8F6',
   },
@@ -659,24 +581,24 @@ const styles = StyleSheet.create({
     fontFamily:
       typography.fontPromptBold,
 
-    fontSize: 15,
-    fontWeight: '800',
+    fontSize: 16,
+    fontWeight: '700',
 
-    lineHeight: 20,
+    lineHeight: 24,
 
-    color: '#009688',
+    color: colors.primaryDark,
   },
 
   headerSubtitle: {
     margin: 0,
 
     fontFamily:
-      typography.fontPromptMedium,
+      typography.fontPromptRegular,
 
-    fontSize: 10,
-    fontWeight: '500',
+    fontSize: 11,
+    fontWeight: '400',
 
-    lineHeight: 14,
+    lineHeight: 16,
 
     color: '#637b91',
   },
@@ -713,6 +635,7 @@ const styles = StyleSheet.create({
 
     width: 215,
     height: 215,
+    gap: 4,
 
     alignItems: 'center',
     justifyContent: 'center',
@@ -722,33 +645,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
 
     borderWidth: 1.5,
-    borderColor: '#cdd8e1',
+    borderColor: '#DBF0EE',
 
-    shadowColor: '#355956',
+    shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
     shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowRadius: 10,
 
-    elevation: 1.5,
+    elevation: 2,
+  },
 
-    overflow: 'hidden',
+  touchpadOuterHalo: {
+    position: 'absolute',
+    top: -6,
+    left: -6,
+    width: 227,
+    height: 227,
+    borderRadius: 113.5,
+    borderWidth: 6,
+    borderColor: 'rgba(239, 119, 115, 0.18)',
   },
 
   touchpadPadSensing: {
     borderColor: '#EF7773',
 
-    backgroundColor:
-      'rgba(239, 119, 115, 0.08)',
+    backgroundColor: '#FDEFEE',
 
     shadowColor: '#EF7773',
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.15,
     shadowRadius: 10,
 
     elevation: 4,
@@ -787,11 +718,11 @@ const styles = StyleSheet.create({
       typography.fontPromptMedium,
 
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: '500',
 
     lineHeight: 14,
 
-    color: '#637b91',
+    color: '#355956',
 
     textAlign: 'center',
 
@@ -809,20 +740,20 @@ const styles = StyleSheet.create({
     fontFamily:
       typography.fontPromptMedium,
 
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '500',
 
     lineHeight: 15,
 
     textAlign: 'center',
 
-    color: '#79ADA9',
+    color: colors.textSecondary,
   },
 
   /* Metrics */
 
   metricsGrid: {
-    marginHorizontal: 24,
+    width: '100%',
 
     flexDirection: 'row',
 
@@ -831,7 +762,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
 
     borderWidth: 1,
-    borderColor: '#cdd8e1',
+    borderColor: '#f1f1f1',
 
     overflow: 'hidden',
   },
@@ -852,27 +783,27 @@ const styles = StyleSheet.create({
 
   metricDivider: {
     width: 1,
-    height: 36,
+    height: '100%',
 
     alignSelf: 'center',
 
-    backgroundColor: '#cdd8e1',
+    backgroundColor: '#f1f1f1',
   },
 
   metricBoxLabel: {
     marginBottom: 4,
 
     fontFamily:
-      typography.fontPromptMedium,
+      typography.fontPromptBold,
 
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 11,
+    fontWeight: '700',
 
     lineHeight: 16,
 
     textAlign: 'center',
 
-    color: '#637b91',
+    color: colors.textSecondary,
   },
 
   metricBoxValue: {
@@ -883,9 +814,10 @@ const styles = StyleSheet.create({
 
     lineHeight: 34,
 
-    color: '#009688',
+    color: '#355956',
 
     textAlign: 'center',
+    textTransform: 'uppercase',
   },
 
   metricBoxUnit: {
@@ -893,8 +825,9 @@ const styles = StyleSheet.create({
       typography.fontGothamBold,
 
     fontSize: 11,
+    fontWeight: '600',
 
-    color: '#637b91',
+    color: '#79ADA9',
   },
 
   stateBoxValue: {
@@ -920,10 +853,10 @@ const styles = StyleSheet.create({
 
   stateTagParasympatheticText: {
     fontFamily:
-      typography.fontPromptBold,
+      typography.fontPromptMedium,
 
     fontSize: 9,
-    fontWeight: '700',
+    fontWeight: '500',
 
     color: '#047857',
   },
@@ -939,27 +872,24 @@ const styles = StyleSheet.create({
 
     borderRadius: 999,
 
-    backgroundColor: '#FDEFEE',
+    backgroundColor: '#FAD6D5',
   },
 
   stateTagSympatheticText: {
     fontFamily:
-      typography.fontPromptBold,
+      typography.fontPromptMedium,
 
     fontSize: 9,
-    fontWeight: '700',
+    fontWeight: '500',
 
-    color: '#EB6460',
+    color: '#E44743',
   },
 
   /* Footer */
 
   footerArea: {
     width: '100%',
-
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 16,
+    paddingTop: 16,
   },
 });
 

@@ -28,6 +28,7 @@
   background: #ffffff;
 
   border-radius: 16px;
+  padding: 16px;
 
   overflow: hidden;
 
@@ -40,21 +41,13 @@
 
 /* ─────────────────────────────
    Header
-   RN:
-   paddingHorizontal: 20
-   paddingVertical: 14
 ───────────────────────────── */
 
 .header {
-  min-height: 56px;
-
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-
-  padding: 14px 20px;
-
-  border-bottom: 1px solid #f1f1f1;
+  margin-bottom: 18px;
 
   box-sizing: border-box;
 }
@@ -76,7 +69,7 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 9px;
+  border-radius: 50%;
 
   background: #E0F8F6;
 
@@ -86,8 +79,8 @@
 }
 
 .activityIconBox svg {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
 }
 
 .headerTextCol {
@@ -102,25 +95,25 @@
 .headerTitle {
   margin: 0;
 
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
+  font-family: inherit;
 
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 24px;
 
-  color: #355956;
+  color: #009688;
 }
 
 .headerSubtitle {
   margin: 0;
 
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
+  font-family: inherit;
 
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 14px;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
 
-  color: #79ADA9;
+  color: #637B91;
 }
 
 .closeBtn {
@@ -252,6 +245,7 @@
 
   width: 215px;
   height: 215px;
+  gap: 4px;
 
   display: flex;
   flex-direction: column;
@@ -348,15 +342,15 @@
 .touchpadInstruction {
   margin-top: 14px;
 
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
+  font-family: inherit;
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   line-height: 15px;
 
   text-align: center;
 
-  color: #79ADA9;
+  color: #566D80;
 }
 
 /* ─────────────────────────────
@@ -365,12 +359,12 @@
 ───────────────────────────── */
 
 .metricsGrid {
-  width: calc(100% - 48px);
+  width: 100%;
 
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: row;
 
-  margin: 0 auto;
+  margin: 0;
 
   background: #fbfbfb;
 
@@ -384,6 +378,7 @@
 }
 
 .metricBox {
+  flex: 1;
   min-width: 0;
 
   min-height: 96px;
@@ -399,22 +394,25 @@
   box-sizing: border-box;
 }
 
-.metricBox+.metricBox {
-  border-left: 1px solid #f1f1f1;
+.metricDivider {
+  width: 1px;
+  height: 100%;
+  align-self: center;
+  background-color: #f1f1f1;
 }
 
 .metricBoxLabel {
   margin-bottom: 4px;
 
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
+  font-family: 'Prompt', sans-serif;
 
-  font-size: 12px;
-  font-weight: 500;
-  line-height: normal;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
 
   text-align: center;
 
-  color: #79ADA9;
+  color: #566D80;
 }
 
 .metricBoxValue {
@@ -426,15 +424,18 @@
 
   color: #355956;
 
+  text-align: center;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
-.metricBoxValue span {
+.metricBoxUnit {
   font-family: 'Gotham Rounded', sans-serif !important;
   font-size: 11px;
   font-weight: 600;
 
   color: #79ADA9;
+  text-transform: uppercase;
 }
 
 .stateBoxValue {
@@ -456,30 +457,43 @@
 
   border-radius: 9999px;
 
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
-
-  font-size: 9px;
-  font-weight: 700;
-
   white-space: nowrap;
 }
 
 .stateTagParasympathetic {
   background: #DCF3D1;
+}
 
-  color: #047857;
+.stateTagParasympatheticText,
+.stateTagParasympatheticText * {
+  font-family: 'Prompt', 'Gotham Rounded', sans-serif !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  color: #047857 !important;
 }
 
 .stateTagSympathetic {
   background: #FAD6D5;
-
-  color: #E44743;
 }
 
-.stateTagParasympathetic svg,
+.stateTagSympatheticText,
+.stateTagSympatheticText * {
+  font-family: 'Prompt', 'Gotham Rounded', sans-serif !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  color: #E44743 !important;
+}
+
+.stateTagParasympathetic svg {
+  width: 13px;
+  height: 13px;
+  color: #047857;
+}
+
 .stateTagSympathetic svg {
   width: 13px;
   height: 13px;
+  color: #E44743;
 }
 
 /* ─────────────────────────────
@@ -492,7 +506,7 @@
 .footerArea {
   width: 100%;
 
-  padding: 20px 24px 16px;
+  padding: 16px 0 0;
 
   box-sizing: border-box;
 }

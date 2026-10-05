@@ -18,6 +18,7 @@ import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { Heart, Check, GlassWater, Sparkles, ArrowRight, X, HelpCircle } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
+import { renderBilingualNodes } from '../../components/BilingualText';
 import { VictorySipProps } from './types';
 
 export const VictorySip: React.FC<VictorySipProps> = ({
@@ -230,11 +231,15 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           <GlassWater size={14} color={skyTheme.badgeIconColor} strokeWidth={2.4} />
         )}
         <Text style={[styles.instructionPillText, { color: skyTheme.badgeTextColor }]}>
-          {isFinished
-            ? strings.sipProgressDone
-            : isTiltingToDrink
-              ? strings.tiltActive
-              : strings.tiltReady}
+          {renderBilingualNodes(
+            isFinished
+              ? strings.sipProgressDone
+              : isTiltingToDrink
+                ? strings.tiltActive
+                : strings.tiltReady,
+            typography.fontPromptBold,
+            typography.fontGothamBold
+          )}
         </Text>
         <HelpCircle size={13} color={skyTheme.badgeIconColor} strokeWidth={2} />
       </TouchableOpacity>
@@ -446,11 +451,15 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             {sipCount}/3
           </Text>
           <Text style={[styles.organicCountLabel, { color: skyTheme.labelColor }]}>
-            {isFinished
-              ? strings.sipProgressDone
-              : isTiltingToDrink
-                ? strings.sipProgressSipping
-                : strings.sipProgressIdle}
+            {renderBilingualNodes(
+              isFinished
+                ? strings.sipProgressDone
+                : isTiltingToDrink
+                  ? strings.sipProgressSipping
+                  : strings.sipProgressIdle,
+              typography.fontPromptSemiBold,
+              typography.fontGothamBold
+            )}
           </Text>
 
           {/* Slim glowing 4px progress line */}
@@ -477,11 +486,15 @@ export const VictorySip: React.FC<VictorySipProps> = ({
           />
         ) : (
           <Text style={[styles.organicSensorHint, { color: skyTheme.hintColor }]}>
-            {isTiltingToDrink
-              ? strings.sippingHold
-              : readyForNextSip.current
-                ? strings.tiltPhoneHint
-                : strings.lowerPhoneHint}
+            {renderBilingualNodes(
+              isTiltingToDrink
+                ? strings.sippingHold
+                : readyForNextSip.current
+                  ? strings.tiltPhoneHint
+                  : strings.lowerPhoneHint,
+              typography.fontPromptMedium,
+              typography.fontGotham
+            )}
           </Text>
         )}
       </View>
@@ -499,7 +512,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               onPress={() => setIsGuideOpen(false)}
               style={styles.modalCloseBtn}
             >
-              <X size={18} color="#64748B" />
+              <X size={18} color="#637b91" />
             </TouchableOpacity>
 
             <View style={styles.guideIconWrapper}>
@@ -507,7 +520,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             </View>
 
             <Text style={styles.guideTitle}>
-              {strings.guideTitle}
+              {renderBilingualNodes(strings.guideTitle, typography.fontPromptBold, typography.fontGothamBold)}
             </Text>
 
             <View style={styles.guideStepsBox}>
@@ -516,7 +529,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
                   <Text style={styles.stepNumText}>1</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {strings.guideStep1Desc}
+                  {renderBilingualNodes(strings.guideStep1Desc, typography.fontPromptRegular, typography.fontGothamBook)}
                 </Text>
               </View>
 
@@ -525,7 +538,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
                   <Text style={styles.stepNumText}>2</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {strings.guideStep2Desc}
+                  {renderBilingualNodes(strings.guideStep2Desc, typography.fontPromptRegular, typography.fontGothamBook)}
                 </Text>
               </View>
 
@@ -534,24 +547,22 @@ export const VictorySip: React.FC<VictorySipProps> = ({
                   <Text style={styles.stepNumText}>3</Text>
                 </View>
                 <Text style={styles.guideStepText}>
-                  {strings.guideStep3Desc}
+                  {renderBilingualNodes(strings.guideStep3Desc, typography.fontPromptRegular, typography.fontGothamBook)}
                 </Text>
               </View>
             </View>
 
-            <TouchableOpacity
+            <MarshmallowButton
+              variant={MARSHMALLOW_VARIANT.PRIMARY}
+              size={MARSHMALLOW_SIZE.MD}
+              title={strings.guideConfirm}
+              icon={<Check size={16} color="#FFFFFF" strokeWidth={2.6} />}
               onPress={() => {
                 audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
                 setIsGuideOpen(false);
               }}
-              activeOpacity={0.85}
-              style={styles.guideConfirmBtn}
-            >
-              <Check size={16} color="#FFFFFF" strokeWidth={2.6} />
-              <Text style={styles.guideConfirmText}>
-                {strings.guideConfirm}
-              </Text>
-            </TouchableOpacity>
+              style={{ width: '100%' }}
+            />
           </View>
         </View>
       </Modal>
@@ -766,16 +777,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.45)',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
   },
   modalCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    padding: 24,
+    padding: 16,
     alignItems: 'center',
     position: 'relative',
     width: '100%',
-    maxWidth: 360,
+    maxWidth: 340,
     ...shadows.card,
   },
   modalCloseBtn: {
@@ -783,34 +794,35 @@ const styles = StyleSheet.create({
     top: 16,
     right: 16,
     padding: 6,
+    zIndex: 10,
   },
   guideIconWrapper: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: colors.primaryLight,
+    backgroundColor: '#E0F8F6',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
     borderWidth: 2,
-    borderColor: colors.borderTeal,
+    borderColor: '#B3EDE8',
   },
   guideTitle: {
     fontFamily: typography.fontPromptBold,
     fontSize: 16,
-    color: colors.textPrimary,
+    color: colors.primaryDark,
     textAlign: 'center',
     marginBottom: 16,
   },
   guideStepsBox: {
     width: '100%',
-    backgroundColor: colors.bgLight,
-    borderRadius: radii.lg,
+    backgroundColor: '#fbfbfb',
+    borderRadius: 16,
     padding: 14,
     gap: 12,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: colors.borderSubtle,
+    borderColor: '#f1f1f1',
   },
   guideStepRow: {
     flexDirection: 'row',
@@ -820,15 +832,16 @@ const styles = StyleSheet.create({
   stepNumBadge: {
     width: 22,
     height: 22,
-    borderRadius: radii.full,
+    borderRadius: 11,
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 1,
   },
   stepNumText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 11,
+    fontWeight: '700',
     color: colors.white,
   },
   guideStepText: {
@@ -837,21 +850,5 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     color: colors.textSecondary,
     lineHeight: 18,
-  },
-  guideConfirmBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: radii.full,
-    gap: 8,
-    width: '100%',
-  },
-  guideConfirmText: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 13.5,
-    color: colors.white,
   },
 });

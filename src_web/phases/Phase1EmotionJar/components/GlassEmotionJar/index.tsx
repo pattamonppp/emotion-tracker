@@ -380,7 +380,6 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
           type="button"
           className={styles.jarButton}
           onClick={handleJarTap}
-          aria-label="Emotion jar"
         >
           {/* Lid */}
           <div className={styles.lidSection}>
@@ -626,7 +625,6 @@ export const GlassEmotionJar: React.FC<GlassEmotionJarProps> = ({
 
                               onRemoveEmotion(tag.id);
                             }}
-                            aria-label={`Remove ${emotionText}`}
                           >
                             <X
                               size={9}

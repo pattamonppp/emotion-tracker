@@ -205,13 +205,13 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       default:
         return {
           btn: {
-            paddingVertical: 11,
-            paddingHorizontal: 20,
+            paddingVertical: 9,
+            paddingHorizontal: 16,
             borderRadius: radii.full,
           },
           text: {
-            fontSize: 14,
-            lineHeight: 16.8,
+            fontSize: 13,
+            lineHeight: 16,
             fontFamily: typography.fontPromptBold,
           },
         };
@@ -221,9 +221,25 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
   const vStyles = getVariantStyles();
   const sStyles = getSizeStyles();
 
+  const flattenedStyle = StyleSheet.flatten(style) || {};
+  const wrapperStyle: ViewStyle = {};
+  if (flattenedStyle.flex !== undefined) wrapperStyle.flex = flattenedStyle.flex;
+  if (flattenedStyle.flexGrow !== undefined) wrapperStyle.flexGrow = flattenedStyle.flexGrow;
+  if (flattenedStyle.flexShrink !== undefined) wrapperStyle.flexShrink = flattenedStyle.flexShrink;
+  if (flattenedStyle.width !== undefined) wrapperStyle.width = flattenedStyle.width;
+  if (flattenedStyle.alignSelf !== undefined) wrapperStyle.alignSelf = flattenedStyle.alignSelf;
+  if (flattenedStyle.margin !== undefined) wrapperStyle.margin = flattenedStyle.margin;
+  if (flattenedStyle.marginHorizontal !== undefined) wrapperStyle.marginHorizontal = flattenedStyle.marginHorizontal;
+  if (flattenedStyle.marginVertical !== undefined) wrapperStyle.marginVertical = flattenedStyle.marginVertical;
+  if (flattenedStyle.marginLeft !== undefined) wrapperStyle.marginLeft = flattenedStyle.marginLeft;
+  if (flattenedStyle.marginRight !== undefined) wrapperStyle.marginRight = flattenedStyle.marginRight;
+  if (flattenedStyle.marginTop !== undefined) wrapperStyle.marginTop = flattenedStyle.marginTop;
+  if (flattenedStyle.marginBottom !== undefined) wrapperStyle.marginBottom = flattenedStyle.marginBottom;
+
   return (
     <Animated.View
       style={[
+        wrapperStyle,
         {
           transform: [{ scale: scaleAnim }, { translateY: translateYAnim }],
         },
@@ -244,13 +260,18 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           styles.base,
           sStyles.btn,
           vStyles.btn,
+          { width: '100%' },
           disabled && styles.disabled,
           style,
         ]}
       >
         {icon ? icon : null}
         {title ? (
-          <Text style={[styles.text, sStyles.text, vStyles.text, textStyle]}>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[styles.text, sStyles.text, vStyles.text, textStyle]}
+          >
             {renderBilingualNodes(
               title,
               sStyles.text.fontFamily,
@@ -259,7 +280,11 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           </Text>
         ) : null}
         {typeof children === 'string' ? (
-          <Text style={[styles.text, sStyles.text, vStyles.text, textStyle]}>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[styles.text, sStyles.text, vStyles.text, textStyle]}
+          >
             {renderBilingualNodes(
               children,
               sStyles.text.fontFamily,

@@ -261,9 +261,6 @@ export const AudioMatrixSanctuary: React.FC<
             type="button"
             className={styles.playPauseBtn}
             onClick={togglePlayback}
-            aria-label={
-              isPlaying ? 'Pause' : 'Play'
-            }
           >
             {isPlaying ? (
               <Pause
@@ -287,7 +284,6 @@ export const AudioMatrixSanctuary: React.FC<
             type="button"
             className={styles.replayBtn}
             onClick={handleReplay}
-            aria-label="Replay"
             style={{
               backgroundColor: skyTheme.cardBg,
               borderColor: skyTheme.cardBorder,

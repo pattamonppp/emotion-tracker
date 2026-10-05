@@ -17,6 +17,8 @@ import { colors, shadows, typography } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 import { MODAL_CONFIG } from '../../../constants';
 import { Language } from '../../../types';
+import { renderBilingualNodes } from '../../../components/BilingualText';
+import { MarshmallowButton, MARSHMALLOW_VARIANT, MARSHMALLOW_SIZE } from '../../../design-system/MarshmallowButton';
 
 export interface CustomEmotionModalProps {
   isOpen: boolean;
@@ -40,6 +42,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
   isJarFull,
 }) => {
   const [inputText, setInputText] = useState(initialText);
+  const [isFocused, setIsFocused] = useState(false);
   const t = getTranslation(lang);
   const ce = t.modals.customEmotion;
 
@@ -107,10 +110,10 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
               </View>
               <View>
                 <Text style={styles.headerTitle}>
-                  {editingId ? ce.editTitle : ce.newTitle}
+                  {renderBilingualNodes(editingId ? ce.editTitle : ce.newTitle, typography.fontPromptBold, typography.fontGothamBold)}
                 </Text>
                 <Text style={styles.headerSubtitle}>
-                  {ce.tellMoocaSub}
+                  {renderBilingualNodes(ce.tellMoocaSub, typography.fontPromptRegular, typography.fontGothamBook)}
                 </Text>
               </View>
             </View>
@@ -130,7 +133,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
             </View>
             <View style={styles.mascotBubble}>
               <Text style={styles.mascotBubbleText}>
-                {ce.mascotBubble}
+                {renderBilingualNodes(ce.mascotBubble, typography.fontPromptSemiBold, typography.fontGotham)}
               </Text>
             </View>
           </View>
@@ -138,24 +141,32 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
           {/* Text Input Container */}
           <View style={styles.inputWrapper}>
             <TextInput
-              style={styles.textInput}
+              style={[
+                styles.textInput,
+                isFocused && styles.textInputFocused,
+              ]}
               value={inputText}
               onChangeText={setInputText}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
               placeholder={ce.inputPlaceholder}
-              placeholderTextColor="#94A3B8"
+              placeholderTextColor="#637b91"
               maxLength={MODAL_CONFIG.customEmotion.maxLength}
+              multiline={true}
+              numberOfLines={3}
+              textAlignVertical="top"
               autoFocus
               returnKeyType="done"
             />
             <Text style={styles.charCount}>
-              {inputText.length}/{MODAL_CONFIG.customEmotion.maxLength}
+              {renderBilingualNodes(`${inputText.length}/${MODAL_CONFIG.customEmotion.maxLength}`, typography.fontPromptRegular, typography.fontGothamBook)}
             </Text>
           </View>
 
           {/* Quick Suggestions Chips */}
           <View style={styles.suggestionsContainer}>
             <Text style={styles.suggestionsLabel}>
-              {ce.quickTapLabel}
+              {renderBilingualNodes(ce.quickTapLabel)}
             </Text>
             <ScrollView
               horizontal
@@ -178,7 +189,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
                       inputText === item && styles.suggestionTextActive,
                     ]}
                   >
-                    {item}
+                    {renderBilingualNodes(item)}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -188,47 +199,40 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
           {/* Action Buttons */}
           <View style={styles.actionsRow}>
             {editingId ? (
-              <TouchableOpacity
-                onPress={handleDelete}
-                style={styles.clearBtn}
-                activeOpacity={0.75}
-              >
-                <RotateCcw size={12} color="#EF4444" strokeWidth={2.4} />
-                <Text style={styles.clearBtnText}>
-                  {ce.deleteBtn}
-                </Text>
-              </TouchableOpacity>
+              <View style={styles.deleteWrapper}>
+                <MarshmallowButton
+                  variant={MARSHMALLOW_VARIANT.PINK}
+                  size={MARSHMALLOW_SIZE.MD}
+                  title={ce.deleteBtn}
+                  icon={<RotateCcw size={12} color="#EF4444" strokeWidth={2.4} />}
+                  onPress={handleDelete}
+                />
+              </View>
             ) : null}
 
-            <TouchableOpacity
-              onPress={handleSaveToSky}
-              disabled={!inputText.trim()}
-              style={[
-                styles.saveSkyBtn,
-                !inputText.trim() && styles.btnDisabled,
-              ]}
-              activeOpacity={0.8}
-            >
-              <Sparkles size={13} color={colors.primaryDark} strokeWidth={2.4} />
-              <Text style={styles.saveSkyText}>
-                {ce.keepOnSky}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.actionBtn}>
+              <MarshmallowButton
+                variant={MARSHMALLOW_VARIANT.MINT}
+                size={MARSHMALLOW_SIZE.MD}
+                title={ce.keepOnSky}
+                icon={<Sparkles size={13} color={colors.primaryDark} strokeWidth={2.4} />}
+                disabled={!inputText.trim()}
+                style={{ width: '100%' }}
+                onPress={handleSaveToSky}
+              />
+            </View>
 
-            <TouchableOpacity
-              onPress={handleSaveToJar}
-              disabled={!inputText.trim()}
-              style={[
-                styles.saveJarBtn,
-                !inputText.trim() && styles.btnDisabled,
-              ]}
-              activeOpacity={0.85}
-            >
-              <ArrowDown size={14} color="#FFFFFF" strokeWidth={2.6} />
-              <Text style={styles.saveJarText}>
-                {isJarFull ? ce.saveCloud : ce.dropIntoJar}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.actionBtn}>
+              <MarshmallowButton
+                variant={MARSHMALLOW_VARIANT.PRIMARY}
+                size={MARSHMALLOW_SIZE.MD}
+                title={isJarFull ? ce.saveCloud : ce.dropIntoJar}
+                icon={<ArrowDown size={14} color="#FFFFFF" strokeWidth={2.6} />}
+                disabled={!inputText.trim()}
+                style={{ width: '100%' }}
+                onPress={handleSaveToJar}
+              />
+            </View>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -239,7 +243,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(7, 26, 43, 0.65)',
+    backgroundColor: 'rgba(15, 23, 42, 0.55)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
@@ -249,7 +253,7 @@ const styles = StyleSheet.create({
     maxWidth: 340,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    padding: 18,
+    padding: 16,
     borderWidth: 1.5,
     borderColor: 'rgba(239, 119, 115, 0.3)',
     ...shadows.card,
@@ -259,12 +263,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 18,
   },
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 12,
     flex: 1,
   },
   iconCircle: {
@@ -276,16 +280,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerTitle: {
-    fontFamily: typography.fontPromptExtraBold,
-    fontSize: 14,
+    fontFamily: typography.fontPromptBold,
+    fontSize: 16,
+    lineHeight: 24,
     color: colors.primaryDark,
-    ...(Platform.OS !== 'android' ? { fontWeight: '800' } : {}),
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
   headerSubtitle: {
-    fontFamily: typography.fontPromptMedium,
+    fontFamily: typography.fontPromptRegular,
     fontSize: 11,
-    color: colors.textMuted,
-    ...(Platform.OS !== 'android' ? { fontWeight: '500' } : {}),
+    lineHeight: 16,
+    color: '#637b91',
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
   closeBtn: {
     width: 32,
@@ -325,20 +331,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingTop: 12,
     paddingBottom: 26,
+    minHeight: 90,
     fontSize: 13,
-    color: colors.textPrimary,
+    color: '#26313c',
     fontFamily: typography.fontPromptMedium,
     borderWidth: 1.5,
     borderColor: '#cdd8e1',
+  },
+  textInputFocused: {
+    borderColor: '#00c4b3',
+    backgroundColor: '#ffffff',
   },
   charCount: {
     position: 'absolute',
     bottom: 8,
     right: 12,
     fontSize: 10,
-    color: colors.textMuted,
-    fontFamily: typography.fontPromptSemiBold,
-    ...(Platform.OS !== 'android' ? { fontWeight: '600' } : {}),
+    color: '#637b91',
+    fontFamily: typography.fontGothamBook,
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
   suggestionsContainer: {
     marginBottom: 16,
@@ -346,7 +357,7 @@ const styles = StyleSheet.create({
   suggestionsLabel: {
     fontFamily: typography.fontPromptBold,
     fontSize: 11,
-    color: colors.textSecondary,
+    color: '#566d80',
     marginBottom: 8,
     ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
@@ -367,20 +378,28 @@ const styles = StyleSheet.create({
     borderColor: '#EF7773',
   },
   suggestionText: {
-    fontFamily: typography.fontPromptMedium,
+    fontFamily: typography.fontPromptRegular,
     fontSize: 11,
     color: colors.textSecondary,
-    ...(Platform.OS !== 'android' ? { fontWeight: '600' } : {}),
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
   suggestionTextActive: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontPromptMedium,
     color: '#EB6460',
-    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
+    ...(Platform.OS !== 'android' ? { fontWeight: '500' } : {}),
   },
   actionsRow: {
     flexDirection: 'row',
     gap: 8,
     alignItems: 'center',
+    width: '100%',
+  },
+  actionBtn: {
+    flex: 1,
+    minWidth: 0,
+  },
+  deleteWrapper: {
+    flexShrink: 0,
   },
   clearBtn: {
     flexDirection: 'row',

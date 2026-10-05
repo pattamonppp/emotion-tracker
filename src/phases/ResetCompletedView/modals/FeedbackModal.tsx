@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -40,6 +41,7 @@ import {
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { getTranslation } from '../../../locales';
 import { FEEDBACK_ACCURACY, FeedbackAccuracy, Language } from '../../../types';
+import { renderBilingualNodes } from '../../../components/BilingualText';
 
 export interface FeedbackModalProps {
   isOpen: boolean;
@@ -87,11 +89,6 @@ export const FeedbackModal: React.FC<
         icon: MessageSquareHeart,
       },
       {
-        id: 'haptics',
-        label: fb.aspectHaptics,
-        icon: Activity,
-      },
-      {
         id: 'sip',
         label: fb.aspectSip,
         icon: GlassWater,
@@ -100,6 +97,11 @@ export const FeedbackModal: React.FC<
         id: 'mbti',
         label: fb.aspectMbti,
         icon: Heart,
+      },
+      {
+        id: 'haptics',
+        label: fb.aspectHaptics,
+        icon: Activity,
       },
     ];
 
@@ -208,21 +210,18 @@ export const FeedbackModal: React.FC<
           >
             {/* Header */}
             <View style={styles.headerBar}>
-              <View
-                style={
-                  styles.headerTitleRow
-                }
-              >
-                <MessageSquareHeart
-                  size={20}
-                  color={colors.primary}
-                />
-
-                <Text
-                  style={styles.headerTitle}
-                >
-                  {fb.modalTitle}
-                </Text>
+              <View style={styles.headerTitleRow}>
+                <View style={styles.iconCircle}>
+                  <MessageSquareHeart size={16} color="#00C4B3" strokeWidth={2.4} />
+                </View>
+                <View>
+                  <Text style={styles.headerTitle}>
+                    {renderBilingualNodes(fb.modalTitle, typography.fontPromptBold, typography.fontGothamBold)}
+                  </Text>
+                  <Text style={styles.headerSubtitle}>
+                    {renderBilingualNodes(fb.modalSubtitle, typography.fontPromptRegular, typography.fontGothamBook)}
+                  </Text>
+                </View>
               </View>
 
               <TouchableOpacity
@@ -235,10 +234,7 @@ export const FeedbackModal: React.FC<
                   right: 10,
                 }}
               >
-                <X
-                  size={18}
-                  color="#64748B"
-                />
+                <X size={18} color={colors.textMuted} strokeWidth={2.4} />
               </TouchableOpacity>
             </View>
 
@@ -259,7 +255,7 @@ export const FeedbackModal: React.FC<
                         styles.sectionLabel
                       }
                     >
-                      {fb.ratingQuestion}
+                      {renderBilingualNodes(fb.ratingQuestion, typography.fontPromptBold, typography.fontGothamBold)}
                     </Text>
 
                     <View
@@ -346,7 +342,7 @@ export const FeedbackModal: React.FC<
                           },
                         ]}
                       >
-                        {getRatingText()}
+                        {renderBilingualNodes(getRatingText(), typography.fontPromptBold, typography.fontGothamBold)}
                       </Text>
                     </View>
                   </View>
@@ -358,7 +354,7 @@ export const FeedbackModal: React.FC<
                         styles.sectionLabel
                       }
                     >
-                      {fb.accuracyQuestion}
+                      {renderBilingualNodes(fb.accuracyQuestion, typography.fontPromptBold, typography.fontGothamBold)}
                     </Text>
 
                     <View
@@ -422,7 +418,7 @@ export const FeedbackModal: React.FC<
                                   },
                                 ]}
                               >
-                                {option.label}
+                                {renderBilingualNodes(option.label, typography.fontPromptBold, typography.fontGothamBold)}
                               </Text>
                             </TouchableOpacity>
                           );
@@ -438,7 +434,7 @@ export const FeedbackModal: React.FC<
                         styles.sectionLabel
                       }
                     >
-                      {fb.aspectsQuestion}
+                      {renderBilingualNodes(fb.aspectsQuestion, typography.fontPromptBold, typography.fontGothamBold)}
                     </Text>
 
                     <View
@@ -492,9 +488,11 @@ export const FeedbackModal: React.FC<
                                   styles.chipTextActive,
                                 ]}
                               >
-                                {
-                                  aspect.label
-                                }
+                                {renderBilingualNodes(
+                                  aspect.label,
+                                  isSelected ? typography.fontPromptSemiBold : typography.fontPromptMedium,
+                                  isSelected ? typography.fontGothamBold : typography.fontGotham
+                                )}
                               </Text>
                             </TouchableOpacity>
                           );
@@ -510,7 +508,7 @@ export const FeedbackModal: React.FC<
                         styles.sectionLabel
                       }
                     >
-                      {fb.commentQuestion}
+                      {renderBilingualNodes(fb.commentQuestion, typography.fontPromptBold, typography.fontGothamBold)}
                     </Text>
 
                     <TextInput
@@ -529,9 +527,7 @@ export const FeedbackModal: React.FC<
                   </View>
 
                   {/* Submit */}
-                  <View
-                    style={styles.submitWrap}
-                  >
+                  <View>
                     <MarshmallowButton
                       variant={MARSHMALLOW_VARIANT.PRIMARY}
                       size={MARSHMALLOW_SIZE.MD}
@@ -572,7 +568,7 @@ export const FeedbackModal: React.FC<
                       styles.successTitle
                     }
                   >
-                    {fb.successTitle}
+                    {renderBilingualNodes(fb.successTitle, typography.fontPromptBold, typography.fontGothamBold)}
                   </Text>
 
                   <Text
@@ -580,7 +576,7 @@ export const FeedbackModal: React.FC<
                       styles.successDesc
                     }
                   >
-                    {fb.successDesc}
+                    {renderBilingualNodes(fb.successDesc, typography.fontPromptLight, typography.fontGotham)}
                   </Text>
 
                   <View
@@ -623,27 +619,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     overflow: 'hidden',
+    padding: 16,
     ...shadows.soft,
   },
 
   headerBar: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent:
-      'space-between',
-
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 18,
   },
 
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
 
-    gap: 8,
+  iconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#E0F8F6',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   headerTitle: {
@@ -651,9 +651,21 @@ const styles = StyleSheet.create({
       typography.fontPromptBold,
 
     fontSize: 16,
-    fontWeight: '800',
+    lineHeight: 24,
 
     color: colors.primaryDark,
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
+  },
+
+  headerSubtitle: {
+    fontFamily:
+      typography.fontPromptRegular,
+
+    fontSize: 11,
+    lineHeight: 16,
+
+    color: '#637b91',
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
 
   closeBtn: {
@@ -665,8 +677,8 @@ const styles = StyleSheet.create({
   },
 
   scrollContent: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 0,
+    paddingVertical: 12,
 
     gap: 20,
   },
@@ -679,10 +691,10 @@ const styles = StyleSheet.create({
     fontFamily:
       typography.fontPromptBold,
 
-    fontSize: 13,
-    fontWeight: '700',
+    fontSize: 11,
 
-    color: colors.textPrimary,
+    color: colors.textSecondary,
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
   },
 
   /* Stars */
@@ -838,21 +850,13 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
 
-  /* Submit */
-
-  submitWrap: {
-    marginTop: 8,
-
-    paddingBottom: 24,
-  },
-
   /* Success */
 
   successCard: {
     alignItems: 'center',
     justifyContent: 'center',
 
-    paddingVertical: 40,
+    paddingVertical: 20,
     paddingHorizontal: 20,
   },
 
@@ -893,6 +897,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
 
     lineHeight: 20,
+    maxWidth: '80%',
   },
 
   successButtonWrap: {

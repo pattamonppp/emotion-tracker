@@ -25,6 +25,7 @@ import {
   RATING_LEVELS,
 } from './constants';
 import styles from './styles.module.scss';
+import MarshmallowButton, { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT } from '@/components/MarshmallowButton';
 
 export interface AiFeedbackModalProps {
   isOpen: boolean;
@@ -131,24 +132,6 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
     audioService.playJarDrop();
   };
 
-  const handleCopyJson = async () => {
-    if (!savedRecord) return;
-
-    try {
-      await navigator.clipboard.writeText(
-        JSON.stringify(savedRecord, null, 2),
-      );
-
-      setCopied(true);
-
-      window.setTimeout(() => {
-        setCopied(false);
-      }, 2000);
-    } catch {
-      // Ignore clipboard errors.
-    }
-  };
-
   const handleClose = () => {
     setSubmitted(false);
     setCopied(false);
@@ -172,18 +155,23 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
         <div className={styles.safeArea}>
           <div className={styles.headerBar}>
             <div className={styles.headerTitleRow}>
-              <MessageHeartIcon className={styles.headerIcon} />
-
-              <h3 className={styles.headerTitle}>
-                {strings.modalTitle}
-              </h3>
+              <div className={styles.iconCircle}>
+                <MessageHeartIcon className={styles.headerIcon} />
+              </div>
+              <div>
+                <h3 className={styles.headerTitle}>
+                  {strings.modalTitle}
+                </h3>
+                <p className={styles.headerSubtitle}>
+                  {strings.modalSubtitle}
+                </p>
+              </div>
             </div>
 
             <button
               type="button"
               onClick={handleClose}
               className={styles.closeBtn}
-              aria-label="Close"
             >
               <CloseIcon />
             </button>
@@ -208,7 +196,6 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                           type="button"
                           onClick={() => handleRatingChange(star)}
                           className={styles.starTouch}
-                          aria-label={`Rating ${star}`}
                         >
                           <StarIcon
                             style={{
@@ -374,13 +361,11 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 </div>
 
                 <div className={styles.submitWrap}>
-                  <Button
-                    variant="primary"
-                    colorTheme={BUTTON_THEME.TURQUOISE}
-                    size="md"
+                  <MarshmallowButton
+                    variant={MARSHMALLOW_VARIANT.PRIMARY}
+                    size={MARSHMALLOW_SIZE.MD}
                     onClick={handleSubmit}
-                    leadingIcon={<CheckCircleIcon />}
-                    label={strings.submitButton}
+                    title={strings.submitButton}
                   />
                 </div>
               </>
@@ -398,18 +383,6 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                   {strings.successDesc}
                 </p>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShowJson((prev) => !prev)
-                  }
-                  className={styles.jsonToggleBtn}
-                >
-                  {showJson
-                    ? strings.hideJson
-                    : strings.inspectJson}
-                </button>
-
                 {showJson && savedRecord && (
                   <pre className={styles.jsonPreviewBox}>
                     {JSON.stringify(savedRecord, null, 2)}
@@ -417,34 +390,13 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                 )}
 
                 <div className={styles.successButtonWrap}>
-                  <Button
-                    variant="primary"
-                    colorTheme={BUTTON_THEME.TURQUOISE}
-                    size="md"
+                  <MarshmallowButton
+                    variant={MARSHMALLOW_VARIANT.PRIMARY}
+                    size={MARSHMALLOW_SIZE.MD}
                     onClick={handleClose}
-                    label={strings.doneButton}
+                    title={strings.doneButton}
                   />
                 </div>
-
-                {savedRecord && (
-                  <button
-                    type="button"
-                    onClick={handleCopyJson}
-                    className={styles.copyJsonBtn}
-                  >
-                    {copied ? (
-                      <CheckIcon />
-                    ) : (
-                      <CopyIcon />
-                    )}
-
-                    <span>
-                      {copied
-                        ? strings.copiedJson
-                        : strings.copyJson}
-                    </span>
-                  </button>
-                )}
               </div>
             )}
           </div>

@@ -56,18 +56,24 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
         <div className={styles.safeArea}>
           <div className={styles.headerBar}>
             <div className={styles.headerTitleRow}>
-              <Award className={styles.headerIcon} />
+              <div className={styles.iconCircle}>
+                <Award size={16} color="#DF8900" strokeWidth={2.4} />
+              </div>
 
-              <h3 className={styles.headerTitle}>
-                {h.resetHistoryTitle}
-              </h3>
+              <div>
+                <h3 className={styles.headerTitle}>
+                  {h.resetHistoryTitle}
+                </h3>
+                <p className={styles.headerSubtitle}>
+                  {h.subtitle}
+                </p>
+              </div>
             </div>
 
             <button
               type="button"
               onClick={onClose}
               className={styles.closeBtn}
-              aria-label="Close"
             >
               <X />
             </button>

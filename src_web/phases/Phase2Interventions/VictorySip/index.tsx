@@ -5,6 +5,7 @@ import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../
 import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import { Check, GlassWater, ArrowRight, X, Sparkles, Heart, HelpCircle } from 'lucide-react';
 import { getTranslation } from '../../../locales';
+import { renderBilingual } from '../../../components/BilingualText';
 import type { VictorySipProps } from './types';
 import styles from './styles.module.scss';
 import { useSkyTheme } from '@/hooks/useSkyTheme';
@@ -312,49 +313,49 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               onClick={() => setIsGuideOpen(false)}
               className={styles.modalCloseBtn}
             >
-              <X size={18} color="#64748B" />
+              <X size={18} color="#637b91" />
             </button>
 
             <div className={styles.guideIconWrapper}>
               <GlassWater size={32} color="#00C4B3" strokeWidth={2.4} />
             </div>
 
-            <h3 className={styles.guideTitle}>{strings.guideTitle}</h3>
+            <h3 className={styles.guideTitle}>{renderBilingual(strings.guideTitle)}</h3>
 
             <div className={styles.guideStepsBox}>
               <div className={styles.guideStepRow}>
                 <div className={styles.stepNumBadge}>
                   <span className={styles.stepNumText}>1</span>
                 </div>
-                <span className={styles.guideStepText}>{strings.guideStep1Desc}</span>
+                <span className={styles.guideStepText}>{renderBilingual(strings.guideStep1Desc)}</span>
               </div>
 
               <div className={styles.guideStepRow}>
                 <div className={styles.stepNumBadge}>
                   <span className={styles.stepNumText}>2</span>
                 </div>
-                <span className={styles.guideStepText}>{strings.guideStep2Desc}</span>
+                <span className={styles.guideStepText}>{renderBilingual(strings.guideStep2Desc)}</span>
               </div>
 
               <div className={styles.guideStepRow}>
                 <div className={styles.stepNumBadge}>
                   <span className={styles.stepNumText}>3</span>
                 </div>
-                <span className={styles.guideStepText}>{strings.guideStep3Desc}</span>
+                <span className={styles.guideStepText}>{renderBilingual(strings.guideStep3Desc)}</span>
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
+            <MarshmallowButton
+              variant={MARSHMALLOW_VARIANT.PRIMARY}
+              size={MARSHMALLOW_SIZE.MD}
+              title={strings.guideConfirm}
+              icon={<Check size={16} color="#FFFFFF" strokeWidth={2.6} />}
+              onPress={() => {
                 audioService.triggerHaptic(HAPTIC_STYLE.SUCCESS);
                 setIsGuideOpen(false);
               }}
-              className={styles.guideConfirmBtn}
-            >
-              <Check size={16} color="#FFFFFF" strokeWidth={2.6} />
-              <span className={styles.guideConfirmText}>{strings.guideConfirm}</span>
-            </button>
+              style={{ width: '100%' }}
+            />
           </div>
         </div>
       )}

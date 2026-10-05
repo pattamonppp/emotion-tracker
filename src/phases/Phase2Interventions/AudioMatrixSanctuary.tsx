@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   mbtiBadgeText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBook,
     fontSize: 11,
   },
   scriptCard: {

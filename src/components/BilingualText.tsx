@@ -10,8 +10,8 @@ export interface BilingualTextProps extends TextProps {
 
 export const renderBilingualNodes = (
   text: string,
-  fontPrompt: string = typography.fontPromptBold,
-  fontGotham: string = typography.fontGothamBold
+  fontPrompt: string = typography.fontPromptRegular,
+  fontGotham: string = typography.fontGothamBook
 ): React.ReactNode => {
   if (!text) return text;
   const hasEnglish = /[a-zA-Z0-9]/.test(text);

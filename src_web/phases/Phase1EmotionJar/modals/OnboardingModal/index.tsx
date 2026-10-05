@@ -74,10 +74,18 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       <div className={styles.modalCard}>
         {/* Header Bar */}
         <div className={styles.headerBar}>
-          <h2 className={styles.headerTitle}>{o.profileTitle}</h2>
+          <div className={styles.headerTitleRow}>
+            <div className={styles.iconCircle}>
+              <User size={16} color="#00C4B3" strokeWidth={2.4} />
+            </div>
+            <div>
+              <h2 className={styles.headerTitle}>{o.profileTitle}</h2>
+              <p className={styles.headerSubtitle}>{o.subtitle}</p>
+            </div>
+          </div>
           {onClose && (
             <button type="button" onClick={onClose} className={styles.closeBtn} title="Close">
-              <X size={18} color="#64748B" />
+              <X size={18} color="#637B91" strokeWidth={2.4} />
             </button>
           )}
         </div>

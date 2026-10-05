@@ -265,9 +265,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 20px;
   box-sizing: border-box;
-  background: rgba(15, 23, 42, 0.65);
+  background: rgba(0, 0, 0, 0.45);
   animation: fadeIn 150ms ease-out;
 }
 
@@ -278,7 +278,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px;
+  padding: 16px;
   box-sizing: border-box;
   background: #ffffff;
   border-radius: 16px;
@@ -321,10 +321,11 @@
 
 .guideTitle {
   margin: 0 0 16px;
+  font-family: inherit;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
-  color: #355956;
+  color: #009688;
   text-align: center;
 }
 
@@ -362,6 +363,7 @@
 }
 
 .stepNumText {
+  font-family: 'Gotham Rounded', sans-serif;
   font-size: 11px;
   font-weight: 700;
   line-height: 1;
@@ -373,7 +375,7 @@
   font-size: 12.5px;
   font-weight: 400;
   line-height: 18px;
-  color: #528984;
+  color: #566D80;
   text-align: left;
 }
 

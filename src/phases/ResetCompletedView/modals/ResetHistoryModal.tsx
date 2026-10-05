@@ -5,13 +5,15 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ShiftFeedback, UserProfile, Language, SHIFT_RESULT } from '../../../types';
 import { Award, X, Activity, Sparkles } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
+import { renderBilingualNodes } from '../../../components/BilingualText';
 
 export interface ResetHistoryModalProps {
   isOpen: boolean;
@@ -58,13 +60,20 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
         <SafeAreaView style={styles.modalCard}>
           <View style={styles.headerBar}>
             <View style={styles.headerTitleRow}>
-              <Award size={18} color={colors.secondary} />
-              <Text style={styles.headerTitle}>
-                {h.resetHistoryTitle}
-              </Text>
+              <View style={styles.iconCircle}>
+                <Award size={16} color="#DF8900" strokeWidth={2.4} />
+              </View>
+              <View>
+                <Text style={styles.headerTitle}>
+                  {renderBilingualNodes(h.resetHistoryTitle, typography.fontPromptBold, typography.fontGothamBold)}
+                </Text>
+                <Text style={styles.headerSubtitle}>
+                  {renderBilingualNodes(h.subtitle, typography.fontPromptRegular, typography.fontGothamBook)}
+                </Text>
+              </View>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <X size={18} color={colors.textSecondary} />
+              <X size={18} color={colors.textMuted} strokeWidth={2.4} />
             </TouchableOpacity>
           </View>
 
@@ -77,17 +86,17 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
                     <View style={styles.badgeShift}>
                       <Sparkles size={12} color={colors.primary} />
                       <Text style={styles.badgeShiftText}>
-                        {item.shiftResult.toUpperCase()}
+                        {renderBilingualNodes(item.shiftResult.toUpperCase(), typography.fontPromptBold, typography.fontGothamBold)}
                       </Text>
                     </View>
                     <Text style={styles.timestampText}>
-                      {item.timestamp ? item.timestamp.split('T')[0] : h.today}
+                      {renderBilingualNodes(item.timestamp ? item.timestamp.split('T')[0] : h.today, typography.fontPromptMedium, typography.fontGotham)}
                     </Text>
                   </View>
 
                   <View style={styles.metricRow}>
                     <View style={styles.metricItem}>
-                      <Text style={styles.metricLabel}>{h.preLabel}</Text>
+                      <Text style={styles.metricLabel}>{renderBilingualNodes(h.preLabel, typography.fontPromptBold, typography.fontGothamBold)}</Text>
                       <Text style={styles.metricVal}>{item.preHeartRate} BPM</Text>
                     </View>
 
@@ -97,7 +106,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
                     </View>
 
                     <View style={styles.metricItem}>
-                      <Text style={styles.metricLabel}>{h.postLabel}</Text>
+                      <Text style={styles.metricLabel}>{renderBilingualNodes(h.postLabel, typography.fontPromptBold, typography.fontGothamBold)}</Text>
                       <Text style={[styles.metricVal, { color: colors.primary }]}>
                         {item.postHeartRate} BPM
                       </Text>
@@ -128,26 +137,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     overflow: 'hidden',
+    padding: 16,
     ...shadows.soft,
   },
   headerBar: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderSubtle,
+    marginBottom: 18,
   },
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
+    flex: 1,
+  },
+  iconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FCF4E0',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerTitle: {
+    fontFamily: typography.fontPromptBold,
     fontSize: 16,
-    fontWeight: '800',
+    lineHeight: 24,
     color: colors.primaryDark,
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
+  },
+  headerSubtitle: {
+    fontFamily: typography.fontPromptRegular,
+    fontSize: 11,
+    lineHeight: 16,
+    color: '#637b91',
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
   closeBtn: {
     width: 32,
@@ -157,8 +182,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   content: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 0,
+    paddingVertical: 4,
     gap: 12,
   },
   historyCard: {
@@ -205,9 +230,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   metricLabel: {
+    fontFamily: typography.fontPromptSemiBold,
     fontSize: 10,
-    color: colors.textMuted,
-    fontWeight: '600',
+    color: colors.textSecondary,
     marginBottom: 2,
   },
   metricVal: {

@@ -13,6 +13,8 @@ import { DESIGN_TOKENS } from '../../../../design-system/tokens';
 import { getTranslation } from '../../../../locales';
 import { MODAL_CONFIG } from '../../../../constants';
 import { Language } from '../../../../types';
+import { renderBilingual } from '../../../../components/BilingualText';
+import MarshmallowButton, { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT } from '../../../../components/MarshmallowButton';
 import styles from './styles.module.scss';
 
 export interface CustomEmotionModalProps {
@@ -99,7 +101,6 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
       <button
         type="button"
         className={styles.backdrop}
-        aria-label="Close modal"
         onClick={onClose}
       />
 
@@ -107,7 +108,6 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
         className={styles.card}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="custom-emotion-modal-title"
       >
         {/* Header */}
         <div className={styles.header}>
@@ -125,11 +125,11 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
                 id="custom-emotion-modal-title"
                 className={styles.title}
               >
-                {editingId ? ce.editTitle : ce.newTitle}
+                {renderBilingual(editingId ? ce.editTitle : ce.newTitle)}
               </h2>
 
               <p className={styles.subtitle}>
-                {ce.tellMoocaSub}
+                {renderBilingual(ce.tellMoocaSub)}
               </p>
             </div>
           </div>
@@ -138,7 +138,6 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
             type="button"
             className={styles.close}
             onClick={onClose}
-            aria-label="Close"
           >
             <X
               size={18}
@@ -160,7 +159,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
 
           <div className={styles.mascotBubble}>
             <p className={styles.mascotBubbleText}>
-              {ce.mascotBubble}
+              {renderBilingual(ce.mascotBubble)}
             </p>
           </div>
         </div>
@@ -177,14 +176,14 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
           />
 
           <span className={styles.charCount}>
-            {inputText.length}/{MODAL_CONFIG.customEmotion.maxLength}
+            {renderBilingual(`${inputText.length}/${MODAL_CONFIG.customEmotion.maxLength}`)}
           </span>
         </div>
 
         {/* Suggestions */}
         <div className={styles.suggestions}>
           <p className={styles.suggestionsLabel}>
-            {ce.quickTapLabel}
+            {renderBilingual(ce.quickTapLabel)}
           </p>
 
           <div className={styles.suggestionsList}>
@@ -200,7 +199,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
                   })}
                   onClick={() => handleSuggestionPress(item)}
                 >
-                  {item}
+                  {renderBilingual(item)}
                 </button>
               );
             })}
@@ -210,56 +209,38 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
         {/* Actions */}
         <div className={styles.actions}>
           {editingId && (
-            <button
-              type="button"
-              className={styles.delete}
-              onClick={handleDelete}
-            >
-              <RotateCcw
-                size={12}
-                strokeWidth={2.4}
+            <div className={styles.deleteWrapper}>
+              <MarshmallowButton
+                variant={MARSHMALLOW_VARIANT.PINK}
+                size={MARSHMALLOW_SIZE.MD}
+                onPress={handleDelete}
+                icon={<RotateCcw size={14} strokeWidth={2.4} />}
+                title={ce.deleteBtn}
               />
-              <span>{ce.deleteBtn}</span>
-            </button>
+            </div>
           )}
 
-          <button
-            type="button"
-            className={classNames(styles.saveSky, {
-              [styles.buttonDisabled]: isEmpty,
-            })}
-            disabled={isEmpty}
-            onClick={handleSaveToSky}
-          >
-            <Sparkles
-              size={13}
-              color={DESIGN_TOKENS.color.brand.turquoise.text}
-              strokeWidth={2.4}
+          <div className={styles.actionBtn}>
+            <MarshmallowButton
+              variant={MARSHMALLOW_VARIANT.MINT}
+              size={MARSHMALLOW_SIZE.MD}
+              disabled={isEmpty}
+              onPress={handleSaveToSky}
+              icon={<Sparkles size={14} strokeWidth={2.4} />}
+              title={ce.keepOnSky}
             />
+          </div>
 
-            <span>{ce.keepOnSky}</span>
-          </button>
-
-          <button
-            type="button"
-            className={classNames(styles.saveJar, {
-              [styles.buttonDisabled]: isEmpty,
-            })}
-            disabled={isEmpty}
-            onClick={handleSaveToJar}
-          >
-            <ArrowDown
-              size={14}
-              color="#FFFFFF"
-              strokeWidth={2.6}
+          <div className={styles.actionBtn}>
+            <MarshmallowButton
+              variant={MARSHMALLOW_VARIANT.PRIMARY}
+              size={MARSHMALLOW_SIZE.MD}
+              disabled={isEmpty}
+              onPress={handleSaveToJar}
+              icon={<ArrowDown size={14} strokeWidth={2.6} />}
+              title={isJarFull ? ce.saveCloud : ce.dropIntoJar}
             />
-
-            <span>
-              {isJarFull
-                ? ce.saveCloud
-                : ce.dropIntoJar}
-            </span>
-          </button>
+          </div>
         </div>
       </div>
     </div>
