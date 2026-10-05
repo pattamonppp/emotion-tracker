@@ -1072,76 +1072,76 @@ export const SkyPeriodSwitcher: React.FC = () => {
             onPress={() => setIsOpen(false)}
           />
           <View style={styles.optionsPopup}>
-          {/* Option: Auto Real-Time Clock */}
-          <TouchableOpacity
-            onPress={() => {
-              setSkyMode(AUTO_SKY);
-              setIsOpen(false);
-            }}
-            style={[styles.optionBtn, skyMode === AUTO_SKY && styles.optionBtnActive]}
-          >
-            <Clock size={12} color={skyMode === AUTO_SKY ? '#FFFFFF' : colors.primaryDark} strokeWidth={2.2} />
-            <Text style={[styles.optionText, skyMode === AUTO_SKY && styles.optionTextActive]}>
-              {skyLabels.auto}
-            </Text>
-          </TouchableOpacity>
+            {/* Option: Auto Real-Time Clock */}
+            <TouchableOpacity
+              onPress={() => {
+                setSkyMode(AUTO_SKY);
+                setIsOpen(false);
+              }}
+              style={[styles.optionBtn, skyMode === AUTO_SKY && styles.optionBtnActive]}
+            >
+              <Clock size={12} color={skyMode === AUTO_SKY ? '#FFFFFF' : colors.primaryDark} strokeWidth={2.2} />
+              <Text style={[styles.optionText, skyMode === AUTO_SKY && styles.optionTextActive]}>
+                {skyLabels.auto}
+              </Text>
+            </TouchableOpacity>
 
-          {/* Option: Dawn */}
-          <TouchableOpacity
-            onPress={() => {
-              setSkyMode(SKY.DAWN);
-              setIsOpen(false);
-            }}
-            style={[styles.optionBtn, skyMode === SKY.DAWN && styles.optionBtnActive]}
-          >
-            {getPeriodIcon(SKY.DAWN, 12, skyMode === SKY.DAWN)}
-            <Text style={[styles.optionText, skyMode === SKY.DAWN && styles.optionTextActive]}>
-              {skyLabels.dawn}
-            </Text>
-          </TouchableOpacity>
+            {/* Option: Dawn */}
+            <TouchableOpacity
+              onPress={() => {
+                setSkyMode(SKY.DAWN);
+                setIsOpen(false);
+              }}
+              style={[styles.optionBtn, skyMode === SKY.DAWN && styles.optionBtnActive]}
+            >
+              {getPeriodIcon(SKY.DAWN, 12, skyMode === SKY.DAWN)}
+              <Text style={[styles.optionText, skyMode === SKY.DAWN && styles.optionTextActive]}>
+                {skyLabels.dawn}
+              </Text>
+            </TouchableOpacity>
 
-          {/* Option: Day */}
-          <TouchableOpacity
-            onPress={() => {
-              setSkyMode(SKY.DAY);
-              setIsOpen(false);
-            }}
-            style={[styles.optionBtn, skyMode === SKY.DAY && styles.optionBtnActive]}
-          >
-            {getPeriodIcon(SKY.DAY, 12, skyMode === SKY.DAY)}
-            <Text style={[styles.optionText, skyMode === SKY.DAY && styles.optionTextActive]}>
-              {skyLabels.day}
-            </Text>
-          </TouchableOpacity>
+            {/* Option: Day */}
+            <TouchableOpacity
+              onPress={() => {
+                setSkyMode(SKY.DAY);
+                setIsOpen(false);
+              }}
+              style={[styles.optionBtn, skyMode === SKY.DAY && styles.optionBtnActive]}
+            >
+              {getPeriodIcon(SKY.DAY, 12, skyMode === SKY.DAY)}
+              <Text style={[styles.optionText, skyMode === SKY.DAY && styles.optionTextActive]}>
+                {skyLabels.day}
+              </Text>
+            </TouchableOpacity>
 
-          {/* Option: Sunset */}
-          <TouchableOpacity
-            onPress={() => {
-              setSkyMode(SKY.SUNSET);
-              setIsOpen(false);
-            }}
-            style={[styles.optionBtn, skyMode === SKY.SUNSET && styles.optionBtnActive]}
-          >
-            {getPeriodIcon(SKY.SUNSET, 12, skyMode === SKY.SUNSET)}
-            <Text style={[styles.optionText, skyMode === SKY.SUNSET && styles.optionTextActive]}>
-              {skyLabels.sunset}
-            </Text>
-          </TouchableOpacity>
+            {/* Option: Sunset */}
+            <TouchableOpacity
+              onPress={() => {
+                setSkyMode(SKY.SUNSET);
+                setIsOpen(false);
+              }}
+              style={[styles.optionBtn, skyMode === SKY.SUNSET && styles.optionBtnActive]}
+            >
+              {getPeriodIcon(SKY.SUNSET, 12, skyMode === SKY.SUNSET)}
+              <Text style={[styles.optionText, skyMode === SKY.SUNSET && styles.optionTextActive]}>
+                {skyLabels.sunset}
+              </Text>
+            </TouchableOpacity>
 
-          {/* Option: Night */}
-          <TouchableOpacity
-            onPress={() => {
-              setSkyMode(SKY.NIGHT);
-              setIsOpen(false);
-            }}
-            style={[styles.optionBtn, skyMode === SKY.NIGHT && styles.optionBtnActive]}
-          >
-            {getPeriodIcon(SKY.NIGHT, 12, skyMode === SKY.NIGHT)}
-            <Text style={[styles.optionText, skyMode === SKY.NIGHT && styles.optionTextActive]}>
-              {skyLabels.night}
-            </Text>
-          </TouchableOpacity>
-        </View>
+            {/* Option: Night */}
+            <TouchableOpacity
+              onPress={() => {
+                setSkyMode(SKY.NIGHT);
+                setIsOpen(false);
+              }}
+              style={[styles.optionBtn, skyMode === SKY.NIGHT && styles.optionBtnActive]}
+            >
+              {getPeriodIcon(SKY.NIGHT, 12, skyMode === SKY.NIGHT)}
+              <Text style={[styles.optionText, skyMode === SKY.NIGHT && styles.optionTextActive]}>
+                {skyLabels.night}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </>
       )}
     </View>
@@ -1290,7 +1290,7 @@ const styles = StyleSheet.create({
   diffusedSunCoreDay: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 16,
     backgroundColor: '#FFFFFF',
     shadowColor: '#FDE047',
     shadowOffset: { width: 0, height: 0 },

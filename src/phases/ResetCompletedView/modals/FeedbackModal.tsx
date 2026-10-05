@@ -326,16 +326,13 @@ export const FeedbackModal: React.FC<
                       ]}
                     >
                       <RatingIcon
-                        size={14}
+                        size={12}
                         color={
                           STAR_COLORS[
                           rating - 1
                           ]
                         }
-                        strokeWidth={2.3}
-                        style={{
-                          marginRight: 4,
-                        }}
+                        strokeWidth={2}
                       />
 
                       <Text
@@ -624,7 +621,7 @@ const styles = StyleSheet.create({
     maxWidth: 520,
     maxHeight: '92%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 16,
     overflow: 'hidden',
     ...shadows.soft,
   },
@@ -715,9 +712,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
 
-    borderRadius: 12,
+    borderRadius: 9999,
 
     borderWidth: 1,
+    gap: 6,
   },
 
   starDescText: {
@@ -725,7 +723,7 @@ const styles = StyleSheet.create({
       typography.fontPromptBold,
 
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '500',
   },
 
   /* Accuracy */
@@ -814,8 +812,6 @@ const styles = StyleSheet.create({
 
   chipTextActive: {
     color: colors.primaryDark,
-
-    fontWeight: '700',
   },
 
   /* Comment */

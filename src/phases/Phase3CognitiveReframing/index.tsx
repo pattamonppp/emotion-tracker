@@ -194,7 +194,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
         <View style={styles.bottomBar}>
           <MarshmallowButton
             variant={MARSHMALLOW_VARIANT.PRIMARY}
-            size={MARSHMALLOW_SIZE.LG}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onProceed}
             icon={<ArrowRight size={18} color="#FFFFFF" />}
             title={p3.measureBtn}

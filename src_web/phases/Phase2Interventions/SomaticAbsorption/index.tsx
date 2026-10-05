@@ -445,7 +445,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
         <div className={styles.actionSection}>
           <MarshmallowButton
             variant={MARSHMALLOW_VARIANT.PRIMARY}
-            size={MARSHMALLOW_SIZE.LG}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
             icon={
               <Check

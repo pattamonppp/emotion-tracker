@@ -27,6 +27,7 @@ import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { getTranslation } from '../../../locales';
 import { MODAL_CONFIG } from '../../../constants';
 import { GOAL } from '../../../../src_web/types';
+import { MarshmallowButton, MARSHMALLOW_VARIANT, MARSHMALLOW_SIZE } from '../../../design-system/MarshmallowButton';
 
 export interface OnboardingModalProps {
   initialProfile: UserProfile;
@@ -146,7 +147,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                       ]}
                     >
                       <IconComponent size={20} color={g.color} />
-                      <Text style={[styles.goalLabel, isSelected && { color: colors.primaryDark, fontWeight: '800' }]}>
+                      <Text style={[styles.goalLabel, isSelected && { color: colors.primaryDark }]}>
                         {g.label}
                       </Text>
                       {isSelected && <Check size={14} color={g.color} strokeWidth={3} />}
@@ -192,15 +193,13 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
             {/* Save Button */}
             <View style={styles.saveSection}>
-              <Button
-                variant="primary"
-                size="lg"
-                fullWidth
+              <MarshmallowButton
+                title={o.saveSettings}
                 onPress={handleSave}
                 icon={<Check size={18} color="#FFFFFF" />}
-              >
-                {o.saveSettings}
-              </Button>
+                variant={MARSHMALLOW_VARIANT.PRIMARY}
+                size={MARSHMALLOW_SIZE.MD}
+              />
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -222,7 +221,7 @@ const styles = StyleSheet.create({
     maxWidth: 520,
     maxHeight: '90%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 16,
     overflow: 'hidden',
     ...shadows.soft,
   },
@@ -304,7 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.lg,
     borderWidth: 1.5,
     borderColor: colors.borderSubtle,
-    gap: 8,
+    gap: 12,
   },
   goalLabel: {
     flex: 1,

@@ -15,6 +15,7 @@ import { audioService, HAPTIC_STYLE } from '../../../../services/audioService';
 import { getTranslation } from '../../../../locales';
 import { MODAL_CONFIG } from '../../../../constants';
 import styles from './styles.module.scss';
+import MarshmallowButton, { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT } from '@/components/MarshmallowButton';
 
 export interface OnboardingModalProps {
   initialProfile: UserProfile;
@@ -133,7 +134,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                       className={styles.goalLabel}
                       style={{
                         color: isSelected ? '#004D40' : '#1E293B',
-                        fontWeight: isSelected ? 800 : 600,
+                        fontWeight: 600,
                       }}
                     >
                       {g.label}
@@ -172,15 +173,13 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
           {/* Save Button */}
           <div className={styles.saveSection}>
-            <Button
-              variant={BUTTON_VARIANT.PRIMARY}
-              size="lg"
-              fullWidth
-              onClick={handleSave}
+            <MarshmallowButton
+              title={o.saveSettings}
+              onPress={handleSave}
               icon={<Check size={18} color="#FFFFFF" />}
-            >
-              {o.saveSettings}
-            </Button>
+              variant={MARSHMALLOW_VARIANT.PRIMARY}
+              size={MARSHMALLOW_SIZE.MD}
+            />
           </div>
         </div>
       </div>

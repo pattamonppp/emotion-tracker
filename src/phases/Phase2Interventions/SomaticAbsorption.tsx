@@ -413,7 +413,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
         <View style={styles.actionSection}>
           <MarshmallowButton
             variant={MARSHMALLOW_VARIANT.PRIMARY}
-            size={MARSHMALLOW_SIZE.LG}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
             icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceedBtn}
@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 340,
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 16,
     padding: 24,
     alignItems: 'center',
     position: 'relative',

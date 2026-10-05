@@ -226,7 +226,7 @@ export const Phase3CognitiveReframing: React.FC<
         <div className={styles.bottomBar}>
           <MarshmallowButton
             variant={MARSHMALLOW_VARIANT.PRIMARY}
-            size={MARSHMALLOW_SIZE.LG}
+            size={MARSHMALLOW_SIZE.MD}
             onPress={onProceed}
             icon={
               <ArrowRight

@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingTop: 8,
-    paddingBottom: 32,
+    paddingBottom: 0,
     alignItems: 'center',
   },
   topBadge: {

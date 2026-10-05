@@ -7,6 +7,7 @@ import { LeafIcon, ZapIcon } from '../../../../icons';
 import { getTranslation } from '../../../../locales';
 import { Language } from '../../../../types';
 import styles from './styles.module.scss';
+import MarshmallowButton, { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT } from '@/components/MarshmallowButton';
 
 export interface LivePulseSensorModalProps {
   isOpen: boolean;
@@ -205,13 +206,11 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
 
         {/* Footer */}
         <div className={styles.footerArea}>
-          <Button
-            variant="primary"
-            colorTheme={BUTTON_THEME.TURQUOISE}
-            size="md"
-            fullWidth
-            onClick={onClose}
-            label={strings.confirmBtn}
+          <MarshmallowButton
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.MD}
+            title={strings.confirmBtn}
+            onPress={onClose}
           />
         </div>
       </div>

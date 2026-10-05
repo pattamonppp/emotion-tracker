@@ -237,11 +237,10 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                   >
                     <RatingIcon
                       style={{
-                        width: 14,
-                        height: 14,
-                        marginRight: 4,
+                        width: 12,
+                        height: 12,
                         color: ratingColor,
-                        strokeWidth: 2.3,
+                        strokeWidth: 2,
                       }}
                     />
 

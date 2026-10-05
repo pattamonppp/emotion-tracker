@@ -906,7 +906,7 @@ const styles = StyleSheet.create({
   emptyCircleBadge: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 16,
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',

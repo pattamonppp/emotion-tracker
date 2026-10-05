@@ -239,7 +239,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
       <div className={styles.bottomBar}>
         <MarshmallowButton
           variant={MARSHMALLOW_VARIANT.PRIMARY}
-          size={MARSHMALLOW_SIZE.LG}
+          size={MARSHMALLOW_SIZE.MD}
           onPress={handleFinish}
           icon={<ArrowRight size={18} color="#FFFFFF" />}
           title={p4.claimPolaroid}

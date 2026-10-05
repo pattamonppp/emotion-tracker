@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-  Modal, 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  ScrollView 
+import {
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ShiftFeedback, UserProfile, Language, SHIFT_RESULT } from '../../../types';
@@ -56,57 +56,57 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
     >
       <View style={styles.backdrop}>
         <SafeAreaView style={styles.modalCard}>
-        <View style={styles.headerBar}>
-          <View style={styles.headerTitleRow}>
-            <Award size={18} color={colors.secondary} />
-            <Text style={styles.headerTitle}>
-              {h.resetHistoryTitle}
-            </Text>
+          <View style={styles.headerBar}>
+            <View style={styles.headerTitleRow}>
+              <Award size={18} color={colors.secondary} />
+              <Text style={styles.headerTitle}>
+                {h.resetHistoryTitle}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+              <X size={18} color={colors.textSecondary} />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-            <X size={18} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
 
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          {displayHistory.map((item, idx) => {
-            const drop = item.preHeartRate - item.postHeartRate;
-            return (
-              <View key={idx} style={styles.historyCard}>
-                <View style={styles.cardHeader}>
-                  <View style={styles.badgeShift}>
-                    <Sparkles size={12} color={colors.primary} />
-                    <Text style={styles.badgeShiftText}>
-                      {item.shiftResult.toUpperCase()}
+          <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+            {displayHistory.map((item, idx) => {
+              const drop = item.preHeartRate - item.postHeartRate;
+              return (
+                <View key={idx} style={styles.historyCard}>
+                  <View style={styles.cardHeader}>
+                    <View style={styles.badgeShift}>
+                      <Sparkles size={12} color={colors.primary} />
+                      <Text style={styles.badgeShiftText}>
+                        {item.shiftResult.toUpperCase()}
+                      </Text>
+                    </View>
+                    <Text style={styles.timestampText}>
+                      {item.timestamp ? item.timestamp.split('T')[0] : h.today}
                     </Text>
                   </View>
-                  <Text style={styles.timestampText}>
-                    {item.timestamp ? item.timestamp.split('T')[0] : h.today}
-                  </Text>
-                </View>
 
-                <View style={styles.metricRow}>
-                  <View style={styles.metricItem}>
-                    <Text style={styles.metricLabel}>{h.preLabel}</Text>
-                    <Text style={styles.metricVal}>{item.preHeartRate} BPM</Text>
-                  </View>
+                  <View style={styles.metricRow}>
+                    <View style={styles.metricItem}>
+                      <Text style={styles.metricLabel}>{h.preLabel}</Text>
+                      <Text style={styles.metricVal}>{item.preHeartRate} BPM</Text>
+                    </View>
 
-                  <View style={styles.deltaBox}>
-                    <Activity size={12} color={colors.primary} />
-                    <Text style={styles.deltaVal}>-{drop} BPM</Text>
-                  </View>
+                    <View style={styles.deltaBox}>
+                      <Activity size={12} color={colors.primary} />
+                      <Text style={styles.deltaVal}>-{drop} BPM</Text>
+                    </View>
 
-                  <View style={styles.metricItem}>
-                    <Text style={styles.metricLabel}>{h.postLabel}</Text>
-                    <Text style={[styles.metricVal, { color: colors.primary }]}>
-                      {item.postHeartRate} BPM
-                    </Text>
+                    <View style={styles.metricItem}>
+                      <Text style={styles.metricLabel}>{h.postLabel}</Text>
+                      <Text style={[styles.metricVal, { color: colors.primary }]}>
+                        {item.postHeartRate} BPM
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
-        </ScrollView>
+              );
+            })}
+          </ScrollView>
         </SafeAreaView>
       </View>
     </Modal>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     maxWidth: 520,
     maxHeight: '90%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 16,
     overflow: 'hidden',
     ...shadows.soft,
   },

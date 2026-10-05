@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 340,
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 16,
     padding: 18,
     borderWidth: 1.5,
     borderColor: 'rgba(239, 119, 115, 0.3)',

@@ -770,7 +770,7 @@ const styles = StyleSheet.create({
   },
   modalCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 16,
     padding: 24,
     alignItems: 'center',
     position: 'relative',

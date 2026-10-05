@@ -26,6 +26,7 @@ import { Button } from '../../../design-system/Button';
 import { getTranslation } from '../../../locales';
 import { typography } from '../../../design-system/tokens';
 import { Language } from '../../../types';
+import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
 
 export interface LivePulseSensorModalProps {
   isOpen: boolean;
@@ -556,14 +557,12 @@ export const LivePulseSensorModal: React.FC<
                 styles.footerArea
               }
             >
-              <Button
-                variant="primary"
-                size="md"
-                fullWidth
+              <MarshmallowButton
+                variant={MARSHMALLOW_VARIANT.PRIMARY}
+                size={MARSHMALLOW_SIZE.MD}
+                title={strings.confirmBtn}
                 onPress={handleClose}
-              >
-                {strings.confirmBtn}
-              </Button>
+              />
             </View>
           </SafeAreaView>
         </View>
