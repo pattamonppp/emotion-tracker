@@ -26,3 +26,30 @@
   border-radius: $radius-pill;
   padding: 8px 16px;
 }
+
+@mixin modal-text-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fbfbfb;
+  border: 1.5px solid #cdd8e1;
+  border-radius: 14px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #26313c;
+  transition: border-color $transition-fast, background-color $transition-fast, box-shadow $transition-fast;
+
+  &::placeholder {
+    color: #637b91;
+    opacity: 1;
+  }
+
+  &:focus {
+    border-color: #00c4b3;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 196, 179, 0.15);
+  }
+}

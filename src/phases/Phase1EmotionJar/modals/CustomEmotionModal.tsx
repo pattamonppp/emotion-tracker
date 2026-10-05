@@ -122,7 +122,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               style={styles.closeBtn}
             >
-              <X size={18} color={colors.textMuted} strokeWidth={2.4} />
+              <X size={18} color="#79ADA9" strokeWidth={2.4} />
             </TouchableOpacity>
           </View>
 

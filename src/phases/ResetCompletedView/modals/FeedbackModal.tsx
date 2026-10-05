@@ -71,6 +71,9 @@ export const FeedbackModal: React.FC<
     const [comment, setComment] =
       useState('');
 
+    const [isFocused, setIsFocused] =
+      useState(false);
+
     const [submitted, setSubmitted] =
       useState(false);
 
@@ -234,7 +237,7 @@ export const FeedbackModal: React.FC<
                   right: 10,
                 }}
               >
-                <X size={18} color={colors.textMuted} strokeWidth={2.4} />
+                <X size={18} color="#79ADA9" strokeWidth={2.4} />
               </TouchableOpacity>
             </View>
 
@@ -414,11 +417,15 @@ export const FeedbackModal: React.FC<
                                     color:
                                       option.text,
                                     fontWeight:
-                                      '800',
+                                      '700',
                                   },
                                 ]}
                               >
-                                {renderBilingualNodes(option.label, typography.fontPromptBold, typography.fontGothamBold)}
+                                {renderBilingualNodes(
+                                  option.label,
+                                  isSelected ? typography.fontPromptBold : typography.fontPromptMedium,
+                                  isSelected ? typography.fontGothamBold : typography.fontGotham
+                                )}
                               </Text>
                             </TouchableOpacity>
                           );
@@ -473,7 +480,7 @@ export const FeedbackModal: React.FC<
                                 size={14}
                                 color={
                                   isSelected
-                                    ? colors.primaryDark
+                                    ? '#009688'
                                     : '#64748B'
                                 }
                                 style={{
@@ -512,17 +519,22 @@ export const FeedbackModal: React.FC<
                     </Text>
 
                     <TextInput
-                      style={styles.textInput}
+                      style={[
+                        styles.textInput,
+                        isFocused && styles.textInputFocused,
+                      ]}
                       multiline
                       numberOfLines={3}
                       value={comment}
                       onChangeText={
                         setComment
                       }
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
                       placeholder={
                         fb.commentPlaceholder
                       }
-                      placeholderTextColor="#94A3B8"
+                      placeholderTextColor="#637b91"
                     />
                   </View>
 
@@ -771,7 +783,7 @@ const styles = StyleSheet.create({
       typography.fontPromptMedium,
 
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '500',
 
     color: '#79ADA9',
 
@@ -807,8 +819,7 @@ const styles = StyleSheet.create({
   chipActive: {
     backgroundColor: '#E0F8F6',
 
-    borderColor:
-      colors.primary,
+    borderColor: '#00c4b3',
   },
 
   chipText: {
@@ -819,11 +830,12 @@ const styles = StyleSheet.create({
 
     color: '#528984',
 
-    fontWeight: '600',
+    fontWeight: '500',
   },
 
   chipTextActive: {
-    color: colors.primaryDark,
+    color: '#009688',
+    fontWeight: '600',
   },
 
   /* Comment */
@@ -834,20 +846,26 @@ const styles = StyleSheet.create({
     borderRadius: 14,
 
     borderWidth: 1.5,
-    borderColor: '#f1f1f1',
+    borderColor: '#cdd8e1',
 
-    padding: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
 
     fontFamily:
       typography.fontPromptMedium,
 
     fontSize: 13,
 
-    color: colors.textPrimary,
+    color: '#26313c',
 
-    minHeight: 70,
+    minHeight: 80,
 
     textAlignVertical: 'top',
+  },
+
+  textInputFocused: {
+    borderColor: '#00c4b3',
+    backgroundColor: '#ffffff',
   },
 
   /* Success */

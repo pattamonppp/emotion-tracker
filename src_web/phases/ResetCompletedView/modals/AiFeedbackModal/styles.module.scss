@@ -373,7 +373,8 @@
 }
 
 .chipTextActive {
-  color: #355956;
+  color: #009688;
+  font-weight: 600;
 }
 
 .chipActive {
@@ -383,37 +384,31 @@
 
 .textInput {
   display: block;
-
   width: 100%;
-  min-height: 70px;
-
+  min-height: 80px;
   box-sizing: border-box;
-
-  padding: 12px;
-
-  resize: none;
-
-  border: 1.5px solid #f1f1f1;
+  padding: 12px 14px;
+  resize: vertical;
+  background: #fbfbfb;
+  border: 1.5px solid #cdd8e1;
   border-radius: 14px;
   outline: none;
-
-  background: #fbfbfb;
-
-  font-family: 'Gotham Rounded', 'Prompt', sans-serif;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 500;
-  line-height: 20px;
-
-  color: #355956;
+  line-height: 1.5;
+  color: #26313c;
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
 
   &::placeholder {
-    color: #79ADA9;
+    color: #637b91;
     opacity: 1;
   }
 
   &:focus {
     border-color: #00c4b3;
-    box-shadow: none;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 196, 179, 0.15);
   }
 }
 

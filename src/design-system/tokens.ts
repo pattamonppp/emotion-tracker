@@ -286,3 +286,20 @@ export type {
   SkyTimePeriod,
   SkyMode,
 } from '../types';
+
+export const modalInputStyles = {
+  input: {
+    backgroundColor: '#fbfbfb',
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: '#cdd8e1',
+    fontSize: 13,
+    color: '#26313c',
+    fontFamily: typography.fontPromptMedium,
+  },
+  inputFocused: {
+    borderColor: '#00c4b3',
+    backgroundColor: '#ffffff',
+  },
+  placeholderColor: '#637b91',
+};

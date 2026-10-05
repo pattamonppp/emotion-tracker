@@ -464,7 +464,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               onPress={() => setIsGuideOpen(false)}
               style={styles.modalCloseBtn}
             >
-              <X size={18} color="#637b91" />
+              <X size={18} color="#79ADA9" />
             </TouchableOpacity>
 
             <View style={styles.guideIconWrapper}>

@@ -116,7 +116,7 @@
 
 .fieldLabel {
   font-family: inherit;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 11px;
   color: #566D80;
 }
@@ -130,11 +130,12 @@
   height: 44px;
   gap: 8px;
   padding-left: 12px;
-  transition: border-color $transition-fast;
+  transition: border-color $transition-fast, box-shadow $transition-fast, background-color $transition-fast;
 
   &:focus-within {
     border-color: #00C4B3;
     background-color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(0, 196, 179, 0.15);
   }
 }
 

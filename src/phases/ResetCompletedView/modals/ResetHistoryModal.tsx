@@ -9,6 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ShiftFeedback, UserProfile, Language, SHIFT_RESULT } from '../../../types';
 import { Award, X, Activity, Sparkles } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../../design-system/tokens';
@@ -57,25 +58,30 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
       onRequestClose={onClose}
     >
       <View style={styles.backdrop}>
-        <SafeAreaView style={styles.modalCard}>
-          <View style={styles.headerBar}>
-            <View style={styles.headerTitleRow}>
-              <View style={styles.iconCircle}>
-                <Award size={16} color="#DF8900" strokeWidth={2.4} />
+        <LinearGradient
+          colors={['#fbfbfb', '#ffffff', '#E0F8F6']}
+          locations={[0, 0.5, 1]}
+          style={styles.modalCard}
+        >
+          <SafeAreaView style={styles.safeArea}>
+            <View style={styles.headerBar}>
+              <View style={styles.headerTitleRow}>
+                <View style={styles.iconCircle}>
+                  <Award size={16} color="#DF8900" strokeWidth={2.4} />
+                </View>
+                <View>
+                  <Text style={styles.headerTitle}>
+                    {renderBilingualNodes(h.resetHistoryTitle, typography.fontPromptBold, typography.fontGothamBold)}
+                  </Text>
+                  <Text style={styles.headerSubtitle}>
+                    {renderBilingualNodes(h.subtitle, typography.fontPromptRegular, typography.fontGothamBook)}
+                  </Text>
+                </View>
               </View>
-              <View>
-                <Text style={styles.headerTitle}>
-                  {renderBilingualNodes(h.resetHistoryTitle, typography.fontPromptBold, typography.fontGothamBold)}
-                </Text>
-                <Text style={styles.headerSubtitle}>
-                  {renderBilingualNodes(h.subtitle, typography.fontPromptRegular, typography.fontGothamBook)}
-                </Text>
-              </View>
+              <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+                <X size={18} color="#79ADA9" strokeWidth={2.4} />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <X size={18} color={colors.textMuted} strokeWidth={2.4} />
-            </TouchableOpacity>
-          </View>
 
           <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
             {displayHistory.map((item, idx) => {
@@ -117,9 +123,10 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
             })}
           </ScrollView>
         </SafeAreaView>
-      </View>
-    </Modal>
-  );
+      </LinearGradient>
+    </View>
+  </Modal>
+);
 };
 
 const styles = StyleSheet.create({
@@ -134,11 +141,15 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 520,
     maxHeight: '90%',
-    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     overflow: 'hidden',
     padding: 16,
+    paddingBottom: 0,
     ...shadows.soft,
+  },
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'transparent',
   },
   headerBar: {
     flexDirection: 'row',
@@ -183,7 +194,8 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 0,
-    paddingVertical: 4,
+    paddingVertical: 0,
+    paddingBottom: 16,
     gap: 12,
   },
   historyCard: {

@@ -44,6 +44,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   onClose,
 }) => {
   const [profile, setProfile] = useState<UserProfile>(initialProfile);
+  const [isFocused, setIsFocused] = useState(false);
   const lang = profile.language;
   const t = getTranslation(lang);
   const o = t.modals.onboarding;
@@ -105,7 +106,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             </View>
             {onClose && (
               <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-                <X size={18} color={colors.textMuted} strokeWidth={2.4} />
+                <X size={18} color="#79ADA9" strokeWidth={2.4} />
               </TouchableOpacity>
             )}
           </View>
@@ -125,12 +126,15 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               <Text style={styles.fieldLabel}>
                 {renderBilingualNodes(o.yourName)}
               </Text>
-              <View style={styles.inputRow}>
-                <User size={16} color={colors.primary} style={{ marginLeft: 12 }} />
+              <View style={[styles.inputRow, isFocused && styles.inputRowFocused]}>
+                <User size={16} color={isFocused ? colors.primary : '#79ADA9'} style={{ marginLeft: 12 }} />
                 <TextInput
                   value={profile.name}
                   onChangeText={(text) => setProfile({ ...profile, name: text })}
                   placeholder={o.namePlaceholder}
+                  placeholderTextColor="#637b91"
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
                   style={styles.textInput}
                 />
               </View>
@@ -306,18 +310,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fbfbfb',
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    borderColor: colors.borderSubtle,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: '#cdd8e1',
+    height: 44,
+  },
+  inputRowFocused: {
+    borderColor: '#00C4B3',
+    backgroundColor: '#FFFFFF',
   },
   textInput: {
     flex: 1,
     paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 14,
-    color: colors.textPrimary,
-    fontFamily: typography.fontPromptSemiBold,
-    ...(Platform.OS !== 'android' ? { fontWeight: '600' } : {}),
+    fontSize: 13,
+    color: '#26313c',
+    fontFamily: typography.fontPromptMedium,
   },
   goalsGrid: {
     flexDirection: 'row',

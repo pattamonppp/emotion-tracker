@@ -289,7 +289,7 @@ export const LivePulseSensorModal: React.FC<
               >
                 <X
                   size={18}
-                  color={colors.textMuted}
+                  color="#79ADA9"
                   strokeWidth={2.4}
                 />
               </Pressable>

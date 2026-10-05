@@ -325,7 +325,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                               height: 14,
                               marginRight: 6,
                               color: isSelected
-                                ? '#00695C'
+                                ? '#009688'
                                 : '#64748B',
                             }}
                           />
