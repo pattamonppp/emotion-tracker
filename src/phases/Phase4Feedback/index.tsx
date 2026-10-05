@@ -118,7 +118,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             {/* Delta Arrow */}
             <View style={styles.deltaBadge}>
               <Text style={styles.deltaText} numberOfLines={1}>
-                {`${bpmDrop >= 0 ? `-${bpmDrop}` : `+${Math.abs(bpmDrop)}`}\u00A0BPM`}
+                {`${bpmDrop >= 0 ? `-${bpmDrop}` : `+${Math.abs(bpmDrop)}`} BPM`}
               </Text>
             </View>
 
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   bpmCard: {
     width: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: radii.xl,
+    borderRadius: radii.card,
     padding: 16,
     borderWidth: 1.5,
     borderColor: colors.borderTeal,
@@ -343,32 +343,40 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   bpmPreValue: {
-    fontFamily: typography.fontPromptExtraBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 22,
     color: colors.textPrimary,
   },
   bpmPostValue: {
-    fontFamily: typography.fontPromptExtraBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 22,
     color: colors.primaryDark,
   },
   bpmUnit: {
-    fontFamily: typography.fontPromptMedium,
+    fontFamily: typography.fontGothamBold,
     fontSize: 10,
     color: colors.textMuted,
   },
   deltaBadge: {
+    flexGrow: 0,
+    flexShrink: 0,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#E6FAF8',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: radii.full,
     borderWidth: 1.5,
     borderColor: colors.primary,
+    maxWidth: 85,
   },
   deltaText: {
-    fontFamily: typography.fontPromptExtraBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 14,
     color: colors.primaryDark,
+    maxWidth: '100%',
+    textAlign: 'center',
   },
   stepperRow: {
     flexDirection: 'row',
@@ -439,7 +447,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   stampSubLabel: {
-    fontFamily: typography.fontPromptMedium,
+    fontFamily: typography.fontPromptRegular,
     fontSize: 11,
     color: colors.textMuted,
     marginTop: 2,

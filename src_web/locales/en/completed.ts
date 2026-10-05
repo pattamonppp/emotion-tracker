@@ -5,7 +5,6 @@ export const completed = {
   rainbowCelebration: 'Rainbow Keepsake',
   goldMedalTitle: 'Mooca Best Friend',
   caption: 'You are so brave and wonderful! Keep shining',
-  resetDurationLabel: '120s Reset',
   preLabel: 'Initial',
   nowLabel: 'Current',
   calmShift: 'Calm Shift',

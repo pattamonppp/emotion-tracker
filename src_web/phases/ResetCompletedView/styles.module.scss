@@ -9,7 +9,7 @@
 }
 
 .container {
-  padding: 8px 16px 28px 16px;
+  padding: 8px 16px 0 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,7 +67,7 @@
   background-color: #FFFFFF;
   border-radius: 16px;
   padding: 12px;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
   border: 1.5px solid #f1f1f1;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   margin-bottom: 12px;
@@ -124,6 +124,7 @@
 }
 
 .rainbowText {
+  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
   font-size: 0.625rem;
   font-weight: 700;
   color: #DF8900;
@@ -202,7 +203,7 @@
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid #f1f1f1;
-  padding-top: 6px;
+  padding-top: 8px;
 }
 
 .chinDateText {
@@ -221,6 +222,7 @@
 }
 
 .chinBpmText {
+  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
   font-size: 0.625rem;
   font-weight: 700;
   color: $color-brand-contrast;
@@ -235,11 +237,12 @@
   align-items: center;
   justify-content: space-around;
   background-color: #FFFFFF;
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 10px 8px;
   border: 1.5px solid rgba(0, 196, 179, 0.35);
   margin-bottom: 14px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .metricItem {
@@ -257,7 +260,7 @@
 }
 
 .metricVal {
-  font-family: $font-th;
+  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
   font-size: 0.8125rem;
   font-weight: 700;
   color: $color-slate-800;

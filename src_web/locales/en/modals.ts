@@ -25,7 +25,7 @@ export const modals = {
     saveSettings: 'Save Profile Settings',
     nameLabel: 'What should Mooca call you?',
     namePlaceholder: 'Enter your nickname...',
-    ageLabel: 'Age Group / Occupation',
+    ageLabel: 'Age Group and Occupation',
     goalLabel: 'Primary goal you want Mooca to help with',
     mbtiLabel: 'Personality Type (MBTI)',
     mbtiHint: 'Fine-tune Mooca tone and comfort style',
@@ -128,7 +128,7 @@ export const modals = {
     friendMooca: 'Mooca',
     storyTooltip: 'Mooca Story',
     toggleFrameTooltip: 'Toggle mobile device frame',
-    toggleLangTooltip: 'Toggle language TH / EN',
+    toggleLangTooltip: 'Toggle language TH - EN',
     designTokensTooltip: 'Design Tokens & UI',
   },
   drawer: {

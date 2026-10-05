@@ -17,7 +17,7 @@ export const phase2 = {
   somaticAbsorption: {
     fingertipHeat: 'Fingertip Heat:',
     dualThumbActive: 'Dual-Thumb Active',
-    coolNerves: 'Cool / Elevated Nerves',
+    coolNerves: 'Cool & Elevated Nerves',
     restoredWarmth: 'Warm Equilibrium Restored',
     mascotDone: 'Wonderful job! Your mind and body are peaceful and safe now.',
     mascotRubbing: 'Feeling the warmth? Gently anchoring your calm right here.',

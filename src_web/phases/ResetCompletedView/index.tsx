@@ -182,7 +182,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
             <div className={styles.chinFooterRow}>
               <span className={styles.chinDateText}>
-                {currentDate} • {c.resetDurationLabel}
+                {currentDate}
               </span>
 
               <div className={styles.chinBpmDrop}>
@@ -193,7 +193,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 />
 
                 <span className={styles.chinBpmText}>
-                  {`-${bpmDrop}\u00A0BPM`}
+                  {`-${bpmDrop} BPM`}
                 </span>
               </div>
             </div>
@@ -208,7 +208,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             </span>
 
             <span className={styles.metricVal}>
-              {`${feedback?.preHeartRate || 105}\u00A0BPM`}
+              {`${feedback?.preHeartRate || 105} BPM`}
             </span>
           </div>
 
@@ -225,24 +225,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 styles.metricValTeal,
               )}
             >
-              {`${feedback?.postHeartRate || 87}\u00A0BPM`}
-            </span>
-          </div>
-
-          <div className={styles.metricDivider} />
-
-          <div className={styles.metricItem}>
-            <span className={styles.metricLabel}>
-              {c.calmShift}
-            </span>
-
-            <span
-              className={classNames(
-                styles.metricVal,
-                styles.metricValOrange,
-              )}
-            >
-              {`-${bpmDrop}\u00A0BPM`}
+              {`${feedback?.postHeartRate || 87} BPM`}
             </span>
           </div>
         </div>
@@ -257,7 +240,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             icon={
               <MessageSquareHeart
                 size={18}
-                color="#004D40"
+                color="currentColor"
               />
             }
             title={c.feedbackBtn}
@@ -271,7 +254,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             icon={
               <Share2
                 size={16}
-                color="#FFFFFF"
+                color="currentColor"
               />
             }
             title={c.sharePolaroidBtn}
@@ -285,7 +268,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             icon={
               <RotateCcw
                 size={18}
-                color="#FFFFFF"
+                color="currentColor"
               />
             }
             title={c.restartSessionBtn}
@@ -299,7 +282,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             icon={
               <History
                 size={16}
-                color="#004D40"
+                color="currentColor"
               />
             }
             title={c.viewHistoryBtn}

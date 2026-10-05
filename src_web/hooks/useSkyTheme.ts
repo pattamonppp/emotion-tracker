@@ -103,7 +103,7 @@ export const useSkyTheme = (periodOverride?: SkyTimePeriod): SkyThemeTokens => {
           cardBorder: '#FAD6D5',
           scriptTitle: '#E85A56',
           scriptText: '#EB6460',
-          waveColor: '#EF7773',
+          waveColor: '#E44743',
           hintText: '#FFFFFF',
 
           // Somatic Absorption
@@ -201,7 +201,7 @@ export const useSkyTheme = (periodOverride?: SkyTimePeriod): SkyThemeTokens => {
           cardBorder: '#F8E4B3',
           scriptTitle: '#DF8900',
           scriptText: '#E39200',
-          waveColor: '#F9A000',
+          waveColor: '#DF8900',
           hintText: '#D97800',
 
           // Somatic Absorption

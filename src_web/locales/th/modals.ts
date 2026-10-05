@@ -25,7 +25,7 @@ export const modals = {
     saveSettings: 'บันทึกการตั้งค่า',
     nameLabel: 'ให้ Mooca เรียกเธอว่าอะไรดีจ้ะ?',
     namePlaceholder: 'พิมพ์ชื่อเล่นของเธอ...',
-    ageLabel: 'ช่วงอายุ / สถานะ',
+    ageLabel: 'ช่วงอายุและสถานะ',
     goalLabel: 'เป้าหมายหลักที่อยากให้ Mooca ช่วยดูแล',
     mbtiLabel: 'ประเภทบุคลิกภาพ (MBTI)',
     mbtiHint: 'ปรับระดับคำปลอบของ Mooca',
@@ -128,7 +128,7 @@ export const modals = {
     friendMooca: 'เพื่อน Mooca',
     storyTooltip: 'เรื่องราวของ Mooca',
     toggleFrameTooltip: 'สลับกรอบอุปกรณ์มือถือ',
-    toggleLangTooltip: 'สลับภาษา TH / EN',
+    toggleLangTooltip: 'สลับภาษา TH - EN',
     designTokensTooltip: 'Design Tokens & UI',
   },
   drawer: {

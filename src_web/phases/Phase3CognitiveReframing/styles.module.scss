@@ -65,13 +65,15 @@
 
 .mascotWrapper {
   width: 100%;
-  height: 135px;
+  height: 145px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  flex-direction: column;
   overflow: visible;
   box-sizing: border-box;
-  margin-top: 32px;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 /* ─────────────────────────────────────
@@ -91,7 +93,7 @@
 
   border-radius: 9999px;
 
-  border: 1px solid #99f6e4;
+  border: 1px solid rgba(0, 196, 179, 0.25);
 
   gap: 6px;
 
@@ -116,7 +118,7 @@
 
   line-height: normal;
 
-  color: #00695c;
+  color: #009688;
 }
 
 /* ─────────────────────────────────────
@@ -195,7 +197,7 @@
 
   background: #ffffff;
 
-  border-radius: 18px;
+  border-radius: 16px;
 
   padding: 18px 16px 16px;
 
@@ -240,7 +242,7 @@
 .letterStampText {
   margin: 0;
 
-  font-family: 'Prompt', sans-serif;
+  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
 
   font-size: 8px;
   font-weight: 700;
@@ -293,7 +295,7 @@
 
   line-height: 20px;
 
-  color: #334155;
+  color: #26313c;
 }
 
 /* ─────────────────────────────────────
@@ -307,7 +309,7 @@
 
   align-items: flex-start;
 
-  background: #E0F8F6;
+  background: #DBF0EE;
 
   padding: 10px;
 
@@ -315,7 +317,7 @@
 
   margin-top: 10px;
 
-  border: 1px solid #B3EDE8;
+  border: 1px solid rgba(0, 196, 179, 0.25);
 
   gap: 8px;
 
@@ -342,7 +344,7 @@
 
   line-height: 17px;
 
-  color: #355956;
+  color: #009688;
 }
 
 /* ─────────────────────────────────────
@@ -356,9 +358,9 @@
 
   border-radius: 16px;
 
-  padding: 14px;
+  padding: 14px 14px 10px;
 
-  border: 1.5px solid #B3EDE8;
+  border: 1.5px solid rgba(0, 196, 179, 0.25);
 
   margin-top: 8px;
 
@@ -404,7 +406,7 @@
 
   line-height: normal;
 
-  color: #355956;
+  color: #009688;
 }
 
 /* ─────────────────────────────────────
@@ -460,9 +462,9 @@
   margin: 0;
   padding: 12px;
 
-  background: #fbfbfb;
+  background: #DBF0EE;
 
-  border: 1.5px solid #f1f1f1;
+  border: 1.5px solid rgba(0, 196, 179, 0.25);
 
   border-radius: 12px;
 
@@ -488,9 +490,9 @@
 }
 
 .commitBoxActive {
-  background: #E0F8F6;
+  background: #DBF0EE;
 
-  border-color: #00c4b3;
+  border-color: #00C4B3;
 }
 
 /* ─────────────────────────────────────
@@ -532,15 +534,15 @@
   font-family: 'Prompt', sans-serif;
 
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
 
   line-height: 18px;
 
-  color: #355956;
+  color: #26313c;
 }
 
 .commitActionTextActive {
-  color: #355956;
+  color: #009688;
 }
 
 /* ─────────────────────────────────────
@@ -560,7 +562,7 @@
 
   border-radius: 50%;
 
-  border: 1.5px dashed #c4c4c4;
+  border: 1.5px dashed #CBD5E1;
 
   box-sizing: border-box;
 }
@@ -573,11 +575,11 @@
   font-family: 'Prompt', sans-serif;
 
   font-size: 8px;
-  font-weight: 700;
+  font-weight: 500;
 
   line-height: 1.2;
 
-  color: #79ADA9;
+  color: #637B91;
 
   text-align: center;
 }
@@ -603,7 +605,7 @@
 
   background: #8AD866;
 
-  border: 2px solid #B3EDE8;
+  border: 2px solid rgba(0, 196, 179, 0.25);
 
   box-sizing: border-box;
 
@@ -627,7 +629,7 @@
 
   border-radius: 50%;
 
-  background: #355956;
+  background: #009688;
 }
 
 .mintSealText {
@@ -676,7 +678,7 @@
 
   line-height: normal;
 
-  color: #64748b;
+  color: #637B91;
 
   text-align: center;
 }

@@ -53,7 +53,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
     }
 
     const waveAnimations = waveBars.map((val, i) => {
-      const dur = 380 + (i % 5) * 120;
+      const dur = 280 + (i % 5) * 90;
       return Animated.loop(
         Animated.sequence([
           Animated.timing(val, {
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   scriptCard: {
     width: '100%',
     maxWidth: 340,
-    borderRadius: 18,
+    borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderWidth: 1.2,

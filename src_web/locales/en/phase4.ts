@@ -12,7 +12,7 @@ export const phase4 = {
   bpmHeader: 'Heart Rate Delta',
   bpmBefore: 'Before',
   bpmNow: 'Now',
-  empowered: 'Empowered / Ready',
+  empowered: 'Empowered & Ready',
   grounded: 'Calm & Grounded',
   same: 'Balanced & Steady',
   finishButton: 'Complete Reset',

@@ -123,8 +123,8 @@ export const INTERVENTION_DATASET: Record<InterventionOption, InterventionOption
   },
   D: {
     option: INTERVENTION.D,
-    nameTh: 'Micro-Bounce / Vertical Grounding',
-    nameEn: 'Micro-Bounce / Vertical Grounding',
+    nameTh: 'Micro-Bounce (Vertical Grounding)',
+    nameEn: 'Micro-Bounce (Vertical Grounding)',
     keywordsTh: ['สับสน', 'เบลอ', 'มึน', 'ใจลอย', 'จับต้นชนปลายไม่ถูก', 'หลุดโฟกัส', 'เลือกไม่ถูก'],
     keywordsEn: ['confused', 'confusion', 'blur', 'blurry', 'dizzy', 'spacing out', 'spacey', 'daydreaming', 'lost focus', 'unfocused', 'indecisive', 'disoriented', 'floaty', 'brain fog'],
     descriptionTh: 'กระโดดดึ๋งเบา ๆ ทิ้งส้นเท้าลงพื้นอย่างมั่นคง ดึงสติและโฟกัสกลับสู่ร่างกายปัจจุบัน',
@@ -200,10 +200,10 @@ export const matchOptionFromKeywords = (
 };
 
 export const CONTEXT_LOCATIONS = [
-  { id: GOAL.EXAM, labelTh: 'สนามสอบ / ห้องเรียน', labelEn: 'Exam Hall / School', icon: 'GraduationCap' },
-  { id: GOAL.WORK, labelTh: 'ออฟฟิศ / หน้าคอมพิวเตอร์', labelEn: 'Office / Workstation', icon: 'Briefcase' },
-  { id: GOAL.STAGE, labelTh: 'หลังเวที / ก่อนพรีเซนต์', labelEn: 'Backstage / Presentation', icon: 'Mic' },
-  { id: GOAL.BURNOUT, labelTh: 'ระหว่างเดินทาง / รถไฟฟ้า', labelEn: 'Transit / Commute', icon: 'Navigation' },
+  { id: GOAL.EXAM, labelTh: 'สนามสอบ ห้องเรียน', labelEn: 'Exam Hall, School', icon: 'GraduationCap' },
+  { id: GOAL.WORK, labelTh: 'ออฟฟิศ หน้าคอมพิวเตอร์', labelEn: 'Office, Workstation', icon: 'Briefcase' },
+  { id: GOAL.STAGE, labelTh: 'หลังเวที ก่อนพรีเซนต์', labelEn: 'Backstage, Presentation', icon: 'Mic' },
+  { id: GOAL.BURNOUT, labelTh: 'ระหว่างเดินทาง รถไฟฟ้า', labelEn: 'Transit, Commute', icon: 'Navigation' },
 ];
 
 export interface ReframingInsight {

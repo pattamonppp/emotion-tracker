@@ -110,7 +110,11 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
         )}
         style={style}
       >
-        {icon}
+        {React.isValidElement(icon)
+          ? React.cloneElement(icon as React.ReactElement<any>, {
+              color: 'currentColor',
+            })
+          : icon}
 
         {title ? (
           <span className={styles.text} style={textStyle}>

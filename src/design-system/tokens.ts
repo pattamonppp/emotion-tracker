@@ -51,6 +51,7 @@ export const colors = {
 export const radii = {
   sm: 8,
   md: 12,
+  card: 16,
   lg: 18,
   xl: 24,
   full: 9999,

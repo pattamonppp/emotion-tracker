@@ -18,10 +18,14 @@
   outline: none;
   box-sizing: border-box;
   box-shadow: 0 2px 8px rgba(53, 89, 86, 0.08);
-  transition: transform 80ms ease, opacity 80ms ease, box-shadow 80ms ease;
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 80ms ease, opacity 80ms ease;
   -webkit-tap-highlight-color: transparent;
   font-family: 'Prompt', sans-serif;
   letter-spacing: 0;
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 4px 14px rgba(53, 89, 86, 0.14);
+  }
 
   &:active:not(:disabled),
   &.isPressed:not(:disabled) {
@@ -31,6 +35,11 @@
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  svg {
+    color: currentColor !important;
+    stroke: currentColor !important;
   }
 }
 
@@ -51,6 +60,10 @@
   .text {
     color: #FFFFFF;
   }
+
+  &:hover:not(:disabled) {
+    background-color: #00A89A;
+  }
 }
 
 .variant_secondary {
@@ -59,6 +72,10 @@
 
   .text {
     color: #FFFFFF;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #F07E38;
   }
 }
 
@@ -70,6 +87,11 @@
   .text {
     color: var(--color-primary-dark, #009688);
   }
+
+  &:hover:not(:disabled) {
+    background-color: #FFE5D4;
+    border-color: #FFC4A3;
+  }
 }
 
 .variant_mint {
@@ -79,6 +101,11 @@
 
   .text {
     color: var(--color-primary-dark, #009688);
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #D0F7F2;
+    border-color: #8DE0D7;
   }
 }
 
@@ -90,6 +117,11 @@
   .text {
     color: #EF7773;
   }
+
+  &:hover:not(:disabled) {
+    background-color: #FCE1E0;
+    border-color: #F7B5B3;
+  }
 }
 
 .variant_outline {
@@ -100,6 +132,10 @@
   .text {
     color: var(--color-primary, #00C4B3);
   }
+
+  &:hover:not(:disabled) {
+    background-color: #E0F8F6;
+  }
 }
 
 .variant_ghost {
@@ -109,6 +145,10 @@
 
   .text {
     color: var(--color-primary-dark, #009688);
+  }
+
+  &:hover:not(:disabled) {
+    background-color: rgba(0, 196, 179, 0.08);
   }
 }
 
@@ -129,7 +169,7 @@
 
 .size_md {
   padding: 11px 20px;
-  border-radius: 18px;
+  border-radius: 9999px;
 
   .text {
     font-size: 14px;

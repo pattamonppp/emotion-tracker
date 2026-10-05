@@ -172,7 +172,7 @@
   padding: 16px;
 
   border: 1.5px solid #f1f1f1;
-  border-radius: 20px;
+  border-radius: 16px;
 
   background: #fbfbfb;
 
@@ -264,7 +264,7 @@
 }
 
 .metricVal {
-  font-family: 'Prompt', sans-serif;
+  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
   font-size: 13px;
   font-weight: 800;
   line-height: normal;
@@ -303,7 +303,7 @@
 }
 
 .deltaVal {
-  font-family: 'Prompt', sans-serif;
+  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
   font-size: 10px;
   font-weight: 800;
   line-height: normal;

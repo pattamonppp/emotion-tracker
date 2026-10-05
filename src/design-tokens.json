@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/design-tokens.json",
-  "name": "mindfull / Ooca Design Tokens",
+  "name": "mindfull - Ooca Design Tokens",
   "version": "2.1.0",
   "color": {
     "brand": {

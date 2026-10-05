@@ -117,7 +117,7 @@ export const Phase3CognitiveReframing: React.FC<
               <div className={styles.biologyNote}>
                 <Dna
                   size={15}
-                  color="#355956"
+                  color="#009688"
                   className={styles.biologyIcon}
                 />
 

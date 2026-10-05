@@ -637,7 +637,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   organicCountNumber: {
-    fontFamily: typography.fontPromptExtraBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 36,
     color: colors.primaryDark,
     letterSpacing: -1,

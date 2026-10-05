@@ -85,7 +85,7 @@ export function MobileFrame({
                   type="button"
                   onClick={onToggleLanguage}
                   className={styles.langBtn}
-                  title="Toggle TH / EN"
+                  title="Toggle TH - EN"
                 >
                   <Languages size={13} color={colors.primary} />
                   <span className={styles.langText}>{profile.language.toUpperCase()}</span>

@@ -106,7 +106,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
             {/* Delta Badge */}
             <div className={styles.deltaBadge}>
               <span className={styles.deltaText}>
-                {`${bpmDrop >= 0 ? `-${bpmDrop}` : `+${Math.abs(bpmDrop)}`}\u00A0BPM`}
+                {`${bpmDrop >= 0 ? `-${bpmDrop}` : `+${Math.abs(bpmDrop)}`} BPM`}
               </span>
             </div>
 

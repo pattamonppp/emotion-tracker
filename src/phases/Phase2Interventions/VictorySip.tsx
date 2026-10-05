@@ -729,7 +729,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   organicCountNumber: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 32,
     lineHeight: 36,
   },

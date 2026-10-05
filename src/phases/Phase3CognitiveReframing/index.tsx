@@ -110,14 +110,14 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             </View>
 
             {/* Emotional Reframing Message */}
-            <Text style={styles.letterBody} textBreakStrategy="balanced">
+            <Text style={styles.letterBody} textBreakStrategy="highQuality">
               {lang === LANG.TH ? insight.reflectionTh : insight.reflectionEn}
             </Text>
 
             {/* Biological Reassurance Note */}
             <View style={styles.biologyNote}>
               <Dna size={15} color={colors.primaryDark} style={{ marginTop: 2 }} />
-              <Text style={styles.biologyText} textBreakStrategy="balanced">
+              <Text style={styles.biologyText} textBreakStrategy="highQuality">
                 {lang === LANG.TH ? insight.biologyFactTh : insight.biologyFactEn}
               </Text>
             </View>
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   },
   letterPaper: {
     backgroundColor: '#ffffff',
-    borderRadius: 18,
+    borderRadius: radii.card,
     padding: 16,
     paddingTop: 18,
     borderWidth: 1.5,
@@ -351,8 +351,9 @@ const styles = StyleSheet.create({
   promiseCard: {
     width: '100%',
     backgroundColor: colors.white,
-    borderRadius: radii.lg,
+    borderRadius: radii.card,
     padding: 14,
+    paddingBottom: 10,
     borderWidth: 1.5,
     borderColor: colors.borderTeal,
     marginTop: 8,
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     padding: 12,
     borderWidth: 1.5,
-    borderColor: colors.borderSubtle,
+    borderColor: 'rgba(0, 196, 179, 0.25)',
     gap: 10,
     minHeight: 74,
   },
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
   },
   commitActionText: {
     flex: 1,
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontPromptSemiBold,
     fontSize: 12,
     color: colors.textPrimary,
     lineHeight: 18,
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   stampPrompt: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontPromptMedium,
     fontSize: 8,
     color: colors.textMuted,
     textAlign: 'center',

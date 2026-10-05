@@ -594,7 +594,7 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#FFFFFF',
 
-    borderRadius: 20,
+    borderRadius: 16,
 
     overflow: 'hidden',
 
@@ -878,10 +878,9 @@ const styles = StyleSheet.create({
 
   metricBoxValue: {
     fontFamily:
-      typography.fontPromptBold,
+      typography.fontGothamBold,
 
     fontSize: 28,
-    fontWeight: '800',
 
     lineHeight: 34,
 
@@ -892,10 +891,9 @@ const styles = StyleSheet.create({
 
   metricBoxUnit: {
     fontFamily:
-      typography.fontPromptMedium,
+      typography.fontGothamBold,
 
     fontSize: 11,
-    fontWeight: '600',
 
     color: '#637b91',
   },

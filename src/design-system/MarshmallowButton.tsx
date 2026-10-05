@@ -179,7 +179,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           btn: {
             paddingVertical: 7,
             paddingHorizontal: 14,
-            borderRadius: radii.md,
+            borderRadius: radii.full,
           },
           text: {
             fontSize: 12,
@@ -192,7 +192,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           btn: {
             paddingVertical: 14,
             paddingHorizontal: 28,
-            borderRadius: radii.xl,
+            borderRadius: radii.full,
           },
           text: {
             fontSize: 16,
@@ -206,7 +206,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
           btn: {
             paddingVertical: 11,
             paddingHorizontal: 20,
-            borderRadius: radii.lg,
+            borderRadius: radii.full,
           },
           text: {
             fontSize: 14,

@@ -27,9 +27,9 @@ export const phase1 = {
   previewC: 'Kinetic Shaker',
   previewD: 'Audio Sanctuary',
   locations: {
-    exam: 'Exam Room / Lecture Hall',
-    stage: 'Backstage / Keynote Prep',
-    work: 'Office / Focus Desk',
+    exam: 'Exam Room & Lecture Hall',
+    stage: 'Backstage & Keynote Prep',
+    work: 'Office & Focus Desk',
     burnout: 'Quiet Sanctuary',
   },
   moocaSpeech: {

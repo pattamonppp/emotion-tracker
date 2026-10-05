@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
     zIndex: 5,
   },
   secondsText: {
-    fontFamily: typography.fontPromptExtraBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 38,
     color: colors.primaryDark,
     letterSpacing: -1,

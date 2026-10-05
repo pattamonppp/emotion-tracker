@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ShiftFeedback, UserProfile, Language, SHIFT_RESULT } from '../../../types';
 import { Award, X, Activity, Sparkles } from 'lucide-react-native';
-import { colors, radii, shadows } from '../../../design-system/tokens';
+import { colors, radii, shadows, typography } from '../../../design-system/tokens';
 import { getTranslation } from '../../../locales';
 
 export interface ResetHistoryModalProps {
@@ -211,8 +211,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   metricVal: {
+    fontFamily: typography.fontGothamBold,
     fontSize: 15,
-    fontWeight: '800',
     color: colors.textPrimary,
   },
   deltaBox: {
@@ -227,8 +227,8 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   deltaVal: {
+    fontFamily: typography.fontGothamBold,
     fontSize: 11,
-    fontWeight: '800',
     color: colors.primaryDark,
   },
 });

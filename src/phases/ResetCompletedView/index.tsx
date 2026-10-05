@@ -146,12 +146,12 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
           <View style={styles.chinFooterRow}>
             <Text style={styles.chinDateText}>
-              {currentDate} • {c.resetDurationLabel}
+              {currentDate}
             </Text>
             <View style={styles.chinBpmDrop}>
               <Leaf size={11} color={colors.primary} style={{ marginRight: 2 }} />
               <Text style={styles.chinBpmText} numberOfLines={1}>
-                {`-${bpmDrop}\u00A0BPM`}
+                {`-${bpmDrop} BPM`}
               </Text>
             </View>
           </View>
@@ -163,21 +163,14 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>{c.preLabel}</Text>
           <Text style={styles.metricVal} numberOfLines={1}>
-            {`${feedback?.preHeartRate || 105}\u00A0BPM`}
+            {`${feedback?.preHeartRate || 105} BPM`}
           </Text>
         </View>
         <View style={styles.metricDivider} />
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>{c.nowLabel}</Text>
           <Text style={[styles.metricVal, { color: colors.primary }]} numberOfLines={1}>
-            {`${feedback?.postHeartRate || 87}\u00A0BPM`}
-          </Text>
-        </View>
-        <View style={styles.metricDivider} />
-        <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>{c.calmShift}</Text>
-          <Text style={[styles.metricVal, { color: colors.secondary }]} numberOfLines={1}>
-            {`-${bpmDrop}\u00A0BPM`}
+            {`${feedback?.postHeartRate || 87} BPM`}
           </Text>
         </View>
       </View>
@@ -267,7 +260,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 12,
-    paddingBottom: 10,
+    paddingBottom: 8,
     borderWidth: 1.5,
     borderColor: '#f1f1f1',
     shadowColor: '#000000',
@@ -303,7 +296,7 @@ const styles = StyleSheet.create({
     borderColor: '#F8E4B3',
   },
   rainbowText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 10,
     color: '#DF8900',
   },
@@ -370,7 +363,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderTopWidth: 1,
     borderTopColor: '#f1f1f1',
-    paddingTop: 6,
+    paddingTop: 8,
   },
   chinDateText: {
     fontFamily: typography.fontPromptMedium,
@@ -388,7 +381,7 @@ const styles = StyleSheet.create({
     borderColor: colors.borderTeal,
   },
   chinBpmText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 10,
     color: colors.primaryDark,
   },
@@ -398,7 +391,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: '#FFFFFF',
-    borderRadius: radii.xl,
+    borderRadius: 16,
     paddingVertical: 12,
     paddingHorizontal: 8,
     borderWidth: 1.5,
@@ -408,6 +401,7 @@ const styles = StyleSheet.create({
   metricItem: {
     alignItems: 'center',
     flex: 1,
+    width: '50%',
   },
   metricDivider: {
     width: 1,
@@ -421,7 +415,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   metricVal: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 13,
     color: colors.textPrimary,
   },

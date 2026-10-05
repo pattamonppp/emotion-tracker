@@ -136,10 +136,10 @@ export default function App() {
 
   const locationText =
     profile.goal === GOAL.EXAM
-      ? (profile.language === LANG.TH ? 'สนามสอบ / ห้องเรียน' : 'Exam Hall / School')
+      ? (profile.language === LANG.TH ? 'สนามสอบ ห้องเรียน' : 'Exam Hall & School')
       : profile.goal === GOAL.STAGE
-        ? (profile.language === LANG.TH ? 'หลังเวที / พรีเซนต์' : 'Backstage / Event')
-        : (profile.language === LANG.TH ? 'ออฟฟิศ / โต๊ะทำงาน' : 'Office Workstation');
+        ? (profile.language === LANG.TH ? 'หลังเวที พรีเซนต์' : 'Backstage & Event')
+        : (profile.language === LANG.TH ? 'ออฟฟิศ โต๊ะทำงาน' : 'Office Workstation');
 
   return (
     <LanguageProvider initialLang={profile.language}>
