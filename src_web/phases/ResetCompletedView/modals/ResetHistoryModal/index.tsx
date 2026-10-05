@@ -43,8 +43,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
     },
   ];
 
-  const displayHistory =
-    history.length > 0 ? history : mockDefaultHistory;
+  const displayHistory = history;
 
   return (
     <div className={styles.backdrop}>
@@ -80,7 +79,16 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
           </div>
 
           <div className={styles.content}>
-            {displayHistory.map((item, idx) => {
+            {displayHistory.length === 0 ? (
+              <div className={styles.emptyContainer}>
+                <div className={styles.emptyIconCircle}>
+                  <Activity size={28} color="#79ADA9" strokeWidth={2} />
+                </div>
+                <h4 className={styles.emptyTitle}>{h.emptyTitle}</h4>
+                <p className={styles.emptyDesc}>{h.emptyDesc}</p>
+              </div>
+            ) : (
+              displayHistory.map((item, idx) => {
               const drop =
                 item.preHeartRate - item.postHeartRate;
 
@@ -138,7 +146,8 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
                   </div>
                 </div>
               );
-            })}
+            })
+          )}
           </div>
         </div>
       </div>

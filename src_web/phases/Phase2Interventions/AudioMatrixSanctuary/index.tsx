@@ -8,7 +8,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 
-import { MBTIType, Language, LANG } from '../../../types';
+import { MBTIType, Language, LANG, MBTI } from '../../../types';
 import {
   MBTI_SANCTUARY_SCRIPTS,
   getMBTIArchetype,
@@ -73,7 +73,7 @@ const baseShadow =
 
 export const AudioMatrixSanctuary: React.FC<
   AudioMatrixSanctuaryProps
-> = ({ mbti = 'INFP', onComplete, lang }) => {
+> = ({ mbti = MBTI.INFP, onComplete, lang }) => {
   const t = getTranslation(lang);
   const strings = t.phases.phase2.audioMatrix;
   const skyTheme = useSkyTheme();
@@ -313,7 +313,7 @@ export const AudioMatrixSanctuary: React.FC<
         style={{
           backgroundColor: skyTheme.cardBg,
           borderColor: skyTheme.cardBorder,
-          boxShadow: baseShadow,
+          boxShadow: '0 2px 8px rgba(53, 89, 86, 0.08)',
         }}
       >
         <div className={styles.scriptHeader}>

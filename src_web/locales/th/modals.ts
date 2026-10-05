@@ -13,6 +13,8 @@ export const modals = {
     preLabel: 'ก่อนเริ่ม',
     postLabel: 'หลังรีเซ็ต',
     today: 'วันนี้',
+    emptyTitle: 'ยังไม่มีประวัติการรีเซ็ตใจ',
+    emptyDesc: 'เมื่อทำกิจกรรมรีเซ็ตใจครบ 120 วินาที\nผลการฟื้นฟูระบบประสาทจะถูกบันทึกไว้ที่นี่',
   },
   onboarding: {
     title: 'เพื่อนคู่ใจ Mooca ยินดีที่ได้รู้จัก!',
@@ -22,7 +24,7 @@ export const modals = {
     yourName: 'ชื่อของคุณ',
     primaryContext: 'สถานการณ์หลักที่ต้องเผชิญ',
     mbtiSpecific: 'บุคลิกภาพ MBTI',
-    saveSettings: 'บันทึกการตั้งค่า',
+    saveSettings: 'บันทึก',
     nameLabel: 'ให้ Mooca เรียกเธอว่าอะไรดีจ้ะ?',
     namePlaceholder: 'พิมพ์ชื่อเล่นของเธอ...',
     ageLabel: 'ช่วงอายุและสถานะ',

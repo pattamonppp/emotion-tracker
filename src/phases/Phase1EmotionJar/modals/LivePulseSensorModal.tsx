@@ -741,7 +741,7 @@ const styles = StyleSheet.create({
       typography.fontPromptMedium,
 
     fontSize: 11,
-    fontWeight: '500',
+    fontWeight: '400',
 
     lineHeight: 15,
 

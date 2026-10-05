@@ -48,7 +48,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
     },
   ];
 
-  const displayHistory = history.length > 0 ? history : mockDefaultHistory;
+  const displayHistory = history;
 
   return (
     <Modal
@@ -84,43 +84,57 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
             </View>
 
           <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-            {displayHistory.map((item, idx) => {
-              const drop = item.preHeartRate - item.postHeartRate;
-              return (
-                <View key={idx} style={styles.historyCard}>
-                  <View style={styles.cardHeader}>
-                    <View style={styles.badgeShift}>
-                      <Sparkles size={12} color={colors.primary} />
-                      <Text style={styles.badgeShiftText}>
-                        {renderBilingualNodes(item.shiftResult.toUpperCase(), typography.fontPromptBold, typography.fontGothamBold)}
-                      </Text>
-                    </View>
-                    <Text style={styles.timestampText}>
-                      {renderBilingualNodes(item.timestamp ? item.timestamp.split('T')[0] : h.today, typography.fontPromptMedium, typography.fontGotham)}
-                    </Text>
-                  </View>
-
-                  <View style={styles.metricRow}>
-                    <View style={styles.metricItem}>
-                      <Text style={styles.metricLabel}>{renderBilingualNodes(h.preLabel, typography.fontPromptBold, typography.fontGothamBold)}</Text>
-                      <Text style={styles.metricVal}>{item.preHeartRate} BPM</Text>
-                    </View>
-
-                    <View style={styles.deltaBox}>
-                      <Activity size={12} color={colors.primary} />
-                      <Text style={styles.deltaVal}>-{drop} BPM</Text>
-                    </View>
-
-                    <View style={styles.metricItem}>
-                      <Text style={styles.metricLabel}>{renderBilingualNodes(h.postLabel, typography.fontPromptBold, typography.fontGothamBold)}</Text>
-                      <Text style={[styles.metricVal, { color: colors.primary }]}>
-                        {item.postHeartRate} BPM
-                      </Text>
-                    </View>
-                  </View>
+            {displayHistory.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <View style={styles.emptyIconCircle}>
+                  <Activity size={28} color="#79ADA9" strokeWidth={2} />
                 </View>
-              );
-            })}
+                <Text style={styles.emptyTitle}>
+                  {renderBilingualNodes(h.emptyTitle, typography.fontPromptBold, typography.fontGothamBold)}
+                </Text>
+                <Text style={styles.emptyDesc}>
+                  {renderBilingualNodes(h.emptyDesc, typography.fontPromptRegular, typography.fontGothamBook)}
+                </Text>
+              </View>
+            ) : (
+              displayHistory.map((item, idx) => {
+                const drop = item.preHeartRate - item.postHeartRate;
+                return (
+                  <View key={idx} style={styles.historyCard}>
+                    <View style={styles.cardHeader}>
+                      <View style={styles.badgeShift}>
+                        <Sparkles size={12} color={colors.primary} />
+                        <Text style={styles.badgeShiftText}>
+                          {renderBilingualNodes(item.shiftResult.toUpperCase(), typography.fontPromptBold, typography.fontGothamBold)}
+                        </Text>
+                      </View>
+                      <Text style={styles.timestampText}>
+                        {renderBilingualNodes(item.timestamp ? item.timestamp.split('T')[0] : h.today, typography.fontPromptMedium, typography.fontGotham)}
+                      </Text>
+                    </View>
+
+                    <View style={styles.metricRow}>
+                      <View style={styles.metricItem}>
+                        <Text style={styles.metricLabel}>{renderBilingualNodes(h.preLabel, typography.fontPromptBold, typography.fontGothamBold)}</Text>
+                        <Text style={styles.metricVal}>{item.preHeartRate} BPM</Text>
+                      </View>
+
+                      <View style={styles.deltaBox}>
+                        <Activity size={12} color={colors.primary} />
+                        <Text style={styles.deltaVal}>-{drop} BPM</Text>
+                      </View>
+
+                      <View style={styles.metricItem}>
+                        <Text style={styles.metricLabel}>{renderBilingualNodes(h.postLabel, typography.fontPromptBold, typography.fontGothamBold)}</Text>
+                        <Text style={[styles.metricVal, { color: colors.primary }]}>
+                          {item.postHeartRate} BPM
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })
+            )}
           </ScrollView>
         </SafeAreaView>
       </LinearGradient>
@@ -143,13 +157,45 @@ const styles = StyleSheet.create({
     maxHeight: '90%',
     borderRadius: 16,
     overflow: 'hidden',
-    padding: 16,
-    paddingBottom: 0,
+    padding: 0,
     ...shadows.soft,
   },
   safeArea: {
     flex: 1,
     backgroundColor: 'transparent',
+    padding: 16,
+    paddingBottom: 0,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 48,
+    paddingHorizontal: 20,
+  },
+  emptyIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#E0F8F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 14,
+  },
+  emptyTitle: {
+    fontFamily: typography.fontPromptBold,
+    fontSize: 15,
+    color: '#355956',
+    marginBottom: 6,
+    textAlign: 'center',
+    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
+  },
+  emptyDesc: {
+    fontFamily: typography.fontPromptRegular,
+    fontSize: 12,
+    color: '#79ADA9',
+    lineHeight: 18,
+    textAlign: 'center',
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
   headerBar: {
     flexDirection: 'row',

@@ -205,18 +205,17 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 })}
               </View>
             </View>
-
-            {/* Save Button */}
-            <View style={styles.saveSection}>
-              <MarshmallowButton
-                title={o.saveSettings}
-                onPress={handleSave}
-                icon={<Check size={18} color="#FFFFFF" />}
-                variant={MARSHMALLOW_VARIANT.PRIMARY}
-                size={MARSHMALLOW_SIZE.MD}
-              />
-            </View>
           </ScrollView>
+          {/* Save Button */}
+          <View style={styles.saveSection}>
+            <MarshmallowButton
+              title={o.saveSettings}
+              onPress={handleSave}
+              icon={<Check size={18} color="#FFFFFF" />}
+              variant={MARSHMALLOW_VARIANT.PRIMARY}
+              size={MARSHMALLOW_SIZE.MD}
+            />
+          </View>
         </SafeAreaView>
       </View>
     </Modal>
@@ -304,7 +303,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: colors.textSecondary,
     marginLeft: 2,
-    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
   inputRow: {
     flexDirection: 'row',
@@ -380,6 +379,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   saveSection: {
-    marginTop: 8,
+    marginTop: 16,
   },
 });

@@ -516,7 +516,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             </TouchableOpacity>
 
             <View style={styles.guideIconWrapper}>
-              <GlassWater size={32} color={colors.primary} strokeWidth={2.4} />
+              <GlassWater size={28} color={colors.primary} strokeWidth={2.4} />
             </View>
 
             <Text style={styles.guideTitle}>
@@ -786,7 +786,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 360,
     ...shadows.card,
   },
   modalCloseBtn: {

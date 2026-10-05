@@ -690,7 +690,7 @@ const styles = StyleSheet.create({
 
   scrollContent: {
     paddingHorizontal: 0,
-    paddingVertical: 12,
+    paddingVertical: 0,
 
     gap: 20,
   },
@@ -701,12 +701,12 @@ const styles = StyleSheet.create({
 
   sectionLabel: {
     fontFamily:
-      typography.fontPromptBold,
+      typography.fontPromptRegular,
 
     fontSize: 11,
 
     color: colors.textSecondary,
-    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
 
   /* Stars */

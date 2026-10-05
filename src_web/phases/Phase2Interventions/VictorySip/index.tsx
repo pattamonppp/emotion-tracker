@@ -317,7 +317,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             </button>
 
             <div className={styles.guideIconWrapper}>
-              <GlassWater size={32} color="#00C4B3" strokeWidth={2.4} />
+              <GlassWater size={28} color="#00C4B3" strokeWidth={2.4} />
             </div>
 
             <h3 className={styles.guideTitle}>{renderBilingual(strings.guideTitle)}</h3>

@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 360,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
@@ -355,11 +355,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   suggestionsLabel: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontPromptRegular,
     fontSize: 11,
     color: '#566d80',
     marginBottom: 8,
-    ...(Platform.OS !== 'android' ? { fontWeight: '700' } : {}),
+    ...(Platform.OS !== 'android' ? { fontWeight: '400' } : {}),
   },
   suggestionsList: {
     gap: 6,

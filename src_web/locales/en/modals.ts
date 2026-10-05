@@ -13,6 +13,8 @@ export const modals = {
     preLabel: 'Pre',
     postLabel: 'Post',
     today: 'Today',
+    emptyTitle: 'No reset history yet',
+    emptyDesc: 'When you complete a 120s reset session,\nyour nervous system recovery will be recorded here.',
   },
   onboarding: {
     title: 'Mooca Companion Welcome!',
@@ -22,7 +24,7 @@ export const modals = {
     yourName: 'Your Name',
     primaryContext: 'Primary Context',
     mbtiSpecific: 'MBTI Personality',
-    saveSettings: 'Save Profile Settings',
+    saveSettings: 'Save Profile',
     nameLabel: 'What should Mooca call you?',
     namePlaceholder: 'Enter your nickname...',
     ageLabel: 'Age Group and Occupation',

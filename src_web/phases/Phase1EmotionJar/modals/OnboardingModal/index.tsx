@@ -178,17 +178,16 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               })}
             </div>
           </div>
-
-          {/* Save Button */}
-          <div className={styles.saveSection}>
-            <MarshmallowButton
-              title={o.saveSettings}
-              onPress={handleSave}
-              icon={<Check size={18} color="#FFFFFF" />}
-              variant={MARSHMALLOW_VARIANT.PRIMARY}
-              size={MARSHMALLOW_SIZE.MD}
-            />
-          </div>
+        </div>
+        {/* Save Button */}
+        <div className={styles.saveSection}>
+          <MarshmallowButton
+            title={o.saveSettings}
+            onPress={handleSave}
+            icon={<Check size={18} color="#FFFFFF" />}
+            variant={MARSHMALLOW_VARIANT.PRIMARY}
+            size={MARSHMALLOW_SIZE.MD}
+          />
         </div>
       </div>
     </div>

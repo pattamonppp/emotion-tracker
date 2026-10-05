@@ -19,6 +19,7 @@ import { getTranslation } from '../../locales';
 import { Language } from '../../types';
 
 import { BREATHING_CONFIG } from './constants';
+import { renderBilingualNodes } from '../../components/BilingualText';
 
 export const BREATH_PATTERN = {
   BOX: 'box',
@@ -295,7 +296,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                 <View style={styles.startOrbContainer}>
                   <Wind size={36} color={skyColors.orbBorder} strokeWidth={2.4} />
                   <Text style={[styles.startOrbTitle, { color: skyColors.secondsColor }]}>
-                    {pattern === BREATH_PATTERN.BOX ? strings.badgeBox : strings.badge478}
+                    {renderBilingualNodes(pattern === BREATH_PATTERN.BOX ? strings.badgeBox : strings.badge478)}
                   </Text>
                   <Text style={[styles.startOrbSub, { color: skyColors.cycleCounterColor }]}>
                     {strings.startPrompt}
@@ -455,7 +456,7 @@ const styles = StyleSheet.create({
   },
   bottomSection: {
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 360,
     alignItems: 'center',
     paddingBottom: 4,
     gap: 6,

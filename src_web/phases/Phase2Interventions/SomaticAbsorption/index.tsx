@@ -510,7 +510,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
 
             <div className={styles.guideIconWrapper}>
               <Hand
-                size={32}
+                size={28}
                 color={
                   DESIGN_TOKENS.color.brand.turquoise.primary
                 }
