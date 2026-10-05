@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
@@ -222,7 +223,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
-            icon={<CheckCircle2 size={16} color="#FFFFFF" />}
+            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceedBtn}
           />
         ) : (
@@ -233,7 +234,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
       </div>
 
       {/* 5. Instruction Modal */}
-      {isGuideOpen && (
+      {isGuideOpen && createPortal(
         <div className={styles.modalBackdrop}>
           <div className={styles.modalCard}>
             <div className={styles.guideContainer}>
@@ -280,7 +281,8 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
               />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

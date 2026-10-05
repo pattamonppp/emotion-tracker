@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Sparkles,
   X,
@@ -97,7 +98,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
   const suggestions = ce.quickSuggestions || [];
   const isEmpty = !inputText.trim();
 
-  return (
+  return createPortal(
     <div className={styles.modal}>
       <div className={styles.backdrop} />
 
@@ -242,7 +243,8 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
         </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

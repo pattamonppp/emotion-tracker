@@ -264,7 +264,9 @@
   justify-content: center;
   padding: 20px;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   animation: fadeIn 150ms ease-out;
 }
 

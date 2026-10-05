@@ -13,7 +13,7 @@ import { audioService, HAPTIC_STYLE } from '../../services/audioService';
 import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
-import { Wind, Heart, CheckCircle2, ArrowRight } from 'lucide-react-native';
+import { Wind, Heart, CheckCircle2, Check } from 'lucide-react-native';
 import { colors, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 import { Language } from '../../types';
@@ -296,10 +296,18 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
                 <View style={styles.startOrbContainer}>
                   <Wind size={36} color={skyColors.orbBorder} strokeWidth={2.4} />
                   <Text style={[styles.startOrbTitle, { color: skyColors.secondsColor }]}>
-                    {renderBilingualNodes(pattern === BREATH_PATTERN.BOX ? strings.badgeBox : strings.badge478)}
+                    {renderBilingualNodes(
+                      pattern === BREATH_PATTERN.BOX ? strings.badgeBox : strings.badge478,
+                      typography.fontPromptBold,
+                      typography.fontGothamBold
+                    )}
                   </Text>
                   <Text style={[styles.startOrbSub, { color: skyColors.cycleCounterColor }]}>
-                    {strings.startPrompt}
+                    {renderBilingualNodes(
+                      strings.startPrompt,
+                      typography.fontPromptSemiBold,
+                      typography.fontGotham
+                    )}
                   </Text>
                 </View>
               ) : isFinished ? (
@@ -350,7 +358,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
               variant={MARSHMALLOW_VARIANT.PRIMARY}
               size={MARSHMALLOW_SIZE.MD}
               onPress={onComplete}
-              icon={<ArrowRight size={16} color="#FFFFFF" />}
+              icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
               title={strings.proceedBtn}
             />
           </View>

@@ -236,7 +236,7 @@
 
 .scriptCard {
   width: 100%;
-  max-width: 340px;
+  max-width: min(450px, 90vw);
 
   padding: 14px 16px;
 
@@ -280,11 +280,13 @@
 
   font-family: 'Prompt', 'Gotham Rounded', sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
 
   line-height: 20px;
 
   text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .actionSection {

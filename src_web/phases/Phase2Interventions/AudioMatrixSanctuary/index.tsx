@@ -4,7 +4,7 @@ import {
   Headphones,
   Play,
   Pause,
-  ArrowRight,
+  Check,
   RotateCcw,
 } from 'lucide-react';
 
@@ -18,6 +18,7 @@ import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../
 import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
 import { useSkyTheme } from '@/hooks/useSkyTheme';
 import { getTranslation } from '../../../locales';
+import { renderBilingual } from '../../../components/BilingualText';
 
 import styles from './styles.module.scss';
 
@@ -328,7 +329,7 @@ export const AudioMatrixSanctuary: React.FC<
               color: skyTheme.scriptTitle,
             }}
           >
-            {strings.voiceLabel}
+            {renderBilingual(strings.voiceLabel)}
           </span>
         </div>
 
@@ -338,11 +339,7 @@ export const AudioMatrixSanctuary: React.FC<
             color: skyTheme.scriptText,
           }}
         >
-          "
-          {lang === LANG.TH
-            ? script.th
-            : script.en}
-          "
+          {renderBilingual(`"${lang === LANG.TH ? script.th : script.en}"`)}
         </p>
       </div>
 
@@ -368,9 +365,10 @@ export const AudioMatrixSanctuary: React.FC<
               onComplete();
             }}
             icon={
-              <ArrowRight
-                size={16}
+              <Check
+                size={18}
                 color="#FFFFFF"
+                strokeWidth={2.4}
               />
             }
             title={strings.proceed}

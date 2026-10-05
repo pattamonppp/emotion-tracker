@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { UserProfile, GoalType, GOAL } from '../../../../types';
 import { Button, BUTTON_VARIANT } from '../../../../components/Button';
 import { MOOCA_MOOD, MoocaMascot } from '../../../../components/MoocaMascot';
@@ -69,7 +70,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
     onSave(profile);
   };
 
-  return (
+  return createPortal(
     <div className={styles.backdrop}>
       <div className={styles.modalCard}>
         <div className={styles.container}>
@@ -192,6 +193,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

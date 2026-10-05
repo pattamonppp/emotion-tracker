@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { Language, ShiftFeedback, UserProfile, SHIFT_RESULT } from '../../../../types';
 import { getTranslation } from '../../../../locales';
 import {
@@ -45,7 +46,7 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
 
   const displayHistory = history;
 
-  return (
+  return createPortal(
     <div className={styles.backdrop}>
       <div
         className={styles.modal}
@@ -151,7 +152,8 @@ export const ResetHistoryModal: React.FC<ResetHistoryModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

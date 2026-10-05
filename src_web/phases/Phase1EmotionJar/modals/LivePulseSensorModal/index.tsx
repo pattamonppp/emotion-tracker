@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import cn from 'classnames';
 import { audioService } from '../../../../services/audioService';
 import { Button, BUTTON_THEME } from '../../../../components/Button';
@@ -129,7 +130,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className={styles.backdrop}>
       <div className={styles.modalCard}>
         <div className={styles.container}>
@@ -230,7 +231,8 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
         </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

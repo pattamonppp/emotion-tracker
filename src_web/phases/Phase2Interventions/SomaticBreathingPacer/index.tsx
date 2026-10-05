@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { Wind, Heart, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Wind, Heart, CheckCircle2, Check } from 'lucide-react';
 
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
@@ -12,6 +12,7 @@ import { Language } from '../../../types';
 
 import styles from './styles.module.scss';
 import { DESIGN_TOKENS } from '@/design-system/tokens';
+import { renderBilingual } from '@/components/BilingualText';
 
 export const BREATH_PATTERN = {
   BOX: 'box',
@@ -320,16 +321,18 @@ export const SomaticBreathingPacer: React.FC<
                   className={styles.startOrbTitle}
                   style={{ color: skyTheme.secondsColor }}
                 >
-                  {pattern === BREATH_PATTERN.BOX
-                    ? strings.badgeBox
-                    : strings.badge478}
+                  {renderBilingual(
+                    pattern === BREATH_PATTERN.BOX
+                      ? strings.badgeBox
+                      : strings.badge478
+                  )}
                 </span>
 
                 <span
                   className={styles.startOrbSub}
                   style={{ color: skyTheme.cycleCounterColor }}
                 >
-                  {strings.startPrompt}
+                  {renderBilingual(strings.startPrompt)}
                 </span>
               </div>
             ) : isFinished ? (
@@ -418,9 +421,10 @@ export const SomaticBreathingPacer: React.FC<
               size={MARSHMALLOW_SIZE.MD}
               onPress={onComplete}
               icon={
-                <ArrowRight
-                  size={16}
+                <Check
+                  size={18}
                   color="#FFFFFF"
+                  strokeWidth={2.4}
                 />
               }
               title={strings.proceedBtn}

@@ -36,6 +36,14 @@ export const renderBilingualNodes = (
     });
   }
 
+  if (hasEnglish && !hasThai) {
+    return (
+      <Text style={{ fontFamily: fontGotham }}>
+        {text}
+      </Text>
+    );
+  }
+
   return text;
 };
 

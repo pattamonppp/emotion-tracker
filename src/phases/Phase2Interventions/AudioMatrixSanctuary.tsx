@@ -13,9 +13,10 @@ import { audioService, HAPTIC_STYLE, NEUTRAL_ENVIRONMENT_TYPE } from '../../serv
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
-import { Sparkles, Headphones, Play, Pause, ArrowRight, RotateCcw } from 'lucide-react-native';
+import { Sparkles, Headphones, Play, Pause, Check, RotateCcw } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
+import { renderBilingualNodes } from '../../components/BilingualText';
 import { AudioMatrixSanctuaryProps } from './types';
 import { LANG } from '../../types';
 
@@ -215,14 +216,22 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
         <View style={styles.scriptHeader}>
           <Sparkles size={14} color={skyTheme.scriptTitle} />
           <Text style={[styles.scriptCategory, { color: skyTheme.scriptTitle }]}>
-            {strings.voiceLabel}
+            {renderBilingualNodes(
+              strings.voiceLabel,
+              typography.fontPromptBold,
+              typography.fontGothamBold
+            )}
           </Text>
         </View>
 
         <Text
           style={[styles.scriptText, { color: skyTheme.scriptText }]}
         >
-          "{lang === LANG.TH ? script.th : script.en}"
+          {renderBilingualNodes(
+            `"${lang === LANG.TH ? script.th : script.en}"`,
+            typography.fontPromptRegular,
+            typography.fontGothamBook
+          )}
         </Text>
       </View>
 
@@ -240,7 +249,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
               audioService.stopAllVoice();
               onComplete();
             }}
-            icon={<ArrowRight size={16} color="#FFFFFF" />}
+            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceed}
           />
         )}
@@ -302,7 +311,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   scriptText: {
-    fontFamily: typography.fontPromptMedium,
+    fontFamily: typography.fontPromptRegular,
     fontSize: 12,
     lineHeight: 20,
     textAlign: 'left',

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 import {
   Check,
@@ -486,7 +487,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
         </div>
       )}
 
-      {isGuideOpen && (
+      {isGuideOpen && createPortal(
         <div className={styles.modalBackdrop}>
           <div
             className={styles.modalCard}
@@ -570,7 +571,8 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

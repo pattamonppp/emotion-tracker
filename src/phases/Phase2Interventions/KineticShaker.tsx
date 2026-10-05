@@ -14,7 +14,7 @@ import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../
 import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import Svg, { Defs, RadialGradient as SvgRadialGradient, Stop, Circle as SvgCircle } from 'react-native-svg';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
-import { CheckCircle2, Star, Sparkles } from 'lucide-react-native';
+import { Check, CheckCircle2, Star, Sparkles } from 'lucide-react-native';
 import { colors, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 import { ACTIVITY_TYPE } from '../../types';
@@ -457,7 +457,7 @@ export const KineticShaker: React.FC<KineticShakerProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
-            icon={<CheckCircle2 size={16} color="#FFFFFF" />}
+            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceedBtn}
           />
         ) : (

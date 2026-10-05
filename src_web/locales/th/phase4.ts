@@ -7,7 +7,7 @@ export const phase4 = {
   bubbleGrounded: 'ใจสงบนิ่งและมีสติแล้วนะ เก่งมาก ๆ เลย',
   bubbleGroundedSteady: 'ลมหายใจนิ่งขึ้น จิตใจสงบแล้วนะคนเก่ง',
   bubbleHug: 'มากอดกันแน่น ๆ นะ! Mooca อยู่ตรงนี้เสมอ',
-  bubbleDefault: 'ตอนนี้รู้สึกอย่างไรบ้างแล้วจ๊ะ? บอก Mooca ได้เลยนะ',
+  bubbleDefault: 'ตอนนี้รู้สึกอย่างไรบ้าง? บอก Mooca ได้เลยนะ',
   deltaCheckTitle: 'ตราประทับวัดผลลัพธ์ใจ',
   bpmHeader: 'การเปลี่ยนแปลงของอัตราการเต้นหัวใจ',
   bpmBefore: 'ก่อนเริ่ม',

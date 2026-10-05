@@ -15,7 +15,7 @@ import Svg, { Path, Circle, Ellipse, Defs, RadialGradient as SvgRadialGradient, 
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { useSkyTheme } from '../../hooks/useSkyTheme';
-import { Heart, Check, GlassWater, Sparkles, ArrowRight, X, HelpCircle } from 'lucide-react-native';
+import { Heart, Check, GlassWater, Sparkles, X, HelpCircle } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
 import { renderBilingualNodes } from '../../components/BilingualText';
@@ -481,7 +481,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
-            icon={<ArrowRight size={16} color="#FFFFFF" />}
+            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceedBtn}
           />
         ) : (

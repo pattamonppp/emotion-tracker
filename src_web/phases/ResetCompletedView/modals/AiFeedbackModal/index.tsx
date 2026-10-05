@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   UserProfile,
   ShiftFeedback,
@@ -145,7 +146,7 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
   const RatingIcon = currentRatingInfo.Icon;
   const ratingColor = STAR_COLORS[rating - 1];
 
-  return (
+  return createPortal(
     <div className={styles.backdrop}>
       <div
         className={styles.modal}
@@ -404,7 +405,8 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

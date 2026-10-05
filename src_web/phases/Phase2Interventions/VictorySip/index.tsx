@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 import { audioService, HAPTIC_STYLE } from '../../../services/audioService';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../../design-system/MarshmallowButton';
 import { MOOCA_MOOD, MoocaMascot } from '../../../components/MoocaMascot';
-import { Check, GlassWater, ArrowRight, X, Sparkles, Heart, HelpCircle } from 'lucide-react';
+import { Check, GlassWater, X, Sparkles, Heart, HelpCircle } from 'lucide-react';
 import { getTranslation } from '../../../locales';
 import { renderBilingual } from '../../../components/BilingualText';
 import type { VictorySipProps } from './types';
@@ -292,7 +293,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
-            icon={<ArrowRight size={16} color="#FFFFFF" />}
+            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceedBtn}
           />
         ) : (
@@ -305,7 +306,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
       </div>
 
       {/* 5. Instruction Modal */}
-      {isGuideOpen && (
+      {isGuideOpen && createPortal(
         <div className={styles.modalBackdrop}>
           <div className={styles.modalCard}>
             <div className={styles.guideContainer}>
@@ -359,7 +360,8 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
