@@ -225,6 +225,16 @@
   display: block;
 }
 
+.mascotImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(0, 196, 179, 0.15));
+}
+
 /* Floating hearts */
 
 .floatingHeartsContainer {

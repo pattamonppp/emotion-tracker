@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,21 +7,22 @@ import {
   ViewStyle,
   Animated,
   Easing,
+  Image,
 } from 'react-native';
-import Svg, {
-  Path,
-  Circle,
-  Ellipse,
-  Rect,
-  Line,
-  G,
-  Defs,
-  LinearGradient,
-  Stop,
-} from 'react-native-svg';
+import { SvgXml } from 'react-native-svg';
 import { audioService, HAPTIC_STYLE } from '../services/audioService';
 import { Heart, Sparkles } from 'lucide-react-native';
 import { typography, colors, radii } from '../design-system/tokens';
+import {
+  SVG_MOOCA_THANKS_,
+  SVG_MOOCA_WALLET__ENOUGH_,
+  SVG_MOOCA_WALLET__NOT_ENOUGH_,
+  SVG_MOOCA_HUGGING_SUNNY,
+  SVG_SAD_MOOCA,
+} from '../assets/moocaSvgData';
+
+const MOOCA_HAPPY_PNG = require('../../assets/mooca/Mooca=Happy Mooca with Sunny, Size=L.png');
+const MOOCA_PHONE_PNG = require('../../assets/mooca/Mooca=Mooca using phone, Size=L.png');
 
 export const MOOCA_MOOD = {
   HAPPY: 'happy',
@@ -35,6 +36,8 @@ export const MOOCA_MOOD = {
   CELEBRATING: 'celebrating',
   SLEEPY: 'sleepy',
   SAD: 'sad',
+  WALLET_ENOUGH: 'wallet_enough',
+  WALLET_NOT_ENOUGH: 'wallet_not_enough',
 } as const;
 
 export type MoocaMood = typeof MOOCA_MOOD[keyof typeof MOOCA_MOOD];
@@ -58,6 +61,36 @@ const SWEET_MESSAGES = [
   'เก่งที่สุดเลยยย พักใจแป๊บเดียวนะคะ',
 ];
 
+type MascotAsset =
+  | { type: 'png'; source: any }
+  | { type: 'svg'; xml: string };
+
+const getMascotAsset = (mood: MoocaMood): MascotAsset => {
+  switch (mood) {
+    case MOOCA_MOOD.HUGGING:
+    case MOOCA_MOOD.COMFORTING:
+    case MOOCA_MOOD.RUBBING:
+      return { type: 'svg', xml: SVG_MOOCA_HUGGING_SUNNY };
+    case MOOCA_MOOD.PRAYING:
+      return { type: 'svg', xml: SVG_MOOCA_THANKS_ };
+    case MOOCA_MOOD.SAD:
+      return { type: 'svg', xml: SVG_SAD_MOOCA };
+    case MOOCA_MOOD.WALLET_ENOUGH:
+      return { type: 'svg', xml: SVG_MOOCA_WALLET__ENOUGH_ };
+    case MOOCA_MOOD.WALLET_NOT_ENOUGH:
+      return { type: 'svg', xml: SVG_MOOCA_WALLET__NOT_ENOUGH_ };
+    case MOOCA_MOOD.LISTENING:
+    case MOOCA_MOOD.SLEEPY:
+      return { type: 'png', source: MOOCA_PHONE_PNG };
+    case MOOCA_MOOD.HAPPY:
+    case MOOCA_MOOD.CELEBRATING:
+    case MOOCA_MOOD.DRINKING:
+    case MOOCA_MOOD.SHAKING:
+    default:
+      return { type: 'png', source: MOOCA_HAPPY_PNG };
+  }
+};
+
 export const MoocaMascot: React.FC<MoocaMascotProps> = ({
   mood = 'happy',
   size = 'md',
@@ -67,29 +100,13 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
   onHug,
   style,
 }) => {
-  const [isBlushing, setIsBlushing] = useState(false);
   const [petMessage, setPetMessage] = useState<string | null>(null);
 
   // Animations
   const wiggleAnim = useRef(new Animated.Value(0)).current;
   const bounceAnim = useRef(new Animated.Value(1)).current;
-  const sunnySpinAnim = useRef(new Animated.Value(0)).current;
   const heartFloatAnim = useRef(new Animated.Value(0)).current;
   const heartOpacityAnim = useRef(new Animated.Value(0)).current;
-
-  // Sunny continuous cheerful rotation
-  useEffect(() => {
-    const loop = Animated.loop(
-      Animated.timing(sunnySpinAnim, {
-        toValue: 1,
-        duration: 9000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      })
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [sunnySpinAnim]);
 
   const getDimensions = () => {
     switch (size) {
@@ -108,7 +125,6 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
     if (!interactive) return;
 
     audioService.triggerHaptic(HAPTIC_STYLE.SELECTION);
-    setIsBlushing(true);
 
     // Pick a sweet random message
     const msg = SWEET_MESSAGES[Math.floor(Math.random() * SWEET_MESSAGES.length)];
@@ -178,15 +194,9 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
     if (onHug) onHug();
 
     setTimeout(() => {
-      setIsBlushing(false);
       setPetMessage(null);
     }, 2800);
   };
-
-  const sunnySpinInterpolation = sunnySpinAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
 
   const wiggleInterpolation = wiggleAnim.interpolate({
     inputRange: [-8, 8],
@@ -194,6 +204,7 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
   });
 
   const displayMessage = petMessage || speakingBubble;
+  const asset = getMascotAsset(mood);
 
   return (
     <View style={[styles.container, style]}>
@@ -217,7 +228,6 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
 
       {/* Mooca + Bubble — bubble grows upward, Mooca stays at same Y always */}
       <View style={styles.mascotAnchor}>
-
         {/* Bubble outer positioner: absolute, centered directly above Mooca */}
         <View
           style={[
@@ -243,217 +253,35 @@ export const MoocaMascot: React.FC<MoocaMascotProps> = ({
           onPress={handlePetting}
           disabled={!interactive}
           style={{ width, height, alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+          accessibilityLabel={`Mooca Mascot ${mood}`}
+          accessibilityRole="button"
         >
           <Animated.View
             style={{
+              width,
+              height,
+              alignItems: 'center',
+              justifyContent: 'center',
               transform: [
                 { scale: bounceAnim },
                 { rotate: wiggleInterpolation },
               ],
             }}
           >
-            <Svg width={width} height={height} viewBox="0 0 160 160">
-              <Defs>
-                <LinearGradient id="moocaRainbowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <Stop offset="0%" stopColor={colors.accentPink} />
-                  <Stop offset="30%" stopColor={colors.secondary} />
-                  <Stop offset="65%" stopColor={colors.guava} />
-                  <Stop offset="85%" stopColor={colors.primary} />
-                  <Stop offset="100%" stopColor={colors.accentBlue} />
-                </LinearGradient>
-                <LinearGradient id="sunnyRayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <Stop offset="0%" stopColor="#FFD54F" />
-                  <Stop offset="100%" stopColor="#FFA726" />
-                </LinearGradient>
-              </Defs>
-
-              {/* Soft Warm Halo underneath */}
-              <Ellipse cx="80" cy="148" rx="44" ry="7" fill="rgba(0, 196, 179, 0.18)" />
-
-              {/* Rainbow behind Mooca if celebrating */}
-              {mood === MOOCA_MOOD.CELEBRATING && (
-                <Path
-                  d="M 28 72 A 52 52 0 0 1 132 72"
-                  stroke="url(#moocaRainbowGrad)"
-                  strokeWidth="8"
-                  fill="none"
-                  opacity={0.88}
-                  strokeLinecap="round"
-                />
-              )}
-
-              {/* Cozy Warm Glow */}
-              <Circle cx="80" cy="80" r="56" fill="rgba(230, 249, 247, 0.65)" />
-
-              {/* Fluffy Cloud Body with Soft 3D Touch */}
-              <Path
-                d="M 44 112 C 20 112, 12 88, 24 70 C 16 46, 42 32, 60 40 C 70 20, 94 20, 104 40 C 122 32, 148 46, 140 70 C 152 88, 142 112, 118 112 Z"
-                fill={mood === MOOCA_MOOD.SAD ? '#E2E8F0' : '#FFFFFF'}
-                stroke={mood === MOOCA_MOOD.SAD ? '#94A3B8' : '#BEECE6'}
-                strokeWidth="3.5"
-                strokeLinejoin="round"
+            {asset.type === 'png' ? (
+              <Image
+                source={asset.source}
+                style={{ width, height }}
+                resizeMode="contain"
               />
-
-              {/* Rosy Cheeks with Cute Heart Highlights */}
-              <Circle
-                cx="54"
-                cy="83"
-                r={isBlushing ? 8 : 6.5}
-                fill="#FF8BA7"
-                opacity={isBlushing ? 0.95 : 0.68}
+            ) : (
+              <SvgXml
+                xml={asset.xml}
+                width={width}
+                height={height}
               />
-              {/* Left Cheek Heart Sparkle */}
-              <Path
-                d="M 54 81 C 52 79, 50 81, 52 83 L 54 85 L 56 83 C 58 81, 56 79, 54 81 Z"
-                fill="#FFFFFF"
-                opacity={0.9}
-              />
-
-              <Circle
-                cx="106"
-                cy="83"
-                r={isBlushing ? 8 : 6.5}
-                fill="#FF8BA7"
-                opacity={isBlushing ? 0.95 : 0.68}
-              />
-              {/* Right Cheek Heart Sparkle */}
-              <Path
-                d="M 106 81 C 104 79, 102 81, 104 83 L 106 85 L 108 83 C 110 81, 108 79, 106 81 Z"
-                fill="#FFFFFF"
-                opacity={0.9}
-              />
-
-              {/* Sparkling Starry Anime Eyes */}
-              {mood === MOOCA_MOOD.PRAYING || mood === MOOCA_MOOD.RUBBING || mood === MOOCA_MOOD.COMFORTING ? (
-                <G stroke={colors.primaryDark} strokeWidth="3.2" strokeLinecap="round" fill="none">
-                  <Path d="M 48 76 Q 58 67 68 76" />
-                  <Path d="M 92 76 Q 102 67 112 76" />
-                </G>
-              ) : mood === MOOCA_MOOD.SLEEPY ? (
-                <G stroke={colors.primaryDark} strokeWidth="2.8" strokeLinecap="round" fill="none">
-                  <Path d="M 50 78 Q 58 83 66 78" />
-                  <Path d="M 94 78 Q 102 83 110 78" />
-                </G>
-              ) : mood === MOOCA_MOOD.SAD ? (
-                <G>
-                  <Circle cx="58" cy="74" r="3.8" fill="#334155" />
-                  <Circle cx="102" cy="74" r="3.8" fill="#334155" />
-                  <Path d="M 64 82 Q 62 89 65 92 Q 68 89 66 82 Z" fill="#60A5FA" />
-                </G>
-              ) : (
-                <G>
-                  {/* Big Sparkling Pupils */}
-                  <Circle cx="58" cy="74" r="5" fill={colors.primaryDark} />
-                  <Circle cx="102" cy="74" r="5" fill={colors.primaryDark} />
-                  {/* Primary Reflection Sparkle */}
-                  <Circle cx="56.5" cy="72" r="2.2" fill={colors.white} />
-                  <Circle cx="100.5" cy="72" r="2.2" fill={colors.white} />
-                  {/* Secondary Star Twinkle */}
-                  <Circle cx="60" cy="76" r="1.1" fill={colors.white} />
-                  <Circle cx="104" cy="76" r="1.1" fill={colors.white} />
-                </G>
-              )}
-
-              {/* Cute Happy Mouth */}
-              {mood === MOOCA_MOOD.SAD ? (
-                <Path
-                  d="M 76 86 Q 80 82 84 86"
-                  stroke={colors.primaryDark}
-                  strokeWidth="2.6"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              ) : mood === MOOCA_MOOD.DRINKING ? (
-                <Ellipse cx="80" cy="85" rx="3.5" ry="4.5" fill={colors.primaryDark} />
-              ) : mood === MOOCA_MOOD.CELEBRATING || mood === MOOCA_MOOD.HAPPY || isBlushing ? (
-                <G>
-                  <Path
-                    d="M 72 81 Q 80 94 88 81 Z"
-                    fill="#FF8080"
-                    stroke={colors.primaryDark}
-                    strokeWidth="2.5"
-                    strokeLinejoin="round"
-                  />
-                </G>
-              ) : (
-                <Path
-                  d="M 73 81 Q 80 89 87 81"
-                  stroke={colors.primaryDark}
-                  strokeWidth="2.8"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              )}
-
-              {/* Warm Knitted Orange Scarf with Texture */}
-              <G>
-                <Rect
-                  x="44"
-                  y="97"
-                  width="72"
-                  height="16"
-                  rx="8"
-                  fill="#FA8C3D"
-                  stroke="#D97706"
-                  strokeWidth="1.8"
-                />
-                {/* Cozy Knit Stitches */}
-                <Line x1="56" y1="97" x2="56" y2="113" stroke="#FFF0E6" strokeWidth="2" strokeDasharray="3,2" />
-                <Line x1="68" y1="97" x2="68" y2="113" stroke="#FFF0E6" strokeWidth="2" strokeDasharray="3,2" />
-                <Line x1="80" y1="97" x2="80" y2="113" stroke="#FFF0E6" strokeWidth="2" strokeDasharray="3,2" />
-                <Line x1="92" y1="97" x2="92" y2="113" stroke="#FFF0E6" strokeWidth="2" strokeDasharray="3,2" />
-                <Line x1="104" y1="97" x2="104" y2="113" stroke="#FFF0E6" strokeWidth="2" strokeDasharray="3,2" />
-
-                {/* Draped Scarf Tail with Soft Fringe */}
-                <Rect
-                  x="90"
-                  y="107"
-                  width="16"
-                  height="22"
-                  rx="6"
-                  fill="#FA8C3D"
-                  stroke="#D97706"
-                  strokeWidth="1.8"
-                />
-                <Line x1="94" y1="125" x2="94" y2="130" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
-                <Line x1="98" y1="125" x2="98" y2="130" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
-                <Line x1="102" y1="125" x2="102" y2="130" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
-              </G>
-            </Svg>
+            )}
           </Animated.View>
-
-          {/* Cheerful Mini Sunshine Companion: Sunny (nestled next to Mooca's ear) */}
-          {showSunny && (
-            <Animated.View
-              style={[
-                styles.sunnyContainer,
-                {
-                  transform: [{ rotate: sunnySpinInterpolation }],
-                },
-              ]}
-            >
-              <Svg width={24} height={24} viewBox="0 0 36 36">
-                {/* Spinning Rays */}
-                <G stroke="#FFA726" strokeWidth="2.5" strokeLinecap="round">
-                  <Line x1="18" y1="2" x2="18" y2="7" />
-                  <Line x1="18" y1="29" x2="18" y2="34" />
-                  <Line x1="2" y1="18" x2="7" y2="18" />
-                  <Line x1="29" y1="18" x2="34" y2="18" />
-                  <Line x1="6.7" y1="6.7" x2="10.2" y2="10.2" />
-                  <Line x1="25.8" y1="25.8" x2="29.3" y2="29.3" />
-                  <Line x1="6.7" y1="29.3" x2="10.2" y2="25.8" />
-                  <Line x1="25.8" y1="10.2" x2="29.3" y2="6.7" />
-                </G>
-                {/* Sunny Smiling Face Body */}
-                <Circle cx="18" cy="18" r="9" fill="#FFCA28" stroke="#F57C00" strokeWidth="1.2" />
-                <Circle cx="15.5" cy="16.5" r="1.2" fill="#4E342E" />
-                <Circle cx="20.5" cy="16.5" r="1.2" fill="#4E342E" />
-                <Circle cx="13.5" cy="18" r="1.8" fill="#FF8A80" opacity={0.75} />
-                <Circle cx="22.5" cy="18" r="1.8" fill="#FF8A80" opacity={0.75} />
-                <Path d="M 15.5 19.5 Q 18 22 20.5 19.5" stroke="#4E342E" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-              </Svg>
-            </Animated.View>
-          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -527,15 +355,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -10,
     zIndex: 99,
-  },
-  floatingHeartEmoji: {
-    fontSize: 16,
-    fontWeight: '800',
-  },
-  sunnyContainer: {
-    position: 'absolute',
-    top: -4,
-    right: -4,
-    zIndex: 10,
   },
 });

@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   },
   scriptCard: {
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 360,
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
