@@ -9,6 +9,7 @@ import {
   StyleProp,
 } from 'react-native';
 import { audioService, HAPTIC_STYLE } from '../services/audioService';
+import { renderBilingualNodes } from '../components/BilingualText';
 import { colors, radii, shadows, typography } from './tokens';
 
 export const MARSHMALLOW_VARIANT = {
@@ -250,10 +251,24 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
         {icon ? icon : null}
         {title ? (
           <Text style={[styles.text, sStyles.text, vStyles.text, textStyle]}>
-            {title}
+            {renderBilingualNodes(
+              title,
+              sStyles.text.fontFamily,
+              size === 'sm' ? typography.fontGotham : typography.fontGothamBold
+            )}
           </Text>
         ) : null}
-        {children}
+        {typeof children === 'string' ? (
+          <Text style={[styles.text, sStyles.text, vStyles.text, textStyle]}>
+            {renderBilingualNodes(
+              children,
+              sStyles.text.fontFamily,
+              size === 'sm' ? typography.fontGotham : typography.fontGothamBold
+            )}
+          </Text>
+        ) : (
+          children
+        )}
       </TouchableOpacity>
     </Animated.View>
   );

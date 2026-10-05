@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { audioService, HAPTIC_STYLE } from '../../services/audioService';
+import { renderBilingual } from '../BilingualText';
 import styles from './MarshmallowButton.module.scss';
 
 export const MARSHMALLOW_VARIANT = {
@@ -118,11 +119,17 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
 
         {title ? (
           <span className={styles.text} style={textStyle}>
-            {title}
+            {renderBilingual(title)}
           </span>
         ) : null}
 
-        {children}
+        {typeof children === 'string' ? (
+          <span className={styles.text} style={textStyle}>
+            {renderBilingual(children)}
+          </span>
+        ) : (
+          children
+        )}
       </button>
     </div>
   );

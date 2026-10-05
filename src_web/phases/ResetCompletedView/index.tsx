@@ -18,6 +18,7 @@ import {
   MessageSquareHeart,
 } from 'lucide-react';
 import { getTranslation } from '../../locales';
+import { renderBilingual } from '../../components/BilingualText';
 import styles from './styles.module.scss';
 
 export interface ResetCompletedViewProps {
@@ -90,7 +91,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         <div className={styles.topBadge}>
           <Award size={15} color="#D97706" />
           <span className={styles.topBadgeText}>
-            {c.somaticResetComplete}
+            {renderBilingual(c.somaticResetComplete)}
           </span>
         </div>
 
@@ -99,7 +100,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             [styles.headlineNight]: isNight,
           })}
         >
-          {c.congratsTitle.replace('{name}', profile.name)}
+          {renderBilingual(c.congratsTitle.replace('{name}', profile.name))}
         </h2>
 
         {/* Polaroid Keepsake Card */}
@@ -144,7 +145,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
             {/* Rainbow Arc Badge */}
             <div className={styles.rainbowArcPill}>
-              <Sparkles size={13} color="#DF8900" />
+              <Sparkles size={11} color="#DF8900" />
               <span className={styles.rainbowText}>
                 {c.rainbowCelebration}
               </span>
@@ -163,7 +164,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             {/* Golden Badge */}
             <div className={styles.goldMedalContainer}>
               <div className={styles.goldMedal}>
-                <Award size={16} color="#78350F" />
+                <Award size={14} color="#DF8900" />
                 <span className={styles.goldMedalText}>
                   {c.goldMedalTitle}
                 </span>
@@ -177,12 +178,12 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           {/* Polaroid Wide Bottom Chin */}
           <div className={styles.polaroidChin}>
             <div className={styles.handwrittenCaption}>
-              {c.caption}
+              {renderBilingual(c.caption)}
             </div>
 
             <div className={styles.chinFooterRow}>
               <span className={styles.chinDateText}>
-                {currentDate}
+                {renderBilingual(currentDate)}
               </span>
 
               <div className={styles.chinBpmDrop}>
@@ -193,7 +194,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 />
 
                 <span className={styles.chinBpmText}>
-                  {`-${bpmDrop} BPM`}
+                  {renderBilingual(`-${bpmDrop} BPM`)}
                 </span>
               </div>
             </div>
@@ -204,11 +205,11 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         <div className={styles.metricsSummary}>
           <div className={styles.metricItem}>
             <span className={styles.metricLabel}>
-              {c.preLabel}
+              {renderBilingual(c.preLabel)}
             </span>
 
             <span className={styles.metricVal}>
-              {`${feedback?.preHeartRate || 105} BPM`}
+              {renderBilingual(`${feedback?.preHeartRate || 105} BPM`)}
             </span>
           </div>
 
@@ -216,7 +217,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
           <div className={styles.metricItem}>
             <span className={styles.metricLabel}>
-              {c.nowLabel}
+              {renderBilingual(c.nowLabel)}
             </span>
 
             <span
@@ -225,7 +226,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
                 styles.metricValTeal,
               )}
             >
-              {`${feedback?.postHeartRate || 87} BPM`}
+              {renderBilingual(`${feedback?.postHeartRate || 87} BPM`)}
             </span>
           </div>
         </div>

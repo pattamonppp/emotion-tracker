@@ -14,6 +14,7 @@ import {
   Sprout,
 } from 'lucide-react';
 import { getTranslation } from '../../locales';
+import { renderBilingual } from '../../components/BilingualText';
 
 import styles from './styles.module.scss';
 
@@ -70,7 +71,7 @@ export const Phase3CognitiveReframing: React.FC<
             />
 
             <span className={styles.phaseBadgeText}>
-              {p3.letterBadge}
+              {renderBilingual(p3.letterBadge)}
             </span>
           </div>
 
@@ -104,7 +105,7 @@ export const Phase3CognitiveReframing: React.FC<
                 />
 
                 <span className={styles.letterGreeting}>
-                  {p3.letterBadge}
+                  {renderBilingual(p3.letterBadge)}
                 </span>
               </div>
 
@@ -141,13 +142,13 @@ export const Phase3CognitiveReframing: React.FC<
                 />
 
                 <span className={styles.promiseTitle}>
-                  {p3.promiseBox}
+                  {renderBilingual(p3.promiseBox)}
                 </span>
               </div>
 
               <div className={styles.promiseBadge}>
                 <span className={styles.promiseBadgeText}>
-                  {p3.microStepBadge}
+                  {renderBilingual(p3.microStepBadge)}
                 </span>
               </div>
             </div>
@@ -181,9 +182,11 @@ export const Phase3CognitiveReframing: React.FC<
                     },
                   )}
                 >
-                  {lang === LANG.TH
-                    ? insight.microActionTh
-                    : insight.microActionEn}
+                  {renderBilingual(
+                    lang === LANG.TH
+                      ? insight.microActionTh
+                      : insight.microActionEn
+                  )}
                 </span>
               </div>
 
@@ -197,14 +200,14 @@ export const Phase3CognitiveReframing: React.FC<
                     />
 
                     <span className={styles.mintSealText}>
-                      {p3.promisedStamp}
+                      {renderBilingual(p3.promisedStamp)}
                     </span>
                   </div>
                 </div>
               ) : (
                 <div className={styles.stampPlaceholder}>
                   <span className={styles.stampPrompt}>
-                    {p3.stampPrompt}
+                    {renderBilingual(p3.stampPrompt)}
                   </span>
                 </div>
               )}

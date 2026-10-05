@@ -16,6 +16,7 @@ import { MOOCA_MOOD, MoocaMascot } from '../../components/MoocaMascot';
 import { Heart, Dna, ArrowRight, Sparkles, HeartHandshake, Sprout } from 'lucide-react-native';
 import { colors, radii, shadows, typography } from '../../design-system/tokens';
 import { getTranslation } from '../../locales';
+import { BilingualText } from '../../components/BilingualText';
 import { PHASE3_CONFIG } from '../../constants';
 
 export interface Phase3CognitiveReframingProps {
@@ -77,9 +78,9 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 
         <View style={styles.phaseBadge}>
           <Sparkles size={12} color={colors.primary} />
-          <Text style={styles.phaseBadgeText}>
+          <BilingualText style={styles.phaseBadgeText}>
             {p3.letterBadge}
-          </Text>
+          </BilingualText>
         </View>
 
         {/* Washi-Tape Letter Card */}
@@ -104,9 +105,9 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 
             <View style={styles.letterHeader}>
               <Heart size={14} color="#EF7773" />
-              <Text style={styles.letterGreeting}>
+              <BilingualText style={styles.letterGreeting}>
                 {p3.letterBadge}
-              </Text>
+              </BilingualText>
             </View>
 
             {/* Emotional Reframing Message */}
@@ -129,14 +130,14 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
           <View style={styles.promiseHeaderRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <HeartHandshake size={16} color={colors.primary} strokeWidth={2.4} />
-              <Text style={styles.promiseTitle}>
+              <BilingualText style={styles.promiseTitle}>
                 {p3.promiseBox}
-              </Text>
+              </BilingualText>
             </View>
             <View style={styles.promiseBadge}>
-              <Text style={styles.promiseBadgeText}>
+              <BilingualText style={styles.promiseBadgeText}>
                 {p3.microStepBadge}
-              </Text>
+              </BilingualText>
             </View>
           </View>
 
@@ -170,14 +171,14 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
               >
                 <View style={styles.mintSealInner}>
                   <Heart size={16} color="#FFFFFF" fill="#FFFFFF" />
-                  <Text style={styles.mintSealText}>{p3.promisedStamp}</Text>
+                  <BilingualText style={styles.mintSealText}>{p3.promisedStamp}</BilingualText>
                 </View>
               </Animated.View>
             ) : (
               <View style={styles.stampPlaceholder}>
-                <Text style={styles.stampPrompt}>
+                <BilingualText style={styles.stampPrompt}>
                   {p3.stampPrompt}
-                </Text>
+                </BilingualText>
               </View>
             )}
           </TouchableOpacity>

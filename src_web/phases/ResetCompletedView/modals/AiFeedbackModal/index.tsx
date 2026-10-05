@@ -284,8 +284,8 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                               height: 18,
                               marginBottom: 4,
                               color: isSelected
-                                ? option.colorTheme
-                                : '#64748B',
+                                ? option.color
+                                : '#79ADA9',
                               strokeWidth: 2.3,
                             }}
                           />
@@ -295,6 +295,11 @@ export const AiFeedbackModal: React.FC<AiFeedbackModalProps> = ({
                               ? styles.accuracyTextSelected
                               : ''
                               }`}
+                            style={
+                              isSelected
+                                ? { color: option.color }
+                                : undefined
+                            }
                           >
                             {getTagLabel(option, lang)}
                           </span>

@@ -108,28 +108,28 @@ export const FeedbackModal: React.FC<
         id: FEEDBACK_ACCURACY.SPOT_ON,
         label: fb.accuracySpotOn,
         icon: Target,
-        color: '#00C4B3',
-        bg: '#E6FAF8',
+        color: '#009688',
+        bg: '#E0F8F6',
         border: '#00C4B3',
-        text: '#00695C',
+        text: '#009688',
       },
       {
         id: FEEDBACK_ACCURACY.HELPFUL,
         label: fb.accuracyHelpful,
         icon: Lightbulb,
-        color: '#F59E0B',
-        bg: '#FFFBEB',
-        border: '#FCD34D',
-        text: '#B45309',
+        color: '#DF8900',
+        bg: '#FCF4E0',
+        border: '#F8E4B3',
+        text: '#DF8900',
       },
       {
         id: FEEDBACK_ACCURACY.NEEDS_WORK,
         label: fb.accuracyNeedsWork,
         icon: RotateCcw,
-        color: '#F43F5E',
-        bg: '#FFF1F2',
-        border: '#FDA4AF',
-        text: '#BE123C',
+        color: '#EF7773',
+        bg: '#FDEFEE',
+        border: '#FAD6D5',
+        text: '#EF7773',
       },
     ] as const;
 
@@ -404,7 +404,7 @@ export const FeedbackModal: React.FC<
                                 color={
                                   isSelected
                                     ? option.color
-                                    : '#64748B'
+                                    : '#79ADA9'
                                 }
                                 strokeWidth={
                                   2.3
@@ -743,6 +743,7 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 3,
 
     paddingVertical: 12,
     paddingHorizontal: 6,

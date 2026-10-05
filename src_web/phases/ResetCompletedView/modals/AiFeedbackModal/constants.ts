@@ -38,12 +38,13 @@ export interface AccuracyOption {
   labelEn: string;
   Icon: React.FC<IconProps>;
   colorTheme: FeedbackAccuracyTheme;
+  color: string;
 }
 
 export const ACCURACY_OPTIONS: AccuracyOption[] = [
-  { id: FEEDBACK_ACCURACY.SPOT_ON, labelTh: 'ตรงใจมาก', labelEn: 'Spot On', Icon: TargetIcon, colorTheme: FEEDBACK_ACCURACY_THEME.SPOT_ON },
-  { id: FEEDBACK_ACCURACY.HELPFUL, labelTh: 'ช่วยได้ดี', labelEn: 'Helpful', Icon: LightbulbIcon, colorTheme: FEEDBACK_ACCURACY_THEME.HELPFUL },
-  { id: FEEDBACK_ACCURACY.NEEDS_WORK, labelTh: 'ยังไม่ค่อยตรงจุด', labelEn: 'Needs Work', Icon: RotateCcwIcon, colorTheme: FEEDBACK_ACCURACY_THEME.NEEDS_WORK },
+  { id: FEEDBACK_ACCURACY.SPOT_ON, labelTh: 'ตรงใจมาก', labelEn: 'Spot On', Icon: TargetIcon, colorTheme: FEEDBACK_ACCURACY_THEME.SPOT_ON, color: '#009688' },
+  { id: FEEDBACK_ACCURACY.HELPFUL, labelTh: 'ช่วยได้ดี', labelEn: 'Helpful', Icon: LightbulbIcon, colorTheme: FEEDBACK_ACCURACY_THEME.HELPFUL, color: '#DF8900' },
+  { id: FEEDBACK_ACCURACY.NEEDS_WORK, labelTh: 'ยังไม่ค่อยตรงจุด', labelEn: 'Needs Work', Icon: RotateCcwIcon, colorTheme: FEEDBACK_ACCURACY_THEME.NEEDS_WORK, color: '#EF7773' },
 ];
 
 export interface RatingContextInfo {

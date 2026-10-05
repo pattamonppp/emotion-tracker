@@ -124,7 +124,7 @@
 }
 
 .rainbowText {
-  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
+  font-family: 'Gotham Rounded', sans-serif !important;
   font-size: 0.625rem;
   font-weight: 700;
   color: #DF8900;
@@ -158,9 +158,10 @@
 }
 
 .goldMedalText {
+  font-family: 'Gotham Rounded', sans-serif !important;
   font-size: 0.5625rem;
   font-weight: 700;
-  color: #D97800;
+  color: #DF8900;
   letter-spacing: 0.02em;
 }
 
@@ -222,7 +223,7 @@
 }
 
 .chinBpmText {
-  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
+  font-family: 'Gotham Rounded', sans-serif !important;
   font-size: 0.625rem;
   font-weight: 700;
   color: $color-brand-contrast;
@@ -260,7 +261,7 @@
 }
 
 .metricVal {
-  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
+  font-family: 'Gotham Rounded', sans-serif !important;
   font-size: 0.8125rem;
   font-weight: 700;
   color: $color-slate-800;

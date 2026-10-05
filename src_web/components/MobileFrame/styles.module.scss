@@ -90,7 +90,7 @@
 }
 
 .langText {
-  font-family: 'Gotham Rounded', 'Gotham', sans-serif !important;
+  font-family: 'Gotham Rounded', sans-serif !important;
   font-weight: 700;
   font-size: 11px;
   color: $color-brand-contrast;
@@ -150,7 +150,7 @@
 }
 
 .avatarText {
-  font-family: 'Prompt', $font-sans;
+  font-family: 'Gotham Rounded', 'Prompt', $font-sans;
   font-weight: 700;
   font-size: 13px;
   color: $color-white;

@@ -3,7 +3,7 @@ export const completed = {
   somaticResetComplete: 'กอดใจและรีเซ็ตสำเร็จ',
   congratsTitle: 'ยินดีด้วยนะ {name}!',
   rainbowCelebration: 'Mooca Rainbow Celebration',
-  goldMedalTitle: 'เหรียญตรา Mooca Best Friend',
+  goldMedalTitle: 'Mooca Best Friend',
   caption: 'เธอเก่งที่สุดในโลกเลย! พักใจแล้วก้าวไปต่อนะ',
   preLabel: 'ก่อนเริ่ม',
   nowLabel: 'ตอนนี้',

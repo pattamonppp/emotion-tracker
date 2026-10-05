@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { UserProfile, ShiftFeedback, SKY, LANG } from '../../types';
+import { BilingualText } from '../../components/BilingualText';
 import { MARSHMALLOW_SIZE, MARSHMALLOW_VARIANT, MarshmallowButton } from '../../design-system/MarshmallowButton';
 import { MoocaMascot } from '../../components/MoocaMascot';
 import { FeedbackModal } from './modals/FeedbackModal';
@@ -76,14 +77,22 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
       {/* Top Completion Header */}
       <View style={styles.topBadge}>
         <Award size={15} color="#DF8900" />
-        <Text style={styles.topBadgeText}>
+        <BilingualText
+          style={styles.topBadgeText}
+          fontPrompt={typography.fontPromptBold}
+          fontGotham={typography.fontGothamBold}
+        >
           {c.somaticResetComplete}
-        </Text>
+        </BilingualText>
       </View>
 
-      <Text style={[styles.headline, isNight && { color: '#FFFFFF' }]}>
+      <BilingualText
+        style={[styles.headline, isNight && { color: '#FFFFFF' }]}
+        fontPrompt={typography.fontPromptExtraBold}
+        fontGotham={typography.fontGothamBold}
+      >
         {c.congratsTitle.replace('{name}', profile.name)}
-      </Text>
+      </BilingualText>
 
       {/* Polaroid Keepsake Card */}
       <View style={styles.polaroidFrame}>
@@ -109,7 +118,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
           {/* Rainbow Arc Badge */}
           <View style={styles.rainbowArcPill}>
-            <Sparkles size={13} color="#DF8900" />
+            <Sparkles size={11} color="#DF8900" />
             <Text style={styles.rainbowText}>
               {c.rainbowCelebration}
             </Text>
@@ -128,7 +137,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           {/* Golden Badge */}
           <View style={styles.goldMedalContainer}>
             <View style={styles.goldMedal}>
-              <Award size={16} color="#DF8900" />
+              <Award size={14} color="#DF8900" />
               <Text style={styles.goldMedalText}>
                 {c.goldMedalTitle}
               </Text>
@@ -140,14 +149,22 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
 
         {/* Polaroid Wide Bottom Chin */}
         <View style={styles.polaroidChin}>
-          <Text style={styles.handwrittenCaption}>
+          <BilingualText
+            style={styles.handwrittenCaption}
+            fontPrompt={typography.fontPromptBold}
+            fontGotham={typography.fontGothamBold}
+          >
             {c.caption}
-          </Text>
+          </BilingualText>
 
           <View style={styles.chinFooterRow}>
-            <Text style={styles.chinDateText}>
+            <BilingualText
+              style={styles.chinDateText}
+              fontPrompt={typography.fontPromptMedium}
+              fontGotham={typography.fontGotham}
+            >
               {currentDate}
-            </Text>
+            </BilingualText>
             <View style={styles.chinBpmDrop}>
               <Leaf size={11} color={colors.primary} style={{ marginRight: 2 }} />
               <Text style={styles.chinBpmText} numberOfLines={1}>
@@ -318,14 +335,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radii.full,
-    borderWidth: 1.5,
+    borderWidth: 1.24,
     borderColor: '#F9A000',
     zIndex: 2,
   },
   goldMedalText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 9,
-    color: '#D97800',
+    color: '#DF8900',
     letterSpacing: 0.3,
   },
   ribbonTailLeft: {
