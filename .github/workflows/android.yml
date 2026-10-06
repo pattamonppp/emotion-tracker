@@ -1,0 +1,76 @@
+# Build the Android APK directly on the GitHub runner (no Expo/EAS account) and ship it to Firebase App Distribution
+name: Android to Firebase App Distribution
+
+on:
+  # Run manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      release_notes:
+        description: "Release notes shown to testers"
+        required: false
+        default: "New build from GitHub Actions"
+
+  # Or push a tag like android-v1.0.0
+  push:
+    tags: ["android-v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-distribution
+  cancel-in-progress: false
+
+jobs:
+  build-and-distribute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Generates the native android/ project from app.json (android/ is gitignored)
+      - name: Expo prebuild
+        run: npx expo prebuild --platform android --no-install
+
+      # Make each build installable over the previous one
+      - name: Set versionCode from run number
+        run: sed -i "s/versionCode [0-9]\+/versionCode ${{ github.run_number }}/" android/app/build.gradle
+
+      - name: Build release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          groups: testers
+          file: android/app/build/outputs/apk/release/app-release.apk
+          releaseNotes: ${{ github.event.inputs.release_notes || 'New build from GitHub Actions' }}
+
+      - name: Keep APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 7
