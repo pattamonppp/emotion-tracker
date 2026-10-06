@@ -3,20 +3,11 @@ import * as Speech from 'expo-speech';
 import { Language, LANG } from '../types';
 
 let expoAudio: any = null;
-let expoAv: any = null;
 
 try {
   expoAudio = require('expo-audio');
 } catch {
   // expo-audio not available
-}
-
-if (!expoAudio) {
-  try {
-    expoAv = require('expo-av');
-  } catch {
-    // expo-av not available
-  }
 }
 
 let DREAMSCAPE_BGM: any = null;
@@ -100,28 +91,6 @@ class NativeAudioMatrixService {
         }
       }
 
-      // 2. Try legacy expo-av
-      if (expoAv?.Audio && DREAMSCAPE_BGM) {
-        try {
-          await expoAv.Audio.setAudioModeAsync({
-            playsInSilentModeIOS: true,
-            staysActiveInBackground: false,
-            shouldDuckAndroid: true,
-          });
-
-          const { sound } = await expoAv.Audio.Sound.createAsync(
-            DREAMSCAPE_BGM,
-            { isLooping: true, volume: 0.35, shouldPlay: true }
-          );
-          this.bgmSound = sound;
-          this.isBgmPlaying = true;
-          this.notifyBgmListeners();
-          return;
-        } catch (e) {
-          // console.log('expo-av sound initialization fallback:', e);
-        }
-      }
-
       // Fallback state
       this.isBgmPlaying = true;
       this.notifyBgmListeners();
@@ -181,20 +150,6 @@ class NativeAudioMatrixService {
           const chimePlayer = expoAudio.createAudioPlayer(JAR_CHIME);
           chimePlayer.volume = 0.5;
           chimePlayer.play();
-          return;
-        } catch { }
-      }
-      if (expoAv?.Audio && JAR_CHIME) {
-        try {
-          const { sound } = await expoAv.Audio.Sound.createAsync(
-            JAR_CHIME,
-            { volume: 0.5, shouldPlay: true }
-          );
-          sound.setOnPlaybackStatusUpdate((status: any) => {
-            if (status.isLoaded && status.didJustFinish) {
-              sound.unloadAsync();
-            }
-          });
           return;
         } catch { }
       }
