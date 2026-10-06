@@ -1,13 +1,20 @@
 export const STORAGE_KEYS = {
-  PROFILE: 'kinetic_vibe_profile',
-  HISTORY: 'kinetic_vibe_history',
+  PROFILE: 'mindfull_profile',
+  HISTORY: 'mindfull_history',
+  LEGACY_PROFILE: 'kinetic_vibe_profile',
+  LEGACY_HISTORY: 'kinetic_vibe_history',
   LANGUAGE: 'mooca_language_pref',
   FEEDBACK: 'mooca_feedback_dataset',
 } as const;
 
 export const getStorageJSON = <T>(key: string, fallback: T): T => {
   try {
-    const item = localStorage.getItem(key);
+    let item = localStorage.getItem(key);
+    if (!item && key === STORAGE_KEYS.PROFILE) {
+      item = localStorage.getItem(STORAGE_KEYS.LEGACY_PROFILE);
+    } else if (!item && key === STORAGE_KEYS.HISTORY) {
+      item = localStorage.getItem(STORAGE_KEYS.LEGACY_HISTORY);
+    }
     return item ? JSON.parse(item) : fallback;
   } catch {
     return fallback;

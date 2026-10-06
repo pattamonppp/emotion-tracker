@@ -1,13 +1,17 @@
 import { safeStorage as AsyncStorage } from './safeStorage';
 import { UserProfile, ShiftFeedback } from '../types';
 
-const PROFILE_KEY = '@kinetic_vibe_profile';
-const HISTORY_KEY = '@kinetic_vibe_history';
+const PROFILE_KEY = '@mindfull_profile';
+const LEGACY_PROFILE_KEY = '@kinetic_vibe_profile';
+const HISTORY_KEY = '@mindfull_history';
+const LEGACY_HISTORY_KEY = '@kinetic_vibe_history';
 
 export const storageService = {
   async getProfile(defaultProfile: UserProfile): Promise<UserProfile> {
     try {
-      const data = await AsyncStorage.getItem(PROFILE_KEY);
+      const data =
+        (await AsyncStorage.getItem(PROFILE_KEY)) ||
+        (await AsyncStorage.getItem(LEGACY_PROFILE_KEY));
       return data ? JSON.parse(data) : defaultProfile;
     } catch {
       return defaultProfile;
@@ -24,7 +28,9 @@ export const storageService = {
 
   async getHistory(): Promise<ShiftFeedback[]> {
     try {
-      const data = await AsyncStorage.getItem(HISTORY_KEY);
+      const data =
+        (await AsyncStorage.getItem(HISTORY_KEY)) ||
+        (await AsyncStorage.getItem(LEGACY_HISTORY_KEY));
       return data ? JSON.parse(data) : [];
     } catch {
       return [];

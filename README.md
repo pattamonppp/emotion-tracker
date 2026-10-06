@@ -1,4 +1,4 @@
-# KINETIC VIBE — 120s Somatic & Cognitive Reset (React Native / Expo)
+# Mindfull — 120s Somatic & Cognitive Reset (React Native / Expo)
 
 A full native mobile application powered by **React Native** and **Expo**, designed for 120-second somatic nervous system resets, acute stress decompression, and pre-performance grounding.
 
