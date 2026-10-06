@@ -94,10 +94,6 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           />
         </View>
 
-        <Text style={[styles.title, isNight && { color: '#FFFFFF' }]}>
-          {p4.deltaCheckTitle}
-        </Text>
-
         {/* Heart Rate Delta Comparison Card */}
         <View style={styles.bpmCard}>
           <View style={styles.bpmHeader}>
@@ -297,7 +293,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     overflow: 'visible',
     paddingBottom: 4,
-    marginBottom: 6,
+    marginBottom: 10,
   },
   title: {
     fontFamily: typography.fontPromptExtraBold,

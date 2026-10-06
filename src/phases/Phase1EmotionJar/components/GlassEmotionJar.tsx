@@ -680,7 +680,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   moocaSpeechText: {
-    fontFamily: typography.fontPromptSemiBold,
+    fontFamily: typography.fontPromptMedium,
     fontSize: 9.5,
     color: colors.primaryDark,
     textAlign: 'left',

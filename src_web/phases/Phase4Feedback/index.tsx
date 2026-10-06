@@ -84,10 +84,6 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           />
         </div>
 
-        <h2 className={classNames(styles.title, { [styles.titleNight]: isNight })}>
-          {p4.deltaCheckTitle}
-        </h2>
-
         {/* Heart Rate Delta Comparison Card */}
         <div className={classNames(styles.bpmCard, { [styles.bpmCardNight]: isNight })}>
           <div className={styles.bpmHeader}>

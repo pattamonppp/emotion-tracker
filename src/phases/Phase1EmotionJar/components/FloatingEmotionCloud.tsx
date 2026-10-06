@@ -478,7 +478,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cloudTitle: {
-    fontFamily: typography.fontPromptSemiBold,
+    fontFamily: typography.fontPromptMedium,
     fontSize: 9.8,
     flexShrink: 1,
   },
