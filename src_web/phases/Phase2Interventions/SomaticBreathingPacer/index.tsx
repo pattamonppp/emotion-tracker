@@ -422,7 +422,7 @@ export const SomaticBreathingPacer: React.FC<
               onPress={onComplete}
               icon={
                 <Check
-                  size={18}
+                  size={16}
                   color="#FFFFFF"
                   strokeWidth={2.4}
                 />

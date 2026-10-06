@@ -277,8 +277,8 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
               : touchCount === 1
                 ? strings.fingerWarning1
                 : strings.fingerPrompt,
-            typography.fontPromptBold,
-            typography.fontGothamBold
+            typography.fontPromptMedium,
+            typography.fontGotham
           )}
         </Text>
         <HelpCircle size={13} color={theme.badgeIconColor} strokeWidth={2} />
@@ -420,7 +420,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
-            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
+            icon={<Check size={16} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceedBtn}
           />
         </View>
@@ -551,8 +551,8 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   instructionPillText: {
-    fontFamily: typography.fontPromptBold,
-    fontSize: 12,
+    fontFamily: typography.fontPromptMedium,
+    fontSize: 11,
   },
   wheelSection: {
     flex: 1,
@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
     opacity: 0.35,
   },
   percentNumber: {
-    fontFamily: typography.fontPromptExtraBold,
+    fontFamily: typography.fontGothamBold,
     fontSize: 34,
     textAlign: 'center',
     letterSpacing: -0.5,

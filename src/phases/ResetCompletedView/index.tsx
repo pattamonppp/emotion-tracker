@@ -79,8 +79,8 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
         <Award size={15} color="#DF8900" />
         <BilingualText
           style={styles.topBadgeText}
-          fontPrompt={typography.fontPromptBold}
-          fontGotham={typography.fontGothamBold}
+          fontPrompt={typography.fontPromptMedium}
+          fontGotham={typography.fontGotham}
         >
           {c.somaticResetComplete}
         </BilingualText>
@@ -199,7 +199,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           variant={MARSHMALLOW_VARIANT.MINT}
           size={MARSHMALLOW_SIZE.MD}
           onPress={() => setIsFeedbackModalOpen(true)}
-          icon={<MessageSquareHeart size={18} color={colors.primaryDark} />}
+          icon={<MessageSquareHeart size={16} color={colors.primaryDark} />}
           title={c.feedbackBtn}
         />
 
@@ -217,7 +217,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
           variant={MARSHMALLOW_VARIANT.PRIMARY}
           size={MARSHMALLOW_SIZE.MD}
           onPress={onRestart}
-          icon={<RotateCcw size={18} color="#FFFFFF" />}
+          icon={<RotateCcw size={16} color="#FFFFFF" />}
           title={c.restartSessionBtn}
         />
 
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   topBadgeText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontPromptMedium,
     fontSize: 11,
     color: '#D97800',
   },

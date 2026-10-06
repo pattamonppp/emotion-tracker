@@ -286,7 +286,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             onProceed();
           }}
           title={p1.beginCozyReset}
-          icon={<ArrowRight size={17} color="#FFFFFF" />}
+          icon={<ArrowRight size={16} color="#FFFFFF" />}
           disabled={selectedEmotions.length === 0}
         />
       </div>

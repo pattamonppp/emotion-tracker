@@ -249,7 +249,7 @@ export const AudioMatrixSanctuary: React.FC<AudioMatrixSanctuaryProps> = ({
               audioService.stopAllVoice();
               onComplete();
             }}
-            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
+            icon={<Check size={16} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceed}
           />
         )}
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   mbtiBadgeText: {
-    fontFamily: typography.fontGothamBook,
+    fontFamily: typography.fontGotham,
     fontSize: 11,
   },
   scriptCard: {

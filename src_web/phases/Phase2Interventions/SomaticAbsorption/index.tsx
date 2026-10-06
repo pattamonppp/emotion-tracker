@@ -451,7 +451,7 @@ export const SomaticAbsorption: React.FC<SomaticAbsorptionProps> = ({
             onPress={onComplete}
             icon={
               <Check
-                size={18}
+                size={16}
                 color="#FFFFFF"
                 strokeWidth={2.4}
               />

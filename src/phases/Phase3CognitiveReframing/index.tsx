@@ -78,7 +78,11 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
 
         <View style={styles.phaseBadge}>
           <Sparkles size={12} color={colors.primary} />
-          <BilingualText style={styles.phaseBadgeText}>
+          <BilingualText
+            style={styles.phaseBadgeText}
+            fontPrompt={typography.fontPromptMedium}
+            fontGotham={typography.fontGotham}
+          >
             {p3.letterBadge}
           </BilingualText>
         </View>
@@ -196,7 +200,7 @@ export const Phase3CognitiveReframing: React.FC<Phase3CognitiveReframingProps> =
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             onPress={onProceed}
-            icon={<ArrowRight size={18} color="#FFFFFF" />}
+            icon={<ArrowRight size={16} color="#FFFFFF" />}
             title={p3.measureBtn}
           />
         </View>
@@ -241,7 +245,7 @@ const styles = StyleSheet.create({
     ...shadows.card,
   },
   phaseBadgeText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontPromptMedium,
     fontSize: 11,
     color: colors.primaryDark,
   },

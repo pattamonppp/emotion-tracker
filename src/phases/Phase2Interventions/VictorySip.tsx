@@ -237,8 +237,8 @@ export const VictorySip: React.FC<VictorySipProps> = ({
               : isTiltingToDrink
                 ? strings.tiltActive
                 : strings.tiltReady,
-            typography.fontPromptBold,
-            typography.fontGothamBold
+            typography.fontPromptMedium,
+            typography.fontGotham
           )}
         </Text>
         <HelpCircle size={13} color={skyTheme.badgeIconColor} strokeWidth={2} />
@@ -481,7 +481,7 @@ export const VictorySip: React.FC<VictorySipProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             onPress={onComplete}
-            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
+            icon={<Check size={16} color="#FFFFFF" strokeWidth={2.4} />}
             title={strings.proceedBtn}
           />
         ) : (
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   instructionPillText: {
-    fontFamily: typography.fontPromptBold,
+    fontFamily: typography.fontPromptMedium,
     fontSize: 11,
     letterSpacing: 0.1,
   },

@@ -241,7 +241,7 @@ export const Phase4Feedback: React.FC<Phase4FeedbackProps> = ({
           variant={MARSHMALLOW_VARIANT.PRIMARY}
           size={MARSHMALLOW_SIZE.MD}
           onPress={handleFinish}
-          icon={<ArrowRight size={18} color="#FFFFFF" />}
+          icon={<ArrowRight size={16} color="#FFFFFF" />}
           title={p4.claimPolaroid}
         />
       </div>

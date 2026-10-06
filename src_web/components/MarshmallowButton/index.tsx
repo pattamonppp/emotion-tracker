@@ -91,6 +91,21 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
   const variantClass = styles[`variant_${variant}`] || styles.variant_primary;
   const sizeClass = styles[`size_${size}`] || styles.size_md;
 
+  const iconSize = size === 'sm' ? 14 : size === 'lg' ? 20 : 16;
+
+  const renderedIcon = React.isValidElement(icon)
+    ? (
+      <span className={styles.iconWrapper}>
+        {React.cloneElement(icon as React.ReactElement<any>, {
+          size: iconSize,
+          color: 'currentColor',
+        })}
+      </span>
+    )
+    : icon ? (
+      <span className={styles.iconWrapper}>{icon}</span>
+    ) : null;
+
   return (
     <div className={styles.buttonWrapper}>
       <button
@@ -111,11 +126,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
         )}
         style={style}
       >
-        {React.isValidElement(icon)
-          ? React.cloneElement(icon as React.ReactElement<any>, {
-              color: 'currentColor',
-            })
-          : icon}
+        {renderedIcon}
 
         {title ? (
           <span className={styles.text} style={textStyle}>

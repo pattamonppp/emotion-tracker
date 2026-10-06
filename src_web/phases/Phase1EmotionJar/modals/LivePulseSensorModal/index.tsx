@@ -225,7 +225,7 @@ export const LivePulseSensorModal: React.FC<LivePulseSensorModalProps> = ({
             variant={MARSHMALLOW_VARIANT.PRIMARY}
             size={MARSHMALLOW_SIZE.MD}
             title={strings.confirmBtn}
-            icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
+            icon={<Check size={16} color="#FFFFFF" strokeWidth={2.4} />}
             onPress={onClose}
           />
         </div>

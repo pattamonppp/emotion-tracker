@@ -240,7 +240,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             onPress={onOpenFeedback}
             icon={
               <MessageSquareHeart
-                size={18}
+                size={16}
                 color="currentColor"
               />
             }
@@ -268,7 +268,7 @@ export const ResetCompletedView: React.FC<ResetCompletedViewProps> = ({
             onPress={onRestart}
             icon={
               <RotateCcw
-                size={18}
+                size={16}
                 color="currentColor"
               />
             }

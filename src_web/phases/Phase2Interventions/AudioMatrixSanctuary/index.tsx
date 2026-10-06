@@ -366,7 +366,7 @@ export const AudioMatrixSanctuary: React.FC<
             }}
             icon={
               <Check
-                size={18}
+                size={16}
                 color="#FFFFFF"
                 strokeWidth={2.4}
               />

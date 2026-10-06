@@ -230,7 +230,7 @@ export const Phase3CognitiveReframing: React.FC<
             onPress={onProceed}
             icon={
               <ArrowRight
-                size={18}
+                size={16}
                 color="#FFFFFF"
               />
             }

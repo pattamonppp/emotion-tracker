@@ -99,73 +99,79 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       case MARSHMALLOW_VARIANT.SECONDARY:
         return {
           btn: {
-            backgroundColor: colors.secondary, // #FF8F4B (Sunshade 500)
+            backgroundColor: disabled ? colors.secondaryLight : colors.secondary, // #FFDDC9 vs #FF8F4B
+            borderWidth: 1.5,
+            borderColor: 'transparent',
           },
           text: {
-            color: '#FFFFFF',
+            color: disabled ? '#F6F6F6' : '#FFFFFF',
           },
         };
       case MARSHMALLOW_VARIANT.SOFT_CREAM:
         return {
           btn: {
-            backgroundColor: '#FFF2E9', // Sunshade 50
+            backgroundColor: disabled ? '#FFF8F3' : '#FFF2E9', // Sunshade 50
             borderWidth: 1.5,
-            borderColor: '#FFDDC9', // Sunshade 100
+            borderColor: disabled ? '#FFEFE6' : '#FFDDC9', // Sunshade 100
           },
           text: {
-            color: colors.primaryDark,
+            color: disabled ? colors.primaryLight2 : colors.primaryDark,
           },
         };
       case MARSHMALLOW_VARIANT.MINT:
         return {
           btn: {
-            backgroundColor: '#E0F8F6', // Turquoise 50
+            backgroundColor: disabled ? '#F2FCFA' : '#E0F8F6', // Turquoise 50
             borderWidth: 1.5,
-            borderColor: '#B3EDE8', // Turquoise 100
+            borderColor: disabled ? '#DDF6F3' : '#B3EDE8', // Turquoise 100
           },
           text: {
-            color: colors.primaryDark,
+            color: disabled ? colors.primaryLight2 : colors.primaryDark,
           },
         };
       case MARSHMALLOW_VARIANT.PINK:
         return {
           btn: {
-            backgroundColor: '#FDEFEE', // Flamingo 50
+            backgroundColor: disabled ? '#FEF7F7' : '#FDEFEE', // Flamingo 50
             borderWidth: 1.5,
-            borderColor: '#FAD6D5', // Flamingo 100
+            borderColor: disabled ? '#FDE8E7' : '#FAD6D5', // Flamingo 100
           },
           text: {
-            color: '#EF7773', // Flamingo 500
+            color: disabled ? colors.accentPinkLight : '#EF7773', // Flamingo 500
           },
         };
       case MARSHMALLOW_VARIANT.OUTLINE:
         return {
           btn: {
             backgroundColor: '#FFFFFF',
-            borderWidth: 2,
-            borderColor: colors.primary,
+            borderWidth: 1.5,
+            borderColor: disabled ? colors.primaryLight2 : colors.primary,
           },
           text: {
-            color: colors.primary,
+            color: disabled ? colors.primaryLight2 : colors.primary,
           },
         };
       case MARSHMALLOW_VARIANT.GHOST:
         return {
           btn: {
             backgroundColor: 'transparent',
+            borderWidth: 1.5,
+            borderColor: 'transparent',
             borderBottomWidth: 0,
             elevation: 0,
             shadowOpacity: 0,
           },
           text: {
-            color: colors.primaryDark,
+            color: disabled ? colors.primaryLight2 : colors.primaryDark,
           },
         };
       case MARSHMALLOW_VARIANT.PRIMARY:
       default:
         return {
           btn: {
-            backgroundColor: colors.primary, // #00C4B3
+            backgroundColor: disabled ? colors.primaryLight2 : colors.primary, // #B3EDE8 vs #00C4B3
+            borderWidth: 1.5,
+            borderColor: 'transparent',
           },
           text: {
             color: '#FFFFFF',
@@ -179,7 +185,8 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       case 'sm':
         return {
           btn: {
-            paddingVertical: 7,
+            height: 36,
+            minHeight: 36,
             paddingHorizontal: 14,
             borderRadius: radii.full,
           },
@@ -191,7 +198,8 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       case 'lg':
         return {
           btn: {
-            paddingVertical: 14,
+            height: 54,
+            minHeight: 54,
             paddingHorizontal: 28,
             borderRadius: radii.full,
           },
@@ -204,15 +212,40 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
       default:
         return {
           btn: {
-            paddingVertical: 9,
-            paddingHorizontal: 16,
+            height: 40,
+            minHeight: 40,
+            paddingHorizontal: 20,
             borderRadius: radii.full,
           },
           text: {
             fontSize: 13,
-            fontFamily: typography.fontPromptBold,
+            fontFamily: typography.fontPromptMedium,
           },
         };
+    }
+  };
+
+  const getIconSize = (): number => {
+    switch (size) {
+      case 'sm':
+        return 14;
+      case 'lg':
+        return 20;
+      case 'md':
+      default:
+        return 16;
+    }
+  };
+
+  const getIconWrapperSize = (): { width: number; height: number } => {
+    switch (size) {
+      case 'sm':
+        return { width: 16, height: 16 };
+      case 'lg':
+        return { width: 24, height: 24 };
+      case 'md':
+      default:
+        return { width: 18, height: 18 };
     }
   };
 
@@ -264,8 +297,12 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
         ]}
       >
         {icon ? (
-          <View style={styles.iconWrapper}>
-            {icon}
+          <View style={[styles.iconWrapper, getIconWrapperSize()]}>
+            {React.isValidElement(icon)
+              ? React.cloneElement(icon as React.ReactElement<any>, {
+                  size: getIconSize(),
+                })
+              : icon}
           </View>
         ) : null}
         {title ? (
@@ -277,7 +314,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             {renderBilingualNodes(
               title,
               sStyles.text.fontFamily,
-              size === 'sm' ? typography.fontGotham : typography.fontGothamBold
+              size === 'lg' ? typography.fontGothamBold : typography.fontGotham
             )}
           </Text>
         ) : null}
@@ -290,7 +327,7 @@ export const MarshmallowButton: React.FC<MarshmallowButtonProps> = ({
             {renderBilingualNodes(
               children,
               sStyles.text.fontFamily,
-              size === 'sm' ? typography.fontGotham : typography.fontGothamBold
+              size === 'lg' ? typography.fontGothamBold : typography.fontGotham
             )}
           </Text>
         ) : (
@@ -312,7 +349,7 @@ const styles = StyleSheet.create({
   iconWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    display: 'flex',
+    flexShrink: 0,
   },
   text: {
     textAlign: 'center',
@@ -320,6 +357,7 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
   disabled: {
-    opacity: 0.5,
+    elevation: 0,
+    shadowOpacity: 0,
   },
 });

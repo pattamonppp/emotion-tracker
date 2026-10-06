@@ -289,7 +289,7 @@ export const Phase1EmotionJar: React.FC<Phase1EmotionJarProps> = ({
             onProceed();
           }}
           title={p1.beginCozyReset}
-          icon={<ArrowRight size={17} color="#FFFFFF" />}
+          icon={<ArrowRight size={16} color="#FFFFFF" />}
           disabled={selectedEmotions.length === 0}
         />
       </View>
@@ -359,8 +359,8 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   badgeText: {
-    fontFamily: typography.fontGothamBold,
-    fontSize: 10,
+    fontFamily: typography.fontGotham,
+    fontSize: 11,
     color: colors.primaryDark,
   },
   pulsePill: {
@@ -376,8 +376,8 @@ const styles = StyleSheet.create({
     ...shadows.soft,
   },
   pulseText: {
-    fontFamily: typography.fontGothamBold,
-    fontSize: 10,
+    fontFamily: typography.fontGotham,
+    fontSize: 11,
     color: colors.secondary,
   },
   contentBody: {

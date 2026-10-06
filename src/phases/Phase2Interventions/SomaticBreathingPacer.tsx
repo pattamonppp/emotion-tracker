@@ -358,7 +358,7 @@ export const SomaticBreathingPacer: React.FC<SomaticBreathingPacerProps> = ({
               variant={MARSHMALLOW_VARIANT.PRIMARY}
               size={MARSHMALLOW_SIZE.MD}
               onPress={onComplete}
-              icon={<Check size={18} color="#FFFFFF" strokeWidth={2.4} />}
+              icon={<Check size={16} color="#FFFFFF" strokeWidth={2.4} />}
               title={strings.proceedBtn}
             />
           </View>
@@ -492,13 +492,13 @@ const styles = StyleSheet.create({
   },
   actionBtnWrapper: {
     width: '100%',
-    height: 46,
+    height: 40,
     justifyContent: 'center',
     marginTop: 4,
   },
   actionBtnPlaceholder: {
     width: '100%',
-    height: 46,
+    height: 40,
     marginTop: 4,
   },
 });

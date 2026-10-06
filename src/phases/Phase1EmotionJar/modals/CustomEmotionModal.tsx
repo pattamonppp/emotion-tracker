@@ -201,7 +201,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
                   variant={MARSHMALLOW_VARIANT.PINK}
                   size={MARSHMALLOW_SIZE.MD}
                   title={ce.deleteBtn}
-                  icon={<RotateCcw size={12} color="#EF4444" strokeWidth={2.4} />}
+                  icon={<RotateCcw size={16} color="#EF4444" strokeWidth={2.4} />}
                   onPress={handleDelete}
                 />
               </View>
@@ -212,7 +212,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
                 variant={MARSHMALLOW_VARIANT.MINT}
                 size={MARSHMALLOW_SIZE.MD}
                 title={ce.keepOnSky}
-                icon={<Sparkles size={13} color={colors.primaryDark} strokeWidth={2.4} />}
+                icon={<Sparkles size={16} color={colors.primaryDark} strokeWidth={2.4} />}
                 disabled={!inputText.trim()}
                 style={{ width: '100%' }}
                 onPress={handleSaveToSky}
@@ -224,7 +224,7 @@ export const CustomEmotionModal: React.FC<CustomEmotionModalProps> = ({
                 variant={MARSHMALLOW_VARIANT.PRIMARY}
                 size={MARSHMALLOW_SIZE.MD}
                 title={isJarFull ? ce.saveCloud : ce.dropIntoJar}
-                icon={isJarFull ? <Check size={16} color="#FFFFFF" strokeWidth={2.4} /> : <ArrowDown size={14} color="#FFFFFF" strokeWidth={2.6} />}
+                icon={isJarFull ? <Check size={16} color="#FFFFFF" strokeWidth={2.4} /> : <ArrowDown size={16} color="#FFFFFF" strokeWidth={2.6} />}
                 disabled={!inputText.trim()}
                 style={{ width: '100%' }}
                 onPress={handleSaveToJar}

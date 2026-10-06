@@ -212,7 +212,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             <MarshmallowButton
               title={o.saveSettings}
               onPress={handleSave}
-              icon={<Check size={18} color="#FFFFFF" />}
+              icon={<Check size={16} color="#FFFFFF" />}
               variant={MARSHMALLOW_VARIANT.PRIMARY}
               size={MARSHMALLOW_SIZE.MD}
             />
